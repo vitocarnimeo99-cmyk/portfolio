@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open \"/Users/vitomarianocarnimeo/Desktop/SITO VITQ/portfolioCARTELLINO.html\")",
+      "Bash(npx --yes playwright --version)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}
