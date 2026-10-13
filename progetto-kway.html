@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Way 25 Verona — Porta Borsari / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="K-Way 25 Verona: illustrazione esclusiva di Porta Borsari e lettering per la campagna di apertura del primo store K-Way in Corso Porta Borsari, con Burro Studio. Poster, sticker e K-Way in edizione limitata.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: il blu elettrico del K-Way in edizione
+     limitata al posto del blu di default, con il giallo di poster e
+     sticker come colore pop per badge e dettagli. */
+  :root{
+    --accent:#2347C4;
+    --accent-soft:#E2E8FA;
+    --pop-yellow:#F2D13D;
+  }
+
+  /* -------- Hero: il K-Way su fondo nero, tilt 3D che segue il mouse -------- */
+  .kway-hero-art{
+    position:relative;
+    flex:0 0 440px;
+    width:440px;
+    perspective:1200px;
+  }
+  .kway-card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background:#000;
+    border:7px solid #fff;
+    box-shadow:0 30px 70px rgba(23,20,15,.28);
+    transform: rotate(1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+  }
+  .kway-hero-art:hover .kway-card{
+    box-shadow:0 34px 80px rgba(23,20,15,.3), 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(35,71,196,.4);
+  }
+  .kway-card img{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    transform: scale(1.02);
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .kway-hero-art:hover .kway-card img{ transform: scale(1.08); }
+  /* Riflesso lucido del nylon: segue il cursore */
+  .kway-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .kway-hero-art:hover .kway-card::after{ opacity:1; }
+
+  .kway-coords{
+    position:absolute;
+    left:22px; bottom:20px;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    color:#fff;
+    opacity:.75;
+    z-index:1;
+  }
+
+  .kway-badge{
+    position:absolute;
+    left:-26px; top:-24px;
+    width:108px; height:108px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    background: var(--pop-yellow);
+    color: var(--accent);
+    font-weight:700;
+    font-size:0.66rem;
+    line-height:1.25;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    border-radius:50%;
+    border:3px dashed rgba(35,71,196,.5);
+    transform: rotate(-14deg);
+    padding:10px;
+    box-shadow:0 10px 24px rgba(35,71,196,.3);
+    transition: transform .7s ease;
+    z-index:2;
+  }
+  .kway-hero-art:hover .kway-badge{ transform: rotate(346deg); }
+  @media (max-width:980px){
+    .kway-hero-art{ width:380px; margin:36px auto 0; }
+  }
+  @media (max-width:560px){
+    .kway-hero-art{ width:100%; max-width:380px; }
+    .kway-badge{ left:-10px; top:-18px; width:88px; height:88px; font-size:0.56rem; }
+  }
+
+  /* -------- Ticker in versione K-Way (blu + giallo) -------- */
+  .ticker-wrap.kway-ticker{ background: var(--accent); }
+  .kway-ticker .ticker{ animation-duration:30s; }
+  .kway-ticker .ticker-item{ color:#fff; letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .kway-ticker .ticker-sep{ color: var(--pop-yellow); }
+
+  /* -------- Sulle strade di Verona: due scatti sfalsati -------- */
+  .kway-street .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .kway-street .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .kway-street-lead{ font-size:1.05rem; color: var(--ink-soft); max-width:62ch; margin:-24px 0 0; }
+  .kway-street-grid{
+    display:grid;
+    grid-template-columns: 7fr 5fr;
+    gap:28px;
+    align-items:start;
+    margin-top:56px;
+  }
+  .kway-shot{ margin:0; }
+  .kway-shot:nth-child(2){ margin-top:120px; }
+  .kway-shot-frame{
+    position:relative;
+    border-radius:16px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    background: var(--paper-dim);
+    transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+  }
+  .kway-shot:nth-child(1) .kway-shot-frame{ transform: rotate(-1.2deg); }
+  .kway-shot:nth-child(2) .kway-shot-frame{ transform: rotate(1.4deg); }
+  .kway-shot:hover .kway-shot-frame{
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow:0 24px 50px rgba(23,20,15,.22);
+  }
+  /* Lente d'ingrandimento: zoom centrato sul cursore (origine gestita da main.js) */
+  .kway-shot-frame.zoom-tile .art{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: transform .35s ease-out;
+    cursor: zoom-in;
+  }
+  .kway-shot-frame.zoom-tile:hover .art{ transform: scale(1.9); }
+  /* Zoom leggero e centrale: solo un segnale di hover */
+  .kway-shot-frame.zoom-soft .art{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: transform .45s cubic-bezier(.2,.7,.2,1);
+  }
+  .kway-shot-frame.zoom-soft:hover .art{ transform: scale(1.06); }
+  .kway-shot-tag{
+    position:absolute;
+    top:16px; right:16px;
+    padding:6px 12px;
+    border-radius:999px;
+    background: var(--pop-yellow);
+    color: var(--accent);
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    pointer-events:none;
+    transition: opacity .25s ease;
+    z-index:1;
+  }
+  .kway-shot:hover .kway-shot-tag{ opacity:0; }
+  .kway-shot figcaption{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .ks-num{ font-weight:700; color: var(--accent); font-size:0.95rem; }
+  .ks-label{ font-weight:700; font-size:1.02rem; }
+  .ks-meta{ margin-left:auto; font-size:0.85rem; color: var(--ink-soft); }
+  @media (max-width:820px){
+    .kway-street-grid{ grid-template-columns:1fr; gap:40px; }
+    .kway-shot:nth-child(2){ margin-top:0; }
+    .kway-shot-frame{ transform:none !important; }
+    .kway-shot-frame.zoom-tile:hover .art{ transform:none; }
+    .kway-shot-frame.zoom-soft:hover .art{ transform:none; }
+  }
+  @media (hover:none){
+    .kway-shot-frame.zoom-tile:hover .art,
+    .kway-shot-frame.zoom-soft:hover .art{ transform:none; }
+  }
+
+  /* -------- Trittico stories: tre card 9:16 che si aprono a ventaglio -------- */
+  .kway-triss{
+    background: var(--accent);
+    color:#fff;
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  section.kway-triss{ border-top:none; }
+  .kway-triss .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--pop-yellow);
+    margin-bottom:22px;
+  }
+  .kway-triss .section-title{ color:#fff; }
+  .kway-triss .section-title em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .kway-triss-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .kway-triss-head p{ color:rgba(255,255,255,.75); max-width:46ch; margin:0 0 48px; font-size:1.02rem; }
+
+  .triss-row{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:32px;
+    margin-top:24px;
+    perspective:1400px;
+  }
+  .triss-card{
+    position:relative;
+    flex:0 1 300px;
+    margin:0;
+    /* posizione "a mazzo" prima dell'ingresso in viewport */
+    transform: translateX(var(--stack-x,0)) translateY(40px) rotate(var(--stack-r,0deg));
+    opacity:0;
+    transition:
+      transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0ms),
+      opacity .6s ease var(--d,0ms);
+  }
+  .triss-card:nth-child(1){ --stack-x: calc(100% + 32px); --stack-r:-9deg; --fan-r:-3deg; --d:0ms; }
+  .triss-card:nth-child(2){ --stack-r:2deg; --fan-r:0deg; --fan-y:-28px; --d:120ms; z-index:2; }
+  .triss-card:nth-child(3){ --stack-x: calc(-100% - 32px); --stack-r:10deg; --fan-r:3deg; --d:240ms; }
+  .triss-row.is-open .triss-card{
+    transform: translateY(var(--fan-y,0px)) rotate(var(--fan-r));
+    opacity:1;
+  }
+  /* Dopo l'apertura il ritardo a cascata non serve più: hover reattivo */
+  .triss-row.is-settled .triss-card{ transition: transform .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease, filter .35s ease; }
+  .triss-row.is-settled:hover .triss-card{ opacity:.45; filter: saturate(.6); }
+  .triss-row.is-settled .triss-card:hover{
+    opacity:1;
+    filter:none;
+    transform: translateY(calc(var(--fan-y,0px) - 16px)) rotate(0deg) scale(1.04);
+    z-index:3;
+  }
+
+  .triss-phone{
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    aspect-ratio:750/1334;
+    background:#000;
+    border:6px solid #fff;
+    box-shadow:0 28px 60px rgba(8,16,60,.45);
+  }
+  .triss-phone img{
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .triss-card:hover .triss-phone img{ transform: scale(1.05); }
+
+  /* Barra di avanzamento stile Instagram: si riempie in hover */
+  .triss-bar{
+    position:absolute;
+    left:10px; right:10px; top:10px;
+    height:3px;
+    border-radius:3px;
+    background:rgba(255,255,255,.35);
+    overflow:hidden;
+    z-index:1;
+  }
+  .triss-bar::after{
+    content:"";
+    position:absolute; inset:0;
+    background:#fff;
+    transform-origin:left center;
+    transform: scaleX(0);
+    transition: transform .3s ease;
+  }
+  .triss-card:hover .triss-bar::after{ transform: scaleX(1); transition: transform 4s linear; }
+  .triss-user{
+    position:absolute;
+    left:12px; top:22px;
+    display:flex; align-items:center; gap:8px;
+    font-size:0.74rem;
+    font-weight:700;
+    color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,.45);
+    z-index:1;
+    pointer-events:none;
+  }
+  .triss-user::before{
+    content:"";
+    width:22px; height:22px;
+    border-radius:50%;
+    background: #fff url("assets/images/LOGO%20IG%20KWAY.jpg") center/cover no-repeat;
+    border:2px solid #fff;
+  }
+  /* Spunta blu "verificato" di Instagram accanto al nome */
+  .triss-verified{
+    width:13px; height:13px;
+    margin-left:-4px;
+    flex:none;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.35));
+  }
+
+  .triss-card figcaption{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-top:20px;
+    padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.25);
+  }
+  .tr-num{ font-weight:700; color: var(--pop-yellow); font-size:0.95rem; }
+  .tr-label{ font-weight:700; font-size:1rem; }
+  .tr-meta{ margin-left:auto; font-size:0.82rem; color:rgba(255,255,255,.7); white-space:nowrap; }
+
+  @media (max-width:820px){
+    .triss-row{
+      justify-content:flex-start;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:none;
+      gap:18px;
+      margin: 24px -40px 0;
+      padding: 10px 40px 20px;
+    }
+    .triss-row::-webkit-scrollbar{ display:none; }
+    .triss-card{ flex:0 0 72vw; max-width:300px; scroll-snap-align:center; }
+    .triss-row .triss-card,
+    .triss-row.is-open .triss-card,
+    .triss-row.is-settled .triss-card:hover{ transform:none; opacity:1; filter:none; }
+    .triss-row.is-settled:hover .triss-card{ opacity:1; filter:none; }
+    .tr-meta{ white-space:normal; text-align:right; }
+  }
+
+  /* -------- Story player: le stories "live" della serata, stile Instagram -------- */
+  .story-player{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:64px;
+    align-items:center;
+    margin-top:110px;
+    padding-top:64px;
+    border-top:1px solid rgba(255,255,255,.2);
+  }
+  .sp-side h3{
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    margin:0 0 14px;
+  }
+  .sp-side h3 em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .sp-side > p{ color:rgba(255,255,255,.75); max-width:44ch; margin:0 0 32px; }
+
+  .sp-now{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    padding:14px 0;
+    margin-bottom:24px;
+    border-top:1px solid rgba(255,255,255,.25);
+    border-bottom:1px solid rgba(255,255,255,.25);
+    min-height:56px;
+  }
+  .sp-now-num{ font-weight:700; color: var(--pop-yellow); font-variant-numeric: tabular-nums; }
+  .sp-now-label{ font-weight:700; font-size:1.05rem; }
+
+  .sp-thumbs{
+    display:grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap:10px;
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .sp-thumb{
+    display:block;
+    width:100%;
+    padding:0;
+    border:2px solid transparent;
+    border-radius:10px;
+    overflow:hidden;
+    aspect-ratio:750/1334;
+    background:#000;
+    cursor:pointer;
+    opacity:.5;
+    transition: opacity .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .sp-thumb img{ display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .sp-thumb:hover{ opacity:.9; transform: translateY(-3px); }
+  .sp-thumb.is-active{ opacity:1; border-color: var(--pop-yellow); transform: translateY(-3px); }
+  .sp-thumb:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+
+  .sp-device{ position:relative; }
+  .sp-bars{
+    display:flex;
+    gap:4px;
+    margin-bottom:12px;
+  }
+  .sp-bar{
+    position:relative;
+    flex:1;
+    height:3px;
+    border-radius:3px;
+    background:rgba(255,255,255,.3);
+    overflow:hidden;
+  }
+  .sp-bar span{
+    position:absolute; inset:0;
+    background:#fff;
+    transform-origin:left center;
+    transform: scaleX(var(--p,0));
+  }
+  .sp-screen{
+    position:relative;
+    border-radius:26px;
+    overflow:hidden;
+    aspect-ratio:750/1334;
+    background:#000;
+    border:6px solid #fff;
+    box-shadow:0 34px 70px rgba(8,16,60,.5);
+    transform: rotate(1.5deg);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .sp-device:hover .sp-screen{ transform: rotate(0deg) scale(1.015); }
+  .sp-slide{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.04);
+    transition: opacity .45s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .sp-slide.is-active{ opacity:1; transform: scale(1); }
+  .sp-tap{
+    position:absolute; top:0; bottom:0;
+    width:50%;
+    border:none;
+    background:transparent;
+    padding:0;
+    z-index:2;
+  }
+  .sp-tap--prev{ left:0; cursor: w-resize; }
+  .sp-tap--next{ right:0; cursor: e-resize; }
+  .sp-tap:focus-visible{ outline:2px solid var(--pop-yellow); outline-offset:-4px; }
+  .sp-paused{
+    position:absolute;
+    left:50%; top:50%;
+    width:64px; height:64px;
+    margin:-32px 0 0 -32px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    font-size:1.2rem;
+    opacity:0;
+    transform: scale(.8);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    z-index:3;
+  }
+  .story-player.is-paused .sp-paused{ opacity:1; transform: scale(1); }
+  .sp-hint{
+    display:block;
+    margin-top:16px;
+    text-align:center;
+    font-size:0.8rem;
+    color:rgba(255,255,255,.65);
+  }
+
+  @media (max-width:980px){
+    .story-player{ grid-template-columns:1fr; gap:40px; margin-top:80px; }
+    .sp-device{ order:-1; width:min(100%, 340px); margin:0 auto; }
+    .sp-screen{ transform:none; }
+    .sp-thumbs{
+      display:flex;
+      overflow-x:auto;
+      scrollbar-width:none;
+      margin:0 -40px; padding:4px 40px 6px;
+    }
+    .sp-thumbs::-webkit-scrollbar{ display:none; }
+    .sp-thumbs li{ flex:0 0 64px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sp-slide, .sp-screen, .sp-thumb{ transition:none; }
+  }
+
+  /* -------- Sticker pack: sticker trascinabili su fondo nero -------- */
+  .kway-stickers{
+    background:#000;
+    color: var(--paper);
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  .kway-stickers .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--pop-yellow);
+    margin-bottom:22px;
+  }
+  .kway-stickers .section-title{ color: var(--paper); }
+  .kway-stickers .section-title em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .kway-stickers-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .kway-stickers-head p{ color:#B9B4A6; max-width:46ch; margin:0 0 48px; font-size:1.02rem; }
+  .sticker-board{
+    position:relative;
+    height:560px;
+    margin-top:12px;
+    border:1px dashed rgba(247,245,240,.18);
+    border-radius:22px;
+    touch-action:pan-y;
+  }
+  .sticker-hint{
+    position:absolute;
+    left:24px; bottom:20px;
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:0.85rem;
+    color:#B9B4A6;
+    pointer-events:none;
+    transition: opacity .4s ease;
+  }
+  .sticker-hint i{ color: var(--pop-yellow); }
+  .sticker-board.is-touched .sticker-hint{ opacity:0; }
+  .sticker-reset{
+    position:absolute;
+    right:20px; bottom:16px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(247,245,240,.3);
+    background:transparent;
+    color: var(--paper);
+    font: inherit;
+    font-size:0.85rem;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .3s ease, background-color .2s ease, border-color .2s ease, color .2s ease;
+    z-index:20;
+  }
+  .sticker-board.is-touched .sticker-reset{ opacity:1; pointer-events:auto; }
+  .sticker-reset:hover{ background: var(--pop-yellow); border-color: var(--pop-yellow); color: var(--accent); }
+
+  .sticker{
+    position:absolute;
+    left:0; top:0;
+    margin:0;
+    cursor:grab;
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+    transform: translate(var(--x,0px), var(--y,0px)) rotate(var(--r,0deg)) scale(var(--s,1));
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.6));
+    transition: filter .25s ease;
+    will-change: transform;
+  }
+  .sticker img{ display:block; width:100%; height:auto; pointer-events:none; }
+  .sticker:hover{ filter: drop-shadow(0 18px 28px rgba(0,0,0,.7)) drop-shadow(0 0 14px rgba(242,209,61,.25)); }
+  .sticker.is-dragging{
+    cursor:grabbing;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,.8)) drop-shadow(0 0 22px rgba(242,209,61,.35));
+  }
+  .sticker--logo{ width:400px; }
+  .sticker--porta{ width:330px; }
+  .sticker figcaption{
+    position:absolute;
+    left:50%; top:100%;
+    transform: translate(-50%, 8px);
+    white-space:nowrap;
+    font-size:0.78rem;
+    color:#B9B4A6;
+    opacity:0;
+    transition: opacity .25s ease;
+    pointer-events:none;
+  }
+  .sticker:hover figcaption{ opacity:1; }
+  .sticker.is-dragging figcaption{ opacity:0; }
+
+  @media (max-width:820px){
+    .sticker-board{
+      height:auto;
+      border:none;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:36px;
+    }
+    .sticker{ position:relative; transform:none !important; cursor:default; touch-action:auto; }
+    .sticker--logo, .sticker--porta{ width:min(84vw, 360px); }
+    .sticker:nth-child(odd){ transform: rotate(-4deg) !important; }
+    .sticker:nth-child(even){ transform: rotate(3deg) !important; }
+    .sticker figcaption{ opacity:1; position:static; transform:none; text-align:center; margin-top:10px; }
+    .sticker-hint, .sticker-reset{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .kway-card, .kway-card img, .kway-badge, .kway-shot-frame, .kway-shot-frame .art{ transition:none; }
+    .kway-ticker .ticker{ animation:none; }
+  }
+
+  /* Su mobile il margine laterale di .wrap scende a 20px: la riga a scorrimento segue */
+  @media (max-width:640px){
+    .triss-row{ margin:24px -20px 0; padding:10px 20px 20px; }
+    .sp-thumbs{ margin:0 -20px; padding:4px 20px 6px; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .kway-triss, .kway-stickers{ padding:56px 0 60px; }
+    .story-player{ margin-top:48px; padding-top:40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Campagna store opening — Burro Studio</span>
+      <h1>K-Way 25 <em>Porta Borsari, Verona</em></h1>
+      <p>Campagna ideata per celebrare l'inaugurazione del <strong>primo store K-Way</strong> in <strong>Corso Porta Borsari</strong> a Verona.<br><br>
+      Per l'occasione ho sviluppato un'<strong>illustrazione esclusiva della storica Porta Borsari</strong>, l'antica porta romana che dà il nome alla via, e un lettering K-Way gonfio e "bagnato" di pioggia. Il disegno è diventato il volto di poster, sticker e di un <strong>K-Way in edizione limitata</strong>, oltre che del flyer per l'after party di inaugurazione.</p>
+      <div class="project-meta">
+        <div>Anno<span>2024</span></div>
+        <div>Ruolo<span>Illustrazione · Type design</span></div>
+        <div>Output<span>Poster · Sticker · K-Way limited</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener">Vedi il progetto su Behance ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="kway-hero-art" id="kway-hero">
+      <div class="kway-card">
+        <img src="assets/images/KWAY02.jpg" width="1149" height="1149" alt="K-Way blu in edizione limitata con l'illustrazione di Porta Borsari stampata sul retro" loading="eager" decoding="async">
+        <span class="kway-coords" aria-hidden="true">18W67N – 29E29N · VERONA</span>
+      </div>
+      <span class="kway-badge" aria-hidden="true">Limited<br>edition</span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap kway-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">K-Way 25 Verona</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Corso Porta Borsari</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">18W67N – 29E29N</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Private after party</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Limited edition</span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">K-Way 25 Verona</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Corso Porta Borsari</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">18W67N – 29E29N</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Private after party</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Limited edition</span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="kway-street">
+    <div class="wrap">
+      <span class="eyebrow">In città</span>
+      <h2 class="section-title">Sulle strade <br><em class="semibold">di Verona</em></h2>
+      <p class="kway-street-lead">Giallo e blu, gli stessi colori del lettering, per farsi notare tra le pietre del centro storico: dal flyer per l'after party al poster con la Porta disegnata, affisso a due passi dallo store.</p>
+      <div class="kway-street-grid">
+        <figure class="kway-shot">
+          <div class="kway-shot-frame zoom-soft">
+            <img class="art" src="assets/images/KWAY01.jpg" width="1146" height="1146" alt="Flyer giallo K-Way per l'after party privato, appoggiato sul parabrezza di un'auto blu" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span class="ks-num">01</span><span class="ks-label">Flyer after party</span><span class="ks-meta">Gio 30.03 · 10PM–End</span></figcaption>
+        </figure>
+        <figure class="kway-shot">
+          <div class="kway-shot-frame zoom-tile">
+            <img class="art" src="assets/images/KWAY04.jpg" width="1082" height="1082" alt="Poster blu con l'illustrazione gialla di Porta Borsari affisso su un pilastro in pietra a Verona" loading="lazy" decoding="async">
+            <span class="kway-shot-tag">Passa sopra per lo zoom</span>
+          </div>
+          <figcaption><span class="ks-num">02</span><span class="ks-label">Poster Porta Borsari</span><span class="ks-meta">Corso Porta Borsari</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="kway-triss">
+    <div class="wrap">
+      <div class="kway-triss-head">
+        <div>
+          <span class="eyebrow">Stories</span>
+          <h2 class="section-title">@kway_official, <em>operativi sui social</em></h2>
+        </div>
+        <p>Il racconto social dell'inaugurazione: prima i tre contenuti di lancio (flyer dell'after party, K-Way in vetrina, flyer dell'opening), poi le stories pubblicate live durante la serata.</p>
+      </div>
+      <div class="triss-row" id="triss-row">
+        <figure class="triss-card">
+          <div class="triss-phone">
+            <span class="triss-bar" aria-hidden="true"></span>
+            <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
+            <img src="assets/images/K-way_TRISS_01.jpg" width="750" height="1334" alt="Story K-Way: flyer giallo dell'after party privato, giovedì 30.03 dalle 10PM, Sciò Rum e Mattias Clay vinyl DJ set" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span class="tr-num">01</span><span class="tr-label">After party</span><span class="tr-meta">Gio 30.03 · 10PM–End</span></figcaption>
+        </figure>
+        <figure class="triss-card">
+          <div class="triss-phone">
+            <span class="triss-bar" aria-hidden="true"></span>
+            <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
+            <img src="assets/images/K-way_TRISS_02.jpg" width="750" height="1334" alt="Story K-Way: il K-Way blu in edizione limitata con Porta Borsari sul retro, esposto su un manichino nello store" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span class="tr-num">02</span><span class="tr-label">In vetrina</span><span class="tr-meta">Limited edition</span></figcaption>
+        </figure>
+        <figure class="triss-card">
+          <div class="triss-phone">
+            <span class="triss-bar" aria-hidden="true"></span>
+            <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
+            <img src="assets/images/K-way_TRISS_03.jpg" width="750" height="1334" alt="Story K-Way: flyer blu dell'opening con Porta Borsari in giallo, giovedì 30.03 dalle 6 alle 9PM, Corso Porta Borsari 57/D" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span class="tr-num">03</span><span class="tr-label">Opening</span><span class="tr-meta">6–9PM · Porta Borsari 57/D</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="story-player" id="story-player">
+        <div class="sp-side">
+          <span class="eyebrow">Live dall'opening</span>
+          <h3>La serata, <em>story doopo story</em></h3>
+          <p>L’artwork non si è fermata alla vetrina, ma ha accompagnato l’intera serata, diventando parte dell’esperienza.<br>Tra musica, momenti da condividere nelle stories, sticker da prendere e gadget da portare a casa, il progetto ha continuato a vivere anche fuori dallo spazio dell’evento, attraverso gli occhi e i contenuti di chi lo ha vissuto..</p>
+          <div class="sp-now" aria-live="polite"><span class="sp-now-num">04</span><span class="sp-now-label">Il K-Way in vetrina</span></div>
+          <ul class="sp-thumbs">
+          <li><button class="sp-thumb is-active" type="button" aria-label="Story 04: Il K-Way in vetrina"><img src="assets/images/K-way_TRISS_04.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 05: DJ set al banco"><img src="assets/images/K-way_TRISS_05.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 06: Veronesità ai massimi"><img src="assets/images/K-way_TRISS_06.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 07: Setting up, si parte alle 6PM"><img src="assets/images/K-way_TRISS_07.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 08: Repost del flyer opening"><img src="assets/images/K-way_TRISS_08.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 09: Repost del flyer after party"><img src="assets/images/K-way_TRISS_09.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 10: Dietro la camera"><img src="assets/images/K-way_TRISS_10.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 11: Il giorno dopo"><img src="assets/images/K-way_TRISS_11.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          </ul>
+        </div>
+        <div class="sp-device">
+          <div class="sp-bars" aria-hidden="true"><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span></div>
+          <div class="sp-screen">
+          <img class="sp-slide is-active" src="assets/images/K-way_TRISS_04.jpg" width="750" height="1334" alt="Story di @kway_official: il K-Way blu con Porta Borsari esposto su un manichino nello store" loading="lazy" decoding="async" data-label="Il K-Way in vetrina">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_05.jpg" width="750" height="1334" alt="Story: Alberto Morelato e Tiscrivodopo al DJ set, con gli sticker K-Way sparsi sul banco" loading="lazy" decoding="async" data-label="DJ set al banco">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_06.jpg" width="750" height="1334" alt="Story con la scritta “Veronesità ai massimi”: i DJ alla console nello store K-Way" loading="lazy" decoding="async" data-label="Veronesità ai massimi">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_07.jpg" width="750" height="1334" alt="Story “Setting upppp, starting at 6PM”: il K-Way in vetrina visto da fuori, Porta Borsari" loading="lazy" decoding="async" data-label="Setting up, si parte alle 6PM">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_08.jpg" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer blu dell'opening pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer opening">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_09.jpg" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer giallo dell'after party pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer after party">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_10.jpg" width="750" height="1334" alt="Story: il display di una Canon inquadra l'illustrazione sul K-Way, con le info del DJ set 6–9PM" loading="lazy" decoding="async" data-label="Dietro la camera">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_11.jpg" width="750" height="1334" alt="Story: il K-Way limited edition appoggiato su una sedia, “opening hometown store”" loading="lazy" decoding="async" data-label="Il giorno dopo">
+            <button class="sp-tap sp-tap--prev" type="button" aria-label="Story precedente"></button>
+            <button class="sp-tap sp-tap--next" type="button" aria-label="Story successiva"></button>
+            <span class="sp-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
+          </div>
+          <span class="sp-hint">Tocca a destra o a sinistra · tieni premuto per mettere in pausa</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="kway-stickers">
+    <div class="wrap">
+      <div class="kway-stickers-head">
+        <div>
+          <span class="eyebrow">Sticker pack</span>
+          <h2 class="section-title">Attaccali <em>dove vuoi</em></h2>
+        </div>
+        <p>Il lettering e la Porta diventano sticker da collezionare, regalati durante l'opening. Prendili, spostali, impilali: sono fatti per questo.</p>
+      </div>
+      <div class="sticker-board" id="sticker-board">
+        <figure class="sticker sticker--logo" data-x="0.08" data-y="0.12" data-r="-8">
+          <img src="assets/images/KWAY03_sticker.png" width="928" height="766" alt="Due sticker K-Way, uno giallo e uno blu, con il lettering e le coordinate di Verona" decoding="async" draggable="false">
+          <figcaption>Lettering · giallo &amp; blu</figcaption>
+        </figure>
+        <figure class="sticker sticker--porta" data-x="0.58" data-y="0.06" data-r="6">
+          <img src="assets/images/KWAY05_sticker.png" width="712" height="791" alt="Sticker sagomato con l'illustrazione gialla di Porta Borsari e il lettering K-Way su fondo blu" decoding="async" draggable="false">
+          <figcaption>Porta Borsari · die-cut</figcaption>
+        </figure>
+        <span class="sticker-hint"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>Trascina gli sticker</span>
+        <button class="sticker-reset" type="button">Rimetti a posto</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap project-end-inner">
+      <h2 class="section-title">Progetti per il tuo opening?</h2>
+      <p>Lettering, illustrazione e materiali per lanci, store e edizioni limitate. Scrivimi e disegniamo insieme il prossimo drop.</p>
+      <div class="project-links">
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero: tilt 3D + riflesso lucido che seguono il cursore, con easing.
+  (function () {
+    const art = document.getElementById('kway-hero');
+    const card = art && art.querySelector('.kway-card');
+    if (!card || reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // Trittico stories: le card partono "a mazzo" e si aprono a ventaglio
+  // quando entrano in viewport; poi passano alle transizioni rapide di hover.
+  (function () {
+    const row = document.getElementById('triss-row');
+    if (!row) return;
+    const open = () => {
+      row.classList.add('is-open');
+      setTimeout(() => row.classList.add('is-settled'), reduceMotion ? 0 : 1200);
+    };
+    if (reduceMotion || !('IntersectionObserver' in window)) { open(); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      if (entries.some(e => e.isIntersecting)) { obs.disconnect(); open(); }
+    }, { threshold: 0.25 });
+    io.observe(row);
+  })();
+
+  // Story player: avanza da solo come Instagram (5s per story) solo quando
+  // è in viewport. Tap a destra/sinistra per navigare, tieni premuto per
+  // mettere in pausa, miniature e frecce della tastiera per saltare.
+  (function () {
+    const player = document.getElementById('story-player');
+    if (!player) return;
+    const slides = Array.from(player.querySelectorAll('.sp-slide'));
+    const bars = Array.from(player.querySelectorAll('.sp-bar span'));
+    const thumbs = Array.from(player.querySelectorAll('.sp-thumb'));
+    const screen = player.querySelector('.sp-screen');
+    const nowNum = player.querySelector('.sp-now-num');
+    const nowLabel = player.querySelector('.sp-now-label');
+    const firstNum = 4; // le stories del player partono da TRISS_04
+    const DURATION = 5000;
+
+    let index = 0;
+    let progress = 0;
+    let inView = false;
+    let held = false;
+    let suppressClick = false;
+    let last = 0;
+    let rafId = null;
+
+    const render = () => {
+      bars.forEach((b, i) => b.style.setProperty('--p', i < index ? 1 : i === index ? progress : 0));
+    };
+
+    const show = (i) => {
+      index = (i + slides.length) % slides.length;
+      progress = 0;
+      slides.forEach((s, k) => s.classList.toggle('is-active', k === index));
+      thumbs.forEach((t, k) => t.classList.toggle('is-active', k === index));
+      nowNum.textContent = String(firstNum + index).padStart(2, '0');
+      nowLabel.textContent = slides[index].dataset.label;
+      // Tiene la miniatura attiva visibile nella fila scorrevole su mobile
+      const strip = thumbs[index].closest('.sp-thumbs');
+      const li = thumbs[index].parentElement;
+      if (strip.scrollWidth > strip.clientWidth) {
+        strip.scrollTo({ left: li.offsetLeft - strip.clientWidth / 2 + li.offsetWidth / 2, behavior: 'smooth' });
+      }
+      render();
+    };
+
+    const playing = () => inView && !held && !reduceMotion;
+
+    const tick = (t) => {
+      if (!playing()) { rafId = null; return; }
+      const dt = last ? t - last : 0;
+      last = t;
+      progress += dt / DURATION;
+      if (progress >= 1) show(index + 1);
+      else render();
+      rafId = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (rafId === null && playing()) { last = 0; rafId = requestAnimationFrame(tick); }
+    };
+
+    player.querySelector('.sp-tap--prev').addEventListener('click', () => {
+      if (suppressClick) return;
+      show(index - 1); start();
+    });
+    player.querySelector('.sp-tap--next').addEventListener('click', () => {
+      if (suppressClick) return;
+      show(index + 1); start();
+    });
+    thumbs.forEach((t, i) => t.addEventListener('click', () => { show(i); start(); }));
+
+    // Tieni premuto = pausa (come su Instagram). Un tap breve resta navigazione.
+    let holdTimer = null;
+    screen.addEventListener('pointerdown', () => {
+      suppressClick = false;
+      holdTimer = setTimeout(() => {
+        held = true;
+        suppressClick = true;
+        player.classList.add('is-paused');
+      }, 220);
+    });
+    const release = () => {
+      clearTimeout(holdTimer);
+      if (!held) return;
+      held = false;
+      player.classList.remove('is-paused');
+      start();
+    };
+    screen.addEventListener('pointerup', release);
+    screen.addEventListener('pointerleave', release);
+    screen.addEventListener('pointercancel', release);
+    screen.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    player.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { show(index + 1); start(); }
+      if (e.key === 'ArrowLeft') { show(index - 1); start(); }
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries.some(e => e.isIntersecting);
+        start();
+      }, { threshold: 0.5 }).observe(screen);
+    } else {
+      inView = true;
+      start();
+    }
+
+    // Precarica tutte le stories del player così il passaggio è istantaneo
+    window.addEventListener('load', () => slides.forEach(s => { s.loading = 'eager'; }));
+
+    show(0);
+  })();
+
+  // Sticker pack: sticker trascinabili dentro la board. Durante il drag lo
+  // sticker si solleva e oscilla in base alla velocità, al rilascio si
+  // "riattacca" con una rotazione leggermente casuale. Solo da desktop:
+  // sotto gli 820px la board diventa una colonna statica.
+  (function () {
+    const board = document.getElementById('sticker-board');
+    if (!board) return;
+    const stickers = Array.from(board.querySelectorAll('.sticker'));
+    const resetBtn = board.querySelector('.sticker-reset');
+    const desktop = matchMedia('(min-width: 821px)');
+    let zTop = 10;
+    const state = new Map();
+
+    const apply = (el, s) => {
+      el.style.setProperty('--x', s.x.toFixed(1) + 'px');
+      el.style.setProperty('--y', s.y.toFixed(1) + 'px');
+      el.style.setProperty('--r', s.r.toFixed(2) + 'deg');
+      el.style.setProperty('--s', s.s.toFixed(3));
+    };
+
+    const place = () => {
+      const bw = board.clientWidth;
+      const bh = board.clientHeight;
+      stickers.forEach((el) => {
+        const s = {
+          x: parseFloat(el.dataset.x) * bw,
+          y: parseFloat(el.dataset.y) * bh,
+          r: parseFloat(el.dataset.r),
+          s: 1, tr: parseFloat(el.dataset.r), ts: 1
+        };
+        state.set(el, s);
+        apply(el, s);
+      });
+      board.classList.remove('is-touched');
+    };
+
+    // Animazione morbida di rotazione/scala verso il target.
+    let rafId = null;
+    const tick = () => {
+      let moving = false;
+      state.forEach((s, el) => {
+        const nr = s.r + (s.tr - s.r) * 0.18;
+        const ns = s.s + (s.ts - s.s) * 0.2;
+        if (Math.abs(nr - s.r) > 0.01 || Math.abs(ns - s.s) > 0.0005) moving = true;
+        s.r = nr; s.s = ns;
+        apply(el, s);
+      });
+      rafId = moving ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    stickers.forEach((el) => {
+      let dragging = false;
+      let offX = 0, offY = 0, lastX = 0;
+
+      el.addEventListener('pointerdown', (e) => {
+        if (!desktop.matches) return;
+        e.preventDefault();
+        const s = state.get(el);
+        dragging = true;
+        el.setPointerCapture(e.pointerId);
+        el.classList.add('is-dragging');
+        el.style.zIndex = ++zTop;
+        board.classList.add('is-touched');
+        const b = board.getBoundingClientRect();
+        offX = e.clientX - b.left - s.x;
+        offY = e.clientY - b.top - s.y;
+        lastX = e.clientX;
+        s.ts = reduceMotion ? 1 : 1.08;
+        start();
+      });
+
+      el.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const s = state.get(el);
+        const b = board.getBoundingClientRect();
+        const maxX = b.width - el.offsetWidth * 0.35;
+        const maxY = b.height - el.offsetHeight * 0.35;
+        s.x = Math.min(maxX, Math.max(-el.offsetWidth * 0.65, e.clientX - b.left - offX));
+        s.y = Math.min(maxY, Math.max(-el.offsetHeight * 0.65, e.clientY - b.top - offY));
+        if (!reduceMotion) {
+          const vx = e.clientX - lastX;
+          s.tr = Math.max(-18, Math.min(18, vx * 0.9));
+        }
+        lastX = e.clientX;
+        apply(el, s);
+        start();
+      });
+
+      const drop = () => {
+        if (!dragging) return;
+        dragging = false;
+        el.classList.remove('is-dragging');
+        const s = state.get(el);
+        s.tr = reduceMotion ? s.r : (Math.random() * 16 - 8);
+        s.ts = 1;
+        start();
+      };
+      el.addEventListener('pointerup', drop);
+      el.addEventListener('pointercancel', drop);
+    });
+
+    resetBtn.addEventListener('click', place);
+    window.addEventListener('resize', () => { if (desktop.matches) place(); });
+    place();
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Can’t Give You HIV — U=U / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="I Can’t Give You HIV – U=U, Burro Studio per ASA Milano e Milano Check Point: campagna per la Giornata Mondiale contro l'AIDS tra poster, affissioni 6x3, social e t-shirt limited edition.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: il rosso dei manifesti al posto del blu di
+     default, con il nero della seconda versione come base delle sezioni scure. */
+  :root{
+    --accent:#C8221E;
+    --accent-soft:#F6E1DF;
+    --hiv-black:#111010;
+    --hiv-white:#ECEAE6;
+  }
+
+  /* -------- Hero: key visual con tilt 3D, le due tavole in dissolvenza -------- */
+  .hiv-hero-art{
+    position:relative;
+    flex:0 0 520px;
+    width:520px;
+    perspective:1200px;
+  }
+  .hiv-card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--hiv-black);
+    border:7px solid #fff;
+    box-shadow:0 30px 70px rgba(23,20,15,.28);
+    aspect-ratio:1715/1158;
+    transform: rotate(-1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+  }
+  .hiv-hero-art:hover .hiv-card{
+    box-shadow:0 34px 80px rgba(23,20,15,.3), 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(200,34,30,.4);
+  }
+  .hiv-card img{
+    position:absolute; inset:0;
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform: scale(1.02);
+    opacity:0;
+    transition: opacity 1s ease, transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .hiv-card img.is-active{ opacity:1; }
+  .hiv-hero-art:hover .hiv-card img{ transform: scale(1.07); }
+  /* Riflesso che segue il cursore */
+  .hiv-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.2) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .hiv-hero-art:hover .hiv-card::after{ opacity:1; }
+
+  .hiv-badge{
+    position:absolute;
+    right:-26px; top:-26px;
+    width:112px; height:112px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    background: var(--hiv-black);
+    color:#fff;
+    font-weight:700;
+    font-size:0.56rem;
+    line-height:1.25;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    border-radius:50%;
+    border:3px dashed rgba(200,34,30,.8);
+    transform: rotate(12deg);
+    padding:10px;
+    box-shadow:0 10px 24px rgba(17,16,16,.35);
+    transition: transform .7s ease;
+    z-index:2;
+  }
+  .hiv-badge strong{ display:block; font-size:1.9rem; line-height:1; letter-spacing:-0.02em; margin-bottom:4px; }
+  .hiv-hero-art:hover .hiv-badge{ transform: rotate(372deg); }
+  @media (max-width:980px){
+    .hiv-hero-art{ width:min(100%, 480px); flex-basis:auto; margin:36px auto 0; }
+  }
+  @media (max-width:560px){
+    .hiv-badge{ right:6px; top:-24px; width:90px; height:90px; font-size:0.48rem; }
+    .hiv-badge strong{ font-size:1.5rem; }
+  }
+
+  /* Titolo su due righe fisse: "I Can’t Give You" / "HIV U=U" */
+  .project-hero h1.hiv-title span{ display:block; white-space:nowrap; }
+  .project-hero h1.hiv-title em{ display:inline; }
+
+  /* CTA Vogue */
+  .btn-vogue{ background: var(--accent); color:#fff; }
+  .btn-vogue:hover{ background: var(--ink); color: var(--paper); }
+  .btn-vogue i{ font-size:1.05rem; }
+
+  /* -------- Ticker in versione U=U (rosso + nero) -------- */
+  .ticker-wrap.hiv-ticker{ background: var(--accent); }
+  .hiv-ticker .ticker{ animation-duration:30s; }
+  .hiv-ticker .ticker-item{ color:#fff; letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .hiv-ticker .ticker-item em{ font-style:normal; color: var(--hiv-black); }
+  .hiv-ticker .ticker-sep{ color: var(--hiv-black); }
+
+  /* Eyebrow delle sezioni */
+  .hiv-section .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .hiv-section .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+
+  /* -------- Poster: acrostico H·I·V + i due manifesti a pila -------- */
+  .hiv-posters{
+    background: var(--hiv-black);
+    color: var(--hiv-white);
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  section.hiv-posters{ border-top:none; }
+  .hiv-posters .section-title{ color:#fff; margin-bottom:28px; }
+  .poster-grid{
+    display:grid;
+    grid-template-columns: 1fr 440px;
+    gap:72px;
+    align-items:center;
+  }
+  .poster-side > p{ color:rgba(236,234,230,.75); max-width:48ch; margin:0 0 36px; font-size:1.02rem; }
+
+  .acrostic{
+    list-style:none;
+    margin:0 0 40px; padding:0;
+    border-top:1px solid rgba(255,255,255,.18);
+  }
+  .acrostic li{
+    display:flex;
+    align-items:baseline;
+    gap:4px;
+    padding:12px 4px;
+    border-bottom:1px solid rgba(255,255,255,.18);
+    font-weight:700;
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    line-height:1.1;
+    letter-spacing:-0.01em;
+    text-transform:uppercase;
+    color:rgba(236,234,230,.45);
+    transition: color .3s ease, padding-left .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .acrostic li b{ color: var(--accent); font-weight:700; }
+  .acrostic li:hover,
+  .acrostic.is-lit li{ color:#fff; padding-left:12px; }
+  .acrostic.is-lit li:nth-child(2){ transition-delay:.15s; }
+  .acrostic.is-lit li:nth-child(3){ transition-delay:.3s; }
+
+  .poster-switch{ display:flex; gap:10px; }
+  .poster-switch button{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 18px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.3);
+    background:transparent;
+    color:#fff;
+    font: inherit;
+    font-size:0.9rem;
+    font-weight:700;
+    cursor:pointer;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .poster-switch button::before{
+    content:"";
+    width:12px; height:12px;
+    border-radius:50%;
+    background: var(--sw);
+    border:1px solid rgba(255,255,255,.5);
+  }
+  .poster-switch button:hover{ border-color:#fff; }
+  .poster-switch button[aria-pressed="true"]{ background:#fff; color: var(--hiv-black); border-color:#fff; }
+  .poster-switch button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .poster-stack{
+    position:relative;
+    aspect-ratio:1452/1920;
+    cursor:pointer;
+  }
+  .poster-stack figure{
+    position:absolute; inset:0;
+    margin:0;
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 30px 60px rgba(0,0,0,.55);
+    transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+  }
+  .poster-stack img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .poster-stack figure.is-front{ z-index:2; transform: rotate(-2deg); }
+  .poster-stack figure.is-back{ z-index:1; transform: translate(14%, 4%) rotate(5deg) scale(.92); filter: brightness(.55); }
+  .poster-stack:hover figure.is-back{ transform: translate(18%, 2%) rotate(7deg) scale(.92); filter: brightness(.75); }
+  .poster-stack:focus-visible{ outline:2px solid var(--accent); outline-offset:8px; border-radius:6px; }
+  .poster-hint{
+    display:block;
+    margin-top:28px;
+    text-align:center;
+    font-size:0.8rem;
+    color:rgba(236,234,230,.55);
+  }
+
+  @media (max-width:980px){
+    .poster-grid{ grid-template-columns:1fr; gap:56px; }
+    .poster-device{ width:min(78%, 380px); margin:0 auto; }
+  }
+
+  /* -------- Affissioni 6x3: palco principale + miniature -------- */
+  .billboard-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .billboard-head p{ color: var(--ink-soft); max-width:46ch; margin:0 0 48px; font-size:1.02rem; }
+  .bb-stage{
+    position:relative;
+    border-radius:10px;
+    overflow:hidden;
+    aspect-ratio:3/2;
+    background: var(--paper-dim);
+    box-shadow:0 24px 50px rgba(23,20,15,.18);
+  }
+  .bb-stage img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.04);
+    transition: opacity .6s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .bb-stage img.is-active{ opacity:1; transform: scale(1); }
+  .bb-arrow{
+    position:absolute; top:50%;
+    width:48px; height:48px;
+    margin-top:-24px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:rgba(17,16,16,.55);
+    color:#fff;
+    font-size:1rem;
+    cursor:pointer;
+    z-index:2;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .bb-arrow:hover{ background: var(--accent); transform: scale(1.06); }
+  .bb-arrow:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  .bb-arrow--prev{ left:16px; }
+  .bb-arrow--next{ right:16px; }
+  .bb-count{
+    position:absolute;
+    left:16px; bottom:16px;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(17,16,16,.6);
+    color:#fff;
+    font-size:0.8rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+    z-index:2;
+  }
+  .bb-thumbs{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    margin-top:18px;
+  }
+  .bb-thumb{
+    position:relative;
+    padding:0;
+    border:none;
+    border-radius:6px;
+    overflow:hidden;
+    aspect-ratio:3/2;
+    background: var(--paper-dim);
+    cursor:pointer;
+    opacity:.55;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .bb-thumb img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .bb-thumb::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height:4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin:left;
+    transition: transform .35s ease;
+  }
+  .bb-thumb:hover{ opacity:.9; transform: translateY(-2px); }
+  .bb-thumb.is-active{ opacity:1; }
+  .bb-thumb.is-active::after{ transform: scaleX(1); }
+  .bb-thumb:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:560px){
+    .bb-thumbs{ gap:8px; }
+    .bb-arrow{ width:40px; height:40px; margin-top:-20px; }
+  }
+
+  /* -------- Social & t-shirt: due stories 9:16 -------- */
+  .hiv-social{
+    background: var(--accent);
+    color:#fff;
+    overflow:hidden;
+  }
+  section.hiv-social{ border-top:none; }
+  .hiv-social .eyebrow{ color: var(--hiv-black); }
+  .hiv-social .section-title{ color:#fff; margin-bottom:18px; }
+  .hiv-social .section-title em{ color: var(--hiv-black); }
+  .social-grid{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:72px;
+    align-items:center;
+  }
+  .social-grid > div > p{ color:rgba(255,255,255,.85); max-width:46ch; margin:0 0 20px; font-size:1.02rem; }
+  .story-pair{
+    display:flex;
+    gap:24px;
+    align-items:flex-start;
+  }
+  .story-card{
+    margin:0;
+    width:230px;
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .story-card:nth-child(1){ transform: rotate(-4deg) translateY(18px); }
+  .story-card:nth-child(2){ transform: rotate(3deg) translateY(-18px); }
+  .story-pair:hover .story-card{ transform: rotate(0deg) translateY(0); }
+  .story-phone{
+    border-radius:22px;
+    overflow:hidden;
+    aspect-ratio:1080/1920;
+    background:#000;
+    border:5px solid #fff;
+    box-shadow:0 24px 50px rgba(60,6,6,.4);
+  }
+  .story-phone img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .story-card figcaption{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.35);
+    font-size:0.9rem;
+  }
+  .story-card .fc-num{ font-weight:700; color: var(--hiv-black); }
+  .story-card .fc-label{ font-weight:700; }
+  @media (max-width:980px){
+    .social-grid{ grid-template-columns:1fr; gap:48px; }
+    .story-pair{ justify-content:center; }
+    .story-card{ width:min(42vw, 230px); }
+  }
+  @media (max-width:560px){
+    .story-pair{ gap:14px; }
+  }
+
+  /* -------- Chiusura: l'articolo su Vogue Italia -------- */
+  .hiv-press{
+    display:grid;
+    grid-template-columns: 1fr 440px;
+    gap:64px;
+    align-items:center;
+  }
+  .project-end .hiv-press{ text-align:left; }
+  .hiv-press .section-title{ margin:0 0 18px; }
+  .hiv-press .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .hiv-press .project-links{ justify-content:flex-start; }
+  .hiv-press > div > p{ color: var(--ink-soft); max-width:46ch; margin:0 0 32px; }
+  .press-card{
+    display:block;
+    padding:36px 34px 30px;
+    border-radius:16px;
+    background: var(--hiv-black);
+    color: var(--hiv-white);
+    text-decoration:none;
+    box-shadow:0 24px 50px rgba(23,20,15,.18);
+    transform: rotate(1.2deg);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .press-card:hover{ transform: rotate(0deg) translateY(-4px); box-shadow:0 30px 60px rgba(23,20,15,.25); }
+  .press-card:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+  .press-source{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:22px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.18);
+    font-size:0.8rem;
+    color:rgba(236,234,230,.6);
+  }
+  .press-source strong{ font-family: Georgia, "Times New Roman", serif; font-size:1.35rem; letter-spacing:0.02em; color:#fff; font-weight:700; }
+  .press-card blockquote{
+    margin:0 0 22px;
+    font-size:1.08rem;
+    line-height:1.5;
+    color:#fff;
+  }
+  .press-card blockquote::before{ content:"“"; display:block; font-size:3rem; line-height:.6; color: var(--accent); margin-bottom:8px; font-family: Georgia, serif; }
+  .press-card cite{ display:block; font-style:normal; font-size:0.85rem; color:rgba(236,234,230,.6); }
+  .press-read{ display:inline-flex; gap:8px; margin-top:24px; font-size:0.9rem; font-weight:700; color: var(--accent); }
+  @media (max-width:980px){
+    .hiv-press{ grid-template-columns:1fr; gap:40px; }
+    .press-card{ transform:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hiv-card, .hiv-card img, .hiv-badge, .poster-stack figure, .bb-stage img, .story-card, .press-card, .acrostic li{ transition:none; }
+    .hiv-ticker .ticker{ animation:none; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .hiv-posters{ padding:56px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Campagna sociale — Burro Studio</span>
+      <h1 class="hiv-title"><span>I Can’t Give You</span> <span>HIV <em>U=U</em></span></h1>
+      <p>Per la <strong>Giornata Mondiale contro l'AIDS</strong>, <strong>ASA Milano</strong> e <strong>Milano Check Point</strong> lanciano una campagna per abbattere lo stigma: una persona con HIV in terapia e con carica virale non rilevabile <strong>non trasmette il virus</strong>. Undetectable = Untrasmittable.<br><br>
+      Con <strong>Burro Studio</strong> abbiamo riletto le tre lettere H·I·V in positivo: <strong>Hope, Inclusion, Vision</strong>. Tutto quello che si può dare, tranne il virus.</p>
+      <div class="project-meta">
+        <div>Anno<span>2020</span></div>
+        <div>Cliente<span>ASA Milano · Milano Check Point</span></div>
+        <div>Output<span>Poster · 6x3 · Social · T-shirt</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary btn-vogue" href="https://www.vogue.it/news/article/giornata-mondiale-contro-aids-campagna-asa-milano-check-point" target="_blank" rel="noopener"><i class="fa-regular fa-newspaper" aria-hidden="true"></i>Leggi l'articolo su Vogue Italia ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209240265/I-CANT-GIVE-YOU-HIV-UU-Burro-Studio" target="_blank" rel="noopener" aria-label="Vedi il progetto su Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="hiv-hero-art" id="hiv-hero">
+      <div class="hiv-card">
+        <img class="is-active" src="assets/images/I CAN’T GIVE YOU HIV_01.jpg" width="1715" height="1158" alt="Affissione rossa sotto un ponte ferroviario: I can give you Hope, Inclusion, Vision — I can’t give U HIV, con il simbolo delle due mani che si stringono e il logo U=U" loading="eager" decoding="async">
+        <img src="assets/images/I CAN’T GIVE YOU HIV_02.jpg" width="1715" height="1158" alt="I due manifesti della campagna affiancati, versione rossa e versione nera con la t-shirt U=U" loading="lazy" decoding="async">
+      </div>
+      <span class="hiv-badge" aria-hidden="true"><strong>U=U</strong>Undetectable<br>Untrasmittable</span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap hiv-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">I can give you <em>Hope</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can give you <em>Inclusion</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can give you <em>Vision</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can’t give U <em>HIV</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">U=U <em>Undetectable = Untrasmittable</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">#StopHIVStigma</span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">I can give you <em>Hope</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can give you <em>Inclusion</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can give you <em>Vision</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">I can’t give U <em>HIV</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">U=U <em>Undetectable = Untrasmittable</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">#StopHIVStigma</span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="hiv-section hiv-posters">
+    <div class="wrap">
+      <div class="poster-grid">
+        <div class="poster-side">
+          <span class="eyebrow">I manifesti</span>
+          <h2 class="section-title">Tre lettere, <em>riscritte</em></h2>
+          <p>La campagna rilancia in Italia il progetto social di Randy Davis: alle lettere H, I e V si associano parole positive. Il messaggio è che una persona sieropositiva in terapia può trasmettere solo questi valori, non il virus.</p>
+          <ol class="acrostic" id="acrostic">
+            <li><b>H</b>ope</li>
+            <li><b>I</b>nclusion</li>
+            <li><b>V</b>ision</li>
+          </ol>
+          <div class="poster-switch" role="group" aria-label="Scegli la versione del manifesto">
+            <button type="button" data-poster="0" aria-pressed="true" style="--sw:#C8221E">Rosso</button>
+            <button type="button" data-poster="1" aria-pressed="false" style="--sw:#111010">Nero</button>
+          </div>
+        </div>
+        <div class="poster-device">
+          <div class="poster-stack" id="poster-stack" tabindex="0" role="button" aria-label="Mostra l'altra versione del manifesto">
+            <figure class="is-front">
+              <img src="assets/images/I CAN’T GIVE YOU HIV_VERTICALE_POSTER_02.jpg" width="1452" height="1920" alt="Manifesto rosso: I can give you Hope, Inclusion, Vision, il simbolo delle mani che si stringono e I can’t give U HIV" loading="lazy" decoding="async">
+            </figure>
+            <figure class="is-back">
+              <img src="assets/images/I CAN’T GIVE YOU HIV_VERTICALE_POSTER_01.jpg" width="1452" height="1920" alt="Manifesto nero con le due t-shirt U=U fronte e retro e la scritta I can’t give U HIV" loading="lazy" decoding="async">
+            </figure>
+          </div>
+          <span class="poster-hint">Tocca il manifesto per cambiare versione</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hiv-section hiv-billboards">
+    <div class="wrap">
+      <div class="billboard-head">
+        <div>
+          <span class="eyebrow">Affissioni 6x3</span>
+          <h2 class="section-title">Grande, <em>in strada</em></h2>
+        </div>
+        <p>Il sistema si allarga al formato 6x3: il manifesto rosso in orizzontale, la versione nera con la t-shirt e la scacchiera che alterna le due varianti sullo stesso muro.</p>
+      </div>
+      <div class="bb-viewer" id="bb-viewer">
+        <div class="bb-stage">
+          <img class="is-active" src="assets/images/I CAN’T GIVE YOU HIV_6x3_01.jpg" width="1715" height="1170" alt="Affissione 6x3 rossa sotto un ponte ferroviario con il simbolo delle mani e il logo U=U" loading="lazy" decoding="async">
+          <img src="assets/images/I CAN’T GIVE YOU HIV_6x3_02.jpg" width="1747" height="1170" alt="Affissione 6x3 nera tra i poster su un muro con graffiti, con le due t-shirt U=U" loading="lazy" decoding="async">
+          <img src="assets/images/I CAN’T GIVE YOU HIV_6x3_03.jpg" width="3456" height="2303" alt="Affissione composta da dieci manifesti rossi e neri a scacchiera in Baynes Street, Londra" loading="lazy" decoding="async">
+          <button class="bb-arrow bb-arrow--prev" type="button" aria-label="Affissione precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          <button class="bb-arrow bb-arrow--next" type="button" aria-label="Affissione successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <span class="bb-count" aria-live="polite">01 / 03</span>
+        </div>
+        <div class="bb-thumbs">
+          <button class="bb-thumb is-active" type="button" aria-label="Affissione 1: versione rossa" aria-current="true"><img src="assets/images/I CAN’T GIVE YOU HIV_6x3_01.jpg" alt="" loading="lazy" decoding="async"></button>
+          <button class="bb-thumb" type="button" aria-label="Affissione 2: versione nera"><img src="assets/images/I CAN’T GIVE YOU HIV_6x3_02.jpg" alt="" loading="lazy" decoding="async"></button>
+          <button class="bb-thumb" type="button" aria-label="Affissione 3: scacchiera"><img src="assets/images/I CAN’T GIVE YOU HIV_6x3_03.jpg" alt="" loading="lazy" decoding="async"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hiv-section hiv-social">
+    <div class="wrap social-grid">
+      <div>
+        <span class="eyebrow">Social &amp; t-shirt</span>
+        <h2 class="section-title">Da indossare <br>e da condividere</h2>
+        <p>La grafica U=U nasce per la campagna web, in formato verticale per le stories, e diventa una t-shirt in edizione limitata: il simbolo piccolo sul petto, la frase completa sulla schiena.</p>
+        <p>Il simbolo è un cerchio chiuso da due mani che si stringono, come la "U" dell'equazione.</p>
+      </div>
+      <div class="story-pair">
+        <figure class="story-card">
+          <div class="story-phone"><img src="assets/images/I CAN’T GIVE YOU HIV_VERTICALE_01.jpg" width="1080" height="1920" alt="Story verticale nera con U=U in bianco e il simbolo rosso delle mani che si stringono" loading="lazy" decoding="async"></div>
+          <figcaption><span class="fc-num">01</span><span class="fc-label">Il simbolo</span></figcaption>
+        </figure>
+        <figure class="story-card">
+          <div class="story-phone"><img src="assets/images/I CAN’T GIVE YOU HIV_VERTICALE_02.jpg" width="1080" height="1920" alt="Story verticale con il retro della t-shirt bianca: U=U, il simbolo rosso, Undetectable Untrasmittable e i loghi ASA, Milano Checkpoint e Burro Studio" loading="lazy" decoding="async"></div>
+          <figcaption><span class="fc-num">02</span><span class="fc-label">La t-shirt</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap hiv-press">
+      <div>
+        <h2 class="section-title">Adesso parla <em>Vogue ;)</em></h2>
+        <p>Il 1° dicembre 2020 Vogue Italia ha raccontato la campagna di ASA Milano e Milano Check Point, con il video U=U, le adesioni sui social e la grafica di Burro Studio.</p>
+        <div class="project-links">
+          <a class="btn-primary btn-vogue" href="https://www.vogue.it/news/article/giornata-mondiale-contro-aids-campagna-asa-milano-check-point" target="_blank" rel="noopener"><i class="fa-regular fa-newspaper" aria-hidden="true"></i>Leggi l'articolo ↗</a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+          <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        </div>
+      </div>
+      <a class="press-card" href="https://www.vogue.it/news/article/giornata-mondiale-contro-aids-campagna-asa-milano-check-point" target="_blank" rel="noopener" aria-label="Leggi l'articolo su Vogue Italia">
+        <span class="press-source"><strong>VOGUE</strong><span>1 dicembre 2020</span></span>
+        <blockquote>Per la campagna “I Can Give You” sviluppata da Burro Studio, ASA Milano ha deciso di rilanciare in Italia il progetto social di Randy Davis che si focalizza sulle tre lettere H I V associate a parole che le persone possono scegliere con una connotazione positiva come Hope, Inclusion, Vision.</blockquote>
+        <cite>Giornata Mondiale contro l'AIDS: la campagna di Asa Milano e Milano Check Point</cite>
+        <span class="press-read">Leggi su vogue.it ↗</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero: tilt 3D + riflesso che seguono il cursore, con easing; le due
+  // tavole del key visual si alternano in dissolvenza.
+  (function () {
+    const art = document.getElementById('hiv-hero');
+    const card = art && art.querySelector('.hiv-card');
+    if (!card) return;
+
+    const slides = Array.from(card.querySelectorAll('img'));
+    if (!reduceMotion && slides.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('is-active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('is-active');
+      }, 4000);
+    }
+
+    if (reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // Manifesti: l'acrostico H·I·V si accende quando entra in viewport; i due
+  // poster stanno a pila e si scambiano con un tap o con i pulsanti colore.
+  (function () {
+    const acrostic = document.getElementById('acrostic');
+    if (acrostic) {
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        acrostic.classList.add('is-lit');
+      } else {
+        new IntersectionObserver((entries, obs) => {
+          if (entries.some(e => e.isIntersecting)) { obs.disconnect(); acrostic.classList.add('is-lit'); }
+        }, { threshold: 0.6 }).observe(acrostic);
+      }
+    }
+
+    const stack = document.getElementById('poster-stack');
+    if (!stack) return;
+    const posters = Array.from(stack.querySelectorAll('figure'));
+    const buttons = Array.from(document.querySelectorAll('.poster-switch button'));
+    let front = 0;
+
+    const show = (i) => {
+      front = i;
+      posters.forEach((p, k) => {
+        p.classList.toggle('is-front', k === front);
+        p.classList.toggle('is-back', k !== front);
+      });
+      buttons.forEach((b, k) => b.setAttribute('aria-pressed', String(k === front)));
+    };
+
+    stack.addEventListener('click', () => show((front + 1) % posters.length));
+    stack.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show((front + 1) % posters.length); }
+    });
+    buttons.forEach((b, i) => b.addEventListener('click', () => show(i)));
+  })();
+
+  // Affissioni 6x3: palco con frecce, miniature e frecce da tastiera.
+  (function () {
+    const viewer = document.getElementById('bb-viewer');
+    if (!viewer) return;
+    const slides = Array.from(viewer.querySelectorAll('.bb-stage img'));
+    const thumbs = Array.from(viewer.querySelectorAll('.bb-thumb'));
+    const count = viewer.querySelector('.bb-count');
+    const pad = (n) => String(n).padStart(2, '0');
+    let index = 0;
+
+    const show = (i) => {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('is-active', k === index));
+      thumbs.forEach((t, k) => {
+        t.classList.toggle('is-active', k === index);
+        if (k === index) t.setAttribute('aria-current', 'true');
+        else t.removeAttribute('aria-current');
+      });
+      count.textContent = pad(index + 1) + ' / ' + pad(slides.length);
+    };
+
+    viewer.querySelector('.bb-arrow--prev').addEventListener('click', () => show(index - 1));
+    viewer.querySelector('.bb-arrow--next').addEventListener('click', () => show(index + 1));
+    thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
+    viewer.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(index + 1);
+      if (e.key === 'ArrowLeft') show(index - 1);
+    });
+  })();
+</script>
+
+</body>
+</html>

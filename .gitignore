@@ -1,1 +1,5 @@
 .DS_Store
+
+# File sorgente pesanti (Photoshop/Illustrator) - non usati dal sito
+*.psd
+*.ai

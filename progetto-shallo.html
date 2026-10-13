@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shallo Beer Shop — 7 Years / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="Shallo Beer Shop 7 Years: illustrazione e type design per la campagna del settimo anniversario della birreria milanese, con Burro Studio. Poster dell'evento e t-shirt celebrative.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: il viola del lettering "Shallo" come accento,
+     il pesca del poster come fondo pop, l'arancio della lattina e il rosa
+     delle t-shirt nere per i dettagli. */
+  :root{
+    --accent:#5A2AA0;
+    --accent-soft:#ECE3F7;
+    --peach:#FCD9A8;
+    --can:#F2A33A;
+    --pink:#E2357E;
+  }
+
+  /* -------- Hero: il poster con tilt 3D e bollicine al click -------- */
+  .shallo-hero-art{
+    position:relative;
+    flex:0 0 440px;
+    width:440px;
+    perspective:1200px;
+  }
+  .shallo-card{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--peach);
+    border:7px solid #fff;
+    box-shadow:0 30px 70px rgba(23,20,15,.28);
+    transform: rotate(-1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+    cursor:pointer;
+  }
+  .shallo-hero-art:hover .shallo-card{
+    box-shadow:0 34px 80px rgba(23,20,15,.3), 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(90,42,160,.4);
+  }
+  .shallo-card:focus-visible{ outline:3px solid var(--accent); outline-offset:4px; }
+  .shallo-card img{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    transform: scale(1.02);
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .shallo-hero-art:hover .shallo-card img{ transform: scale(1.06); }
+  /* Riflesso che segue il cursore */
+  .shallo-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.28) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .shallo-hero-art:hover .shallo-card::after{ opacity:1; }
+
+  .shallo-badge{
+    position:absolute;
+    right:-24px; top:-26px;
+    width:112px; height:112px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    background: var(--accent);
+    color: var(--peach);
+    font-weight:700;
+    font-size:0.64rem;
+    line-height:1.1;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    border-radius:50%;
+    border:3px dashed rgba(252,217,168,.55);
+    transform: rotate(12deg);
+    box-shadow:0 10px 24px rgba(90,42,160,.35);
+    transition: transform .7s ease;
+    z-index:2;
+    pointer-events:none;
+  }
+  .shallo-badge b{ font-size:2.4rem; line-height:.9; letter-spacing:-0.02em; color: var(--can); }
+  .shallo-hero-art:hover .shallo-badge{ transform: rotate(372deg); }
+
+  .shallo-cheers{
+    position:absolute;
+    left:50%; bottom:-46px;
+    transform: translateX(-50%);
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.82rem;
+    color: var(--ink-soft);
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  .shallo-cheers i{ color: var(--can); }
+  .shallo-count{ font-weight:700; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+  /* Bollicine generate da JS al click sul poster */
+  .fizz{
+    position:absolute;
+    bottom:12%;
+    width:var(--sz,14px); height:var(--sz,14px);
+    border-radius:50%;
+    border:2px solid #fff;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9) 0 18%, rgba(242,163,58,.55) 45%, rgba(242,163,58,.15) 100%);
+    pointer-events:none;
+    z-index:3;
+    animation: fizz-up var(--t,1.6s) cubic-bezier(.3,.6,.4,1) forwards;
+  }
+  @keyframes fizz-up{
+    0%{ transform: translate(0,0) scale(.3); opacity:0; }
+    15%{ opacity:1; }
+    100%{ transform: translate(var(--dx,0px), var(--dy,-380px)) scale(1); opacity:0; }
+  }
+  .cheers-pop{
+    position:absolute;
+    left:50%; top:42%;
+    z-index:4;
+    padding:10px 20px;
+    border-radius:999px;
+    background: var(--accent);
+    color: var(--peach);
+    font-weight:700;
+    font-size:1.2rem;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    pointer-events:none;
+    animation: cheers-pop 1.1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes cheers-pop{
+    0%{ transform: translate(-50%,-50%) scale(.4) rotate(-12deg); opacity:0; }
+    25%{ transform: translate(-50%,-50%) scale(1.1) rotate(-6deg); opacity:1; }
+    70%{ transform: translate(-50%,-70%) scale(1) rotate(-6deg); opacity:1; }
+    100%{ transform: translate(-50%,-110%) scale(.9) rotate(-6deg); opacity:0; }
+  }
+
+  @media (max-width:980px){
+    .shallo-hero-art{ width:380px; margin:36px auto 40px; }
+  }
+  @media (max-width:560px){
+    .shallo-hero-art{ width:100%; max-width:380px; }
+    .shallo-badge{ right:-8px; top:-18px; width:90px; height:90px; font-size:0.54rem; }
+    .shallo-badge b{ font-size:1.9rem; }
+  }
+
+  /* -------- Ticker in versione Shallo (viola + pesca) -------- */
+  .ticker-wrap.shallo-ticker{ background: var(--accent); }
+  .shallo-ticker .ticker{ animation-duration:30s; }
+  .shallo-ticker .ticker-item{ color: var(--peach); letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .shallo-ticker .ticker-sep{ color: var(--can); }
+
+  /* -------- Il personaggio: dettaglio con lente d'ingrandimento -------- */
+  .shallo-char .eyebrow,
+  .shallo-merch .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .shallo-char .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .char-grid{
+    display:grid;
+    grid-template-columns: 5fr 7fr;
+    gap:64px;
+    align-items:center;
+  }
+  .char-text p{ font-size:1.05rem; color: var(--ink-soft); max-width:46ch; margin:-24px 0 32px; }
+  .char-notes{
+    list-style:none;
+    margin:0; padding:0;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .char-note{
+    display:flex; align-items:baseline; gap:14px;
+    width:100%;
+    padding:14px 0;
+    border:none;
+    border-top:1px solid var(--line);
+    background:none;
+    font:inherit;
+    color: var(--ink);
+    text-align:left;
+    cursor:pointer;
+    transition: color .2s ease, padding-left .25s ease;
+  }
+  .char-notes li:last-child .char-note{ border-bottom:1px solid var(--line); }
+  .char-note .cn-num{ font-weight:700; color: var(--accent); font-size:0.95rem; }
+  .char-note .cn-label{ font-weight:700; font-size:1.02rem; }
+  .char-note .cn-meta{ margin-left:auto; font-size:0.85rem; color: var(--ink-soft); }
+  .char-note:hover, .char-note.is-active{ padding-left:10px; color: var(--accent); }
+  .char-note.is-active .cn-num{ color: var(--can); }
+  .char-note:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .char-frame{
+    position:relative;
+    margin:0;
+    border-radius:18px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    background: var(--peach);
+    transform: rotate(1.2deg);
+    box-shadow:0 26px 60px rgba(23,20,15,.18);
+    cursor:none;
+    touch-action:pan-y;
+  }
+  .char-frame > img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .char-loupe{
+    position:absolute;
+    left:0; top:0;
+    width:240px; height:240px;
+    margin:-120px 0 0 -120px;
+    border-radius:50%;
+    border:5px solid #fff;
+    box-shadow:0 18px 40px rgba(23,20,15,.35), inset 0 0 0 2px rgba(90,42,160,.4);
+    background-color: var(--peach);
+    background-repeat:no-repeat;
+    pointer-events:none;
+    opacity:0;
+    transform: translate(var(--lx,0px), var(--ly,0px)) scale(.6);
+    transition: opacity .25s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+    z-index:2;
+  }
+  .char-frame.is-looking .char-loupe{ opacity:1; transform: translate(var(--lx,0px), var(--ly,0px)) scale(1); }
+  /* Mentre la lente segue il mouse niente transizione sul translate */
+  .char-frame.is-tracking .char-loupe{ transition: opacity .25s ease; }
+  .char-tag{
+    position:absolute;
+    top:16px; left:16px;
+    padding:6px 12px;
+    border-radius:999px;
+    background: var(--accent);
+    color: var(--peach);
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    pointer-events:none;
+    transition: opacity .25s ease;
+    z-index:1;
+  }
+  .char-frame.is-looking .char-tag{ opacity:0; }
+  @media (max-width:880px){
+    .char-grid{ grid-template-columns:1fr; gap:40px; }
+    .char-frame{ transform:none; }
+  }
+
+  /* -------- Merch: configuratore t-shirt -------- */
+  .shallo-merch{
+    background: var(--peach);
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  section.shallo-merch{ border-top:none; }
+  .shallo-merch .section-title em{ font-style:italic; font-weight:400; color: var(--pink); }
+  .merch-grid{
+    display:grid;
+    grid-template-columns: 1fr 600px;
+    gap:64px;
+    align-items:center;
+  }
+  .merch-side > p{ color: var(--ink-soft); max-width:44ch; margin:-24px 0 36px; font-size:1.02rem; }
+
+  .merch-group{ margin-bottom:26px; }
+  .merch-group-label{
+    display:block;
+    font-size:0.8rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .merch-opts{ display:flex; gap:10px; flex-wrap:wrap; }
+  .merch-opt{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:11px 20px;
+    border-radius:999px;
+    border:2px solid rgba(23,20,15,.18);
+    background:transparent;
+    color: var(--ink);
+    font:inherit;
+    font-size:0.92rem;
+    font-weight:700;
+    cursor:pointer;
+    transition: border-color .2s ease, background-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .merch-opt:hover{ border-color: var(--ink); transform: translateY(-2px); }
+  .merch-opt[aria-pressed="true"]{ background: var(--accent); border-color: var(--accent); color: var(--peach); }
+  .merch-opt:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  .swatch{
+    width:16px; height:16px;
+    border-radius:50%;
+    border:2px solid currentColor;
+  }
+  .swatch--white{ background:#fff; }
+  .swatch--black{ background:#111; }
+
+  .merch-now{
+    display:flex; align-items:baseline; gap:12px;
+    padding:14px 0;
+    margin-top:34px;
+    border-top:1px solid rgba(23,20,15,.18);
+    border-bottom:1px solid rgba(23,20,15,.18);
+  }
+  .merch-now-num{ font-weight:700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .merch-now-label{ font-weight:700; font-size:1.05rem; }
+  .merch-now-meta{ margin-left:auto; font-size:0.85rem; color: var(--ink-soft); }
+
+  .merch-stage{ position:relative; perspective:1600px; }
+  .merch-tee{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    border:6px solid #fff;
+    border-radius:22px;
+    aspect-ratio:1/1;
+    background:#000;
+    box-shadow:0 34px 70px rgba(60,30,10,.28);
+    transform-style:preserve-3d;
+    transform: rotate(-1.4deg) rotateY(var(--flip,0deg));
+    transition: transform .8s cubic-bezier(.3,.7,.2,1), background-color .4s ease;
+    cursor:pointer;
+  }
+  .merch-tee:focus-visible{ outline:3px solid var(--accent); outline-offset:5px; }
+  .merch-face{
+    position:absolute; inset:0;
+    border-radius:16px;
+    overflow:hidden;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .merch-face--back{ transform: rotateY(180deg); }
+  .merch-face img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.03);
+    transition: opacity .45s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .merch-face img.is-active{ opacity:1; transform: scale(1); }
+  .merch-stage:hover .merch-face img.is-active{ transform: scale(1.03); }
+  .merch-hint{
+    display:flex; justify-content:center; align-items:center; gap:8px;
+    margin-top:18px;
+    font-size:0.82rem;
+    color: var(--ink-soft);
+  }
+  .merch-hint i{ color: var(--accent); }
+
+  .merch-thumbs{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:12px;
+    max-width:360px;
+    list-style:none;
+    margin:28px 0 0; padding:0;
+  }
+  .merch-thumb{
+    display:block;
+    width:100%;
+    padding:0;
+    border:2px solid transparent;
+    border-radius:12px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    background:#000;
+    cursor:pointer;
+    opacity:.55;
+    transition: opacity .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .merch-thumb img{ display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .merch-thumb:hover{ opacity:.9; transform: translateY(-3px); }
+  .merch-thumb.is-active{ opacity:1; border-color: var(--accent); transform: translateY(-3px); }
+  .merch-thumb:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  @media (max-width:980px){
+    .merch-grid{ grid-template-columns:1fr; gap:44px; }
+    .merch-stage{ order:-1; width:min(100%, 540px); margin:0 auto; }
+  }
+
+  /* -------- La festa: fisarmonica di foto su un'unica riga -------- */
+  section.shallo-party{ border-top:none; }
+  .shallo-party .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .shallo-party .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .shallo-party .wrap > p{ font-size:1.05rem; color: var(--ink-soft); max-width:56ch; margin:-24px 0 40px; }
+  .party-row{
+    display:flex;
+    gap:12px;
+    height:480px;
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .party-row li{
+    flex:1 1 0;
+    min-width:0;
+    transition: flex-grow .6s cubic-bezier(.3,.7,.2,1);
+  }
+  .party-row li.is-active{ flex-grow:3.6; }
+  .party-shot{
+    position:relative;
+    display:block;
+    width:100%; height:100%;
+    padding:0;
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--peach);
+    cursor:pointer;
+    font:inherit;
+    text-align:left;
+  }
+  .party-shot img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    filter: saturate(.7);
+    transform: scale(1.06);
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+  }
+  .party-row li.is-active .party-shot img{ filter:none; transform: scale(1); }
+  .party-shot::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(to top, rgba(23,20,15,.72), rgba(23,20,15,0) 50%);
+    pointer-events:none;
+  }
+  .party-num{
+    position:absolute;
+    top:14px; left:14px;
+    z-index:1;
+    display:grid; place-items:center;
+    width:38px; height:38px;
+    border-radius:50%;
+    background: var(--accent);
+    color: var(--peach);
+    font-size:0.8rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+    transition: background-color .3s ease, color .3s ease;
+  }
+  .party-row li.is-active .party-num{ background: var(--can); color: var(--ink); }
+  .party-cap{
+    position:absolute;
+    left:22px; right:22px; bottom:20px;
+    z-index:1;
+    color:#fff;
+    opacity:0;
+    transform: translateY(12px);
+    transition: opacity .35s ease, transform .45s cubic-bezier(.2,.7,.2,1);
+  }
+  .party-row li.is-active .party-cap{ opacity:1; transform:none; transition-delay:.18s; }
+  .party-cap b{ display:block; font-size:1.15rem; margin-bottom:4px; }
+  .party-cap span{ font-size:0.88rem; opacity:.85; }
+  .party-shot:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+
+  /* Su mobile la riga diventa uno scorrimento orizzontale con snap */
+  @media (max-width:760px){
+    .party-row{
+      height:auto;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      margin:0 -40px; padding:0 40px 8px;
+      scroll-padding:0 40px;
+    }
+    .party-row li, .party-row li.is-active{ flex:0 0 78%; scroll-snap-align:start; }
+    .party-shot{ aspect-ratio:4/5; height:auto; }
+    .party-shot img{ filter:none; transform:none; }
+    .party-cap{ opacity:1; transform:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .shallo-card, .shallo-card img, .shallo-badge, .merch-tee, .merch-face img, .char-loupe,
+    .party-row li, .party-shot img, .party-cap{ transition:none; }
+    .shallo-ticker .ticker{ animation:none; }
+  }
+
+  /* Su mobile il margine laterale di .wrap scende a 20px: la riga a scorrimento segue */
+  @media (max-width:640px){
+    .party-row{ margin:0 -20px; padding:0 20px 8px; scroll-padding:0 20px; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .shallo-merch{ padding:56px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Campagna anniversario — Burro Studio</span>
+      <h1>Shallo Beer Shop <em>7 Years, Milano</em></h1>
+      <p>Campagna ideata per celebrare il <strong>settimo anniversario</strong> di una delle birrerie più rinomate e apprezzate di Milano: <strong>Shallo – Beer Shop</strong>.<br><br>
+      Ho curato <strong>illustrazione e type design</strong>: una lattina di birra artigianale che se ne va a spasso nel bosco, disegnata in stile cartoon anni '30, e un lettering "Shallo" morbido e gonfio. Il disegno è diventato il volto del <strong>poster dell'evento</strong> in Piazza Mirabello e di una serie di <strong>t-shirt celebrative</strong>. Art direction e graphic design di Burro Studio.</p>
+      <div class="project-meta">
+        <div>Anno<span>2022</span></div>
+        <div>Ruolo<span>Illustrations · Type design · Graphic</span></div>
+        <div>Output<span>Poster · Sticker · T-shirt</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary" href="https://www.behance.net/gallery/209158235/Shallo-Beer-Shop-Burro-Studio" target="_blank" rel="noopener">Vedi il progetto su Behance ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209158235/Shallo-Beer-Shop-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="shallo-hero-art" id="shallo-hero">
+      <button class="shallo-card" type="button" aria-label="Brinda con Shallo: fai partire le bollicine">
+        <img src="assets/images/SHALLO01.jpg" width="1146" height="1146" alt="Poster Shallo 7 Years: una lattina di birra a cartoni animati cammina nel bosco tra il lettering viola, 14.07.2022, 12PM–12AM, Piazza Mirabello, special lunch by Brosetti" loading="eager" decoding="async">
+      </button>
+      <span class="shallo-badge" aria-hidden="true"><b>7</b>Years</span>
+      <span class="shallo-cheers" aria-live="polite"><i class="fa-solid fa-beer-mug-empty" aria-hidden="true"></i>Clicca per brindare · <span class="shallo-count">0</span> cin cin</span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap shallo-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">Shallo 7 Years</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">14.07.2022</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Piazza Mirabello</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Craft beers &amp; good vibes</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Special lunch by Brosetti</span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">Shallo 7 Years</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">14.07.2022</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Piazza Mirabello</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Craft beers &amp; good vibes</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Special lunch by Brosetti</span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="shallo-char">
+    <div class="wrap char-grid">
+      <div class="char-text">
+        <span class="eyebrow">Il personaggio</span>
+        <h2 class="section-title">Una lattina <br><em>a spasso nel bosco</em></h2>
+        <p>Guanti bianchi, sneakers enormi, linea nera spessa e retino halftone sull'arancio: un omaggio ai cartoon rubber hose, con la lattina appena stappata che saluta mentre attraversa il bosco. Passa sopra l'illustrazione per guardare i dettagli da vicino.</p>
+        <ul class="char-notes">
+          <li><button class="char-note" type="button" data-x="0.52" data-y="0.14"><span class="cn-num">01</span><span class="cn-label">Appena stappata</span><span class="cn-meta">Fizz &amp; sparkle</span></button></li>
+          <li><button class="char-note" type="button" data-x="0.58" data-y="0.4"><span class="cn-num">02</span><span class="cn-label">Retino halftone</span><span class="cn-meta">Texture a punti</span></button></li>
+          <li><button class="char-note" type="button" data-x="0.74" data-y="0.48"><span class="cn-num">03</span><span class="cn-label">Il segno di approvazione</span><span class="cn-meta">Guanti bianchi</span></button></li>
+          <li><button class="char-note" type="button" data-x="0.27" data-y="0.84"><span class="cn-num">04</span><span class="cn-label">Sneakers XXL</span><span class="cn-meta">Rubber hose style</span></button></li>
+        </ul>
+      </div>
+      <figure class="char-frame" id="char-frame">
+        <img src="assets/images/SHALLO04.jpg" width="1146" height="1146" alt="Dettaglio dell'illustrazione: la lattina arancione con retino halftone, guanti bianchi e sneakers che cammina tra gli alberi" loading="lazy" decoding="async">
+        <span class="char-loupe" aria-hidden="true"></span>
+        <span class="char-tag">Passa sopra con la lente</span>
+      </figure>
+    </div>
+  </section>
+
+  <section class="shallo-merch">
+    <div class="wrap merch-grid">
+      <div class="merch-side">
+        <span class="eyebrow">Merch</span>
+        <h2 class="section-title"> T-shirt</h2>
+        <p>L'illustrazione esce dal poster e finisce sulle t-shirt dell'anniversario: logo piccolo sul petto, artwork completo sulla schiena.</p>
+
+        <div class="merch-group">
+          <span class="merch-group-label" id="lbl-color">Colore</span>
+          <div class="merch-opts" role="group" aria-labelledby="lbl-color">
+            <button class="merch-opt" type="button" data-color="white" aria-pressed="true"><span class="swatch swatch--white" aria-hidden="true"></span>Bianca</button>
+            <button class="merch-opt" type="button" data-color="black" aria-pressed="false"><span class="swatch swatch--black" aria-hidden="true"></span>Nera</button>
+          </div>
+        </div>
+        <div class="merch-group">
+          <span class="merch-group-label" id="lbl-side">Lato</span>
+          <div class="merch-opts" role="group" aria-labelledby="lbl-side">
+            <button class="merch-opt" type="button" data-side="front" aria-pressed="true">Fronte</button>
+            <button class="merch-opt" type="button" data-side="back" aria-pressed="false">Retro</button>
+          </div>
+        </div>
+
+        <div class="merch-now" aria-live="polite"><span class="merch-now-num">01</span><span class="merch-now-label">Bianca · Fronte</span><span class="merch-now-meta">Logo sul petto</span></div>
+
+        <ul class="merch-thumbs">
+          <li><button class="merch-thumb is-active" type="button" data-color="white" data-side="front" aria-label="T-shirt bianca, fronte"><img src="assets/images/SHALLO02.jpg" width="1146" height="1146" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="merch-thumb" type="button" data-color="white" data-side="back" aria-label="T-shirt bianca, retro"><img src="assets/images/SHALLO05.jpg" width="1146" height="1146" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="merch-thumb" type="button" data-color="black" data-side="front" aria-label="T-shirt nera, fronte"><img src="assets/images/SHALLO06.jpg" width="1146" height="1146" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="merch-thumb" type="button" data-color="black" data-side="back" aria-label="T-shirt nera, retro"><img src="assets/images/SHALLO03.jpg" width="1146" height="1146" alt="" loading="lazy" decoding="async"></button></li>
+        </ul>
+      </div>
+
+      <div class="merch-stage">
+        <button class="merch-tee" id="merch-tee" type="button" aria-label="Gira la t-shirt">
+          <span class="merch-face merch-face--front">
+            <img class="is-active" data-color="white" src="assets/images/SHALLO02.jpg" width="1146" height="1146" alt="T-shirt bianca Shallo, fronte: lettering viola e lattina piccoli sul petto" decoding="async">
+            <img data-color="black" src="assets/images/SHALLO06.jpg" width="1146" height="1146" alt="T-shirt nera Shallo, fronte: lettering viola e lattina con il bosco rosa sul petto" loading="lazy" decoding="async">
+          </span>
+          <span class="merch-face merch-face--back">
+            <img class="is-active" data-color="white" src="assets/images/SHALLO05.jpg" width="1146" height="1146" alt="T-shirt bianca Shallo, retro: artwork completo con Shallo 7 Years, 14.07.2022, Craft beers & good vibes" loading="lazy" decoding="async">
+            <img data-color="black" src="assets/images/SHALLO03.jpg" width="1146" height="1146" alt="T-shirt nera Shallo, retro: artwork completo in viola, arancio e rosa con Shallo 7 Years" loading="lazy" decoding="async">
+          </span>
+        </button>
+        <span class="merch-hint"><i class="fa-solid fa-rotate" aria-hidden="true"></i>Clicca la maglietta per girarla</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="shallo-party">
+    <div class="wrap">
+      <span class="eyebrow">Il giorno della festa</span>
+      <h2 class="section-title">14/07/2022</h2>
+      <p>Dal poster alla piazza: magliette indossate, sticker sui tavoli e la fila davanti al beer shop.</p>
+      <ul class="party-row">
+        <li class="is-active"><button class="party-shot" type="button" aria-pressed="true">
+          <img src="assets/images/Shallo_FOTO_01.jpg" width="1170" height="1149" alt="Una persona con la t-shirt gialla Shallo 7 Years tiene in mano tre bottiglie di birra Mönchsambacher" loading="lazy" decoding="async">
+          <span class="party-num">01</span>
+          <span class="party-cap"><b>La t-shirt in servizio</b><span>Tre bottiglie e il logo sul petto</span></span>
+        </button></li>
+        <li><button class="party-shot" type="button" aria-pressed="false">
+          <img src="assets/images/Shallo_FOTO_02.jpg" width="1170" height="859" alt="Le spine della birra all'aperto in Piazza Mirabello, dietro due ragazzi con la maglietta Shallo brindano al sole" loading="lazy" decoding="async">
+          <span class="party-num">02</span>
+          <span class="party-cap"><b>Spine in piazza</b><span>Piazza Mirabello, 14.07.2022</span></span>
+        </button></li>
+        <li><button class="party-shot" type="button" aria-pressed="false">
+          <img src="assets/images/Shallo_FOTO_03.jpg" width="1170" height="1159" alt="Un secchiello con gli adesivi Shallo 7 Years e Parco Shallo, un bicchiere di birra e lo sticker della lattina sul tavolo" loading="lazy" decoding="async">
+          <span class="party-num">03</span>
+          <span class="party-cap"><b>Sticker ovunque</b><span>La lattina finisce su pc e secchielli</span></span>
+        </button></li>
+        <li><button class="party-shot" type="button" aria-pressed="false">
+          <img src="assets/images/Shallo_FOTO_04.jpg" width="1169" height="1158" alt="La fila serale davanti all'insegna Shallo Beer Shop, in primo piano un ragazzo di spalle con la t-shirt gialla Shallo 7 Years" loading="lazy" decoding="async">
+          <span class="party-num">04</span>
+          <span class="party-cap"><b>La fila davanti al beer shop</b><span>Il retro della maglia, a fine serata</span></span>
+        </button></li>
+        <li><button class="party-shot" type="button" aria-pressed="false">
+          <img src="assets/images/Shallo_FOTO_05.jpg" width="1170" height="2016" alt="Un ragazzo di spalle con la t-shirt nera Shallo 7 Years davanti alla vetrina del beer shop, con la scritta Sono arrivate anche le t-shirt" loading="lazy" decoding="async">
+          <span class="party-num">05</span>
+          <span class="party-cap"><b>Sono arrivate le t-shirt</b><span>La versione nera, davanti alla vetrina</span></span>
+        </button></li>
+        <li><button class="party-shot" type="button" aria-pressed="false">
+          <img src="assets/images/Shallo_FOTO_06.jpg" width="871" height="1476" alt="Una mano tiene lo sticker Shallo 7 Years con la lattina che cammina nel bosco e il lettering viola" loading="lazy" decoding="async">
+          <span class="party-num">06</span>
+          <span class="party-cap"><b>Lo sticker</b><span>Lattina e lettering, pronti da attaccare</span></span>
+        </button></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap project-end-inner">
+      <h2 class="section-title">Un anniversario da festeggiare?</h2>
+      <p>Lettering, personaggi e illustrazioni per eventi, poster e merch. Scrivimi e disegniamo insieme la prossima festa.</p>
+      <div class="project-links">
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero: tilt 3D + riflesso che seguono il cursore; al click il poster
+  // "si stappa" con una pioggia di bollicine e il contatore dei brindisi.
+  (function () {
+    const art = document.getElementById('shallo-hero');
+    const card = art && art.querySelector('.shallo-card');
+    if (!card) return;
+    const count = art.querySelector('.shallo-count');
+    let cheers = 0;
+    const words = ['Cin cin!', 'Cheers!', 'Prost!', 'Salute!', '7 years!', 'Skål!'];
+
+    card.addEventListener('click', () => {
+      cheers++;
+      count.textContent = cheers;
+      const pop = document.createElement('span');
+      pop.className = 'cheers-pop';
+      pop.textContent = words[(cheers - 1) % words.length];
+      art.appendChild(pop);
+      pop.addEventListener('animationend', () => pop.remove());
+      if (reduceMotion) return;
+      for (let i = 0; i < 22; i++) {
+        const b = document.createElement('span');
+        b.className = 'fizz';
+        b.style.left = (12 + Math.random() * 76) + '%';
+        b.style.setProperty('--sz', (6 + Math.random() * 18).toFixed(0) + 'px');
+        b.style.setProperty('--dx', (Math.random() * 80 - 40).toFixed(0) + 'px');
+        b.style.setProperty('--dy', -(220 + Math.random() * 260).toFixed(0) + 'px');
+        b.style.setProperty('--t', (1 + Math.random() * 1.1).toFixed(2) + 's');
+        b.style.animationDelay = (Math.random() * 0.35).toFixed(2) + 's';
+        art.appendChild(b);
+        b.addEventListener('animationend', () => b.remove());
+      }
+    });
+
+    if (reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // Personaggio: lente d'ingrandimento circolare che segue il cursore.
+  // Le note a fianco spostano la lente sul dettaglio corrispondente.
+  (function () {
+    const frame = document.getElementById('char-frame');
+    if (!frame) return;
+    const img = frame.querySelector('img');
+    const loupe = frame.querySelector('.char-loupe');
+    const notes = Array.from(document.querySelectorAll('.char-note'));
+    const ZOOM = 1.9;
+    loupe.style.backgroundImage = `url("${img.getAttribute('src')}")`;
+
+    // px, py: posizione normalizzata (0–1) dentro il riquadro
+    const lookAt = (px, py) => {
+      const w = frame.clientWidth;
+      const h = frame.clientHeight;
+      const r = loupe.offsetWidth / 2;
+      frame.style.setProperty('--lx', (px * w).toFixed(1) + 'px');
+      frame.style.setProperty('--ly', (py * h).toFixed(1) + 'px');
+      loupe.style.backgroundSize = `${w * ZOOM}px ${h * ZOOM}px`;
+      loupe.style.backgroundPosition = `${(-px * w * ZOOM + r).toFixed(1)}px ${(-py * h * ZOOM + r).toFixed(1)}px`;
+      frame.classList.add('is-looking');
+    };
+    const clearNotes = () => notes.forEach(n => n.classList.remove('is-active'));
+
+    frame.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = frame.getBoundingClientRect();
+      frame.classList.add('is-tracking');
+      clearNotes();
+      lookAt((e.clientX - b.left) / b.width, (e.clientY - b.top) / b.height);
+    });
+    frame.addEventListener('pointerleave', () => {
+      frame.classList.remove('is-looking', 'is-tracking');
+    });
+
+    notes.forEach((n) => {
+      const focus = () => {
+        clearNotes();
+        n.classList.add('is-active');
+        frame.classList.remove('is-tracking');
+        lookAt(parseFloat(n.dataset.x), parseFloat(n.dataset.y));
+      };
+      n.addEventListener('mouseenter', focus);
+      n.addEventListener('focus', focus);
+      n.addEventListener('click', focus);
+      n.addEventListener('mouseleave', () => {
+        n.classList.remove('is-active');
+        frame.classList.remove('is-looking');
+      });
+      n.addEventListener('blur', () => {
+        n.classList.remove('is-active');
+        frame.classList.remove('is-looking');
+      });
+    });
+  })();
+
+  // Merch: configuratore t-shirt. Il lato si cambia con un flip 3D della
+  // maglietta, il colore con una dissolvenza su entrambe le facce.
+  (function () {
+    const tee = document.getElementById('merch-tee');
+    if (!tee) return;
+    const section = tee.closest('.shallo-merch');
+    const colorBtns = Array.from(section.querySelectorAll('.merch-opt[data-color]'));
+    const sideBtns = Array.from(section.querySelectorAll('.merch-opt[data-side]'));
+    const thumbs = Array.from(section.querySelectorAll('.merch-thumb'));
+    const faceImgs = Array.from(tee.querySelectorAll('.merch-face img'));
+    const nowNum = section.querySelector('.merch-now-num');
+    const nowLabel = section.querySelector('.merch-now-label');
+    const nowMeta = section.querySelector('.merch-now-meta');
+    const names = { white: 'Bianca', black: 'Nera', front: 'Fronte', back: 'Retro' };
+    const metas = { front: 'Logo sul petto', back: 'Artwork completo' };
+
+    let color = 'white';
+    let side = 'front';
+    let flip = 0; // gradi accumulati: il giro continua sempre nello stesso verso
+
+    const render = () => {
+      faceImgs.forEach(img => img.classList.toggle('is-active', img.dataset.color === color));
+      colorBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.color === color));
+      sideBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.side === side));
+      thumbs.forEach((t, i) => {
+        const on = t.dataset.color === color && t.dataset.side === side;
+        t.classList.toggle('is-active', on);
+        if (on) nowNum.textContent = String(i + 1).padStart(2, '0');
+      });
+      nowLabel.textContent = `${names[color]} · ${names[side]}`;
+      nowMeta.textContent = metas[side];
+      tee.style.setProperty('--flip', flip + 'deg');
+    };
+
+    const setSide = (s) => {
+      if (s === side) return;
+      side = s;
+      flip += 180;
+      render();
+    };
+
+    colorBtns.forEach(b => b.addEventListener('click', () => { color = b.dataset.color; render(); }));
+    sideBtns.forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
+    thumbs.forEach(t => t.addEventListener('click', () => {
+      color = t.dataset.color;
+      if (t.dataset.side !== side) setSide(t.dataset.side);
+      else render();
+    }));
+    tee.addEventListener('click', () => setSide(side === 'front' ? 'back' : 'front'));
+
+    // Precarica tutte le varianti così il cambio è istantaneo
+    window.addEventListener('load', () => faceImgs.forEach(i => { i.loading = 'eager'; }));
+
+    render();
+  })();
+
+  // La festa: fisarmonica di foto. La foto attiva si allarga e mostra la
+  // didascalia; si attiva al passaggio del mouse, al focus o al tocco.
+  (function () {
+    const items = Array.from(document.querySelectorAll('.party-row li'));
+    if (!items.length) return;
+    const activate = (li) => {
+      items.forEach((it) => {
+        const on = it === li;
+        it.classList.toggle('is-active', on);
+        it.querySelector('.party-shot').setAttribute('aria-pressed', on);
+      });
+    };
+    items.forEach((li) => {
+      const shot = li.querySelector('.party-shot');
+      li.addEventListener('mouseenter', () => activate(li));
+      shot.addEventListener('focus', () => activate(li));
+      shot.addEventListener('click', () => activate(li));
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iContadini Ugento — BriefMe / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="iContadini, azienda agricola di Ugento nel Salento, per BriefMe: campagne ADS B2C e corporate gifting in tre formati e tre lingue, piano editoriale social, video per le stories, still life delle zuppe, affissioni 6x3 e catalogo box regalo da sfogliare.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: l'ocra dei bottoni "Assaggiali subito" al posto
+     del blu di default, con il crema e il marrone terra delle ADS. */
+  :root{
+    --accent:#9A6229;
+    --accent-soft:#F4E9D7;
+    --ct-cream:#F4E9D7;
+    --ct-brown:#5A4A41;
+    --ct-dark:#3B302A;
+    --ct-gold:#D9A85B;
+  }
+
+  /* -------- Hero: key visual con tilt 3D, pattern e 6x3 in dissolvenza -------- */
+  .ct-hero-art{
+    position:relative;
+    flex:0 0 500px;
+    width:500px;
+    perspective:1200px;
+  }
+  .ct-card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--ct-cream);
+    border:7px solid #fff;
+    box-shadow:0 30px 70px rgba(23,20,15,.28);
+    aspect-ratio:4/3;
+    transform: rotate(-1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+  }
+  .ct-hero-art:hover .ct-card{
+    box-shadow:0 34px 80px rgba(23,20,15,.3), 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(154,98,41,.4);
+  }
+  .ct-card img{
+    position:absolute; inset:0;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+    transform: scale(1.02);
+    opacity:0;
+    transition: opacity 1s ease, transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .ct-card img.is-active{ opacity:1; }
+  .ct-hero-art:hover .ct-card img{ transform: scale(1.07); }
+  /* Riflesso che segue il cursore */
+  .ct-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .ct-hero-art:hover .ct-card::after{ opacity:1; }
+
+  /* Badge: il logo social del cliente, gira come un timbro */
+  .ct-badge{
+    position:absolute;
+    right:-28px; top:-30px;
+    width:116px; height:116px;
+    border-radius:50%;
+    background:#fff;
+    border:3px dashed var(--ct-gold);
+    padding:6px;
+    box-shadow:0 10px 24px rgba(59,48,42,.3);
+    transform: rotate(-10deg);
+    transition: transform .7s ease;
+    z-index:2;
+  }
+  .ct-badge img{ display:block; width:100%; height:100%; object-fit:contain; border-radius:50%; }
+  .ct-hero-art:hover .ct-badge{ transform: rotate(350deg); }
+  @media (max-width:980px){
+    .ct-hero-art{ width:min(100%, 480px); flex-basis:auto; margin:36px auto 0; }
+  }
+  @media (max-width:560px){
+    .ct-badge{ right:6px; top:-26px; width:88px; height:88px; }
+  }
+
+  .btn-site{ background: var(--accent); color:#fff; }
+  .btn-site:hover{ background: var(--ink); color: var(--paper); }
+  .btn-site i{ font-size:1.05rem; }
+
+  /* -------- Ticker in versione terra (marrone + ocra) -------- */
+  .ticker-wrap.ct-ticker{ background: var(--ct-brown); }
+  .ct-ticker .ticker{ animation-duration:34s; }
+  .ct-ticker .ticker-item{ color: var(--ct-cream); letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .ct-ticker .ticker-item em{ font-style:normal; color: var(--ct-gold); }
+  .ct-ticker .ticker-sep{ color: var(--ct-gold); }
+
+  /* Eyebrow e titoli delle sezioni */
+  .ct-section .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .ct-section .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .ct-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    flex-wrap:wrap;
+    margin-bottom:48px;
+  }
+  .ct-head .section-title{ margin-bottom:0; }
+  .ct-head p{ color: var(--ink-soft); max-width:48ch; margin:0; font-size:1.02rem; }
+
+  /* -------- ADS lab: campagna × formato × lingua -------- */
+  .ct-ads{ background: var(--ct-cream); padding:100px 0 110px; overflow:hidden; }
+  section.ct-ads{ border-top:none; }
+  .ads-lab{
+    display:grid;
+    grid-template-columns: 330px 1fr;
+    gap:56px;
+    align-items:start;
+  }
+  .ads-group + .ads-group{ margin-top:28px; }
+  .ads-group-label{
+    display:flex; align-items:center; gap:10px;
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color: var(--ct-brown);
+    margin-bottom:10px;
+  }
+  .ads-group-label::after{ content:""; flex:1; height:1px; background:rgba(90,74,65,.25); }
+  .ads-list{ list-style:none; margin:0; padding:0; display:grid; gap:6px; }
+  .ads-item{
+    display:grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:6px 10px 6px 6px;
+    border:1px solid transparent;
+    border-radius:12px;
+    background:transparent;
+    color: var(--ink);
+    font: inherit;
+    text-align:left;
+    cursor:pointer;
+    transition: background-color .2s ease, border-color .2s ease, transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .ads-item img{ width:44px; height:44px; border-radius:8px; object-fit:cover; display:block; background:#fff; }
+  .ads-item b{ display:block; font-size:0.95rem; line-height:1.2; }
+  .ads-item small{ display:block; font-size:0.78rem; color: var(--ink-soft); line-height:1.3; }
+  .ads-item .ads-langs{ font-size:0.68rem; font-weight:700; letter-spacing:0.04em; color: var(--accent); white-space:nowrap; }
+  .ads-item:hover{ background:rgba(255,255,255,.6); transform: translateX(4px); }
+  .ads-item[aria-pressed="true"]{ background:#fff; border-color:rgba(90,74,65,.18); box-shadow:0 8px 20px rgba(90,74,65,.12); }
+  .ads-item:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .ads-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .ads-seg{
+    display:inline-flex;
+    padding:4px;
+    gap:2px;
+    border-radius:999px;
+    background:rgba(90,74,65,.1);
+  }
+  .ads-seg button{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 14px;
+    border:none;
+    border-radius:999px;
+    background:transparent;
+    color: var(--ct-brown);
+    font: inherit;
+    font-size:0.85rem;
+    font-weight:700;
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+  }
+  .ads-seg button[aria-pressed="true"]{ background: var(--ct-brown); color: var(--ct-cream); }
+  .ads-seg button:not([aria-pressed="true"]):not(:disabled):hover{ background:rgba(255,255,255,.7); }
+  .ads-seg button:disabled{ opacity:.35; cursor:not-allowed; }
+  .ads-seg button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* Icona del formato: un rettangolino con le proporzioni giuste */
+  .fmt-shape{ display:inline-block; border:2px solid currentColor; border-radius:2px; }
+  .fmt-shape--q{ width:12px; height:12px; }
+  .fmt-shape--v{ width:9px; height:15px; }
+  .fmt-shape--o{ width:17px; height:9px; }
+
+  .ads-box{
+    position:relative;
+    height:clamp(360px, 64vh, 600px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .ads-frame{
+    position:relative;
+    width:400px; height:400px;
+    border-radius:14px;
+    overflow:hidden;
+    background:#fff;
+    border:6px solid #fff;
+    box-shadow:0 30px 60px rgba(90,74,65,.28);
+    transition: width .6s cubic-bezier(.2,.7,.2,1), height .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .ads-frame img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.03);
+    transition: opacity .45s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .ads-frame img.is-in{ opacity:1; transform: scale(1); }
+  .ads-frame .ads-spin{
+    position:absolute; left:50%; top:50%;
+    width:28px; height:28px; margin:-14px 0 0 -14px;
+    border-radius:50%;
+    border:3px solid rgba(90,74,65,.2);
+    border-top-color: var(--accent);
+    animation: ct-spin .8s linear infinite;
+    opacity:0;
+    transition: opacity .2s ease;
+  }
+  .ads-frame.is-loading .ads-spin{ opacity:1; }
+  @keyframes ct-spin{ to{ transform: rotate(360deg); } }
+  .ads-arrow{
+    position:absolute; top:50%;
+    width:46px; height:46px;
+    margin-top:-23px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background: var(--ct-brown);
+    color: var(--ct-cream);
+    cursor:pointer;
+    z-index:2;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .ads-arrow:hover{ background: var(--accent); transform: scale(1.06); }
+  .ads-arrow:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .ads-arrow--prev{ left:0; }
+  .ads-arrow--next{ right:0; }
+  .ads-caption{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    margin-top:18px;
+    padding-top:12px;
+    border-top:1px solid rgba(90,74,65,.25);
+    font-size:0.9rem;
+  }
+  .ads-caption b{ color: var(--ct-brown); }
+  .ads-caption span:last-child{ font-weight:700; color: var(--accent); font-variant-numeric: tabular-nums; white-space:nowrap; }
+
+  @media (max-width:980px){
+    .ads-lab{ grid-template-columns:1fr; gap:36px; }
+    .ads-side{ order:2; }
+    .ads-list{ grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+    .ads-box{ height:clamp(320px, 70vw, 520px); }
+    .ads-arrow{ width:40px; height:40px; margin-top:-20px; }
+  }
+  @media (max-width:560px){
+    .ads-controls{ justify-content:center; }
+    .ads-seg button{ padding:8px 11px; font-size:0.8rem; }
+    .ads-seg .fmt-label{ display:none; }
+  }
+
+  /* -------- Video: le stories animate dentro il telefono -------- */
+  .ct-videos{
+    background: var(--ct-brown);
+    color: var(--ct-cream);
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  section.ct-videos{ border-top:none; }
+  .ct-videos .eyebrow{ color: var(--ct-gold); }
+  .ct-videos .section-title{ color:#fff; margin-bottom:18px; }
+  .ct-videos .section-title em{ color: var(--ct-gold); }
+
+  .story-player{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:64px;
+    align-items:center;
+  }
+  .sp-side > p{ color:rgba(244,233,215,.8); max-width:48ch; margin:0 0 36px; font-size:1.02rem; }
+  .sp-list{
+    list-style:none;
+    margin:0; padding:0;
+    border-top:1px solid rgba(244,233,215,.22);
+  }
+  .sp-list li{ border-bottom:1px solid rgba(244,233,215,.22); }
+  .sp-track{
+    display:grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items:baseline;
+    gap:12px;
+    width:100%;
+    padding:14px 4px;
+    border:none;
+    background:transparent;
+    color:#fff;
+    font: inherit;
+    text-align:left;
+    cursor:pointer;
+    opacity:.6;
+    transition: opacity .25s ease, padding-left .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .sp-track:hover{ opacity:.95; padding-left:12px; }
+  .sp-track.is-active{ opacity:1; padding-left:12px; }
+  .sp-track:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  .sp-num{ font-weight:700; color: var(--ct-gold); font-variant-numeric: tabular-nums; }
+  .sp-title{ font-weight:700; font-size:1.08rem; }
+  .sp-tag{ font-size:0.85rem; color:rgba(244,233,215,.7); white-space:nowrap; }
+  /* Germoglio che spunta accanto al video in riproduzione */
+  .sp-sprout{
+    display:inline-block;
+    margin-left:10px;
+    color: var(--ct-gold);
+    font-size:0.85rem;
+    opacity:0;
+    transform: translateY(4px) scale(.6);
+    transform-origin:bottom;
+    transition: opacity .25s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .sp-track.is-active .sp-sprout{ opacity:1; transform:none; }
+  .story-player.is-playing .sp-track.is-active .sp-sprout{ animation: sprout 1.4s ease-in-out infinite; }
+  @keyframes sprout{ 0%,100%{ transform: rotate(-8deg); } 50%{ transform: rotate(8deg); } }
+
+  .sp-device{ position:relative; }
+  .sp-bars{
+    display:flex;
+    gap:4px;
+    margin-bottom:12px;
+  }
+  .sp-bar{
+    position:relative;
+    flex:1;
+    height:3px;
+    border-radius:3px;
+    background:rgba(244,233,215,.3);
+    overflow:hidden;
+  }
+  .sp-bar span{
+    position:absolute; inset:0;
+    background: var(--ct-cream);
+    transform-origin:left center;
+    transform: scaleX(var(--p,0));
+  }
+  .sp-screen{
+    position:relative;
+    border-radius:26px;
+    overflow:hidden;
+    aspect-ratio:1080/1920;
+    background: var(--ct-cream);
+    border:6px solid var(--ct-cream);
+    box-shadow:0 34px 70px rgba(20,14,10,.55);
+    transform: rotate(1.5deg);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .sp-device:hover .sp-screen{ transform: rotate(0deg) scale(1.015); }
+  .sp-video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: opacity .3s ease;
+  }
+  .sp-video.is-swapping{ opacity:0; }
+  .sp-tap{
+    position:absolute; top:0; bottom:0;
+    width:50%;
+    border:none;
+    background:transparent;
+    padding:0;
+    z-index:2;
+  }
+  .sp-tap--prev{ left:0; cursor: w-resize; }
+  .sp-tap--next{ right:0; cursor: e-resize; }
+  .sp-tap:focus-visible{ outline:2px solid var(--accent); outline-offset:-4px; }
+  .sp-sound{
+    position:absolute;
+    right:12px; top:12px;
+    width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:rgba(59,48,42,.55);
+    color:#fff;
+    font-size:0.95rem;
+    cursor:pointer;
+    z-index:3;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .sp-sound:hover{ background: var(--accent); transform: scale(1.06); }
+  .sp-sound:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  .sp-paused{
+    position:absolute;
+    left:50%; top:50%;
+    width:64px; height:64px;
+    margin:-32px 0 0 -32px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(59,48,42,.55);
+    color:#fff;
+    font-size:1.2rem;
+    opacity:0;
+    transform: scale(.8);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    z-index:3;
+  }
+  .story-player.is-paused .sp-paused{ opacity:1; transform: scale(1); }
+  .sp-hint{
+    display:block;
+    margin-top:16px;
+    text-align:center;
+    font-size:0.8rem;
+    color:rgba(244,233,215,.65);
+  }
+  @media (max-width:980px){
+    .story-player{ grid-template-columns:1fr; gap:44px; }
+    .sp-device{ order:-1; width:min(100%, 340px); margin:0 auto; }
+    .sp-screen{ transform:none; }
+    .sp-track{ grid-template-columns: 36px 1fr; }
+    .sp-tag{ grid-column:2; white-space:normal; margin-top:-6px; }
+  }
+
+  /* -------- PED: feed social filtrabile per rubrica -------- */
+  .ped-top{
+    display:grid;
+    grid-template-columns: 1fr 520px;
+    gap:64px;
+    align-items:center;
+    margin-bottom:56px;
+  }
+  .ped-top p{ color: var(--ink-soft); max-width:48ch; margin:0; font-size:1.02rem; }
+  .ped-top .section-title{ margin-bottom:18px; }
+  .ped-mockup{
+    margin:0;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 24px 50px rgba(23,20,15,.16);
+    transform: rotate(1.2deg);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .ped-mockup:hover{ transform: rotate(0deg) scale(1.01); }
+  .ped-mockup img{ display:block; width:100%; height:auto; }
+
+  /* Il feed: profilo e filtri su una riga, i post in una striscia che
+     esce dai margini e si scorre (anche trascinando), con avanzamento */
+  .ct-ped{ overflow:hidden; }
+  .ped-bar{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    margin-bottom:26px;
+  }
+  .ped-profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:0 0 auto;
+    padding-right:28px;
+    border-right:1px solid var(--line);
+  }
+  .ped-avatar{
+    width:46px; height:46px;
+    border-radius:50%;
+    padding:2px;
+    background: conic-gradient(var(--ct-gold), var(--accent), var(--ct-brown), var(--ct-gold));
+    flex:0 0 auto;
+  }
+  .ped-avatar img{ display:block; width:100%; height:100%; border-radius:50%; border:2px solid #fff; background:#fff; object-fit:contain; }
+  .ped-profile b{ display:block; font-size:0.98rem; line-height:1.2; }
+  .ped-profile small{ display:block; color: var(--ink-soft); font-size:0.8rem; }
+  .ped-filters{
+    display:flex;
+    gap:6px;
+    min-width:0;
+    overflow-x:auto;
+    scrollbar-width:none;
+    padding:2px 24px 2px 2px;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+  }
+  .ped-filters::-webkit-scrollbar{ display:none; }
+  .ped-filters button{
+    display:inline-flex; align-items:center; gap:6px;
+    flex:0 0 auto;
+    padding:7px 13px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size:0.82rem;
+    font-weight:700;
+    white-space:nowrap;
+    cursor:pointer;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .ped-filters button sup{ font-size:0.66rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .ped-filters button:hover{ border-color: var(--ink); }
+  .ped-filters button[aria-pressed="true"]{ background: var(--ct-brown); border-color: var(--ct-brown); color: var(--ct-cream); }
+  .ped-filters button[aria-pressed="true"] sup{ color: var(--ct-gold); }
+  .ped-filters button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* Il ventaglio: i post si sovrappongono come carte da gioco aperte a
+     ventaglio. Quello al centro sta dritto e davanti, gli altri ruotano,
+     scendono e rimpiccioliscono man mano che si allontanano (lo script
+     scrive --r, --y, --s per ogni carta mentre si scorre). La striscia
+     sborda fino ai bordi della finestra. */
+  .ped-track{
+    --bleed: max(40px, calc((100vw - 1180px) / 2 + 40px));
+    --card: 340px;
+    position:relative;
+    list-style:none;
+    display:flex;
+    margin:0 calc(-1 * var(--bleed));
+    padding:36px 0 120px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    overscroll-behavior-x:contain;
+    cursor:grab;
+  }
+  .ped-track::-webkit-scrollbar{ display:none; }
+  .ped-track.is-dragging{ cursor:grabbing; scroll-snap-type:none; }
+  .ped-track.is-dragging .ped-post{ pointer-events:none; }
+  .ped-track li{
+    position:relative;
+    flex:0 0 var(--card);
+    margin-right:calc(var(--card) * -0.42);
+    scroll-snap-align:center;
+    transform-origin:50% 100%;
+    transform: translateY(var(--y, 0px)) rotate(var(--r, 0deg)) scale(var(--s, 1));
+  }
+  .ped-track li[hidden]{ display:none; }
+  .ped-track li.is-pop .ped-post{ animation: ped-pop .5s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+  @keyframes ped-pop{ from{ opacity:0; transform: translateY(30px); } to{ opacity:1; transform:none; } }
+  .ped-post{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    border:5px solid #fff;
+    border-radius:16px;
+    background: var(--paper-dim);
+    aspect-ratio:4/5;
+    overflow:hidden;
+    cursor:pointer;
+    box-shadow:0 18px 40px rgba(59,48,42,.22);
+    transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+  }
+  .ped-track li.is-active .ped-post{ cursor: zoom-in; box-shadow:0 30px 60px rgba(59,48,42,.32); }
+  .ped-post img{ display:block; width:100%; height:100%; object-fit:cover; -webkit-user-drag:none; user-select:none; transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .2s ease; }
+  .ped-post img.is-fading{ opacity:.25; }
+  /* Le carte dietro sono velate: si legge quella davanti */
+  .ped-post::before{
+    content:"";
+    position:absolute; inset:0;
+    z-index:1;
+    background: var(--ct-dark);
+    opacity: var(--veil, 0);
+    pointer-events:none;
+  }
+  /* Caroselli: l'icona delle slide come su Instagram; al passaggio del
+     mouse il post sfoglia le sue slide */
+  .ped-multi{
+    position:absolute; right:12px; top:12px;
+    z-index:2;
+    width:28px; height:28px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem;
+    color:#fff;
+    background:rgba(59,48,42,.55);
+    border-radius:50%;
+  }
+  .ped-post::after{
+    content: attr(data-rubric);
+    position:absolute; left:0; right:0; bottom:0;
+    z-index:2;
+    padding:34px 16px 14px;
+    background: linear-gradient(to top, rgba(59,48,42,.88), rgba(59,48,42,0));
+    color: var(--ct-cream);
+    font-size:0.85rem;
+    font-weight:700;
+    text-align:left;
+    opacity:0;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .ped-track li.is-active .ped-post:hover{ transform: translateY(-8px); }
+  .ped-track li:not(.is-active) .ped-post:hover{ --veil:0; }
+  .ped-post:hover img{ transform: scale(1.04); }
+  .ped-track li.is-active .ped-post:hover::after, .ped-post:focus-visible::after{ opacity:1; transform:none; }
+  .ped-post:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+
+  /* Piede: avanzamento, contatore e frecce */
+  .ped-foot{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-top:8px;
+  }
+  .ped-progress{
+    flex:1;
+    height:2px;
+    background: var(--line);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .ped-progress span{
+    display:block;
+    height:100%;
+    width:var(--w, 20%);
+    margin-left:var(--x, 0%);
+    background: var(--accent);
+    border-radius:2px;
+    transition: width .3s ease;
+  }
+  .ped-count{ font-size:0.85rem; font-weight:700; font-variant-numeric: tabular-nums; color: var(--ink-soft); min-width:5ch; text-align:right; }
+  .ped-arrow{
+    width:42px; height:42px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:transparent;
+    color: var(--ink);
+    cursor:pointer;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, opacity .2s ease;
+  }
+  .ped-arrow:hover:not(:disabled){ background: var(--ct-brown); border-color: var(--ct-brown); color: var(--ct-cream); }
+  .ped-arrow:disabled{ opacity:.35; cursor:default; }
+  .ped-arrow:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  @media (max-width:980px){
+    .ped-top{ grid-template-columns:1fr; gap:40px; }
+  }
+  @media (max-width:720px){
+    .ped-bar{ flex-direction:column; align-items:stretch; gap:16px; }
+    .ped-profile{ border-right:none; padding-right:0; }
+    .ped-track{ --bleed:20px; --card:min(70vw, 290px); padding:24px 0 80px; }
+    .ped-arrow{ display:none; }
+  }
+  /* Lightbox dei post */
+  .ct-lightbox{
+    padding:0;
+    border:none;
+    background:transparent;
+    max-width:min(92vw, 560px);
+    width:100%;
+    overflow:visible;
+  }
+  .ct-lightbox::backdrop{ background:rgba(30,24,20,.82); }
+  .ct-lightbox figure{ margin:0; }
+  .lb-media{ position:relative; touch-action:pan-y; }
+  .ct-lightbox img{
+    display:block;
+    width:100%;
+    max-height:78vh;
+    object-fit:contain;
+    border-radius:12px;
+    background: var(--ct-cream);
+    transition: opacity .25s ease;
+  }
+  .ct-lightbox img.is-loading{ opacity:.5; }
+  /* Frecce delle slide dentro l'immagine, puntini sotto (come su Instagram) */
+  .lb-slide{
+    position:absolute; top:50%;
+    width:34px; height:34px;
+    margin-top:-17px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.88);
+    color: var(--ct-brown);
+    font-size:0.8rem;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(30,24,20,.25);
+    transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+  }
+  .lb-slide[hidden]{ display:none; }
+  .lb-slide:hover{ background: var(--accent); color:#fff; }
+  .lb-slide:focus-visible{ outline:2px solid var(--ct-gold); outline-offset:2px; }
+  .lb-slide--prev{ left:10px; }
+  .lb-slide--next{ right:10px; }
+  .lb-dots{
+    display:flex;
+    justify-content:center;
+    gap:2px;
+    margin-top:8px;
+  }
+  .lb-dots:empty{ display:none; }
+  .lb-dots button{
+    width:16px; height:16px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+  }
+  .lb-dots button::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background:rgba(244,233,215,.35);
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .lb-dots button:hover::before{ background:rgba(244,233,215,.7); }
+  .lb-dots button[aria-current="true"]::before{ background: var(--ct-gold); transform: scale(1.35); }
+  .lb-dots button:focus-visible{ outline:2px solid var(--ct-gold); outline-offset:0; border-radius:50%; }
+  .ct-lightbox figcaption{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:12px;
+    color: var(--ct-cream);
+    font-size:0.9rem;
+  }
+  .ct-lightbox figcaption span:last-child{ color: var(--ct-gold); font-weight:700; font-variant-numeric: tabular-nums; }
+  .lb-btn{
+    position:absolute;
+    width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background: var(--ct-cream);
+    color: var(--ct-brown);
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .lb-btn:hover{ background: var(--accent); color:#fff; }
+  .lb-btn:focus-visible{ outline:2px solid var(--ct-gold); outline-offset:2px; }
+  .lb-close{ right:-14px; top:-14px; }
+  .lb-prev, .lb-next{ top:calc(50% - 40px); }
+  .lb-prev{ left:-60px; }
+  .lb-next{ right:-60px; }
+  @media (max-width:720px){
+    /* Su telefono restano solo le frecce esterne: sfogliano le slide e poi
+       passano al post dopo, come lo swipe */
+    .lb-slide, .lb-slide[hidden]{ display:none; }
+    .lb-prev{ left:8px; }
+    .lb-next{ right:8px; }
+    .lb-close{ right:8px; top:8px; }
+  }
+
+  /* -------- Zuppe: lo sfondo prende il colore del legume -------- */
+  .ct-zuppe{
+    --soup:#B83C22;
+    background: var(--soup);
+    color:#fff;
+    padding:100px 0 110px;
+    overflow:hidden;
+    transition: background-color .8s ease;
+  }
+  section.ct-zuppe{ border-top:none; }
+  .ct-zuppe .eyebrow{ color:rgba(255,255,255,.75); }
+  .ct-zuppe .section-title{ color:#fff; }
+  .ct-zuppe .section-title em{ color: var(--ct-cream); }
+  .ct-zuppe .ct-head p{ color:rgba(255,255,255,.85); }
+
+  /* Palco: i due scatti in grande e sfalsati; nello spazio sopra lo scatto
+     dall'alto, la scheda della zuppa come sull'etichetta */
+  .soup-stage{
+    position:relative;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap:28px;
+    row-gap:clamp(24px, 3vw, 40px);
+    align-items:start;
+    touch-action: pan-y;
+  }
+  .soup-fig--studio{ grid-column:1; grid-row:1 / span 2; }
+  .soup-info{ grid-column:2; grid-row:1; padding-top:6px; }
+  .soup-fig--top{ grid-column:2; grid-row:2; }
+  .soup-info-num{
+    display:flex; align-items:center; gap:12px;
+    font-size:0.8rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    color:rgba(255,255,255,.7);
+    font-variant-numeric: tabular-nums;
+  }
+  .soup-info-num::after{ content:""; flex:1; height:1px; background:rgba(255,255,255,.3); }
+  .soup-info-name{
+    margin:10px 0 16px;
+    font-size:clamp(1.6rem, 3vw, 2.4rem);
+    font-weight:700;
+    line-height:1.1;
+    letter-spacing:-0.01em;
+    overflow:hidden;
+  }
+  .soup-info-name span{ display:block; }
+  .soup-info-name em{ font-style:italic; font-weight:400; color: var(--ct-cream); }
+  .soup-info-name span.is-in{ animation: soup-name-in .7s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes soup-name-in{ from{ opacity:0; transform: translateY(70%); } to{ opacity:1; transform:none; } }
+  .soup-facts{ display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0; }
+  .soup-facts li{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 11px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.35);
+    font-size:0.78rem;
+    font-weight:700;
+  }
+  .soup-facts i{ font-size:0.7rem; color: var(--ct-cream); }
+
+  .soup-fig{
+    position:relative;
+    z-index:1;
+    margin:0;
+    border-radius:18px;
+    overflow:hidden;
+    aspect-ratio:960/1200;
+    background:rgba(0,0,0,.18);
+    box-shadow:0 40px 80px rgba(0,0,0,.32);
+  }
+  /* Cambio a tendina: lo scatto nuovo si apre sopra al vecchio, quello in
+     studio dal basso e quello dall'alto dall'alto, con un attimo di ritardo */
+  .soup-fig img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    visibility:hidden;
+  }
+  .soup-fig img.is-prev{ visibility:visible; z-index:1; }
+  .soup-fig img.is-active{ visibility:visible; z-index:2; animation: soup-wipe-up 1s cubic-bezier(.7,0,.2,1) both; }
+  .soup-fig--top img.is-active{ animation-name: soup-wipe-down; animation-delay:.12s; }
+  @keyframes soup-wipe-up{
+    from{ clip-path: inset(100% 0 0 0); transform: scale(1.12); }
+    to{ clip-path: inset(0); transform: scale(1); }
+  }
+  @keyframes soup-wipe-down{
+    from{ clip-path: inset(0 0 100% 0); transform: scale(1.12); }
+    to{ clip-path: inset(0); transform: scale(1); }
+  }
+  .soup-label{
+    position:absolute;
+    left:16px; bottom:16px;
+    z-index:3;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+
+  /* Barra sotto: i tappi per scegliere la zuppa (l'anello è il timer
+     dell'autoplay), suggerimento, frecce e contatore */
+  .soup-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:48px;
+    padding-top:28px;
+    border-top:1px solid rgba(255,255,255,.25);
+  }
+  .soup-lids{ display:flex; flex-wrap:wrap; gap:14px; }
+  .soup-lid{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    padding:0;
+    border:none;
+    background:none;
+    color:#fff;
+    font: inherit;
+    cursor:pointer;
+  }
+  .soup-lid-img{ position:relative; display:block; width:78px; height:78px; }
+  .soup-lid-img img{
+    position:absolute; inset:7px;
+    width:64px; height:64px;
+    border-radius:50%;
+    object-fit:cover;
+    opacity:.6;
+    filter: saturate(.6);
+    transition: opacity .25s ease, filter .25s ease, transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .soup-lid:hover .soup-lid-img img{ opacity:.95; filter:none; transform: scale(1.06); }
+  .soup-lid[aria-pressed="true"] .soup-lid-img img{ opacity:1; filter:none; }
+  .soup-lid svg{ position:absolute; inset:0; width:100%; height:100%; transform: rotate(-90deg); }
+  .soup-lid circle{ fill:none; stroke-width:2.5; }
+  .soup-ring-bg{ stroke:rgba(255,255,255,.22); }
+  .soup-ring{ stroke:#fff; stroke-linecap:round; stroke-dasharray:232.5; stroke-dashoffset:232.5; transition: stroke-dashoffset .4s ease; }
+  .soup-lid[aria-pressed="true"] .soup-ring{ stroke-dashoffset:0; }
+  .ct-zuppe.is-auto .soup-lid[aria-pressed="true"] .soup-ring{ animation: soup-ring 4.2s linear both; }
+  .ct-zuppe.is-hold .soup-ring, .ct-zuppe.is-offscreen .soup-ring{ animation-play-state:paused; }
+  @keyframes soup-ring{ from{ stroke-dashoffset:232.5; } to{ stroke-dashoffset:0; } }
+  .soup-lid-name{ font-size:0.82rem; font-weight:700; opacity:.65; transition: opacity .25s ease; }
+  .soup-lid:hover .soup-lid-name, .soup-lid[aria-pressed="true"] .soup-lid-name{ opacity:1; }
+  .soup-lid:focus-visible{ outline:2px solid #fff; outline-offset:4px; border-radius:12px; }
+
+  .soup-nav{ display:flex; align-items:center; gap:12px; }
+  .soup-hint{ margin-right:12px; font-size:0.8rem; color:rgba(255,255,255,.7); }
+  @media (hover:hover) and (pointer:fine){
+    .soup-hint{ display:none; }
+  }
+  .soup-count{ min-width:6ch; text-align:center; font-weight:700; font-variant-numeric: tabular-nums; }
+  .soup-arrow{
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:50%;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .soup-arrow:hover{ background:#fff; border-color:#fff; color: var(--soup); transform: scale(1.06); }
+  .soup-arrow:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+
+  /* Su telefono lo scatto in studio va quasi a tutta larghezza e quello
+     dall'alto gli si appoggia sopra, nell'angolo in basso a destra */
+  @media (max-width:720px){
+    .soup-stage{ display:block; padding-bottom:40px; }
+    .soup-info{ padding:0; margin-bottom:24px; }
+    .soup-fig{ border-radius:14px; }
+    .soup-fig--studio{ width:84%; }
+    .soup-fig--top{
+      position:absolute;
+      right:0; bottom:0;
+      width:46%;
+      margin:0;
+      z-index:2;
+      border:4px solid #fff;
+      transform: rotate(3deg);
+    }
+    .soup-label{ left:10px; bottom:10px; padding:4px 9px; font-size:0.62rem; }
+    .soup-bar{ justify-content:center; margin-top:36px; }
+    .soup-lids{ justify-content:center; flex-wrap:nowrap; gap:2px; }
+    .soup-lid{ gap:6px; }
+    .soup-lid-img{ width:54px; height:54px; }
+    .soup-lid-img img{ inset:5px; width:44px; height:44px; }
+    .soup-lid-name{ font-size:0.66rem; }
+    .soup-hint{ display:none !important; }
+  }
+
+  /* -------- Affissioni 6x3: palco principale + miniature -------- */
+  .bb-stage{
+    position:relative;
+    border-radius:10px;
+    overflow:hidden;
+    aspect-ratio: var(--ar, 4/3);
+    max-height:72vh;
+    margin:0 auto;
+    background: var(--ct-cream);
+    box-shadow:0 24px 50px rgba(23,20,15,.18);
+    transition: aspect-ratio .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .bb-stage img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.04);
+    transition: opacity .6s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .bb-stage img.is-active{ opacity:1; transform: scale(1); }
+  .bb-arrow{
+    position:absolute; top:50%;
+    width:48px; height:48px;
+    margin-top:-24px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:rgba(59,48,42,.6);
+    color:#fff;
+    font-size:1rem;
+    cursor:pointer;
+    z-index:2;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .bb-arrow:hover{ background: var(--accent); transform: scale(1.06); }
+  .bb-arrow:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  .bb-arrow--prev{ left:16px; }
+  .bb-arrow--next{ right:16px; }
+  .bb-count{
+    position:absolute;
+    left:16px; bottom:16px;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(59,48,42,.7);
+    color:#fff;
+    font-size:0.8rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+    z-index:2;
+  }
+  .bb-thumbs{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    margin-top:18px;
+  }
+  .bb-thumb{
+    position:relative;
+    padding:0;
+    border:none;
+    border-radius:6px;
+    overflow:hidden;
+    aspect-ratio:3/2;
+    background: var(--paper-dim);
+    cursor:pointer;
+    opacity:.55;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .bb-thumb img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .bb-thumb::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height:4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin:left;
+    transition: transform .35s ease;
+  }
+  .bb-thumb:hover{ opacity:.9; transform: translateY(-2px); }
+  .bb-thumb.is-active{ opacity:1; }
+  .bb-thumb.is-active::after{ transform: scaleX(1); }
+  .bb-thumb:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:560px){
+    .bb-thumbs{ gap:8px; }
+    .bb-arrow{ width:40px; height:40px; margin-top:-20px; }
+  }
+
+  /* -------- Catalogo box regalo: libretto da sfogliare -------- */
+  .fb{ outline:none; border-radius:12px; }
+  .fb:focus-visible{ outline:2px solid var(--accent); outline-offset:8px; }
+  .fb-stage{
+    position:relative;
+    padding:8px 0 28px;
+    touch-action:pan-y;
+    user-select:none;
+    -webkit-user-select:none;
+    cursor:grab;
+  }
+  .fb-stage.is-dragging{ cursor:grabbing; }
+  /* Contenitore della prospettiva; su schermi stretti scorre per mostrare
+     una pagina alla volta (pari a sinistra, dispari a destra) */
+  .fb-shift{
+    position:relative;
+    perspective:2600px;
+    perspective-origin:50% 40%;
+    transition: transform .9s cubic-bezier(.65,0,.35,1);
+  }
+  .fb-book{
+    position:relative;
+    width:min(100%, calc(76vh * 1.4146));
+    margin:0 auto;
+    aspect-ratio:2382/1684;
+    transform-style:preserve-3d;
+    /* Da chiuso la copertina (o il retro) sta al centro: lo spostamento
+       segue la rotazione del primo e dell'ultimo foglio, via JS.
+       Col mouse si inclina seguendo il cursore (come la card K-Way),
+       ruotando attorno al centro della parte visibile (--ox) */
+    transform-origin: var(--ox, 50%) 50%;
+    transform: translateX(var(--tx, 0%)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+  /* Spessore del libretto: sotto le pagine in cima c'è un blocco 3D vero,
+     profondo --t (lo calcola il JS dalle pagine rimaste su quel lato).
+     Visto di fronte è nascosto; inclinando si vedono i bordi chiari delle
+     pagine e, a libro chiuso, il dorso più scuro. */
+  .fb-block{
+    position:absolute;
+    top:0; bottom:0;
+    width:50%;
+    transform-style:preserve-3d;
+    pointer-events:none;
+  }
+  .fb-block--r{ left:50%; }
+  .fb-block--l{ left:0; }
+  .fb-edge{
+    position:absolute;
+    transition: width .5s ease, height .5s ease;
+    --paper: repeating-linear-gradient(var(--dir), #f7f1e6 0 2px, #e9dfcd 2px 3px);
+    --cover: linear-gradient(var(--dir), #bfae90 0 1px, transparent 1px calc(100% - 1px), #bfae90 calc(100% - 1px));
+    background: var(--cover), var(--paper);
+  }
+  /* Bordi lunghi: lato esterno e dorso */
+  .fb-edge--out, .fb-edge--spine{ top:0; bottom:0; width:var(--t, 0px); --dir: to right; }
+  .fb-edge--top, .fb-edge--bottom{ left:0; right:0; height:var(--t, 0px); --dir: to bottom; }
+  .fb-edge--top{ top:0; transform-origin:top; transform: rotateX(-90deg); }
+  .fb-edge--bottom{ bottom:0; transform-origin:bottom; transform: rotateX(90deg); filter: brightness(.94); }
+  .fb-block--r .fb-edge--out{ right:0; transform-origin:right; transform: rotateY(-90deg); }
+  .fb-block--r .fb-edge--spine{ left:0; transform-origin:left; transform: rotateY(90deg); }
+  .fb-block--l .fb-edge--out{ left:0; transform-origin:left; transform: rotateY(90deg); }
+  .fb-block--l .fb-edge--spine{ right:0; transform-origin:right; transform: rotateY(-90deg); }
+  /* Il dorso è la copertina piegata: un po' più scuro, con la piega
+     arrotondata suggerita da un gradiente */
+  .fb-edge--spine{
+    background: linear-gradient(to right, #a8916c, #c7b18c 50%, #a8916c);
+  }
+  /* Un'unica ombra, larga quanto le pagine davvero visibili */
+  .fb-book::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    left: var(--sl, 0%);
+    right: var(--sr, 0%);
+    z-index:-1;
+    box-shadow:0 22px 50px rgba(23,20,15,.2);
+  }
+  .fb-leaf{
+    position:absolute;
+    top:0; left:50%;
+    width:50%; height:100%;
+    transform-origin:left center;
+    transform-style:preserve-3d;
+  }
+  .fb-side{
+    position:absolute; inset:0;
+    background: var(--ct-cream) center / cover no-repeat;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .fb-side.back{ transform: rotateY(180deg); }
+  /* Piega centrale: la carta si incurva verso la costa */
+  .fb-flat .fb-side::after,
+  .fb-strip.is-spine > .fb-side::after{
+    content:"";
+    position:absolute; inset:0;
+    pointer-events:none;
+  }
+  .fb-flat .fb-side.front::after{ background: linear-gradient(to right, rgba(40,28,20,.32), rgba(40,28,20,.12) 2%, rgba(40,28,20,.04) 5%, rgba(40,28,20,0) 9%); }
+  .fb-flat .fb-side.back::after{ background: linear-gradient(to left, rgba(40,28,20,.32), rgba(40,28,20,.12) 2%, rgba(40,28,20,.04) 5%, rgba(40,28,20,0) 9%); }
+  .fb-strip.is-spine > .fb-side.front::after{ background: linear-gradient(to right, rgba(40,28,20,.32), rgba(40,28,20,.12) 20%, rgba(40,28,20,.04) 50%, rgba(40,28,20,0) 90%); }
+  .fb-strip.is-spine > .fb-side.back::after{ background: linear-gradient(to left, rgba(40,28,20,.32), rgba(40,28,20,.12) 20%, rgba(40,28,20,.04) 50%, rgba(40,28,20,0) 90%); }
+  /* Copertina e retro si vedono solo a libretto chiuso: lì non c'è piega */
+  .fb-side.is-cover::after{ display:none; }
+  .fb-flat{ position:absolute; inset:0; transform-style:preserve-3d; }
+  /* Mentre gira il foglio è fatto di strisce: così si curva come carta */
+  .fb-strip{
+    position:absolute; top:0; left:0; height:100%;
+    transform-origin:left center;
+    transform-style:preserve-3d;
+    display:none;
+  }
+  .fb-strip .fb-strip{ left:100%; width:100%; }
+  /* Ogni striscia sborda di un pixel sotto la successiva: niente fessure
+     quando il foglio si piega. L'immagine è posizionata in pixel sulla
+     larghezza della pagina (--pw) così resta allineata. La luce sulla carta
+     curva scurisce la striscia stessa (filtro, non un velo), così dove due
+     strisce si sovrappongono non compaiono righe. */
+  .fb-strip > .fb-side{
+    right:-1px;
+    background-size: var(--pw, 100%) 100%;
+    background-position: calc(var(--pw, 0px) * var(--k) * -1) 0;
+    filter: brightness(var(--lum, 1));
+  }
+  .fb-leaf.is-turning > .fb-flat{ display:none; }
+  .fb-leaf.is-turning .fb-strip{ display:block; }
+  /* Ombra che il foglio in movimento proietta sulle pagine sotto */
+  .fb-cast{
+    position:absolute; top:0; bottom:0; width:50%;
+    pointer-events:none;
+    opacity:0;
+  }
+  .fb-cast.l{ left:0; }
+  .fb-cast.r{ left:50%; }
+  @media (max-width:700px){
+    .fb-stage{ overflow:hidden; padding-bottom:36px; }
+    .fb-shift{ width:200%; margin-left:-50%; }
+    .fb-book{ width:100%; }
+  }
+  .fb-bar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px 20px;
+  }
+  .fb-nav{ display:flex; align-items:center; gap:12px; }
+  .fb-count{ min-width:10ch; text-align:center; font-weight:700; font-variant-numeric: tabular-nums; }
+  .fb-arrow{
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:transparent;
+    color: var(--ct-dark);
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, opacity .2s ease;
+  }
+  .fb-arrow:hover:not(:disabled){ background: var(--accent); border-color: var(--accent); color:#fff; transform: scale(1.06); }
+  .fb-arrow:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .fb-arrow:disabled{ opacity:.3; cursor:default; }
+  .fb-progress{ flex:0 1 200px; height:3px; border-radius:2px; background: var(--line); overflow:hidden; }
+  .fb-progress span{ display:block; height:100%; width:0; background: var(--accent); transition: width .5s ease; }
+
+  /* -------- Chiusura: il cliente e il link al sito -------- */
+  .ct-end{
+    display:grid;
+    grid-template-columns: 1fr 440px;
+    gap:64px;
+    align-items:center;
+  }
+  .project-end .ct-end{ text-align:left; }
+  .ct-end .section-title{ margin:0 0 18px; }
+  .ct-end .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .ct-end .project-links{ justify-content:flex-start; }
+  .ct-end > div > p{ color: var(--ink-soft); max-width:46ch; margin:0 0 32px; }
+  .client-card{
+    display:block;
+    padding:34px 32px 28px;
+    border-radius:16px;
+    background: var(--ct-brown);
+    color: var(--ct-cream);
+    text-decoration:none;
+    box-shadow:0 24px 50px rgba(23,20,15,.18);
+    transform: rotate(1.2deg);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .client-card:hover{ transform: rotate(0deg) translateY(-4px); box-shadow:0 30px 60px rgba(23,20,15,.25); }
+  .client-card:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+  .client-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(244,233,215,.2);
+  }
+  .client-head img{ width:56px; height:56px; border-radius:50%; background:#fff; object-fit:contain; }
+  .client-head strong{ display:block; font-size:1.25rem; color:#fff; }
+  .client-head small{ display:block; font-size:0.8rem; color:rgba(244,233,215,.7); }
+  .client-card blockquote{
+    margin:0 0 22px;
+    font-size:1.1rem;
+    line-height:1.5;
+    color:#fff;
+  }
+  .client-card blockquote::before{ content:"“"; display:block; font-size:3rem; line-height:.6; color: var(--ct-gold); margin-bottom:8px; font-family: Georgia, serif; }
+  .client-pills{ display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0; }
+  .client-pills li{
+    padding:5px 11px;
+    border-radius:999px;
+    border:1px solid rgba(244,233,215,.3);
+    font-size:0.78rem;
+    font-weight:700;
+  }
+  .client-read{ display:inline-flex; gap:8px; margin-top:24px; font-size:0.9rem; font-weight:700; color: var(--ct-gold); }
+  @media (max-width:980px){
+    .ct-end{ grid-template-columns:1fr; gap:40px; }
+    .client-card{ transform:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ct-card, .ct-card img, .ct-badge, .ads-frame, .ads-frame img, .ads-item, .sp-video, .sp-screen, .sp-track,
+    .ped-mockup, .ped-post img, .ct-zuppe, .bb-stage, .bb-stage img, .client-card{ transition:none; }
+    .soup-fig img.is-active, .soup-info-name span.is-in{ animation:none; }
+    .ct-ticker .ticker{ animation:none; }
+    .ped-track li.is-pop .ped-post{ animation:none; }
+    .ped-post{ transition:none; }
+    .story-player.is-playing .sp-track.is-active .sp-sprout{ animation:none; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .ct-ads, .ct-videos, .ct-zuppe{ padding:56px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">ADS, PED, VIDEO EDITING E BRANDING — BriefMe by Comverta</span>
+      <h1>iContadini <em>Ugento</em></h1>
+      <p><strong>iContadini</strong> è un'azienda agricola di <strong>Ugento</strong>, nel cuore del Salento.<br>Coltiva, raccoglie e lavora a mano conserve, sughi, legumi e prodotti da forno, con una filiera corta che va dal campo alla tavola.<br><br>
+      In <strong>BriefMe</strong>, agenzia di performance marketing e creative design, ho contribuito alla comunicazione del brand attraverso campagne <strong>ADS B2C e B2B</strong>, contenuti per i social, video per stories, affissioni e packaging per il lancio di nuovi prodotti. Un lavoro trasversale, sviluppato in diversi formati e lingue, per garantire coerenza e continuità alla comunicazione su tutti i canali.</p>
+      <div class="project-meta">
+        <div>Anno<span>2025 — 2026</span></div>
+        <div>Cliente<span>iContadini · Ugento (LE)</span></div>
+        <div>Output<span>ADS · PED · VIDEO EDITING · BRANDING · CATALOGUES · 6×3 · PACKAGING · ILLUSTRATIONS</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary btn-site" href="https://icontadini.it/it/home/" target="_blank" rel="noopener"><i class="fa-solid fa-seedling" aria-hidden="true"></i>Visita icontadini.it ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/249631589/iContadini-Ugento-BriefMe" target="_blank" rel="noopener" aria-label="Vedi il progetto su Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="ct-hero-art" id="ct-hero">
+      <div class="ct-card">
+        <img class="is-active" src="assets/images/IContadini_01.jpg" width="1920" height="1440" alt="Le piastrelle color crema con le illustrazioni a china di ortaggi e legumi di iContadini" loading="eager" decoding="async">
+        <img src="assets/images/icontadini_6x3_01.jpg" width="6000" height="4500" alt="Cartellone 6x3 sotto il cielo: Vivi l'esperienza agricola del Salento, con un contadino che regge un grappolo di pomodorini" loading="lazy" decoding="async">
+      </div>
+      <span class="ct-badge" aria-hidden="true"><img src="assets/images/icontadini_logo social.jpg" width="1080" height="1080" alt=""></span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap ct-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">Coltiviamo, raccogliamo e <em>lavoriamo a mano</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Dal campo <em>alla tavola</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Ugento · <em>Salento</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Il gusto autentico del <em>Made in Italy</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Assaggiali <em>subito</em></span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">Coltiviamo, raccogliamo e <em>lavoriamo a mano</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Dal campo <em>alla tavola</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Ugento · <em>Salento</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Il gusto autentico del <em>Made in Italy</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Assaggiali <em>subito</em></span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="ct-section ct-ads">
+    <div class="wrap">
+      <div class="ct-head">
+        <div>
+          <span class="eyebrow">Campagne ADS · Una selezione</span>
+          <h2 class="section-title">Una piccola parte<br><em>del raccolto</em></h2>
+        </div>
+        <p>Per iContadini ho seguito molte più campagne di quelle qui presenti: lanci di prodotto, promo stagionali, box regalo, regalistica aziendale e molto altro. Questa è solo una piccola selezione.
+
+Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories, dai reel ai banner, e anche a diverse lingue quando necessario.</p>
+      </div>
+
+      <div class="ads-lab" id="ads-lab">
+        <div class="ads-side">
+          <div class="ads-group">
+            <span class="ads-group-label">B2B · Regalistica aziendale</span>
+            <ul class="ads-list" data-group="b2b"></ul>
+          </div>
+          <div class="ads-group">
+            <span class="ads-group-label">B2C · Prodotti &amp; box regalo</span>
+            <ul class="ads-list" data-group="b2c"></ul>
+          </div>
+        </div>
+
+        <div class="ads-main">
+          <div class="ads-controls">
+            <div class="ads-seg" role="group" aria-label="Formato">
+              <button type="button" data-fmt="q" aria-pressed="true"><span class="fmt-shape fmt-shape--q" aria-hidden="true"></span><span class="fmt-label">Quadrato</span> 1:1</button>
+              <button type="button" data-fmt="v" aria-pressed="false"><span class="fmt-shape fmt-shape--v" aria-hidden="true"></span><span class="fmt-label">Verticale</span> 9:16</button>
+              <button type="button" data-fmt="o" aria-pressed="false"><span class="fmt-shape fmt-shape--o" aria-hidden="true"></span><span class="fmt-label">Orizzontale</span> 1.91:1</button>
+            </div>
+            <div class="ads-seg" role="group" aria-label="Lingua">
+              <button type="button" data-lang="it" aria-pressed="true">IT</button>
+              <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+              <button type="button" data-lang="de" aria-pressed="false">DE</button>
+            </div>
+          </div>
+          <div class="ads-box">
+            <div class="ads-frame is-loading"><span class="ads-spin" aria-hidden="true"></span></div>
+            <button class="ads-arrow ads-arrow--prev" type="button" aria-label="Campagna precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="ads-arrow ads-arrow--next" type="button" aria-label="Campagna successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="ads-caption" aria-live="polite"><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-section ct-videos">
+    <div class="wrap">
+      <div class="story-player" id="story-player">
+        <div class="sp-side">
+          <span class="eyebrow">Video social (PED & ADS)</span>
+          <h2 class="section-title">Stories <em>dal campo</em></h2>
+          <p>Le ADS si muovono anche in verticale: video brevi per stories e reel, tra lanci di prodotto, offerte del mese, rubriche e la newsletter. Scegli un video o lasciali scorrere uno dopo l'altro.</p>
+          <ol class="sp-list">
+            <li><button class="sp-track is-active" type="button" data-src="assets/video/IContadini_PRIMO LAVORO SULLA DESTRA.mp4"><span class="sp-num">01</span><span class="sp-title">Che ortaggio sei?<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Rubrica</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_01.mp4"><span class="sp-num">02</span><span class="sp-title">Linea Grano<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Foglie d'ulivo</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_03.mp4"><span class="sp-num">03</span><span class="sp-title">Offerte del mese<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Promo</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_05.mp4"><span class="sp-num">04</span><span class="sp-title">Dalla terra<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Brand</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_06.mp4"><span class="sp-num">05</span><span class="sp-title">Storia &amp; curiosità<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Rubrica</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_02.mp4"><span class="sp-num">06</span><span class="sp-title">Newsletter<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Sconto 10%</span></button></li>
+          </ol>
+        </div>
+        <div class="sp-device">
+          <div class="sp-bars" aria-hidden="true"><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span></div>
+          <div class="sp-screen">
+            <video class="sp-video" width="1080" height="1920" muted playsinline preload="none" aria-label="Video social iContadini selezionato">
+              <source src="assets/video/IContadini_PRIMO LAVORO SULLA DESTRA.mp4" type="video/mp4">
+            </video>
+            <button class="sp-tap sp-tap--prev" type="button" aria-label="Video precedente"></button>
+            <button class="sp-tap sp-tap--next" type="button" aria-label="Video successivo"></button>
+            <button class="sp-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
+            <span class="sp-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
+          </div>
+          <span class="sp-hint">Tocca a destra o a sinistra · tieni premuto per mettere in pausa</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-section ct-ped">
+    <div class="wrap">
+      <div class="ped-top">
+        <div>
+          <span class="eyebrow">Piano editoriale</span>
+          <h2 class="section-title">Social <em>a km zero</em></h2>
+          <p>Il PED segue il ritmo dell'orto: rubriche fisse come il Calendario dell'orto e l'Oroscopo contadino, i prodotti raccontati dal campo alla tavola, le promo e le ricorrenze. Filtra il feed, scorri la striscia e apri un post per vederlo da vicino: i caroselli si sfogliano slide per slide, come su Instagram.</p>
+        </div>
+        <figure class="ped-mockup">
+          <img src="assets/images/icontadini_02.jpg" width="1575" height="979" alt="Mockup di uno smartphone e dei post social di iContadini su un piano di lavoro" loading="lazy" decoding="async">
+        </figure>
+      </div>
+
+      <div class="ped-feed" id="ped-feed">
+        <div class="ped-bar">
+          <div class="ped-profile">
+            <span class="ped-avatar"><img src="assets/images/icontadini_logo social.jpg" width="1080" height="1080" alt=""></span>
+            <div><b>icontadini</b><small>Azienda agricola · Ugento</small></div>
+          </div>
+          <div class="ped-filters" role="group" aria-label="Filtra i post">
+            <button type="button" data-filter="all" aria-pressed="true">Tutti</button>
+            <button type="button" data-filter="rubriche" aria-pressed="false">Rubriche</button>
+            <button type="button" data-filter="prodotti" aria-pressed="false">Prodotti</button>
+            <button type="button" data-filter="promo" aria-pressed="false">Promo &amp; ricorrenze</button>
+            <button type="button" data-filter="carousel" aria-pressed="false"><i class="fa-regular fa-clone" aria-hidden="true"></i>Caroselli</button>
+          </div>
+        </div>
+        <!-- I post sono generati dallo script PED, dai dati in fondo alla pagina -->
+        <ul class="ped-track" aria-label="Post del piano editoriale"></ul>
+        <div class="ped-foot">
+          <div class="ped-progress" aria-hidden="true"><span></span></div>
+          <span class="ped-count" aria-live="polite">15 post</span>
+          <button class="ped-arrow" type="button" data-step="-1" aria-label="Post precedenti"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          <button class="ped-arrow" type="button" data-step="1" aria-label="Post successivi"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="ct-lightbox" id="ped-lightbox" aria-label="Post del piano editoriale">
+    <figure>
+      <div class="lb-media">
+        <img src="" alt="">
+        <button class="lb-slide lb-slide--prev" type="button" aria-label="Slide precedente" hidden><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="lb-slide lb-slide--next" type="button" aria-label="Slide successiva" hidden><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <div class="lb-dots" role="group" aria-label="Slide del carosello"></div>
+      <figcaption><span></span><span></span></figcaption>
+    </figure>
+    <button class="lb-btn lb-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    <button class="lb-btn lb-prev" type="button" aria-label="Post precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+    <button class="lb-btn lb-next" type="button" aria-label="Post successivo"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+  </dialog>
+
+  <section class="ct-section ct-zuppe" id="ct-zuppe">
+    <div class="wrap">
+      <div class="ct-head">
+        <div>
+          <span class="eyebrow">Still life · Le zuppe</span>
+          <h2 class="section-title">Legumi <em>in posa</em></h2>
+        </div>
+        <p>Ogni zuppa ha due scatti: in studio, sul colore che racconta il legume, e dall'alto, immersa nel letto dei suoi semi.<br>Scegli una zuppa e la sezione prende il suo colore.</p>
+      </div>
+
+      <div class="soup-stage">
+        <div class="soup-info">
+          <span class="soup-info-num">01 / 05</span>
+          <h3 class="soup-info-name"><span class="is-in">Zuppa di <em>ceci</em></span></h3>
+          <ul class="soup-facts">
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i>100% italiani</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i>Senza conservanti</li>
+            <li><i class="fa-solid fa-clock" aria-hidden="true"></i>Pronta in 2'</li>
+          </ul>
+        </div>
+        <figure class="soup-fig soup-fig--studio">
+          <img class="is-active" src="assets/images/icontadini_ZUPPE/icontadini_zuppe_ceci_02.jpg" width="960" height="1200" alt="Zuppa di ceci in studio, su fondo rosso mattone e su un mucchio di ceci" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_fagioliborlotti_02.jpg" width="960" height="1200" alt="Zuppa di fagioli borlotti in studio, su fondo marrone e su un mucchio di borlotti" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_fagiolicannellini_02.jpg" width="960" height="1200" alt="Zuppa di fagioli cannellini in studio, su fondo ruggine e su un mucchio di cannellini" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_lenticchie_02.jpg" width="960" height="1200" alt="Zuppa di lenticchie in studio, su fondo marrone e su un mucchio di lenticchie" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_piselli_02.jpg" width="960" height="1200" alt="Zuppa di piselli in studio, su fondo verde scuro e su un mucchio di piselli secchi" loading="lazy" decoding="async">
+          <span class="soup-label">In studio</span>
+        </figure>
+        <figure class="soup-fig soup-fig--top">
+          <img class="is-active" src="assets/images/icontadini_ZUPPE/icontadini_zuppe_ceci_01.jpg" width="960" height="1200" alt="Il barattolo di zuppa di ceci visto dall'alto, immerso nei ceci" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_fagioliborlotti_01.jpg" width="960" height="1200" alt="Il barattolo di zuppa di fagioli borlotti visto dall'alto, immerso nei borlotti" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_cannellini_01.jpg" width="960" height="1200" alt="Il barattolo di zuppa di fagioli cannellini visto dall'alto, immerso nei cannellini" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_lenticchie_01.jpg" width="960" height="1200" alt="Il barattolo di zuppa di lenticchie visto dall'alto, immerso nelle lenticchie" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_piselli_01.jpg" width="960" height="1200" alt="Il barattolo di zuppa di piselli visto dall'alto, immerso nei piselli secchi" loading="lazy" decoding="async">
+          <span class="soup-label">Dall'alto</span>
+        </figure>
+      </div>
+
+      <div class="soup-bar">
+        <div class="soup-lids" role="group" aria-label="Scegli la zuppa">
+          <button class="soup-lid" type="button" aria-pressed="true" data-color="#B83C22" data-name="ceci"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_ceci_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Ceci</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#66332A" data-name="fagioli borlotti"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_fagioliborlotti_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Borlotti</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#94361F" data-name="fagioli cannellini"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_cannellini_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Cannellini</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#7A3B2D" data-name="lenticchie"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_lenticchie_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Lenticchie</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#36432D" data-name="piselli"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_piselli_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Piselli</span></button>
+        </div>
+        <div class="soup-nav">
+          <span class="soup-hint">Scorri gli scatti per cambiare zuppa</span>
+          <button class="soup-arrow" type="button" data-step="-1" aria-label="Zuppa precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          <span class="soup-count" aria-live="polite">01 / 05</span>
+          <button class="soup-arrow" type="button" data-step="1" aria-label="Zuppa successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-section ct-billboards">
+    <div class="wrap">
+      <div class="ct-head">
+        <div>
+          <span class="eyebrow">Affissioni 6x3</span>
+          <h2 class="section-title">Il Salento, <em>in grande</em></h2>
+        </div>
+        <p>Il racconto esce dal feed e arriva in strada: l'esperienza agricola del Salento sul cartellone, il Salento autentico servito in tavola e la frisella con la degustazione gratuita.</p>
+      </div>
+      <div class="bb-viewer" id="bb-viewer">
+        <div class="bb-stage">
+          <img class="is-active" src="assets/images/icontadini_6x3_01.jpg" width="6000" height="4500" alt="Cartellone 6x3 sotto il cielo: Vivi l'esperienza agricola del Salento, con un contadino che regge un grappolo di pomodorini" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_6x3_02.jpg" width="1920" height="876" alt="Affissione tra gli alberi: Il Salento autentico è servito, con una frisella condita" loading="lazy" decoding="async">
+          <img src="assets/images/icontadini_6x3_03.jpg" width="5500" height="3452" alt="Affissione su una recinzione di cantiere in città: Frisella mia, degustazione gratuita" loading="lazy" decoding="async">
+          <button class="bb-arrow bb-arrow--prev" type="button" aria-label="Affissione precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          <button class="bb-arrow bb-arrow--next" type="button" aria-label="Affissione successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <span class="bb-count" aria-live="polite">01 / 03</span>
+        </div>
+        <div class="bb-thumbs">
+          <button class="bb-thumb is-active" type="button" aria-label="Affissione 1: esperienza agricola" aria-current="true"><img src="assets/images/icontadini_6x3_01.jpg" alt="" loading="lazy" decoding="async"></button>
+          <button class="bb-thumb" type="button" aria-label="Affissione 2: il Salento autentico"><img src="assets/images/icontadini_6x3_02.jpg" alt="" loading="lazy" decoding="async"></button>
+          <button class="bb-thumb" type="button" aria-label="Affissione 3: Frisella mia"><img src="assets/images/icontadini_6x3_03.jpg" alt="" loading="lazy" decoding="async"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-section ct-catalogo">
+    <div class="wrap">
+      <div class="ct-head">
+        <div>
+          <span class="eyebrow">Catalogo · Box regalo 2025</span>
+          <h2 class="section-title">Da sfogliare, <em>pagina per pagina</em></h2>
+        </div>
+        <p>Il catalogo della regalistica: la storia dei tre fratelli, i prodotti e le box regalo 2025, raccolti in un libretto. Trascina le pagine, cliccale o usa le frecce per sfogliarlo.</p>
+      </div>
+      <div class="fb" id="fb" tabindex="0" role="group" aria-roledescription="libretto" aria-label="Catalogo Box regalo 2025 di iContadini" data-pages="38" data-src="assets/images/icontadini_catalogo/catalogo_{n}.jpg">
+        <div class="fb-stage">
+          <div class="fb-shift">
+            <div class="fb-book"></div>
+          </div>
+        </div>
+        <div class="fb-bar">
+          <div class="fb-nav">
+            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <span class="fb-count" aria-live="polite">01 / 38</span>
+            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="fb-progress" aria-hidden="true"><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap ct-end">
+      <div>
+        <h2 class="section-title">Assaggiali <em>subito ;)</em></h2>
+        <p>Conserve, sughi, legumi e box regalo coltivati e lavorati a mano a Ugento.</p>
+        <div class="project-links">
+          <a class="btn-primary btn-site" href="https://icontadini.it/it/home/" target="_blank" rel="noopener"><i class="fa-solid fa-seedling" aria-hidden="true"></i>Visita icontadini.it ↗</a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+          <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        </div>
+      </div>
+      <a class="client-card" href="https://icontadini.it/it/home/" target="_blank" rel="noopener" aria-label="Vai al sito di iContadini">
+        <span class="client-head">
+          <img src="assets/images/icontadini_logo social.jpg" width="1080" height="1080" alt="">
+          <span><strong>iContadini</strong><small>Azienda agricola · Ugento (LE)</small></span>
+        </span>
+        <blockquote>Coltiviamo, raccogliamo e lavoriamo a mano i nostri prodotti.</blockquote>
+        <ul class="client-pills">
+          <li>Filiera corta</li>
+          <li>Prodotti tipici pugliesi</li>
+          <li>Box regalo</li>
+        </ul>
+        <span class="client-read">Vai su icontadini.it ↗</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero: tilt 3D + riflesso che seguono il cursore, con easing; il pattern
+  // e il 6x3 del key visual si alternano in dissolvenza.
+  (function () {
+    const art = document.getElementById('ct-hero');
+    const card = art && art.querySelector('.ct-card');
+    if (!card) return;
+
+    const slides = Array.from(card.querySelectorAll('img'));
+    if (!reduceMotion && slides.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('is-active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('is-active');
+      }, 4000);
+    }
+
+    if (reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // ADS lab: campagna × formato × lingua. La cornice si deforma sulle
+  // proporzioni del formato e l'immagine nuova entra in dissolvenza solo
+  // quando è caricata. Finché nessuno tocca niente, una demo fa girare i
+  // formati quando la sezione è in viewport.
+  (function () {
+    const lab = document.getElementById('ads-lab');
+    if (!lab) return;
+
+    // I file con "Più" sul disco sono in forma Unicode scomposta (u + accento
+    // grave): li scriviamo uguali, altrimenti su un server Linux danno 404.
+    const PIU = 'Più';
+    const A = 'assets/images/icontadini_ADS/';
+    const b2c = (dir, base, q, v, o) => ({ it: { q: A + dir + base + q, v: A + dir + base + v, o: A + dir + base + o } });
+    const R1 = A + 'regalistica 01/', R2 = A + 'regalistica 02/', R3 = A + 'regalistica 03/EXPORT/', R4 = A + 'regalisitca 04/';
+    const CAMPAIGNS = [
+      { group: 'b2b', name: 'Tutto il valore in una Box', tag: 'Filiera corta, zero conservanti',
+        src: {
+          it: { q: R1 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_quadrato_v3.jpg', v: R1 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_verticale.jpg', o: R1 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_orizzontali.jpg' },
+          fr: { q: R1 + 'FRANCIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_quadrato_FRANCIA_v2.jpg', v: R1 + 'FRANCIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_verticale_FRANCIA_v2.jpg', o: R1 + 'FRANCIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_orizzontali_FRANCIA.jpg' },
+          de: { q: R1 + 'GERMANIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_quadrato_GERMANIA.jpg', v: R1 + 'GERMANIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_verticale_GERMANIA.jpg', o: R1 + 'GERMANIA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET2_orizzontali_GERMANIA.jpg' }
+        } },
+      { group: 'b2b', name: 'Box Gourmet', tag: 'Nuova collezione 2025',
+        src: {
+          it: { q: R2 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET3_quadrato_v2.jpg', v: R2 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET3_verticale.jpg', o: R2 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET3_orizzontale.jpg' },
+          fr: { q: R2 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_quadrato_FRANCIA.jpg', v: R2 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_verticale_FRANCIA.jpg', o: R2 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_orizzontale_FRANCIA.jpg' },
+          de: { q: R2 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_quadrato_GERMANIA.jpg', v: R2 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_verticale_GERMANIA.jpg', o: R2 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET3_orizzontale_GERMANIA.jpg' }
+        } },
+      { group: 'b2b', name: 'Il gusto del Made in Italy', tag: 'Per i regali aziendali',
+        src: {
+          it: { q: R3 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET4_v4.jpg', v: R3 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET4_verticali_v2.jpg', o: R3 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET4_orizzontale_v2.jpg' },
+          fr: { q: R3 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_FRANCIA_v2.jpg', v: R3 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_verticali_FRANCIA_v2.jpg', o: R3 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_orizzontale_FRANCIA_v2.jpg' },
+          de: { q: R3 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_GERMANIA_v2.jpg', v: R3 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_verticali_GERMANIA.jpg', o: R3 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET4_orizzontale_GERMANIA.jpg' }
+        } },
+      { group: 'b2b', name: 'Un regalo, mille occasioni', tag: 'Natale, eventi, incentivi',
+        src: {
+          it: { q: R4 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET5_quadrato_v3.jpg', v: R4 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET5_verticale.jpg', o: R4 + 'ITA/ICONTADINI_ADS_MAGGIO_REGALISTICA_TARGET5_orizzontale.jpg' },
+          fr: { q: R4 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_quadrato_FRANCIA.jpg', v: R4 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_verticale_FRANCIA.jpg', o: R4 + 'FRANCIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_orizzontale_FRANCIA.jpg' },
+          de: { q: R4 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_quadrato_GERMANIA.jpg', v: R4 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_verticale_GERMANIA.jpg', o: R4 + 'GERMANIA/ICONTADINI_ADS_GIUGNO_REGALISTICA_TARGET5_orizzontale_GERMANIA.jpg' }
+        } },
+      { group: 'b2c', name: 'Tarallini', tag: 'Tutti i gusti di Puglia',
+        src: b2c('TARALLINI più GUSTI/', 'IContadini_ADS_Maggio_B2C_' + PIU + 'Fatturato_TARALLINI_1_', 'QUADRATO.jpg', 'VERTICALE.jpg', 'ORIZZONTALE.jpg') },
+      { group: 'b2c', name: 'Tarallini', tag: 'Se ti manca la Puglia',
+        src: b2c('TARALLINI PUGLIA/', 'IContadini_ADS_Maggio_B2C_' + PIU + 'Fatturato_TARALLINI_2_', 'QUADRATO.jpg', 'VERTICALE.jpg', 'ORIZZONTALE.jpg') },
+      { group: 'b2c', name: 'Puntarelle alla crudaiola', tag: 'Lavorazione artigianale',
+        src: b2c('puntarelle/', 'IContadini_ADS_Maggio_B2C_' + PIU + 'Venduti_PUNTARELLE_', 'QUADRATO.jpg', 'VERTICALE.jpg', 'ORIZZONTALE.jpg') },
+      { group: 'b2c', name: 'Spaccatella di ciliegino', tag: 'Lancio prodotto',
+        src: b2c('spaccatella/', 'IContadini_ADS_Maggio_B2C_Lancio_SPACCATELLA DI POMODORO CILIEGINO_', 'Quadrato.jpg', 'Verticale.jpg', 'Orizzontale.jpg') },
+      { group: 'b2c', name: 'Box Regalo · Natale', tag: 'È arrivato il momento di stupire',
+        src: { it: { q: A + 'ICONTADINI_ADS_B2C_REGALISTICA_ITA_GRAFICA1__1080x1080_NATALE.jpg' } } },
+      { group: 'b2c', name: 'Box Regalo', tag: 'Il meglio della tradizione pugliese',
+        src: { it: { q: A + 'ICONTADINI_ADS_B2C_REGALISTICA_ITA_GRAFICA2__1080x1080_.jpg' } } }
+    ];
+    const RATIO = { q: 1, v: 1080 / 1920, o: 2090 / 1094 };
+    const FMT_NAME = { q: 'Quadrato 1:1', v: 'Verticale 9:16', o: 'Orizzontale 1.91:1' };
+    const LANG_NAME = { it: 'IT', fr: 'FR', de: 'DE' };
+
+    const box = lab.querySelector('.ads-box');
+    const frame = lab.querySelector('.ads-frame');
+    const caption = lab.querySelectorAll('.ads-caption span');
+    const fmtBtns = Array.from(lab.querySelectorAll('[data-fmt]'));
+    const langBtns = Array.from(lab.querySelectorAll('[data-lang]'));
+    const pad = (n) => String(n).padStart(2, '0');
+
+    // Lista campagne generata dai dati, con la miniatura quadrata in italiano
+    const items = CAMPAIGNS.map((c, i) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ads-item';
+      btn.setAttribute('aria-pressed', 'false');
+      const langs = Object.keys(c.src).map(l => LANG_NAME[l]).join(' · ');
+      btn.innerHTML = '<img alt="" loading="lazy" decoding="async"><span><b></b><small></small></span><span class="ads-langs"></span>';
+      btn.querySelector('img').src = c.src.it.q;
+      btn.querySelector('b').textContent = c.name;
+      btn.querySelector('small').textContent = c.tag;
+      btn.querySelector('.ads-langs').textContent = langs;
+      btn.addEventListener('click', () => { stopDemo(); show(i); });
+      li.appendChild(btn);
+      lab.querySelector('.ads-list[data-group="' + c.group + '"]').appendChild(li);
+      return btn;
+    });
+
+    // Preferenze dell'utente: se una campagna non ha quel formato/lingua
+    // ripieghiamo, ma tornando su una che li ha li ritroviamo.
+    let index = 0, wantFmt = 'q', wantLang = 'it', fmt = 'q', lang = 'it';
+    let token = 0;
+
+    const fit = () => {
+      const r = RATIO[fmt];
+      const bw = box.clientWidth - 110, bh = box.clientHeight;
+      let w = Math.max(160, bw), h = w / r;
+      if (h > bh) { h = bh; w = h * r; }
+      frame.style.width = Math.round(w) + 'px';
+      frame.style.height = Math.round(h) + 'px';
+    };
+
+    const render = () => {
+      const c = CAMPAIGNS[index];
+      lang = c.src[wantLang] ? wantLang : 'it';
+      fmt = c.src[lang][wantFmt] ? wantFmt : 'q';
+
+      items.forEach((b, k) => b.setAttribute('aria-pressed', String(k === index)));
+      fmtBtns.forEach(b => {
+        b.disabled = !c.src[lang][b.dataset.fmt];
+        b.setAttribute('aria-pressed', String(b.dataset.fmt === fmt));
+      });
+      langBtns.forEach(b => {
+        b.disabled = !c.src[b.dataset.lang];
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+      });
+      caption[0].innerHTML = '';
+      const strong = document.createElement('b');
+      strong.textContent = c.name;
+      caption[0].append(strong, ' — ' + FMT_NAME[fmt] + ' · ' + LANG_NAME[lang]);
+      caption[1].textContent = pad(index + 1) + ' / ' + pad(CAMPAIGNS.length);
+      fit();
+
+      // Dissolvenza: la nuova immagine entra solo a caricamento finito, le
+      // vecchie escono dopo; il token scarta i caricamenti superati.
+      const my = ++token;
+      const img = new Image();
+      img.decoding = 'async';
+      img.alt = c.name + ' — ' + c.tag + ', formato ' + FMT_NAME[fmt].toLowerCase() + ', lingua ' + LANG_NAME[lang];
+      frame.classList.add('is-loading');
+      img.onload = () => {
+        if (my !== token) return;
+        frame.classList.remove('is-loading');
+        const old = Array.from(frame.querySelectorAll('img'));
+        frame.appendChild(img);
+        void img.offsetWidth; // reflow: parte la transizione da opacity 0
+        img.classList.add('is-in');
+        setTimeout(() => old.forEach(o => o.remove()), reduceMotion ? 0 : 500);
+        scheduleDemo();
+      };
+      img.src = c.src[lang][fmt];
+    };
+
+    const show = (i) => { index = (i + CAMPAIGNS.length) % CAMPAIGNS.length; render(); };
+
+    fmtBtns.forEach(b => b.addEventListener('click', () => { stopDemo(); wantFmt = b.dataset.fmt; render(); }));
+    langBtns.forEach(b => b.addEventListener('click', () => { stopDemo(); wantLang = b.dataset.lang; render(); }));
+    lab.querySelector('.ads-arrow--prev').addEventListener('click', () => { stopDemo(); show(index - 1); });
+    lab.querySelector('.ads-arrow--next').addEventListener('click', () => { stopDemo(); show(index + 1); });
+    lab.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { stopDemo(); show(index + 1); }
+      if (e.key === 'ArrowLeft') { stopDemo(); show(index - 1); }
+    });
+    window.addEventListener('resize', fit);
+
+    // Demo: q → v → o sulla campagna corrente, poi passa alla successiva.
+    // Il passo dopo parte solo quando l'immagine attuale è comparsa, così
+    // con i file pesanti la demo non resta bloccata sullo spinner.
+    let demoTimer = null, demoOn = !reduceMotion, demoVisible = false, demoStep = 0;
+    const DEMO = ['q', 'v', 'o'];
+    function stopDemo() { demoOn = false; clearTimeout(demoTimer); demoTimer = null; }
+    function scheduleDemo() {
+      clearTimeout(demoTimer);
+      if (!demoOn || !demoVisible) { demoTimer = null; return; }
+      demoTimer = setTimeout(() => {
+        demoTimer = null;
+        demoStep = (demoStep + 1) % DEMO.length;
+        wantFmt = DEMO[demoStep];
+        if (demoStep === 0) index = (index + 1) % CAMPAIGNS.length;
+        render();
+      }, 2600);
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        demoVisible = entries.some(e => e.isIntersecting);
+        if (demoVisible && !frame.classList.contains('is-loading')) scheduleDemo();
+        else if (!demoVisible) { clearTimeout(demoTimer); demoTimer = null; }
+      }, { threshold: 0.4 }).observe(box);
+    }
+
+    render();
+  })();
+
+  // Video nel telefono: le stories in sequenza, come Instagram. Parte solo
+  // quando è in viewport; a fine video passa al successivo. Tap a
+  // destra/sinistra per navigare, tieni premuto per la pausa, click sulla
+  // lista per saltare, pulsante per l'audio.
+  (function () {
+    const player = document.getElementById('story-player');
+    if (!player) return;
+    const tracks = Array.from(player.querySelectorAll('.sp-track'));
+    const bars = Array.from(player.querySelectorAll('.sp-bar span'));
+    const screen = player.querySelector('.sp-screen');
+    const video = player.querySelector('.sp-video');
+    const source = video.querySelector('source');
+    const soundBtn = player.querySelector('.sp-sound');
+
+    let index = 0;
+    let inView = false;
+    let held = false;
+    let suppressClick = false;
+    // Con reduced motion niente autoplay: parte solo dopo un'azione dell'utente
+    let userStarted = !reduceMotion;
+    let rafId = null;
+
+    const progress = () => (video.duration ? Math.min(1, video.currentTime / video.duration) : 0);
+    const render = () => {
+      const p = progress();
+      bars.forEach((b, i) => b.style.setProperty('--p', i < index ? 1 : i === index ? p : 0));
+    };
+    const loop = () => {
+      render();
+      rafId = video.paused ? null : requestAnimationFrame(loop);
+    };
+
+    const shouldPlay = () => inView && !held && userStarted;
+    const sync = () => {
+      if (shouldPlay()) {
+        if (video.paused) video.play().catch(() => {});
+      } else if (!video.paused) {
+        video.pause();
+      }
+    };
+
+    const show = (i) => {
+      index = (i + tracks.length) % tracks.length;
+      tracks.forEach((t, k) => {
+        t.classList.toggle('is-active', k === index);
+        if (k === index) t.setAttribute('aria-current', 'true');
+        else t.removeAttribute('aria-current');
+      });
+      video.classList.add('is-swapping');
+      source.src = tracks[index].dataset.src;
+      video.load();
+      render();
+      sync();
+    };
+
+    video.addEventListener('loadeddata', () => video.classList.remove('is-swapping'));
+    video.addEventListener('play', () => {
+      player.classList.add('is-playing');
+      if (rafId === null) rafId = requestAnimationFrame(loop);
+    });
+    video.addEventListener('pause', () => player.classList.remove('is-playing'));
+    video.addEventListener('ended', () => show(index + 1));
+
+    const go = (i) => { userStarted = true; show(i); };
+    player.querySelector('.sp-tap--prev').addEventListener('click', () => { if (!suppressClick) go(index - 1); });
+    player.querySelector('.sp-tap--next').addEventListener('click', () => { if (!suppressClick) go(index + 1); });
+    tracks.forEach((t, i) => t.addEventListener('click', () => go(i)));
+
+    soundBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      const on = !video.muted;
+      soundBtn.setAttribute('aria-pressed', String(on));
+      soundBtn.setAttribute('aria-label', on ? "Disattiva l'audio" : "Attiva l'audio");
+      soundBtn.querySelector('i').className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+      userStarted = true;
+      sync();
+    });
+
+    // Tieni premuto = pausa (come su Instagram). Un tap breve resta navigazione.
+    let holdTimer = null;
+    screen.addEventListener('pointerdown', (e) => {
+      if (e.target === soundBtn || soundBtn.contains(e.target)) return;
+      suppressClick = false;
+      holdTimer = setTimeout(() => {
+        held = true;
+        suppressClick = true;
+        player.classList.add('is-paused');
+        sync();
+      }, 220);
+    });
+    const release = () => {
+      clearTimeout(holdTimer);
+      if (!held) return;
+      held = false;
+      player.classList.remove('is-paused');
+      sync();
+    };
+    screen.addEventListener('pointerup', release);
+    screen.addEventListener('pointerleave', release);
+    screen.addEventListener('pointercancel', release);
+    screen.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    player.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(index + 1);
+      if (e.key === 'ArrowLeft') go(index - 1);
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries.some(e => e.isIntersecting);
+        if (inView && video.preload === 'none') { video.preload = 'auto'; video.load(); }
+        sync();
+      }, { threshold: 0.5 }).observe(screen);
+    } else {
+      inView = true;
+      sync();
+    }
+
+    render();
+  })();
+
+  // PED: il feed è generato dai dati (POST 01 → POST 15, una cartella per
+  // ogni carosello). I post sono aperti a ventaglio e si scorrono con le
+  // frecce o trascinando: la carta al centro sta davanti e si apre nella
+  // lightbox, un click su una laterale la porta al centro. Filtri con il
+  // conteggio, caroselli che si sfogliano al passaggio del mouse, e
+  // lightbox che scorre slide per slide e poi tra i post del filtro attivo.
+  (function () {
+    const feed = document.getElementById('ped-feed');
+    if (!feed) return;
+
+    // Copie per il web (1080×1350, ~6 MB in tutto); gli originali sono in
+    // "icontadini post social", con la stessa struttura di cartelle.
+    const P = 'assets/images/icontadini post social web/';
+    // Slide di un carosello: cartella, radice del nome e suffissi dei file
+    const slides = (n, base, ends) => ends.map(e => P + 'POST ' + n + '/' + base + e + '.jpg');
+    const single = (n) => [P + 'POST ' + n + '.jpg'];
+    const ORTO = (n, mese, ends) => slides(n, 'ICONTADINI_PED_' + mese + '_CAROSELLO_CALENDARIO_ORTO_IMG', ends);
+    const POSTS = [
+      { cat: 'rubriche', rubric: "Calendario dell'orto · Gennaio",
+        src: ORTO('01', 'GENNAIO', ['01', '02', '03', '04', '05', '06', '07', '08']),
+        alt: ["Calendario dell'orto, gennaio: un barattolo illustrato dentro un'etichetta marrone",
+          'Cavoli, verza e cavoletti di Bruxelles: ricchi di fibre e vitamine, alleati dell’inverno',
+          'Broccoli, cavolfiori e carciofi: sostengono l’organismo e aiutano a depurare',
+          'Cime di rapa, cicorie e radicchio: gusto deciso e proprietà digestive',
+          'Spinaci, bietole e lattuga: leggeri, ricchi di minerali, perfetti ogni giorno',
+          'Carote, sedano e barbabietole: colore, energia e benessere naturale',
+          'Finocchi, porri e cipolle: aiutano la digestione e scaldano i piatti d’inverno',
+          'Patate, zucche e topinambur: saziano, confortano e danno equilibrio'] },
+      { cat: 'rubriche', rubric: 'Oroscopo contadino · Acquario',
+        src: slides('02', 'ICONTADINI_PED_GENNAIO_CAROSELLO_OROSCOPO_IMG', ['01', '02', '03', '04']),
+        alt: ['Oroscopo contadino, Acquario, 21 gennaio – 19 febbraio: liberi, curiosi, fuori dagli schemi',
+          'Il carattere e la cucina dell’Acquario: sperimentare, mescolare tradizione e novità',
+          'I sapori e i prodotti per l’Acquario: orto grigliato, sugo al tonnetto e capperi, tarallini fave e cicorie',
+          'Il consiglio del mese: segui l’istinto, le idee migliori nascono quando ti senti in piena libertà'] },
+      { cat: 'promo', rubric: 'Promo · Buon 2026', src: single('03'),
+        alt: ['Promo Buon 2026: con un ordine superiore a 100 euro una specialità contadina in omaggio'] },
+      { cat: 'promo', rubric: 'San Valentino · Love is good',
+        src: slides('04', 'ICONTADINI_PED_FEBBRAIO_CAROSELLO_SAN_VALENTINO_IMG', ['01', '02', '03', '04', '05', '06', '07', '08']),
+        alt: ['Pomodori: vi amiamo perché sapete di sole anche quando fuori è inverno. Love is good',
+          'Peperoni: vi amiamo per il vostro carattere deciso, senza compromessi',
+          'Olive: vi amiamo perché siete semplici, vere e sempre al posto giusto',
+          'Cime di rapa: vi amiamo perché raccontate la nostra terra, foglia dopo foglia',
+          'Puntarelle: vi amiamo perché sapete essere dolcemente amare',
+          'Cipolle: vi amiamo anche se ci fate piangere',
+          'Peperoncini: vi amiamo perché accendete l’amore, un pizzico alla volta',
+          'Carciofi: vi amiamo perché ci insegnate che la bontà sta nel cuore'] },
+      { cat: 'rubriche', rubric: "Calendario dell'orto · Febbraio",
+        src: ORTO('05', 'FEBBRAIO', ['01', '02', '03', '04_v2', '05', '06', '07']),
+        alt: ["Calendario dell'orto, febbraio: una mano che stringe una radice illustrata",
+          'Cavolfiori, broccoli e cavolo nero: forti, rustici e pieni di carattere',
+          'Arance, mandarini e limoni: colorano le giornate con una sferzata di energia naturale',
+          'Finocchi, porri e sedano: freschezza e delicatezza per ritrovare equilibrio',
+          'Radicchio, spinaci e cicoria: un pizzico di amaro che racconta la vera stagione',
+          'Barbabietole, rape e carote: sottoterra cresce il sapore più autentico dell’inverno',
+          'Ceci secchi, lenticchie e fave secche: pazienza, tempo e tradizione'] },
+      { cat: 'prodotti', rubric: 'Novità · Spaghettoni', src: single('06'),
+        alt: ['Novità, Spaghettoni: l’icona italiana incontra il grano Senatore Cappelli'] },
+      { cat: 'prodotti', rubric: 'Prodotti · La Dolce', src: single('07'),
+        alt: ['La Dolce, passata di pomodoro ciliegino: il gusto che accarezza ogni ricetta con delicatezza'] },
+      { cat: 'rubriche', rubric: "Calendario dell'orto · Marzo",
+        src: ORTO('08', 'MARZO', ['01', '02', '03', '04', '05', '06_v2', '07']),
+        alt: ["Calendario dell'orto, marzo: un carretto di legno illustrato",
+          'Cavolfiori, broccoli e cavolo cappuccio: resistono al freddo e chiudono l’inverno con carattere',
+          'Fragole, nespole e limoni: i primi colori che profumano di nuova stagione',
+          'Cicorie, bietole e spinaci: fresche, leggere, perfette per ritrovare equilibrio',
+          'Asparagi, carciofi e fave fresche: croccanti, teneri, pieni di vita nuova',
+          'Barbabietole, carote e rape: sotto terra custodiscono energia e semplicità',
+          'Ceci, lenticchie e fagioli cannellini: sostanza, calore e piatti che sanno di casa'] },
+      { cat: 'prodotti', rubric: 'Prodotti · Carpaccio di finocchio', src: single('09'),
+        alt: ['Carpaccio di finocchio alla crudaiola: croccante freschezza, lavorata a crudo'] },
+      { cat: 'prodotti', rubric: 'Selezioni iContadini',
+        src: slides('10', 'ICONTADINI_PED_MARZO_CAROSELLO_SELEZIONE_ICONTADINI_IMG', ['01_v2', '02_v2', '03', '04', '05_v2', '06']),
+        alt: ['Selezioni iContadini: 4 soluzioni, un’unica certezza, il gusto autentico della nostra terra, con un grappolo di pomodorini in mano',
+          'Aperitivo pugliese: il sud in tavola, pronto da condividere',
+          'Sapori contadini: la dispensa essenziale, genuina, quotidiana',
+          'Salvacena: soluzioni veloci, senza rinunciare alla qualità',
+          'Mystery Box: lasciati sorprendere dal gusto',
+          'Scegli la tua selezione: una mano apre una scatola di taralli, ordinala su shop.icontadini.it'] },
+      { cat: 'promo', rubric: 'Offerte del mese · Giugno', src: single('11'),
+        alt: ['Gusto, tradizione e natura: a giugno il buono autentico si fa ancora più speciale'] },
+      { cat: 'prodotti', rubric: 'Prodotti · Orto grigliato', src: single('12'),
+        alt: ['Orto grigliato: un’esplosione di sapore mediterraneo, due vasetti di verdure grigliate a mano'] },
+      { cat: 'rubriche', rubric: 'Dal campo alla tavola · Capperi', src: single('13'),
+        alt: ['Dal campo alla tavola: il fior fiore dei capperi sta arrivando, con un fiore di cappero in primo piano'] },
+      { cat: 'rubriche', rubric: 'Storie di gusto · Heike Richter', src: single('14'),
+        alt: ['Storie di gusto: il ritratto di Heike Richter in una cornice polaroid'] },
+      { cat: 'promo', rubric: 'Black Friday · Taste Week', src: single('15'),
+        alt: ['Taste Week dal 28 novembre al 5 dicembre: 10% di sconto, la nostra idea gustosa di Black Friday'] }
+    ];
+
+    const filters = Array.from(feed.querySelectorAll('[data-filter]'));
+    const track = feed.querySelector('.ped-track');
+    const bar = feed.querySelector('.ped-progress span');
+    const count = feed.querySelector('.ped-count');
+    const arrows = Array.from(feed.querySelectorAll('.ped-arrow'));
+    const pad = (n) => String(n).padStart(2, '0');
+    const isCarousel = (d) => d.src.length > 1;
+    const matches = (d, f) => f === 'all' || (f === 'carousel' ? isCarousel(d) : d.cat === f);
+
+    // Il ventaglio gira a loop: la serie di post è ripetuta COPIES volte e
+    // quando lo scorrimento si ferma torniamo, senza che si veda, sulla
+    // copia centrale. Così a sinistra del primo post c'è sempre l'ultimo.
+    // Le copie sono nascoste agli screen reader: per loro conta solo quella
+    // centrale.
+    const COPIES = 5, MID = 2;
+    const makeCard = (d, copy) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ped-post';
+      btn.dataset.rubric = d.rubric;
+      const img = document.createElement('img');
+      img.src = d.src[0];
+      img.alt = d.alt[0];
+      img.width = 1080;
+      img.height = 1350;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      btn.appendChild(img);
+      if (isCarousel(d)) {
+        btn.setAttribute('aria-label', d.alt[0] + ' — carosello di ' + d.src.length + ' slide');
+        const badge = document.createElement('span');
+        badge.className = 'ped-multi';
+        badge.setAttribute('aria-hidden', 'true');
+        badge.innerHTML = '<i class="fa-regular fa-clone"></i>';
+        btn.appendChild(badge);
+      }
+      if (copy !== MID) { li.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }
+      li.appendChild(btn);
+      track.appendChild(li);
+      return { d, copy, li, btn, img };
+    };
+    const cards = [];
+    POSTS.forEach(d => { d.cards = []; });
+    for (let c = 0; c < COPIES; c++) POSTS.forEach(d => { const card = makeCard(d, c); d.cards.push(card); cards.push(card); });
+    POSTS.forEach(d => { d.li = d.cards[MID].li; });
+
+    // Ventaglio: per ogni carta la distanza dal centro (in carte) decide
+    // rotazione, discesa, scala, velo e ordine di sovrapposizione.
+    // Si calcola solo per le carte vicine, le altre restano com'erano.
+    const visCards = () => cards.filter(c => !c.li.hidden);
+    const visPosts = () => POSTS.filter(d => !d.li.hidden);
+    let activeCard = null, fanRaf = null;
+    const fan = () => {
+      fanRaf = null;
+      // Posizioni di layout (offsetLeft), non quelle ruotate: niente tremolii
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = Infinity;
+      visCards().forEach(c => {
+        const p = c.li;
+        const d = (p.offsetLeft + p.offsetWidth / 2 - mid) / (p.offsetWidth * 0.58);
+        if (Math.abs(d) < best) { best = Math.abs(d); activeCard = c; }
+        if (Math.abs(d) > 8) return;
+        const a = Math.min(Math.abs(d), 4);
+        p.style.setProperty('--r', (Math.max(-4, Math.min(4, d)) * 4.5).toFixed(2) + 'deg');
+        p.style.setProperty('--y', (Math.min(a, 3) * 15).toFixed(1) + 'px');
+        p.style.setProperty('--s', (1 - a * 0.07).toFixed(3));
+        p.style.setProperty('--veil', Math.min(a * 0.22, 0.55).toFixed(2));
+        p.style.zIndex = 100 - Math.round(Math.abs(d) * 10);
+      });
+      cards.forEach(c => c.li.classList.toggle('is-active', c === activeCard));
+      update();
+    };
+    const requestFan = () => { if (fanRaf === null) fanRaf = requestAnimationFrame(fan); };
+
+    // Avanzamento: il contatore e la barra dicono quale post è davanti
+    const update = () => {
+      const list = visPosts();
+      const i = activeCard ? list.indexOf(activeCard.d) : 0;
+      const w = 100 / list.length;
+      bar.style.setProperty('--w', w + '%');
+      bar.style.setProperty('--x', Math.max(i, 0) * w + '%');
+      count.textContent = pad(Math.max(i, 0) + 1) + ' / ' + pad(list.length);
+    };
+
+    // Porta una carta al centro del ventaglio
+    const center = (p, smooth) => {
+      track.scrollTo({ left: p.offsetLeft + p.offsetWidth / 2 - track.clientWidth / 2, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
+    };
+
+    // Il loop: a scorrimento fermo, se la carta davanti è in una copia
+    // laterale saltiamo della larghezza di una serie (stesse immagini,
+    // stessa posizione: il salto non si vede).
+    let down = null, moved = false, idle = null;
+    const wrap = () => {
+      if (down || !activeCard || activeCard.copy === MID) return;
+      const first = visPosts()[0];
+      const setWidth = first.cards[MID + 1].li.offsetLeft - first.cards[MID].li.offsetLeft;
+      const hadFocus = activeCard.li.contains(document.activeElement);
+      track.scrollLeft += (MID - activeCard.copy) * setWidth;
+      fan();
+      if (hadFocus) activeCard.d.cards[MID].btn.focus({ preventScroll: true });
+    };
+    track.addEventListener('scroll', () => {
+      requestFan();
+      clearTimeout(idle);
+      idle = setTimeout(wrap, 160);
+    }, { passive: true });
+    addEventListener('resize', () => { if (activeCard) center(activeCard.d.cards[MID].li, false); requestFan(); });
+
+    const go = (dir) => {
+      const list = visCards();
+      const next = list[list.indexOf(activeCard) + dir];
+      if (next) center(next.li, true);
+      return next;
+    };
+    arrows.forEach(a => a.addEventListener('click', () => go(Number(a.dataset.step))));
+    feed.addEventListener('keydown', (e) => {
+      if (e.target.closest('.ped-filters')) return;
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const next = go(e.key === 'ArrowRight' ? 1 : -1);
+      if (next) next.btn.focus({ preventScroll: true });
+    });
+
+    // Trascinamento col mouse (su touch scorre già da sé)
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = { x: e.clientX, left: track.scrollLeft };
+      moved = false;
+    });
+    addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - down.x;
+      if (!moved && Math.abs(dx) > 5) { moved = true; track.classList.add('is-dragging'); }
+      if (moved) track.scrollLeft = down.left - dx;
+    });
+    addEventListener('pointerup', () => {
+      if (!down) return;
+      down = null;
+      if (moved) {
+        // Riattiva lo snap partendo dalla posizione raggiunta
+        const left = track.scrollLeft;
+        track.classList.remove('is-dragging');
+        track.scrollLeft = left;
+        setTimeout(() => { moved = false; }, 0);
+      }
+    });
+    // Un trascinamento non deve aprire il post su cui si rilascia
+    track.addEventListener('click', (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+    // Caroselli al passaggio del mouse: sfogliano le slide; la slide nuova
+    // entra solo quando è caricata, così i file pesanti non lasciano buchi.
+    if (!reduceMotion) {
+      cards.filter(c => isCarousel(c.d)).forEach(({ d, btn, img }) => {
+        let k = 0, timer = null, token = 0;
+        const show = (n) => {
+          const my = ++token;
+          const next = new Image();
+          next.onload = () => {
+            if (my !== token) return;
+            img.classList.add('is-fading');
+            setTimeout(() => {
+              if (my !== token) return;
+              k = n;
+              img.src = d.src[k];
+              img.classList.remove('is-fading');
+              timer = setTimeout(() => show((k + 1) % d.src.length), 1100);
+            }, 200);
+          };
+          next.src = d.src[n];
+        };
+        btn.addEventListener('pointerenter', (e) => {
+          if (e.pointerType !== 'mouse') return;
+          clearTimeout(timer);
+          timer = setTimeout(() => show(1), 500);
+        });
+        btn.addEventListener('pointerleave', () => {
+          clearTimeout(timer);
+          timer = null;
+          token++;
+          k = 0;
+          img.classList.remove('is-fading');
+          img.src = d.src[0];
+        });
+      });
+    }
+
+    filters.forEach(b => {
+      const f = b.dataset.filter;
+      const sup = document.createElement('sup');
+      sup.textContent = POSTS.filter(d => matches(d, f)).length;
+      b.appendChild(sup);
+      b.addEventListener('click', () => {
+        filters.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        let i = 0;
+        POSTS.forEach(d => {
+          const on = matches(d, f);
+          const n = on ? i++ : 0;
+          d.cards.forEach(({ li }) => {
+            li.hidden = !on;
+            li.classList.remove('is-pop');
+            if (on) { li.style.setProperty('--i', n); void li.offsetWidth; li.classList.add('is-pop'); }
+          });
+        });
+        center(visPosts()[0].cards[MID].li, false);
+        fan();
+      });
+    });
+
+    center(POSTS[0].cards[MID].li, false);
+    fan();
+
+    // Lightbox: frecce interne e puntini per le slide, frecce esterne per i
+    // post. Tastiera e swipe vanno avanti slide per slide e, finito il
+    // carosello, passano al post successivo (come su Instagram).
+    const lb = document.getElementById('ped-lightbox');
+    if (!lb || typeof lb.showModal !== 'function') return;
+    const lbImg = lb.querySelector('.lb-media img');
+    const lbCap = lb.querySelectorAll('figcaption span');
+    const lbDots = lb.querySelector('.lb-dots');
+    const slidePrev = lb.querySelector('.lb-slide--prev');
+    const slideNext = lb.querySelector('.lb-slide--next');
+    let list = [], at = 0, slide = 0, lbToken = 0;
+
+    const render = () => {
+      const d = list[at];
+      const n = d.src.length;
+      const my = ++lbToken;
+      lbImg.classList.add('is-loading');
+      lbImg.onload = () => { if (my === lbToken) lbImg.classList.remove('is-loading'); };
+      lbImg.src = d.src[slide];
+      lbImg.alt = d.alt[slide] || d.alt[0];
+      // Precarica la slide dopo, così lo sfoglio è immediato
+      if (slide + 1 < n) new Image().src = d.src[slide + 1];
+
+      slidePrev.hidden = n < 2 || slide === 0;
+      slideNext.hidden = n < 2 || slide === n - 1;
+      if (lbDots.childElementCount !== (n > 1 ? n : 0)) {
+        lbDots.replaceChildren(...(n > 1 ? d.src.map((_, k) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', 'Slide ' + (k + 1) + ' di ' + n);
+          dot.addEventListener('click', () => { slide = k; render(); });
+          return dot;
+        }) : []));
+      }
+      Array.from(lbDots.children).forEach((dot, k) => {
+        if (k === slide) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+
+      lbCap[0].textContent = d.rubric + (n > 1 ? ' · slide ' + (slide + 1) + ' di ' + n : '');
+      lbCap[1].textContent = pad(at + 1) + ' / ' + pad(list.length);
+    };
+    const openPost = (i, s) => {
+      at = (i + list.length) % list.length;
+      slide = s === 'last' ? list[at].src.length - 1 : 0;
+      render();
+    };
+    const step = (dir) => {
+      const n = list[at].src.length;
+      if (slide + dir >= 0 && slide + dir < n) { slide += dir; render(); }
+      else openPost(at + dir, dir < 0 ? 'last' : 0);
+    };
+
+    cards.forEach(({ d, li, btn }) => btn.addEventListener('click', () => {
+      // Una carta laterale prima viene al centro; si apre quella davanti
+      if (!li.classList.contains('is-active')) { center(li, true); return; }
+      list = visPosts();
+      openPost(list.indexOf(d), 0);
+      lb.showModal();
+    }));
+    lb.querySelector('.lb-close').addEventListener('click', () => lb.close());
+    const phone = matchMedia('(max-width:720px)');
+    lb.querySelector('.lb-prev').addEventListener('click', () => phone.matches ? step(-1) : openPost(at - 1, 0));
+    lb.querySelector('.lb-next').addEventListener('click', () => phone.matches ? step(1) : openPost(at + 1, 0));
+    slidePrev.addEventListener('click', () => step(-1));
+    slideNext.addEventListener('click', () => step(1));
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    });
+
+    // Swipe sull'immagine (touch e penna)
+    const media = lb.querySelector('.lb-media');
+    let sx = null;
+    media.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') sx = e.clientX; });
+    media.addEventListener('pointercancel', () => { sx = null; });
+    media.addEventListener('pointerup', (e) => {
+      if (sx === null) return;
+      const dx = e.clientX - sx;
+      sx = null;
+      if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+    });
+
+    // Click sul fondo scuro (fuori dall'immagine e dai pulsanti) = chiudi
+    lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  })();
+
+  // Zuppe: lo sfondo prende il colore del legume e i due scatti cambiano a
+  // tendina, con la scheda della zuppa che si aggiorna. Finché nessuno tocca
+  // niente le zuppe girano da sole: l'anello attorno al tappo attivo è il
+  // timer (a fine animazione si passa alla successiva) e si ferma quando il
+  // cursore è sugli scatti o la sezione è fuori vista. Su touch si scorre.
+  (function () {
+    const section = document.getElementById('ct-zuppe');
+    if (!section) return;
+    const lids = Array.from(section.querySelectorAll('.soup-lid'));
+    const infoNum = section.querySelector('.soup-info-num');
+    const infoName = section.querySelector('.soup-info-name');
+    const figs = Array.from(section.querySelectorAll('.soup-fig'));
+    const sets = figs.map(f => Array.from(f.querySelectorAll('img')));
+    const stage = section.querySelector('.soup-stage');
+    const count = section.querySelector('.soup-count');
+    const pad = (n) => String(n).padStart(2, '0');
+    let index = 0;
+
+    const show = (i) => {
+      const next = (i + lids.length) % lids.length;
+      if (next === index) return;
+      sets.forEach(imgs => imgs.forEach((im, k) => {
+        im.classList.toggle('is-prev', k === index);
+        im.classList.toggle('is-active', k === next);
+      }));
+      index = next;
+      lids.forEach((l, k) => l.setAttribute('aria-pressed', String(k === index)));
+      // Il nome nuovo entra dal basso: uno span nuovo fa ripartire l'animazione
+      const name = document.createElement('span');
+      const em = document.createElement('em');
+      em.textContent = lids[index].dataset.name;
+      name.className = 'is-in';
+      name.append('Zuppa di ', em);
+      infoName.replaceChildren(name);
+      infoNum.textContent = pad(index + 1) + ' / ' + pad(lids.length);
+      section.style.setProperty('--soup', lids[index].dataset.color);
+      count.textContent = pad(index + 1) + ' / ' + pad(lids.length);
+    };
+
+    const stop = () => section.classList.remove('is-auto');
+    if (!reduceMotion) section.classList.add('is-auto', 'is-offscreen');
+    section.querySelector('.soup-lids').addEventListener('animationend', (e) => {
+      if (e.animationName === 'soup-ring' && section.classList.contains('is-auto')) show(index + 1);
+    });
+
+    lids.forEach((l, i) => l.addEventListener('click', () => { stop(); show(i); }));
+    section.querySelectorAll('.soup-arrow').forEach(b => b.addEventListener('click', () => {
+      stop(); show(index + Number(b.dataset.step));
+    }));
+    section.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { stop(); show(index + 1); }
+      if (e.key === 'ArrowLeft') { stop(); show(index - 1); }
+    });
+
+    // Swipe orizzontale sugli scatti (touch e penna)
+    let sx = null;
+    stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') sx = e.clientX; });
+    stage.addEventListener('pointercancel', () => { sx = null; });
+    stage.addEventListener('pointerup', (e) => {
+      if (sx === null) return;
+      const dx = e.clientX - sx;
+      sx = null;
+      if (Math.abs(dx) > 40) { stop(); show(index + (dx < 0 ? 1 : -1)); }
+    });
+
+    // Autoplay in pausa mentre il cursore è sugli scatti
+    stage.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') section.classList.add('is-hold'); });
+    stage.addEventListener('pointerleave', () => section.classList.remove('is-hold'));
+
+
+    // Gli scatti nascosti con loading="lazy" Chrome non li carica mai: quando
+    // la sezione si avvicina li passiamo a eager, così la tendina non scopre
+    // un riquadro vuoto.
+    const preload = () => sets.flat().forEach(im => { im.loading = 'eager'; });
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver((entries) => {
+        if (entries.some(e => e.isIntersecting)) { preload(); near.disconnect(); }
+      }, { rootMargin: '800px 0px' });
+      near.observe(section);
+      new IntersectionObserver((entries) => {
+        section.classList.toggle('is-offscreen', !entries.some(e => e.isIntersecting));
+      }, { threshold: 0.35 }).observe(stage);
+    } else {
+      preload();
+      section.classList.remove('is-offscreen');
+    }
+  })();
+
+  // Affissioni 6x3: palco con frecce, miniature e frecce da tastiera; il
+  // palco prende le proporzioni dell'affissione attiva, senza tagliarla.
+  (function () {
+    const viewer = document.getElementById('bb-viewer');
+    if (!viewer) return;
+    const stage = viewer.querySelector('.bb-stage');
+    const slides = Array.from(stage.querySelectorAll('img'));
+    const thumbs = Array.from(viewer.querySelectorAll('.bb-thumb'));
+    const count = viewer.querySelector('.bb-count');
+    const pad = (n) => String(n).padStart(2, '0');
+    let index = 0;
+
+    const show = (i) => {
+      index = (i + slides.length) % slides.length;
+      const s = slides[index];
+      stage.style.setProperty('--ar', s.getAttribute('width') + '/' + s.getAttribute('height'));
+      slides.forEach((x, k) => x.classList.toggle('is-active', k === index));
+      thumbs.forEach((t, k) => {
+        t.classList.toggle('is-active', k === index);
+        if (k === index) t.setAttribute('aria-current', 'true');
+        else t.removeAttribute('aria-current');
+      });
+      count.textContent = pad(index + 1) + ' / ' + pad(slides.length);
+    };
+
+    viewer.querySelector('.bb-arrow--prev').addEventListener('click', () => show(index - 1));
+    viewer.querySelector('.bb-arrow--next').addEventListener('click', () => show(index + 1));
+    thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
+    viewer.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(index + 1);
+      if (e.key === 'ArrowLeft') show(index - 1);
+    });
+    show(0);
+  })();
+
+  // Catalogo: libretto da sfogliare. Ogni foglio ha una pagina dispari sul
+  // fronte e la pari successiva sul retro, e gira attorno alla costa.
+  // Mentre gira è diviso in strisce che ruotano un po' di più l'una
+  // dell'altra: il foglio si incurva, si illumina e fa ombra sotto (come il
+  // brand manual di Strush). Si sfoglia trascinando, cliccando sulle pagine,
+  // con le frecce o da tastiera. Sotto i 700px si legge una pagina alla volta.
+  (function () {
+    const fb = document.getElementById('fb');
+    if (!fb) return;
+    const stage = fb.querySelector('.fb-stage');
+    const shift = fb.querySelector('.fb-shift');
+    const book = fb.querySelector('.fb-book');
+    const count = fb.querySelector('.fb-count');
+    const progress = fb.querySelector('.fb-progress span');
+    const prevBtn = fb.querySelector('.fb-arrow[data-step="-1"]');
+    const nextBtn = fb.querySelector('.fb-arrow[data-step="1"]');
+    const pad = (n) => String(n).padStart(2, '0');
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const narrow = matchMedia('(max-width: 700px)');
+    const pages = Number(fb.dataset.pages);
+    const total = Math.ceil(pages / 2);   // fogli
+    const N = 16;                         // strisce per foglio
+    const BEND = 46;                      // curvatura massima, in gradi
+    const src = (p) => (p < pages ? fb.dataset.src.replace('{n}', pad(p + 1)) : '');
+    let turned = 0;   // fogli già girati
+    let page = 0;     // pagina in lettura (conta su schermi stretti)
+    let drag = null;
+
+    const el = (cls, parent) => {
+      const d = document.createElement('div');
+      d.className = cls;
+      if (parent) parent.appendChild(d);
+      return d;
+    };
+
+    // Spessore del libretto: blocco 3D sotto le pagine di ciascun lato
+    const block = (side) => {
+      const b = el('fb-block fb-block--' + side, book);
+      ['out', 'spine', 'top', 'bottom'].forEach((k) => el('fb-edge fb-edge--' + k, b));
+      return b;
+    };
+    const stackL = block('l');
+    const stackR = block('r');
+    const castL = el('fb-cast l', book);
+    const castR = el('fb-cast r', book);
+    // sopra le pagine ferme, sotto il foglio che gira
+    [castL, castR].forEach((d) => { d.style.transform = 'translateZ(' + (total * 0.1 + 1).toFixed(1) + 'px)'; });
+
+    const setPw = () => book.style.setProperty('--pw', book.offsetWidth / 2 + 'px');
+    setPw();
+    if ('ResizeObserver' in window) new ResizeObserver(setPw).observe(book);
+    else addEventListener('resize', setPw);
+
+    const leaves = Array.from({ length: total }, (_, i) => {
+      const leaf = el('fb-leaf', book);
+      const flat = el('fb-flat', leaf);
+      const faces = [el('fb-side front', flat), el('fb-side back', flat)];
+      const strips = [];
+      let parent = leaf;
+      for (let k = 0; k < N; k++) {
+        const s = el('fb-strip' + (k === 0 ? ' is-spine' : ''), parent);
+        if (k === 0) s.style.width = 100 / N + '%';
+        const f = el('fb-side front', s);
+        const b = el('fb-side back', s);
+        // ogni striscia mostra la sua fetta di pagina; sul retro le fette
+        // sono in ordine inverso perché il foglio è capovolto
+        f.style.setProperty('--k', k / N);
+        b.style.setProperty('--k', (N - 1 - k) / N);
+        faces.push(f, b);
+        strips.push({ el: s, f, b });
+        parent = s;
+      }
+      leaf.setAttribute('role', 'img');
+      leaf.setAttribute('aria-label', 'Catalogo iContadini, pagine ' + (2 * i + 1) + (2 * i + 2 <= pages ? ' e ' + (2 * i + 2) : ''));
+      // fronte del primo foglio e retro dell'ultimo sono le copertine
+      faces.forEach((face) => {
+        const isFront = face.classList.contains('front');
+        if ((i === 0 && isFront) || (i === total - 1 && !isFront)) face.classList.add('is-cover');
+      });
+      return { el: leaf, i, faces, strips, angle: 0, curl: 1, anim: 0, moving: false, loaded: false };
+    });
+
+    // Carica solo le pagine vicine a quella aperta, già decodificate: il
+    // browser altrimenti decodifica la faccia nascosta solo quando appare
+    // a metà giro, e per un attimo la pagina resta vuota.
+    const load = (leaf) => {
+      if (leaf.loaded) return;
+      leaf.loaded = true;
+      const f = src(2 * leaf.i), b = src(2 * leaf.i + 1);
+      leaf.faces.forEach((face) => {
+        const url = face.classList.contains('front') ? f : b;
+        if (url) face.style.backgroundImage = 'url("' + url + '")';
+      });
+      [f, b].forEach((u) => {
+        if (!u) return;
+        const img = new Image();
+        img.src = u;
+        if (img.decode) img.decode().catch(() => {});
+      });
+    };
+
+    // Fogli fermi su un lato (-1 sinistra, 1 destra), escluso quello in mano
+    const resting = (side, except) => leaves.filter((l) => l !== except && !l.moving
+      && !(drag && drag.leaf === l) && (side < 0 ? l.angle <= -179.99 : l.angle >= -0.01)).length;
+
+    // Il libro scorre verso il centro man mano che la copertina (o il retro)
+    // gira, e l'ombra copre solo la parte già occupata dalle pagine: così a
+    // metà giro non compare una pagina vuota. Su schermi stretti lo
+    // spostamento lo fa .fb-shift.
+    const layoutBook = () => {
+      const a0 = leaves[0].angle;
+      const aN = leaves[total - 1].angle;
+      const rad = Math.PI / 180;
+      const tx = narrow.matches ? 0 : -25 * (1 + a0 / 180) - 25 * aN / 180;
+      book.style.setProperty('--tx', tx.toFixed(3) + '%');
+      const sl = 50 * (1 - Math.max(0, -Math.cos(a0 * rad)));
+      const sr = 50 * (1 - Math.max(0, Math.cos(aN * rad)));
+      book.style.setProperty('--sl', sl.toFixed(3) + '%');
+      book.style.setProperty('--sr', sr.toFixed(3) + '%');
+      // Il tilt ruota attorno al centro della parte visibile del libro
+      book.style.setProperty('--ox', ((sl + 100 - sr) / 2).toFixed(3) + '%');
+    };
+
+    // Le pagine ferme stanno quasi sullo stesso piano: un decimo di pixel
+    // tra l'una e l'altra evita che si mescolino (anche col tilt). Il
+    // foglio che gira sta sopra tutti.
+    const setAngle = (leaf, a) => {
+      leaf.angle = a;
+      const p = -a / 180;
+      const turning = a < -0.01 && a > -179.99;
+      const z = turning ? total * 0.1 + 2 : (a <= -90 ? leaf.i + 1 : total - leaf.i) * 0.1;
+      leaf.el.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateY(' + a + 'deg)';
+      leaf.el.style.zIndex = turning ? total * 2 : (a <= -90 ? leaf.i : total - leaf.i);
+      leaf.el.classList.toggle('is-turning', turning);
+      if (leaf.i === 0 || leaf.i === total - 1) layoutBook();
+      if (!turning) return;
+      // il bordo libero resta indietro (o va avanti, se lo si tira col dito)
+      const c = leaf.curl * BEND * Math.sin(Math.PI * p);
+      const step = c / (N - 1);
+      // più la striscia è inclinata rispetto a chi guarda, più è in ombra
+      const cosAt = (k) => Math.cos((a + step * clamp(k, 0, N - 1)) * Math.PI / 180);
+      let x = 0;
+      leaf.strips.forEach((s, k) => {
+        s.el.style.transform = k === 0 ? '' : 'rotateY(' + step.toFixed(2) + 'deg)';
+        const cs = cosAt(k);
+        x += cs / N;
+        s.f.style.setProperty('--lum', (1 - 0.36 * (1 - cs)).toFixed(3));
+        s.b.style.setProperty('--lum', (1 - 0.36 * (1 + cs)).toFixed(3));
+      });
+      // x: dove cade il bordo libero, da -1 (pagina sinistra) a 1 (destra)
+      const lift = Math.sin(Math.PI * p);
+      const castOn = (cast, pos, dirStr) => {
+        const edge = Math.min(100, Math.abs(pos) * 100);
+        cast.style.background = 'linear-gradient(to ' + dirStr + ', rgba(40,28,20,.45) 0%, rgba(40,28,20,.28) ' + edge.toFixed(1) + '%, rgba(40,28,20,0) ' + Math.min(100, edge + 6 + 22 * lift).toFixed(1) + '%)';
+      };
+      castOn(castR, Math.max(0, x), 'right');
+      castOn(castL, Math.max(0, -x), 'left');
+      // l'ombra cade solo dove c'è davvero una pagina sotto, non sul tavolo
+      castR.style.opacity = resting(1, leaf) ? (x > 0 ? lift * 0.9 : lift * 0.35).toFixed(3) : 0;
+      castL.style.opacity = resting(-1, leaf) ? (x < 0 ? lift * 0.9 : lift * 0.35).toFixed(3) : 0;
+    };
+
+    const anyMoving = () => leaves.some((l) => l.moving);
+    const settle = () => {
+      if (anyMoving() || drag) return;
+      castL.style.opacity = castR.style.opacity = 0;
+      refresh();
+    };
+
+    const tween = (leaf, to) => {
+      cancelAnimationFrame(leaf.anim);
+      const from = leaf.angle;
+      const dur = reduceMotion ? 0 : Math.max(320, 1050 * Math.abs(to - from) / 180);
+      const t0 = performance.now();
+      leaf.moving = true;
+      refresh();
+      const step = (now) => {
+        const t = dur ? Math.min(1, (now - t0) / dur) : 1;
+        setAngle(leaf, from + (to - from) * ease(t));
+        if (t < 1) { leaf.anim = requestAnimationFrame(step); return; }
+        leaf.moving = false;
+        settle();
+      };
+      leaf.anim = requestAnimationFrame(step);
+    };
+
+    // Spessore del blocco di pagine su un lato: circa 2px per foglio, con
+    // un minimo per la sola copertina (libretto più leggibile in 3D)
+    const setThickness = (b, sheets) => {
+      b.style.visibility = sheets ? '' : 'hidden';
+      b.style.setProperty('--t', (sheets ? Math.max(6, sheets * 2) : 0).toFixed(1) + 'px');
+    };
+
+    // Su schermi stretti si mostra la metà del libro con la pagina in lettura
+    const offset = () => (narrow.matches ? (page % 2 === 1 ? 25 : -25) : 0);
+
+    const refresh = () => {
+      leaves.forEach((l) => {
+        const near = l.i >= turned - 2 && l.i <= turned + 1;
+        l.el.style.visibility = near || l.moving || (drag && drag.leaf === l) ? '' : 'hidden';
+        if (l.i >= turned - 3 && l.i <= turned + 3) load(l);
+      });
+      // i blocchi contano solo i fogli già posati: mentre la copertina (o
+      // l'ultimo foglio) è in volo, dall'altra parte non c'è ancora niente
+      setThickness(stackL, resting(-1));
+      setThickness(stackR, resting(1));
+      shift.style.transform = 'translateX(' + offset() + '%)';
+    };
+
+    const update = () => {
+      if (narrow.matches) {
+        count.textContent = pad(page + 1) + ' / ' + pad(pages);
+        progress.style.width = (page / (pages - 1)) * 100 + '%';
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page === pages - 1;
+      } else {
+        const a = 2 * turned, b = 2 * turned + 1;
+        count.textContent = turned === 0 ? pad(1) + ' / ' + pad(pages)
+          : turned === total ? pad(pages) + ' / ' + pad(pages)
+          : pad(a) + '–' + pad(b) + ' / ' + pad(pages);
+        progress.style.width = (turned / total) * 100 + '%';
+        prevBtn.disabled = turned === 0;
+        nextBtn.disabled = turned === total;
+      }
+      refresh();
+    };
+
+    const flip = (dir, curl) => {
+      const leaf = leaves[dir > 0 ? turned : turned - 1];
+      turned += dir;
+      leaf.curl = curl;
+      tween(leaf, dir > 0 ? -180 : 0);
+    };
+
+    const go = (dir) => {
+      if (narrow.matches) {
+        const next = page + dir;
+        if (next < 0 || next > pages - 1) return;
+        page = next;
+        const t = Math.floor((page + 1) / 2);
+        if (t !== turned) flip(dir, dir);
+      } else {
+        if (turned + dir < 0 || turned + dir > total) return;
+        flip(dir, dir);
+        page = turned === 0 ? 0 : 2 * turned - 1;
+      }
+      update();
+    };
+
+    // Trascinamento: il foglio segue il dito, tirato per il bordo; se è
+    // girato abbastanza (o con uno scatto veloce) completa il giro,
+    // altrimenti ricade. Un tocco senza trascinare sfoglia verso il lato
+    // toccato. Su schermi stretti basta uno scorrimento.
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      const r = (narrow.matches ? stage : book).getBoundingClientRect();
+      let dir = e.clientX >= r.left + r.width / 2 ? 1 : -1;
+      // chiuso, il libretto si apre ovunque lo si tocchi
+      if (!narrow.matches && turned === 0) dir = 1;
+      if (!narrow.matches && turned === total) dir = -1;
+      const leaf = narrow.matches ? null : leaves[dir > 0 ? turned : turned - 1];
+      if (!narrow.matches && !leaf) return;
+      drag = { dir, id: e.pointerId, x: e.clientX, t: performance.now(), moved: false, p: 0, w: r.width, leaf };
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved) {
+        if (Math.abs(dx) < 6) return;
+        drag.moved = true;
+        stage.setPointerCapture(drag.id);
+        stage.classList.add('is-dragging');
+        if (drag.leaf) {
+          cancelAnimationFrame(drag.leaf.anim);
+          drag.leaf.moving = false;
+          drag.leaf.curl = -drag.dir;
+          refresh();
+        }
+      }
+      if (!drag.leaf) return;
+      const p = clamp((drag.dir > 0 ? -dx : dx) / (drag.w * 0.55), 0, 1);
+      drag.p = p;
+      setAngle(drag.leaf, drag.dir > 0 ? -180 * p : -180 * (1 - p));
+    });
+    const endDrag = (e, cancelled) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag;
+      drag = null;
+      stage.classList.remove('is-dragging');
+      if (!d.moved) {
+        if (!cancelled) go(d.dir);
+        return;
+      }
+      const dx = e.clientX - d.x;
+      if (!d.leaf) {
+        if (!cancelled && Math.abs(dx) > 30) go(dx < 0 ? 1 : -1);
+        return;
+      }
+      const speed = Math.abs(dx) / (performance.now() - d.t);
+      const commit = !cancelled && (d.p > 0.3 || (speed > 0.5 && d.p > 0.05));
+      if (commit) {
+        turned += d.dir;
+        page = turned === 0 ? 0 : 2 * turned - 1;
+        update();
+      }
+      const flipped = d.dir > 0 ? commit : !commit;
+      tween(d.leaf, flipped ? -180 : 0);
+    };
+    stage.addEventListener('pointerup', (e) => endDrag(e, false));
+    stage.addEventListener('pointercancel', (e) => endDrag(e, true));
+
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
+    fb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+    narrow.addEventListener('change', () => {
+      page = turned === 0 ? 0 : turned === total ? pages - 1 : 2 * turned - 1;
+      layoutBook();
+      update();
+    });
+    leaves.forEach((l) => setAngle(l, 0));
+    // il primo spostamento non va animato
+    shift.style.transition = 'none';
+    update();
+    shift.offsetWidth;
+    shift.style.transition = '';
+
+    // Tilt 3D che segue il cursore, con easing (come la card
+    // K-Way). Solo col mouse, e fermo mentre si trascina un foglio.
+    (function () {
+      if (reduceMotion) return;
+      // Al centro resta piatto; verso i lati ruota di più in orizzontale,
+      // così si vedono lo spessore delle pagine e il dorso
+      const tiltX = 6;
+      const tiltY = 16;
+      const cur = { rx: 0, ry: 0 };
+      const target = { ...cur };
+      let rafId = null;
+
+      const tick = () => {
+        let delta = 0;
+        for (const k in cur) {
+          const next = cur[k] + (target[k] - cur[k]) * 0.12;
+          delta += Math.abs(next - cur[k]);
+          cur[k] = next;
+        }
+        book.style.setProperty('--rx', cur.rx.toFixed(2) + 'deg');
+        book.style.setProperty('--ry', cur.ry.toFixed(2) + 'deg');
+        rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+      };
+      const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+      stage.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse' || drag) return;
+        const r = book.getBoundingClientRect();
+        const px = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+        const py = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+        target.rx = (0.5 - py) * tiltX * 2;
+        target.ry = (px - 0.5) * tiltY * 2;
+        start();
+      });
+      stage.addEventListener('pointerleave', () => {
+        target.rx = 0; target.ry = 0;
+        start();
+      });
+    })();
+  })();
+</script>
+
+</body>
+</html>

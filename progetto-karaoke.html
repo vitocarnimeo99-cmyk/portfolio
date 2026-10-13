@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karaoke Dinner — IYS &amp; Fondazione Burro Studio / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="Karaoke Dinner: illustrazione per la serata benefica di Fondazione Burro Studio e In Your Shoes, per raccogliere scarpe da trekking e abbigliamento tecnico per la comunità Sherpa in Nepal. Poster, t-shirt e social.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: il rosso del titolo del poster come accento,
+     il blu del lettering "We Bridge Continents", il giallo della margherita
+     e il nero del fondo del poster per la sezione della serata. */
+  :root{
+    --accent:#D8322A;
+    --accent-soft:#FBE1DE;
+    --blue:#2E6BF0;
+    --sky:#DDE7FB;
+    --sun:#FFD21F;
+    --night:#121212;
+  }
+
+  /* -------- Hero: il poster con tilt 3D e note musicali al click -------- */
+  .kar-hero-art{
+    position:relative;
+    flex:0 0 440px;
+    width:440px;
+    perspective:1200px;
+  }
+  .kar-card{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--night);
+    border:7px solid #fff;
+    box-shadow:0 30px 70px rgba(23,20,15,.28);
+    transform: rotate(-1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+    cursor:pointer;
+  }
+  .kar-hero-art:hover .kar-card{
+    box-shadow:0 34px 80px rgba(23,20,15,.3), 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(216,50,42,.4);
+  }
+  .kar-card:focus-visible{ outline:3px solid var(--accent); outline-offset:4px; }
+  .kar-card img{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    transform: scale(1.02);
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .kar-hero-art:hover .kar-card img{ transform: scale(1.06); }
+  /* Riflesso che segue il cursore */
+  .kar-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .kar-hero-art:hover .kar-card::after{ opacity:1; }
+
+  .kar-badge{
+    position:absolute;
+    right:-24px; top:-26px;
+    width:112px; height:112px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    background: var(--blue);
+    color:#fff;
+    font-weight:700;
+    font-size:0.64rem;
+    line-height:1.1;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    border-radius:50%;
+    border:3px dashed rgba(255,255,255,.55);
+    transform: rotate(12deg);
+    box-shadow:0 10px 24px rgba(46,107,240,.35);
+    transition: transform .7s ease;
+    z-index:2;
+    pointer-events:none;
+  }
+  .kar-badge b{ font-size:2.4rem; line-height:.9; letter-spacing:-0.02em; color: var(--sun); }
+  .kar-hero-art:hover .kar-badge{ transform: rotate(372deg); }
+
+  .kar-sing{
+    position:absolute;
+    left:50%; bottom:-46px;
+    transform: translateX(-50%);
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.82rem;
+    color: var(--ink-soft);
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  .kar-sing i{ color: var(--accent); }
+  .kar-count{ font-weight:700; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+  /* Note musicali generate da JS al click sul poster */
+  .note{
+    position:absolute;
+    bottom:14%;
+    font-size:var(--sz,22px);
+    line-height:1;
+    color: var(--c, var(--blue));
+    text-shadow:0 0 0 #fff, 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+    pointer-events:none;
+    z-index:3;
+    animation: note-up var(--t,1.6s) cubic-bezier(.3,.6,.4,1) forwards;
+  }
+  @keyframes note-up{
+    0%{ transform: translate(0,0) rotate(0deg) scale(.4); opacity:0; }
+    15%{ opacity:1; }
+    50%{ transform: translate(calc(var(--dx,0px) * -.6), calc(var(--dy,-380px) * .5)) rotate(calc(var(--rot,20deg) * -1)) scale(1); }
+    100%{ transform: translate(var(--dx,0px), var(--dy,-380px)) rotate(var(--rot,20deg)) scale(1); opacity:0; }
+  }
+  .sing-pop{
+    position:absolute;
+    left:50%; top:42%;
+    z-index:4;
+    padding:10px 20px;
+    border-radius:999px;
+    background: var(--accent);
+    color:#fff;
+    font-weight:700;
+    font-size:1.2rem;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    pointer-events:none;
+    animation: sing-pop 1.1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes sing-pop{
+    0%{ transform: translate(-50%,-50%) scale(.4) rotate(-12deg); opacity:0; }
+    25%{ transform: translate(-50%,-50%) scale(1.1) rotate(-6deg); opacity:1; }
+    70%{ transform: translate(-50%,-70%) scale(1) rotate(-6deg); opacity:1; }
+    100%{ transform: translate(-50%,-110%) scale(.9) rotate(-6deg); opacity:0; }
+  }
+
+  @media (max-width:980px){
+    .kar-hero-art{ width:380px; margin:36px auto 40px; }
+  }
+  @media (max-width:560px){
+    .kar-hero-art{ width:100%; max-width:380px; }
+    .kar-badge{ right:-8px; top:-18px; width:90px; height:90px; font-size:0.54rem; }
+    .kar-badge b{ font-size:1.9rem; }
+  }
+
+  /* -------- Ticker in versione Karaoke (rosso + giallo) -------- */
+  .ticker-wrap.kar-ticker{ background: var(--accent); }
+  .kar-ticker .ticker{ animation-duration:30s; }
+  .kar-ticker .ticker-item{ color:#fff; letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .kar-ticker .ticker-sep{ color: var(--sun); }
+
+  /* Eyebrow comune a tutte le sezioni della pagina */
+  .kar-sec .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .kar-sec .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+
+  /* -------- Merch: la t-shirt che si gira -------- */
+  .kar-merch{
+    background: var(--sky);
+    padding:100px 0 110px;
+    overflow:hidden;
+  }
+  section.kar-merch{ border-top:none; }
+  .kar-merch .eyebrow{ color: var(--blue); }
+  .kar-merch .section-title em{ color: var(--blue); }
+  .merch-grid{
+    display:grid;
+    grid-template-columns: 1fr 600px;
+    gap:64px;
+    align-items:center;
+  }
+  .merch-side > p{ color: var(--ink-soft); max-width:44ch; margin:-24px 0 36px; font-size:1.02rem; }
+
+  .merch-group{ margin-bottom:26px; }
+  .merch-group-label{
+    display:block;
+    font-size:0.8rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .merch-opts{ display:flex; gap:10px; flex-wrap:wrap; }
+  .merch-opt{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:11px 20px;
+    border-radius:999px;
+    border:2px solid rgba(23,20,15,.18);
+    background:transparent;
+    color: var(--ink);
+    font:inherit;
+    font-size:0.92rem;
+    font-weight:700;
+    cursor:pointer;
+    transition: border-color .2s ease, background-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .merch-opt:hover{ border-color: var(--ink); transform: translateY(-2px); }
+  .merch-opt[aria-pressed="true"]{ background: var(--blue); border-color: var(--blue); color:#fff; }
+  .merch-opt:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+
+  .merch-now{
+    display:flex; align-items:baseline; gap:12px;
+    padding:14px 0;
+    margin-top:34px;
+    border-top:1px solid rgba(23,20,15,.18);
+    border-bottom:1px solid rgba(23,20,15,.18);
+  }
+  .merch-now-num{ font-weight:700; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .merch-now-label{ font-weight:700; font-size:1.05rem; }
+  .merch-now-meta{ margin-left:auto; font-size:0.85rem; color: var(--ink-soft); }
+
+  .merch-stage{ position:relative; perspective:1600px; }
+  .merch-tee{
+    position:relative;
+    display:block;
+    width:100%;
+    padding:0;
+    border:6px solid #fff;
+    border-radius:22px;
+    aspect-ratio:1/1;
+    background:#ECECEC;
+    box-shadow:0 34px 70px rgba(20,40,90,.25);
+    transform-style:preserve-3d;
+    transform: rotate(-1.4deg) rotateY(var(--flip,0deg));
+    transition: transform .8s cubic-bezier(.3,.7,.2,1);
+    cursor:pointer;
+  }
+  .merch-tee:focus-visible{ outline:3px solid var(--blue); outline-offset:5px; }
+  .merch-face{
+    position:absolute; inset:0;
+    border-radius:16px;
+    overflow:hidden;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .merch-face--back{ transform: rotateY(180deg); }
+  .merch-face img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    transition: transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .merch-stage:hover .merch-face img{ transform: scale(1.03); }
+  .merch-hint{
+    display:flex; justify-content:center; align-items:center; gap:8px;
+    margin-top:18px;
+    font-size:0.82rem;
+    color: var(--ink-soft);
+  }
+  .merch-hint i{ color: var(--blue); }
+
+  .merch-thumbs{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:12px;
+    max-width:360px;
+    list-style:none;
+    margin:28px 0 0; padding:0;
+  }
+  .merch-thumb{
+    display:block;
+    width:100%;
+    padding:0;
+    border:2px solid transparent;
+    border-radius:12px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    background:#ECECEC;
+    cursor:pointer;
+    opacity:.55;
+    transition: opacity .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .merch-thumb img{ display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .merch-thumb:hover{ opacity:.9; transform: translateY(-3px); }
+  .merch-thumb.is-active{ opacity:1; border-color: var(--blue); transform: translateY(-3px); }
+  .merch-thumb:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+
+  @media (max-width:980px){
+    .merch-grid{ grid-template-columns:1fr; gap:44px; }
+    .merch-stage{ order:-1; width:min(100%, 540px); margin:0 auto; }
+  }
+
+  /* -------- La serata: player di stories, sezione nera come il poster -------- */
+  .kar-night{
+    background: var(--night);
+    color:#fff;
+    padding:100px 0 110px;
+  }
+  section.kar-night{ border-top:none; }
+  .kar-night .section-title{ color:#fff; }
+  .kar-night .section-title em{ color: var(--sun); }
+  .night-grid{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:80px;
+    align-items:center;
+  }
+  .night-text > p{ font-size:1.05rem; color:#B9B4A6; max-width:48ch; margin:-24px 0 28px; }
+  .night-tags{
+    display:flex; flex-wrap:wrap; gap:8px;
+    list-style:none;
+    margin:0 0 36px; padding:0;
+  }
+  .night-tags li{
+    padding:6px 14px;
+    border-radius:999px;
+    border:1.5px solid rgba(255,255,255,.25);
+    font-size:0.8rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:#fff;
+  }
+  .night-tags li:nth-child(odd){ border-color: var(--accent); color: var(--accent); }
+
+  .story{
+    position:relative;
+    width:100%;
+    aspect-ratio:9/16;
+    border-radius:28px;
+    overflow:hidden;
+    background:#000;
+    border:6px solid #fff;
+    box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+    transform: rotate(2deg);
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .story-slide{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transform: scale(1.04);
+    transition: opacity .45s ease, transform 5.5s linear;
+  }
+  .story-slide.is-active{ opacity:1; transform: scale(1); }
+  .story::before{
+    content:"";
+    position:absolute; left:0; right:0; top:0;
+    height:110px;
+    background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,0));
+    z-index:1;
+    pointer-events:none;
+  }
+  .story-bars{
+    position:absolute;
+    top:12px; left:12px; right:12px;
+    display:flex; gap:4px;
+    z-index:2;
+  }
+  .story-bar{
+    flex:1;
+    height:3px;
+    border-radius:3px;
+    background: rgba(255,255,255,.35);
+    overflow:hidden;
+  }
+  .story-bar i{
+    display:block;
+    height:100%;
+    width:100%;
+    background:#fff;
+    transform-origin:left center;
+    transform: scaleX(var(--p,0));
+  }
+  .story-head{
+    position:absolute;
+    top:26px; left:12px; right:12px;
+    display:flex; align-items:center; gap:10px;
+    z-index:2;
+    font-size:0.78rem;
+    font-weight:700;
+    color:#fff;
+    pointer-events:none;
+  }
+  .story-avatar{
+    width:30px; height:30px;
+    border-radius:50%;
+    display:grid; place-items:center;
+    background: var(--accent);
+    border:2px solid #fff;
+    overflow:hidden;
+  }
+  .story-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .story-head .story-time{ font-weight:400; opacity:.7; }
+  .story-head .story-state{ margin-left:auto; opacity:.85; }
+  .story-tap{
+    position:absolute; top:0; bottom:0;
+    width:40%;
+    padding:0;
+    border:none;
+    background:none;
+    cursor:pointer;
+    z-index:3;
+  }
+  .story-tap--prev{ left:0; }
+  .story-tap--next{ right:0; width:60%; }
+  .story-tap:focus-visible{ outline:3px solid var(--sun); outline-offset:-6px; border-radius:22px; }
+  .story-hint{
+    display:flex; justify-content:center; align-items:center; gap:8px;
+    margin-top:22px;
+    font-size:0.82rem;
+    color:#B9B4A6;
+  }
+  .story-hint i{ color: var(--sun); }
+
+  @media (max-width:880px){
+    .night-grid{ grid-template-columns:1fr; gap:48px; }
+    .story-wrap{ width:min(100%, 340px); margin:0 auto; order:-1; }
+    .story{ transform:none; }
+  }
+
+  /* -------- Il viaggio: fisarmonica di foto su un'unica riga -------- */
+  section.kar-trip{ border-top:none; }
+  .kar-trip .wrap > p{ font-size:1.05rem; color: var(--ink-soft); max-width:56ch; margin:-24px 0 40px; }
+  .trip-row{
+    display:flex;
+    gap:10px;
+    height:520px;
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .trip-row li{
+    flex:1 1 0;
+    min-width:0;
+    transition: flex-grow .6s cubic-bezier(.3,.7,.2,1);
+  }
+  .trip-row li.is-active{ flex-grow:4.2; }
+  .trip-shot{
+    position:relative;
+    display:block;
+    width:100%; height:100%;
+    padding:0;
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+    background: var(--paper-dim);
+    cursor:pointer;
+    font:inherit;
+    text-align:left;
+  }
+  .trip-shot img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    filter: saturate(.6);
+    transform: scale(1.06);
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+  }
+  .trip-row li.is-active .trip-shot img{ filter:none; transform: scale(1); }
+  .trip-num{
+    position:absolute;
+    top:14px; left:50%;
+    transform: translateX(-50%);
+    z-index:1;
+    display:grid; place-items:center;
+    width:36px; height:36px;
+    border-radius:50%;
+    background: var(--accent);
+    color:#fff;
+    font-size:0.78rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+    transition: background-color .3s ease, color .3s ease, left .4s ease, transform .4s ease;
+  }
+  .trip-row li.is-active .trip-num{ background: var(--sun); color: var(--ink); left:14px; transform:none; }
+  .trip-shot:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+
+  /* Su mobile la riga diventa uno scorrimento orizzontale con snap */
+  @media (max-width:760px){
+    .trip-row{
+      height:auto;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      margin:0 -40px; padding:0 40px 8px;
+      scroll-padding:0 40px;
+    }
+    .trip-row li, .trip-row li.is-active{ flex:0 0 78%; scroll-snap-align:start; }
+    .trip-shot{ aspect-ratio:9/14; height:auto; }
+    .trip-shot img{ filter:none; transform:none; }
+    .trip-num, .trip-row li.is-active .trip-num{ left:14px; transform:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .kar-card, .kar-card img, .kar-badge, .merch-tee, .merch-face img,
+    .trip-row li, .trip-shot img, .story-slide{ transition:none; }
+    .kar-ticker .ticker{ animation:none; }
+  }
+
+  /* Su mobile il margine laterale di .wrap scende a 20px: la riga a scorrimento segue */
+  @media (max-width:640px){
+    .trip-row{ margin:0 -20px; padding:0 20px 8px; scroll-padding:0 20px; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .kar-merch, .kar-night{ padding:56px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Evento benefico — Fondazione Burro Studio × In Your Shoes</span>
+      <h1>Karaoke Dinner <em>We Bridge Continents</em></h1>
+      <p><strong>IYS (In Your Shoes)</strong> è un'organizzazione benefica che aiuta le persone bisognose fornendo l'attrezzatura che le rende più forti. Dal 2017 raccoglie ogni anno scarpe da corsa da tutto il mondo, le etichetta con il nome dei proprietari e le porta in Kenya, a chi sogna e lotta per diventare campione.<br><br>
+      Con questa serata abbiamo sostenuto il progetto di IYS per raccogliere <strong>scarpe da trekking e abbigliamento tecnico</strong> da donare alla <strong>comunità Sherpa in Nepal</strong>, per affrontare la stagione delle grandi spedizioni himalayane.</p>
+      <div class="project-meta">
+        <div>Anno<span>2023</span></div>
+        <div>Ruolo<span>Illustration · Graphic</span></div>
+        <div>Output<span>Poster · T-shirt · Social</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary" href="https://fondazioneburrostudio.com/" target="_blank" rel="noopener">Per maggiori info ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209148083/Karaoke-Dinner-IYS-Fondazione-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="kar-hero-art" id="kar-hero">
+      <button class="kar-card" type="button" aria-label="Prendi il microfono: fai partire le note">
+        <img src="assets/images/KARAOKE01.jpg" width="1146" height="1146" alt="Poster Karaoke Dinner: una margherita sorridente con le scarpe da trekking corre tra il lettering blu We Bridge Continents, Fondazione Burro Studio × In Your Shoes, mercoledì 1 febbraio ore 19, Doppio Malto, Viale Liguria 47" loading="eager" decoding="async">
+      </button>
+      <span class="kar-badge" aria-hidden="true"><b>♪</b>Karaoke<br>night</span>
+      <span class="kar-sing" aria-live="polite"><i class="fa-solid fa-microphone" aria-hidden="true"></i>Clicca per cantare · <span class="kar-count">0</span> canzoni</span>
+    </div>
+  </div>
+
+  <div class="ticker-wrap kar-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">Karaoke Dinner</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">01.02 — 7PM</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Doppio Malto, Viale Liguria 47</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">We bridge continents</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Fondazione Burro Studio × In Your Shoes</span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">Karaoke Dinner</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">01.02 — 7PM</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Doppio Malto, Viale Liguria 47</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">We bridge continents</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Fondazione Burro Studio × In Your Shoes</span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="kar-sec kar-merch">
+    <div class="wrap merch-grid">
+      <div class="merch-side">
+        <span class="eyebrow">Merch</span>
+        <h2 class="section-title">T-shirt <em>solidale</em></h2>
+        <p>L'illustrazione finisce sulle t-shirt della serata: la margherita piccola sul petto, l'artwork completo con il lettering sulla schiena. Le stesse magliette sono poi arrivate fino in Nepal.</p>
+
+        <div class="merch-group">
+          <span class="merch-group-label" id="lbl-side">Lato</span>
+          <div class="merch-opts" role="group" aria-labelledby="lbl-side">
+            <button class="merch-opt" type="button" data-side="front" aria-pressed="true">Fronte</button>
+            <button class="merch-opt" type="button" data-side="back" aria-pressed="false">Retro</button>
+          </div>
+        </div>
+
+        <div class="merch-now" aria-live="polite"><span class="merch-now-num">01</span><span class="merch-now-label">Fronte</span><span class="merch-now-meta">Margherita sul petto</span></div>
+
+        <ul class="merch-thumbs">
+          <li><button class="merch-thumb is-active" type="button" data-side="front" aria-label="T-shirt, fronte"><img src="assets/images/KARAOKE_MAGLIA_01.PNG" width="1500" height="1500" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="merch-thumb" type="button" data-side="back" aria-label="T-shirt, retro"><img src="assets/images/KARAOKE_MAGLIA_02.PNG" width="1500" height="1500" alt="" loading="lazy" decoding="async"></button></li>
+        </ul>
+      </div>
+
+      <div class="merch-stage">
+        <button class="merch-tee" id="merch-tee" type="button" aria-label="Gira la t-shirt">
+          <span class="merch-face merch-face--front">
+            <img src="assets/images/KARAOKE_MAGLIA_01.PNG" width="1500" height="1500" alt="T-shirt grigia, fronte: la margherita sorridente sul petto con la scritta Fondazione Burro Studio In Your Shoes" decoding="async">
+          </span>
+          <span class="merch-face merch-face--back">
+            <img src="assets/images/KARAOKE_MAGLIA_02.PNG" width="1500" height="1500" alt="T-shirt grigia, retro: artwork completo con la margherita in scarpe da trekking e il lettering blu We Bridge Continents" loading="lazy" decoding="async">
+          </span>
+        </button>
+        <span class="merch-hint"><i class="fa-solid fa-rotate" aria-hidden="true"></i>Clicca la maglietta per girarla</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="kar-sec kar-night">
+    <div class="wrap night-grid">
+      <div class="night-text">
+        <span class="eyebrow">La serata</span>
+        <h2 class="section-title">Microfoni accesi, <br><em>ready for tonight!</em></h2>
+        <p>Cena e karaoke al Doppio Malto di Viale Liguria: il menu della serata riprende la margherita in rosso, con la scaletta delle canzoni divisa per decenni. Su Instagram il racconto della serata è passato dalle stories.</p>
+        <ul class="night-tags" aria-label="Le sezioni del menu karaoke">
+          <li>Anni 60/80</li>
+          <li>Anni 70/80</li>
+          <li>Anni 90/00</li>
+          <li>Hit internazionali</li>
+        </ul>
+      </div>
+      <div class="story-wrap">
+        <div class="story" id="kar-story" aria-roledescription="stories" aria-label="Stories della serata">
+          <img class="story-slide is-active" src="assets/images/KARAOKE_STORY_01.jpg.jpg" width="750" height="1334" alt="Il menu Karaoke Dinner con la margherita in rosso e le canzoni divise per decenni, due microfoni appoggiati sopra, la scritta Ready for tonight!" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_02.jpg" width="750" height="1334" alt="La t-shirt bianca con l'artwork We Bridge Continents appesa a una gruccia sotto le luci del locale" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_03.jpg" width="1080" height="1920" alt="Un gruppo di amici canta abbracciato sul palco davanti al testo proiettato sullo schermo" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_04.jpg" width="1080" height="1920" alt="La tovaglietta gialla del Doppio Malto sul tavolo rosso, con posate e una foto stampata" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_05.jpg" width="1080" height="1920" alt="Il presentatore in giacca dorata e papillon canta al microfono davanti alla tenda gialla" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_06.jpg" width="1080" height="1920" alt="La sala piena di gente seduta ai tavoli, una mano alzata in primo piano" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_07.jpg" width="1080" height="1920" alt="Una cantante al microfono di spalle, la giuria seduta ai tavoli sul palco" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_08.jpg" width="1080" height="1920" alt="Un gruppo numeroso canta insieme davanti allo schermo con il testo della canzone" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_09.jpg" width="1080" height="1920" alt="Una giurata in giacca marrone ride al microfono alzando la paletta del voto" loading="lazy" decoding="async">
+          <img class="story-slide" src="assets/images/KARAOKE_STORY_10.jpg" width="1080" height="1920" alt="Un gruppo di ragazzi balla e canta sul palco con i bicchieri in mano" loading="lazy" decoding="async">
+          <div class="story-bars" aria-hidden="true">
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+            <span class="story-bar"><i></i></span>
+          </div>
+          <div class="story-head" aria-hidden="true">
+            <span class="story-avatar"><img src="assets/images/FONDAZIONEBURROSTUDIO_LOGO.jpg" alt="" width="30" height="30"></span>
+            <span>fondazioneburrostudio</span>
+            <span class="story-time">01.02</span>
+            <span class="story-state"><i class="fa-solid fa-pause"></i></span>
+          </div>
+          <button class="story-tap story-tap--prev" type="button" aria-label="Story precedente"></button>
+          <button class="story-tap story-tap--next" type="button" aria-label="Story successiva"></button>
+        </div>
+        <span class="story-hint"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>Tocca per andare avanti · tieni premuto per fermare</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="kar-sec kar-trip">
+    <div class="wrap">
+      <span class="eyebrow">Destinazione Nepal</span>
+      <h2 class="section-title">Dal palco <em>all'Himalaya</em></h2>
+      <p>Le scarpe e l'abbigliamento raccolti durante la serata sono partiti per il Nepal e consegnati alla comunità Sherpa, insieme alle t-shirt e allo striscione "We Bridge Continents".</p>
+      <ul class="trip-row">
+        <li class="is-active"><button class="trip-shot" type="button" aria-pressed="true">
+          <img src="assets/images/KARAOKE_VIAGGIO_06.jpg" width="750" height="1334" alt="Pacchi rossi caricati sul tetto di un fuoristrada davanti all'insegna Empowering Women of Nepal" loading="lazy" decoding="async">
+          <span class="trip-num">01</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_VIAGGIO_04.jpg" width="750" height="1334" alt="Una pila di scarpe da trekking usate viste dalla suola, con lacci colorati" loading="lazy" decoding="async">
+          <span class="trip-num">02</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_VIAGGIO_01.jpg" width="750" height="1334" alt="Una ragazza nepalese tiene in mano un paio di scarpe azzurre con l'etichetta del proprietario" loading="lazy" decoding="async">
+          <span class="trip-num">03</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_VIAGGIO_05.jpg" width="750" height="1334" alt="Un uomo anziano riceve un paio di scarpe nuove circondato dai volontari in un villaggio di montagna" loading="lazy" decoding="async">
+          <span class="trip-num">04</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_VIAGGIO_03.jpg" width="750" height="1334" alt="Due bambini con giacche colorate camminano lungo una stradina tra muri di pietra" loading="lazy" decoding="async">
+          <span class="trip-num">05</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_VIAGGIO_02.jpg" width="750" height="1334" alt="Escursionisti camminano verso uno stupa con le montagne innevate dell'Himalaya sullo sfondo" loading="lazy" decoding="async">
+          <span class="trip-num">06</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_FOTO_02.jpg" width="750" height="938" alt="Volontari con la t-shirt We Bridge Continents appendono lo striscione In Your Shoes a una ringhiera" loading="lazy" decoding="async">
+          <span class="trip-num">07</span>
+        </button></li>
+        <li><button class="trip-shot" type="button" aria-pressed="false">
+          <img src="assets/images/KARAOKE_FOTO_01.jpg" width="750" height="932" alt="Una ragazza di spalle con la t-shirt We Bridge Continents seduta sopra lo striscione In Your Shoes" loading="lazy" decoding="async">
+          <span class="trip-num">08</span>
+        </button></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap project-end-inner">
+      <h2 class="section-title">Una causa da raccontare?</h2>
+      <p>Personaggi, lettering e illustrazioni per eventi, merch e progetti con un messaggio. Scrivimi e disegniamo insieme il prossimo.</p>
+      <div class="project-links">
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero: tilt 3D + riflesso che seguono il cursore; al click dal poster
+  // partono le note musicali e sale il contatore delle canzoni.
+  (function () {
+    const art = document.getElementById('kar-hero');
+    const card = art && art.querySelector('.kar-card');
+    if (!card) return;
+    const count = art.querySelector('.kar-count');
+    let songs = 0;
+    const words = ['Encore!', 'We bridge continents!', 'Namaste!', 'Ancora una!', 'Karaoke!', 'Mic drop!'];
+    const glyphs = ['♪', '♫', '♬', '♩'];
+    const colors = ['var(--blue)', 'var(--accent)', 'var(--sun)'];
+
+    card.addEventListener('click', () => {
+      songs++;
+      count.textContent = songs;
+      const pop = document.createElement('span');
+      pop.className = 'sing-pop';
+      pop.textContent = words[(songs - 1) % words.length];
+      art.appendChild(pop);
+      pop.addEventListener('animationend', () => pop.remove());
+      if (reduceMotion) return;
+      for (let i = 0; i < 16; i++) {
+        const n = document.createElement('span');
+        n.className = 'note';
+        n.textContent = glyphs[i % glyphs.length];
+        n.style.left = (10 + Math.random() * 80) + '%';
+        n.style.setProperty('--c', colors[i % colors.length]);
+        n.style.setProperty('--sz', (18 + Math.random() * 22).toFixed(0) + 'px');
+        n.style.setProperty('--dx', (Math.random() * 120 - 60).toFixed(0) + 'px');
+        n.style.setProperty('--dy', -(220 + Math.random() * 260).toFixed(0) + 'px');
+        n.style.setProperty('--rot', (Math.random() * 60 - 30).toFixed(0) + 'deg');
+        n.style.setProperty('--t', (1.1 + Math.random() * 1.1).toFixed(2) + 's');
+        n.style.animationDelay = (Math.random() * 0.4).toFixed(2) + 's';
+        art.appendChild(n);
+        n.addEventListener('animationend', () => n.remove());
+      }
+    });
+
+    if (reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // Merch: la t-shirt si gira con un flip 3D, dai bottoni, dalle miniature
+  // o cliccando direttamente sulla maglietta.
+  (function () {
+    const tee = document.getElementById('merch-tee');
+    if (!tee) return;
+    const section = tee.closest('.kar-merch');
+    const sideBtns = Array.from(section.querySelectorAll('.merch-opt[data-side]'));
+    const thumbs = Array.from(section.querySelectorAll('.merch-thumb'));
+    const nowNum = section.querySelector('.merch-now-num');
+    const nowLabel = section.querySelector('.merch-now-label');
+    const nowMeta = section.querySelector('.merch-now-meta');
+    const names = { front: 'Fronte', back: 'Retro' };
+    const metas = { front: 'Margherita sul petto', back: 'Artwork completo' };
+
+    let side = 'front';
+    let flip = 0; // gradi accumulati: il giro continua sempre nello stesso verso
+
+    const render = () => {
+      sideBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.side === side));
+      thumbs.forEach((t, i) => {
+        const on = t.dataset.side === side;
+        t.classList.toggle('is-active', on);
+        if (on) nowNum.textContent = String(i + 1).padStart(2, '0');
+      });
+      nowLabel.textContent = names[side];
+      nowMeta.textContent = metas[side];
+      tee.style.setProperty('--flip', flip + 'deg');
+    };
+
+    const setSide = (s) => {
+      if (s === side) return;
+      side = s;
+      flip += 180;
+      render();
+    };
+
+    sideBtns.forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
+    thumbs.forEach(t => t.addEventListener('click', () => setSide(t.dataset.side)));
+    tee.addEventListener('click', () => setSide(side === 'front' ? 'back' : 'front'));
+
+    // Precarica il retro così il primo giro è istantaneo
+    window.addEventListener('load', () => tee.querySelectorAll('img').forEach(i => { i.loading = 'eager'; }));
+
+    render();
+  })();
+
+  // La serata: player in stile stories. Avanza da solo ogni 5 secondi,
+  // tocco a destra/sinistra per cambiare, tieni premuto per mettere in pausa.
+  // Gira solo quando è visibile a schermo.
+  (function () {
+    const story = document.getElementById('kar-story');
+    if (!story) return;
+    const slides = Array.from(story.querySelectorAll('.story-slide'));
+    const bars = Array.from(story.querySelectorAll('.story-bar i'));
+    const state = story.querySelector('.story-state i');
+    const DURATION = 5000;
+    let index = 0;
+    let elapsed = 0;
+    let last = null;
+    let held = false;
+    let visible = false;
+    let rafId = null;
+
+    const show = (i) => {
+      index = (i + slides.length) % slides.length;
+      elapsed = 0;
+      slides.forEach((s, k) => s.classList.toggle('is-active', k === index));
+      bars.forEach((b, k) => b.style.setProperty('--p', k < index ? 1 : 0));
+    };
+
+    const playing = () => visible && !held && !reduceMotion;
+    const syncState = () => {
+      state.className = playing() ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    };
+
+    const tick = (t) => {
+      if (last !== null && playing()) {
+        elapsed += t - last;
+        if (elapsed >= DURATION) show(index + 1);
+        bars[index].style.setProperty('--p', Math.min(elapsed / DURATION, 1).toFixed(3));
+      }
+      last = t;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const startLoop = () => { if (rafId === null) { last = null; rafId = requestAnimationFrame(tick); } };
+    const stopLoop = () => { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } };
+
+    // Tieni premuto = pausa; un tocco breve = avanti/indietro
+    let downAt = 0;
+    story.querySelectorAll('.story-tap').forEach((tap) => {
+      const dir = tap.classList.contains('story-tap--prev') ? -1 : 1;
+      tap.addEventListener('pointerdown', () => { downAt = performance.now(); held = true; syncState(); });
+      tap.addEventListener('pointerup', () => { held = false; syncState(); });
+      tap.addEventListener('pointerleave', () => { held = false; syncState(); });
+      tap.addEventListener('click', (e) => {
+        // click da tastiera (detail 0) o tocco breve
+        if (e.detail === 0 || performance.now() - downAt < 250) show(index + dir);
+      });
+    });
+
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      syncState();
+      if (visible) startLoop(); else stopLoop();
+    }, { threshold: 0.4 }).observe(story);
+
+    show(0);
+    syncState();
+  })();
+
+  // Il viaggio: fisarmonica di foto. La foto attiva si allarga.
+  (function () {
+    const items = Array.from(document.querySelectorAll('.trip-row li'));
+    if (!items.length) return;
+    const activate = (li) => {
+      items.forEach((it) => {
+        const on = it === li;
+        it.classList.toggle('is-active', on);
+        it.querySelector('.trip-shot').setAttribute('aria-pressed', on);
+      });
+    };
+    items.forEach((li) => {
+      const shot = li.querySelector('.trip-shot');
+      li.addEventListener('mouseenter', () => activate(li));
+      shot.addEventListener('focus', () => activate(li));
+      shot.addEventListener('click', () => activate(li));
+    });
+    activate(items[0]);
+  })();
+</script>
+
+</body>
+</html>

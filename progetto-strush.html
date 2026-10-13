@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strush — Co-founder & Art Director / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="Strush, l'app di finanza personale per la Gen Z: brand identity, costruzione geometrica del logo, la mascotte Bernardino, brand manual da sfogliare, sticker e schermate per gli store. Vito Mariano Carnimeo, Co-founder & Art Director.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<style>
+  /* Palette di questa pagina: il Tropical Indigo e il Celadon del brand
+     manual, con il nero "Night". L'accento per i testi è una versione più
+     scura del lilla, perché #9495EA sulla carta non si legge abbastanza. */
+  :root{
+    --accent:#6163C6;
+    --accent-soft:#E7E7FB;
+    --st-lilac:#9495EA;
+    --st-lilac-pale:#F3F3FF;
+    --st-green:#84CD9D;
+    --st-green-dark:#459B62;
+    --st-night:#121212;
+    --st-grad: linear-gradient(135deg, var(--st-green) 0%, var(--st-lilac) 100%);
+  }
+
+  /* -------- Hero: il logo animato in una card con tilt 3D -------- */
+  .st-hero-art{
+    position:relative;
+    flex:0 0 500px;
+    width:500px;
+    perspective:1200px;
+  }
+  .st-card{
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    background: var(--st-night);
+    aspect-ratio:16/9;
+    box-shadow:0 30px 70px rgba(18,18,18,.3);
+    transform: rotate(-1.6deg) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transform-style:preserve-3d;
+    transition: box-shadow .4s ease;
+    will-change:transform;
+  }
+  .st-hero-art:hover .st-card{
+    box-shadow:0 34px 80px rgba(18,18,18,.32), 0 0 30px 8px rgba(148,149,234,.35);
+  }
+  .st-card video{
+    position:absolute; inset:0;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+  }
+  .st-card::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 45%);
+    opacity:0;
+    transition: opacity .35s ease;
+    pointer-events:none;
+  }
+  .st-hero-art:hover .st-card::after{ opacity:1; }
+  /* Lo sticker del dino col salvadanaio che sbuca dall'angolo */
+  .st-peek{
+    position:absolute;
+    right:-34px; bottom:-46px;
+    width:150px;
+    height:auto;
+    transform: rotate(9deg);
+    transform-origin:30% 90%;
+    transition: transform .6s cubic-bezier(.3,1.6,.5,1);
+    filter: drop-shadow(0 12px 18px rgba(18,18,18,.25));
+    z-index:2;
+    pointer-events:none;
+  }
+  .st-hero-art:hover .st-peek{ transform: rotate(-4deg) translateY(-10px) scale(1.05); }
+  @media (max-width:980px){
+    .st-hero-art{ width:min(100%, 480px); flex-basis:auto; margin:36px auto 30px; }
+  }
+  @media (max-width:560px){
+    .st-peek{ right:4px; bottom:-40px; width:100px; }
+  }
+
+  .btn-site{ background: var(--accent); color:#fff; }
+  .btn-site:hover{ background: var(--ink); color: var(--paper); }
+
+  /* -------- Ticker in versione Strush -------- */
+  .ticker-wrap.st-ticker{ background: var(--st-night); }
+  .st-ticker .ticker{ animation-duration:36s; }
+  .st-ticker .ticker-item{ color: var(--st-lilac); letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .st-ticker .ticker-item em{ font-style:normal; color: var(--st-green); }
+  .st-ticker .ticker-sep{ color: var(--st-green); }
+
+  /* Eyebrow e titoli delle sezioni */
+  .st-section .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .st-section .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .st-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    flex-wrap:wrap;
+    margin-bottom:48px;
+  }
+  .st-head .section-title{ margin-bottom:0; }
+  .st-head p{ color: var(--ink-soft); max-width:48ch; margin:0; font-size:1.02rem; }
+
+  /* -------- Il nome: la voce di dizionario + i valori -------- */
+  .st-name-grid{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .st-entry{
+    padding:40px 40px 36px;
+    border-radius:22px;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 20px 50px rgba(18,18,18,.06);
+  }
+  .st-entry-word{
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    margin:0 0 6px;
+    font-size: clamp(2.6rem, 6vw, 4.2rem);
+    font-weight:800;
+    letter-spacing:-0.03em;
+    line-height:1;
+    color: var(--st-night);
+  }
+  .st-entry-word span{
+    font-size:0.42em;
+    font-weight:400;
+    letter-spacing:0;
+    color: var(--ink-soft);
+  }
+  .st-entry-gram{ margin:0 0 24px; color: var(--ink-soft); font-style:italic; }
+  .st-entry-def{ margin:0 0 26px; font-size:1.2rem; line-height:1.45; }
+  .st-entry-def strong{ background: linear-gradient(transparent 62%, rgba(148,149,234,.45) 62%); }
+  .st-entry-ex{
+    margin:0;
+    padding:20px 0 0;
+    border-top:1px dashed var(--line);
+    list-style:none;
+  }
+  .st-entry-ex li{ margin:0 0 12px; }
+  .st-entry-ex q{ font-weight:700; quotes:"«" "»"; }
+  .st-entry-ex small{ display:block; color: var(--ink-soft); font-size:0.9rem; }
+  .st-values{ list-style:none; margin:0 0 30px; padding:0; display:grid; gap:14px; }
+  .st-value{
+    display:grid;
+    grid-template-columns:52px 1fr;
+    gap:18px;
+    align-items:start;
+    padding:20px 22px;
+    border-radius:18px;
+    background: var(--st-lilac-pale);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .st-value:hover{ transform: translateX(6px); box-shadow:0 10px 26px rgba(97,99,198,.15); }
+  .st-value-icon{
+    width:52px; height:52px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background: var(--st-grad);
+    color: var(--st-night);
+    font-size:1.15rem;
+  }
+  .st-value strong{ display:block; font-size:1.08rem; margin-bottom:2px; }
+  .st-value p{ margin:0; color: var(--ink-soft); font-size:0.95rem; }
+  .st-traits-label{ display:block; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color: var(--ink-soft); margin-bottom:12px; }
+  .st-traits{ display:flex; flex-wrap:wrap; gap:10px; list-style:none; margin:0; padding:0; }
+  .st-traits li{
+    padding:10px 18px;
+    border-radius:42% 58% 55% 45% / 55% 45% 55% 45%;
+    font-weight:700;
+    font-size:0.9rem;
+    color: var(--st-night);
+    transition: border-radius .6s ease, transform .3s ease;
+  }
+  .st-traits li:nth-child(odd){ background: var(--st-lilac); }
+  .st-traits li:nth-child(even){ background: var(--st-green); }
+  .st-traits li:hover{ border-radius:58% 42% 45% 55% / 45% 55% 45% 55%; transform: rotate(-3deg) scale(1.05); }
+  @media (max-width:980px){
+    .st-name-grid{ grid-template-columns:minmax(0, 1fr); gap:40px; }
+  }
+  @media (max-width:560px){
+    .st-entry{ padding:28px 22px 24px; }
+  }
+
+  /* -------- Costruzione geometrica del logo -------- */
+  .st-geo{ background: var(--st-lilac-pale); }
+  section.st-geo{ border-top:none; }
+  .geo-grid{
+    display:grid;
+    grid-template-columns: 340px 1fr;
+    gap:64px;
+    align-items:center;
+  }
+  .geo-steps{ list-style:none; margin:0 0 28px; padding:0; display:grid; gap:10px; }
+  .geo-step{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    gap:14px;
+    align-items:center;
+    width:100%;
+    padding:14px 16px;
+    border:1px solid transparent;
+    border-radius:14px;
+    background:transparent;
+    color: var(--ink-soft);
+    font:inherit;
+    text-align:left;
+    cursor:pointer;
+    transition: background-color .3s ease, border-color .3s ease, color .3s ease;
+  }
+  .geo-step:hover{ background: rgba(255,255,255,.6); }
+  .geo-step:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .geo-step.is-active{ background:#fff; border-color: rgba(97,99,198,.25); color: var(--ink); box-shadow:0 10px 24px rgba(97,99,198,.12); }
+  .geo-step-n{
+    width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    border:1.5px solid currentColor;
+    font-weight:800;
+    font-variant-numeric: tabular-nums;
+    transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+  }
+  .geo-step.is-active .geo-step-n{ background: var(--accent); border-color: var(--accent); color:#fff; }
+  .geo-step strong{ display:block; font-size:1.02rem; }
+  .geo-step small{ display:block; font-size:0.86rem; color: var(--ink-soft); }
+  .geo-controls{ display:flex; align-items:center; gap:16px; }
+  .geo-play{
+    flex:0 0 auto;
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background: var(--st-night);
+    color:#fff;
+    cursor:pointer;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .geo-play:hover{ background: var(--accent); transform: scale(1.06); }
+  .geo-play:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .geo-range{
+    flex:1;
+    -webkit-appearance:none;
+    appearance:none;
+    height:4px;
+    border-radius:2px;
+    background: linear-gradient(to right, var(--accent) var(--p,0%), rgba(97,99,198,.2) var(--p,0%));
+    cursor:pointer;
+  }
+  .geo-range::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--accent);
+    box-shadow:0 2px 8px rgba(18,18,18,.2);
+  }
+  .geo-range::-moz-range-thumb{
+    width:14px; height:14px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--accent);
+  }
+  .geo-range:focus-visible{ outline:2px solid var(--accent); outline-offset:6px; }
+  .geo-stage{
+    position:relative;
+    border-radius:24px;
+    background:
+      radial-gradient(circle, rgba(97,99,198,.16) 1px, transparent 1.2px) 0 0/22px 22px,
+      #fff;
+    box-shadow:0 24px 60px rgba(97,99,198,.14);
+    padding:68px 7% 48px;
+    overflow:hidden;
+  }
+  .geo-canvas{ position:relative; aspect-ratio:886/797; }
+  .geo-canvas img{
+    position:absolute; inset:0;
+    display:block;
+    width:100%; height:100%;
+    object-fit:contain;
+    pointer-events:none;
+    user-select:none;
+  }
+  .geo-pieces{ position:absolute; inset:0; }
+  .geo-canvas .geo-pieces img{
+    inset:auto;
+    height:auto;
+    opacity:0;
+    transform-origin:center;
+    will-change: transform, opacity;
+  }
+  .geo-label{
+    position:absolute;
+    left:22px; top:20px;
+    padding:6px 12px;
+    border-radius:999px;
+    background: var(--st-night);
+    color:#fff;
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .geo-ruler{
+    position:absolute;
+    right:22px; bottom:18px;
+    font-size:0.75rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width:980px){
+    .geo-grid{ grid-template-columns:1fr; gap:36px; }
+    .geo-side{ order:2; }
+  }
+
+  /* -------- Brand manual: fascicolo spillato da sfogliare. Aperto mostra
+     due pagine affiancate (pari a sinistra, dispari a destra), chiuso solo
+     la copertina o il retro. Su schermi stretti si vede una pagina alla
+     volta e il fascicolo scorre sotto. -------- */
+  .fb{ outline:none; border-radius:12px; }
+  .fb:focus-visible{ outline:2px solid var(--accent); outline-offset:8px; }
+  .fb-stage{
+    --bw: min(96vw, 1560px, calc(66vh * 3.5556));
+    position:relative;
+    width: var(--bw);
+    margin: 0 0 0 calc((100% - var(--bw)) / 2);
+    padding:18px 0 44px;
+    touch-action:pan-y;
+    user-select:none;
+    -webkit-user-select:none;
+    cursor:grab;
+  }
+  .fb-stage.is-dragging{ cursor:grabbing; }
+  .fb-shift{
+    position:relative;
+    perspective:3200px;
+    perspective-origin:50% 40%;
+    transition: transform .9s cubic-bezier(.65,0,.35,1);
+  }
+  .fb-book{
+    position:relative;
+    width:100%;
+    aspect-ratio: 3840/1080;
+    transform-style:preserve-3d;
+    /* Da chiuso la copertina (o il retro) sta al centro: lo spostamento
+       segue la rotazione del primo e dell'ultimo foglio, via JS.
+       Col mouse si inclina seguendo il cursore, ruotando attorno al
+       centro della parte visibile (--ox) */
+    transform-origin: var(--ox, 50%) 50%;
+    transform: translateX(var(--tx, 0%)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+  /* Spessore del fascicolo: sotto le pagine in cima c'è un blocco 3D vero,
+     profondo --t (lo calcola il JS dalle pagine rimaste su quel lato).
+     Visto di fronte è nascosto; inclinando si vedono i bordi chiari delle
+     pagine e, a fascicolo chiuso, il dorso più scuro. */
+  .fb-block{
+    position:absolute;
+    top:0; bottom:0;
+    width:50%;
+    transform-style:preserve-3d;
+    pointer-events:none;
+  }
+  .fb-block--r{ left:50%; }
+  .fb-block--l{ left:0; }
+  /* Ogni bordo è una fetta del blocco: fogli bianchi a righe, chiusi tra
+     le copertine nere. --dir va dal foglio in cima a quello in fondo: in
+     fondo c'è sempre una copertina, in cima solo a fascicolo chiuso
+     (.is-shut, dal JS) */
+  .fb-edge{
+    position:absolute;
+    transition: width .5s ease, height .5s ease;
+    --paper: repeating-linear-gradient(var(--dir), #f7f7f4 0 2px, #d9d8d2 2px 3px);
+    --cover: linear-gradient(var(--dir), var(--top, transparent) 0 3px, transparent 3px calc(100% - 3px), #121212 calc(100% - 3px));
+    background: var(--cover), var(--paper);
+  }
+  .fb-block.is-shut .fb-edge{ --top: #121212; }
+  /* Bordi lunghi: lato esterno e dorso */
+  .fb-edge--out, .fb-edge--spine{ top:0; bottom:0; width:var(--t, 0px); }
+  .fb-edge--top, .fb-edge--bottom{ left:0; right:0; height:var(--t, 0px); }
+  .fb-edge--top{ top:0; transform-origin:top; transform: rotateX(-90deg); --dir: to bottom; }
+  .fb-edge--bottom{ bottom:0; transform-origin:bottom; transform: rotateX(90deg); filter: brightness(.9); --dir: to top; }
+  .fb-block--r .fb-edge--out{ right:0; transform-origin:right; transform: rotateY(-90deg); --dir: to left; }
+  .fb-block--r .fb-edge--spine{ left:0; transform-origin:left; transform: rotateY(90deg); --dir: to right; }
+  .fb-block--l .fb-edge--out{ left:0; transform-origin:left; transform: rotateY(90deg); --dir: to right; }
+  .fb-block--l .fb-edge--spine{ right:0; transform-origin:right; transform: rotateY(-90deg); --dir: to left; }
+  /* Il dorso: un pezzo unico nel lilla di Strush, un po' più scuro,
+     appena più chiaro al centro per suggerire la curva */
+  .fb-edge--spine{
+    background: linear-gradient(to right, #5f60bd, #7c7dd8 50%, #5f60bd);
+  }
+  /* Accanto al dorso la copertina si scurisce appena, dove si piega */
+  .fb-flat .fb-side.front.is-cover > i{
+    background: linear-gradient(to right, rgba(0,0,0,.45), rgba(0,0,0,0) 2.5%);
+  }
+  .fb-flat .fb-side.back.is-cover > i{
+    background: linear-gradient(to left, rgba(0,0,0,.45), rgba(0,0,0,0) 2.5%);
+  }
+  /* Ombra sul tavolo: sta sotto il fondo di ciascun blocco di pagine, così
+     segue la carta vera anche col fascicolo inclinato e non disegna mai
+     il contorno di una pagina che non c'è */
+  .fb-block::after{
+    content:"";
+    position:absolute; inset:0;
+    transform: translateZ(calc(var(--t, 0px) * -1));
+    box-shadow: 0 26px 34px -18px rgba(18,18,30,.4), 0 10px 18px -12px rgba(18,18,30,.25);
+    transition: transform .5s ease;
+  }
+  .fb-leaf{
+    position:absolute; top:0; left:50%;
+    width:50%; height:100%;
+    transform-origin:left center;
+    transform-style:preserve-3d;
+  }
+  .fb-side{
+    position:absolute; inset:0;
+    background:#fff center / cover no-repeat;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .fb-side.back{ transform: rotateY(180deg); }
+  /* Piega centrale: la carta si incurva verso la cucitura */
+  .fb-flat .fb-side::after,
+  .fb-strip.is-spine > .fb-side::after{
+    content:"";
+    position:absolute; inset:0;
+    pointer-events:none;
+  }
+  .fb-flat .fb-side.front::after{ background: linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,.18) 2%, rgba(0,0,0,.05) 5%, rgba(0,0,0,0) 9%); }
+  .fb-flat .fb-side.back::after{ background: linear-gradient(to left, rgba(0,0,0,.5), rgba(0,0,0,.18) 2%, rgba(0,0,0,.05) 5%, rgba(0,0,0,0) 9%); }
+  .fb-strip.is-spine > .fb-side.front::after{ background: linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,.18) 20%, rgba(0,0,0,.05) 50%, rgba(0,0,0,0) 90%); }
+  .fb-strip.is-spine > .fb-side.back::after{ background: linear-gradient(to left, rgba(0,0,0,.5), rgba(0,0,0,.18) 20%, rgba(0,0,0,.05) 50%, rgba(0,0,0,0) 90%); }
+  /* Copertina e retro si vedono solo a fascicolo chiuso: lì non c'è piega */
+  .fb-side.is-cover::after{ display:none; }
+  .fb-flat{ position:absolute; inset:0; transform-style:preserve-3d; }
+  /* Mentre gira il foglio è fatto di strisce: così si curva come carta */
+  .fb-strip{
+    position:absolute; top:0; left:0; height:100%;
+    transform-origin:left center;
+    transform-style:preserve-3d;
+    display:none;
+  }
+  .fb-strip .fb-strip{ left:100%; width:100%; }
+  /* Ogni striscia sborda di qualche pixel sotto la successiva: niente
+     fessure chiare quando il foglio si piega (sulla copertina nera si
+     vedevano). L'ultima no, se no supera il bordo del foglio. L'immagine è
+     posizionata in pixel sulla larghezza della pagina (--pw) così resta
+     allineata. */
+  .fb-strip > .fb-side{
+    right:-6px;
+    background-size: var(--pw, 100%) 100%;
+    background-position: calc(var(--pw, 0px) * var(--k) * -1) 0;
+    /* un contorno trasparente fa smussare a Chrome i bordi delle strisce
+       in 3D: senza, all'inizio del giro restano fili chiari */
+    outline:1px solid transparent;
+  }
+  .fb-strip.is-edge > .fb-side{ right:0; }
+  .fb-leaf.is-turning > .fb-flat{ display:none; }
+  .fb-leaf.is-turning .fb-strip{ display:block; }
+  .fb-side > i{
+    position:absolute; inset:0;
+    pointer-events:none;
+  }
+  /* Luce sulla carta curva: la striscia stessa si scurisce (filtro, non un
+     velo trasparente), così dove due strisce si sovrappongono non compaiono
+     righe chiare o scure */
+  .fb-strip > .fb-side{ filter: brightness(var(--lum, 1)); }
+  .fb-strip > .fb-side > i{ display:none; }
+  /* Ombra che il foglio in movimento proietta sulle pagine sotto */
+  .fb-cast{
+    position:absolute; top:0; bottom:0; width:50%;
+    pointer-events:none;
+    opacity:0;
+  }
+  .fb-cast.l{ left:0; }
+  .fb-cast.r{ left:50%; }
+  /* Punti metallici: si vedono solo al centro del fascicolo */
+  .fb-staples{
+    position:absolute; left:50%; top:0; bottom:0;
+    width:0;
+    pointer-events:none;
+    opacity:0;
+    transition: opacity .3s ease;
+  }
+  .fb-staples.is-on{ opacity:1; }
+  .fb-staples::before,
+  .fb-staples::after{
+    content:"";
+    position:absolute; left:-1.5px;
+    width:3px; height:9%;
+    border-radius:2px;
+    background: linear-gradient(to right, #8d8f96, #f4f5f8 45%, #a4a6ad 60%, #6d6f76);
+    box-shadow: 0 1px 2px rgba(0,0,0,.45);
+  }
+  .fb-staples::before{ top:22%; }
+  .fb-staples::after{ bottom:22%; }
+  @media (max-width:720px){
+    .fb-stage{ --bw:100%; overflow:hidden; padding-bottom:36px; }
+    .fb-shift{ width:200%; margin-left:-50%; }
+  }
+  .fb-bar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px 20px;
+  }
+  .fb-nav{ display:flex; align-items:center; gap:12px; }
+  .fb-count{ min-width:8ch; text-align:center; font-weight:700; font-variant-numeric: tabular-nums; }
+  .fb-arrow{
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:transparent;
+    color: var(--st-night);
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease, opacity .2s ease;
+  }
+  .fb-arrow:hover:not(:disabled){ background: var(--accent); border-color: var(--accent); color:#fff; transform: scale(1.06); }
+  .fb-arrow:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .fb-arrow:disabled{ opacity:.3; cursor:default; }
+  .fb-progress{ flex:0 1 220px; height:3px; border-radius:2px; background: var(--line); overflow:hidden; }
+  .fb-progress span{ display:block; height:100%; width:0; background: var(--accent); transition: width .5s ease; }
+  .fb-note{ font-size:0.8rem; color: var(--ink-soft); }
+
+  /* -------- Carosello delle schermate -------- */
+  .st-pano{ background: var(--st-night); color: var(--paper); overflow:hidden; }
+  section.st-pano{ border-top:none; }
+  .st-pano .section-title{ color:#fff; }
+  .st-pano .section-title em{ color: var(--st-lilac); }
+  .st-pano .eyebrow{ color: var(--st-green); }
+  .st-pano .st-head p{ color: rgba(247,245,240,.7); }
+  .pano-scroller{
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+    cursor:grab;
+    padding: 50px 0 60px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .pano-scroller::-webkit-scrollbar{ display:none; }
+  .pano-scroller.is-dragging{ cursor:grabbing; }
+  .pano-scroller.is-dragging .pano-frame{ pointer-events:none; }
+  .pano-track{
+    display:flex;
+    gap:12px;
+    width:max-content;
+    padding:0 max(40px, calc((100vw - 1180px) / 2 + 40px));
+  }
+  .pano-frame{
+    position:relative;
+    flex:0 0 auto;
+    height:min(68vh, 620px);
+    aspect-ratio:1080/1920;
+    margin:0;
+    overflow:hidden;
+    border-radius:22px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 24px 50px rgba(0,0,0,.45);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .pano-frame img{ display:block; width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none; }
+  .pano-frame:hover,
+  .pano-track:not(:hover) .pano-frame.is-active{
+    transform: translateY(-12px) rotate(-1deg);
+    box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 24px 50px rgba(0,0,0,.45),
+      0 0 26px rgba(148,149,234,.45);
+  }
+  .pano-frame figcaption{
+    position:absolute;
+    left:12px; bottom:12px;
+    padding:5px 10px;
+    border-radius:999px;
+    background: rgba(18,18,18,.75);
+    color:#fff;
+    font-size:0.75rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+  }
+  .pano-bar{ display:flex; align-items:center; gap:16px; }
+  .pano-progress{ flex:1; height:3px; border-radius:2px; background: rgba(255,255,255,.14); overflow:hidden; }
+  .pano-progress span{ display:block; height:100%; width:20%; background: var(--st-grad); transform-origin:left; }
+  .pano-hint{ font-size:0.85rem; color: rgba(247,245,240,.6); white-space:nowrap; }
+  @media (max-width:560px){
+    .pano-track{ padding:0 20px; gap:10px; }
+    .pano-frame{ height:min(62vh, 520px); border-radius:18px; }
+    .pano-hint{ display:none; }
+  }
+
+  /* -------- Sticker: la bacheca da riordinare -------- */
+  .st-board{
+    position:relative;
+    height:clamp(520px, 62vw, 640px);
+    border-radius:26px;
+    background:
+      radial-gradient(circle, rgba(97,99,198,.18) 1.2px, transparent 1.4px) 0 0/26px 26px,
+      var(--st-lilac-pale);
+    border:2px dashed rgba(97,99,198,.3);
+    overflow:hidden;
+    touch-action:pan-y;
+  }
+  .st-board-tip{
+    position:absolute;
+    left:50%; top:50%;
+    transform: translate(-50%, -50%);
+    margin:0;
+    font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+    font-weight:800;
+    letter-spacing:-0.02em;
+    color: rgba(97,99,198,.16);
+    text-align:center;
+    pointer-events:none;
+    white-space:nowrap;
+  }
+  .sticker{
+    position:absolute;
+    left:0; top:0;
+    /* --k = √(larghezza/altezza): stessa area per tutti, a prescindere dalle proporzioni */
+    width: calc(var(--w, 17%) * var(--k, 1));
+    padding:0;
+    border:none;
+    background:none;
+    cursor:grab;
+    touch-action:none;
+    transform: translate(var(--x,0px), var(--y,0px)) rotate(var(--r,0deg)) scale(var(--s,1));
+    transition: transform .55s cubic-bezier(.3,1.4,.5,1), filter .3s ease;
+    filter: drop-shadow(0 6px 8px rgba(18,18,40,.18));
+    -webkit-tap-highlight-color:transparent;
+  }
+  .sticker img{ display:block; width:100%; height:auto; pointer-events:none; user-select:none; -webkit-user-drag:none; }
+  .sticker:hover{ --s:1.04; }
+  .sticker:focus-visible{ outline:2px dashed var(--accent); outline-offset:4px; }
+  .sticker.is-held{
+    cursor:grabbing;
+    --s:1.1;
+    transition: transform .12s ease-out, filter .3s ease;
+    filter: drop-shadow(0 22px 22px rgba(18,18,40,.28));
+  }
+  .sticker.is-pop{ animation: sticker-pop .5s cubic-bezier(.3,1.6,.5,1); }
+  @keyframes sticker-pop{
+    40%{ transform: translate(var(--x), var(--y)) rotate(calc(var(--r) - 8deg)) scale(1.15); }
+  }
+  .board-bar{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-top:20px; }
+  .board-bar p{ margin:0; color: var(--ink-soft); font-size:0.92rem; }
+  .board-actions{ display:flex; gap:10px; }
+  .board-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 20px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:#fff;
+    color: var(--ink);
+    font:inherit;
+    font-size:0.9rem;
+    font-weight:700;
+    cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .board-btn:hover{ background: var(--accent); border-color: var(--accent); color:#fff; transform: translateY(-2px); }
+  .board-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:700px){
+    .sticker{ --w:30%; }
+    .st-board{ height:560px; }
+  }
+
+  /* -------- Scarica l'app -------- */
+  .st-get{
+    position:relative;
+    background: var(--st-night);
+    color: var(--paper);
+    overflow:hidden;
+    padding:110px 0;
+  }
+  section.st-get{ border-top:none; }
+  .st-get-lines{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none;
+    opacity:.55;
+  }
+  .st-get-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns: 1fr 460px;
+    gap:64px;
+    align-items:center;
+  }
+  .st-get .eyebrow{ color: var(--st-green); }
+  .st-get .section-title{ color:#fff; margin-bottom:20px; }
+  .st-get .section-title em{ font-style:italic; font-weight:400; color: var(--st-lilac); }
+  .st-get-lead{ color: rgba(247,245,240,.75); font-size:1.08rem; max-width:48ch; margin:0 0 32px; }
+  .app-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:18px 20px;
+    margin-bottom:28px;
+    max-width:460px;
+    border-radius:20px;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+  }
+  .app-icon{
+    flex:0 0 76px;
+    width:76px; height:76px;
+    border-radius:20px;
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+    overflow:hidden;
+  }
+  .app-icon img{ width:78%; height:auto; transform: translateX(4%); }
+  .app-card strong{ display:block; font-size:1.25rem; color:#fff; }
+  .app-card small{ display:block; font-size:0.85rem; color: rgba(247,245,240,.6); margin-bottom:8px; }
+  .app-tags{ display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0; }
+  .app-tags li{
+    padding:3px 10px;
+    border-radius:999px;
+    background: rgba(148,149,234,.16);
+    color: var(--st-lilac);
+    font-size:0.75rem;
+    font-weight:700;
+  }
+  .stores{ display:flex; flex-wrap:wrap; gap:18px; }
+  .store{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .store-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    min-width:200px;
+    padding:10px 22px 10px 18px;
+    border-radius:14px;
+    background:#000;
+    border:1px solid rgba(255,255,255,.35);
+    color:#fff;
+    text-decoration:none;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .store-badge:hover{ transform: translateY(-3px); border-color: var(--st-lilac); box-shadow:0 12px 30px rgba(148,149,234,.3); }
+  .store-badge:focus-visible{ outline:2px solid var(--st-green); outline-offset:3px; }
+  .store-badge i{ font-size:1.9rem; width:30px; text-align:center; }
+  .store-badge span{ display:flex; flex-direction:column; line-height:1.15; }
+  .store-badge small{ font-size:0.7rem; letter-spacing:.02em; opacity:.85; }
+  .store-badge b{ font-size:1.3rem; font-weight:600; letter-spacing:-0.01em; }
+  .store-qr{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-size:0.75rem;
+    color: rgba(247,245,240,.55);
+  }
+  .store-qr-code{
+    width:112px; height:112px;
+    padding:8px;
+    border-radius:14px;
+    background:#fff;
+  }
+  .store-qr-code canvas, .store-qr-code img{ display:block; width:100% !important; height:100% !important; }
+  /* Il QR serve solo da desktop: dal telefono si tocca il bottone */
+  @media (hover:none), (max-width:700px){ .store-qr{ display:none; } }
+
+  /* Due telefoni con le schermate degli store che scorrono */
+  .phones{
+    position:relative;
+    height:600px;
+  }
+  .phone{
+    position:absolute;
+    top:0;
+    width:270px;
+    aspect-ratio:1080/1920;
+    padding:10px;
+    border-radius:44px;
+    background:#1d1d1f;
+    box-shadow:
+      inset 0 0 0 2px #3a3a3c,
+      0 40px 80px rgba(0,0,0,.55),
+      0 0 60px rgba(148,149,234,.18);
+  }
+  .phone--front{ left:150px; top:40px; transform: rotate(4deg); z-index:2; }
+  .phone--back{ left:20px; top:0; transform: rotate(-7deg) scale(.9); opacity:.9; }
+  .phone-screen{
+    position:relative;
+    width:100%; height:100%;
+    border-radius:34px;
+    overflow:hidden;
+    background:#fff;
+  }
+  .phone-screen img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition: opacity .9s ease;
+  }
+  .phone-screen img.is-active{ opacity:1; }
+  .phone-island{
+    position:absolute;
+    top:10px; left:50%;
+    width:78px; height:22px;
+    margin-left:-39px;
+    border-radius:999px;
+    background:#000;
+    z-index:2;
+  }
+  .phone-dots{
+    position:absolute;
+    left:50%; bottom:-34px;
+    transform: translateX(-50%);
+    display:flex; gap:6px;
+  }
+  .phone-dots span{ width:6px; height:6px; border-radius:3px; background: rgba(255,255,255,.25); transition: width .4s ease, background-color .4s ease; }
+  .phone-dots span.is-active{ width:18px; background: var(--st-lilac); }
+  @media (max-width:980px){
+    .st-get-grid{ grid-template-columns:minmax(0, 1fr); gap:40px; }
+    .phones{ height:540px; width:100%; max-width:420px; margin:0 auto; }
+  }
+  @media (max-width:480px){
+    .phones{ height:460px; }
+    .phone{ width:220px; border-radius:36px; padding:8px; }
+    .phone-screen{ border-radius:28px; }
+    .phone--front{ left:auto; right:0; top:30px; }
+    .phone--back{ left:0; }
+    .store-badge{ min-width:0; width:100%; }
+    .store{ width:100%; }
+  }
+
+  /* -------- Chiusura: il team -------- */
+  .st-end{
+    display:grid;
+    grid-template-columns: 1fr 440px;
+    gap:64px;
+    align-items:center;
+  }
+  .project-end .st-end{ text-align:left; }
+  .st-end .section-title{ margin:0 0 18px; }
+  .st-end .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .st-end .project-links{ justify-content:flex-start; }
+  .st-end > div > p{ color: var(--ink-soft); max-width:46ch; margin:0 0 32px; }
+  .team-card{
+    display:block;
+    padding:34px 32px 28px;
+    border-radius:22px;
+    background: var(--st-night);
+    color: var(--paper);
+    text-decoration:none;
+    box-shadow:0 24px 50px rgba(18,18,18,.2);
+    transform: rotate(1.2deg);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .team-card:hover{ transform: rotate(0deg) translateY(-4px); box-shadow:0 30px 60px rgba(97,99,198,.3); }
+  .team-card:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+  .team-head{
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:20px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+  }
+  .team-head img{ width:56px; height:56px; padding:6px; border-radius:16px; background:#fff; object-fit:contain; }
+  .team-head strong{ display:block; font-size:1.25rem; color:#fff; }
+  .team-head small{ display:block; font-size:0.8rem; color: rgba(247,245,240,.6); }
+  .team-card blockquote{ margin:0 0 22px; font-size:1.1rem; line-height:1.5; color:#fff; }
+  .team-card blockquote::before{ content:"“"; display:block; font-size:3rem; line-height:.6; color: var(--st-green); margin-bottom:8px; font-family: Georgia, serif; }
+  .team-list{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+  .team-list li{ display:flex; justify-content:space-between; gap:12px; font-size:0.88rem; color: rgba(247,245,240,.7); }
+  .team-list li b{ color:#fff; font-weight:700; }
+  .team-list li.is-me b{ color: var(--st-lilac); }
+  .team-read{ display:inline-flex; gap:8px; margin-top:22px; font-size:0.9rem; font-weight:700; color: var(--st-green); }
+  @media (max-width:980px){
+    .st-end{ grid-template-columns:1fr; gap:40px; }
+    .team-card{ transform:none; }
+  }
+  @media (max-width:420px){
+    .team-list li{ flex-direction:column; gap:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .st-card, .st-peek, .st-value, .st-traits li, .geo-step, .pano-frame,
+    .sticker, .store-badge, .phone-screen img, .team-card{ transition:none; }
+    .sticker.is-pop{ animation:none; }
+    .st-ticker .ticker{ animation:none; }
+  }
+
+  /* Su mobile il margine laterale di .wrap scende a 20px: la riga a scorrimento segue */
+  @media (max-width:640px){
+    .pano-track{ padding:0 20px; }
+  }
+
+  /* Su mobile le sezioni di questa pagina sono meno distanziate */
+  @media (max-width:640px){
+    .st-get{ padding:60px 0; }
+    .pano-scroller{ padding:32px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Brand identity & App - Strush S.R.L.s</span>
+      <h1>Strush <em>Fintech Startup</em></h1>
+      <p><strong>Strush</strong> è l'app di finanza personale che rende l'educazione finanziaria <strong>a misura di Gen Z</strong>: tieni traccia delle spese, imposti un budget, dividi i conti con gli amici e ti fai consigliare da <strong>Bernardino</strong>, il coach personale che ti dice le cose come stanno.<br><br>
+      Del progetto sono <strong>Co-founder &amp; Art Director</strong>. Ho costruito l'identità del brand da zero: il logo e la sua costruzione geometrica, la mascotte, la palette e il brand manual, fino alle illustrazioni, agli sticker e alle schermate con cui l'app si presenta sugli store.</p>
+      <div class="project-meta">
+        <div>Anno<span>2025 — oggi</span></div>
+        <div>Ruolo<span>Co-founder &amp; Art Director</span></div>
+        <div>Output<span>App</span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary btn-site" href="#scarica"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Scarica l'app</a>
+        <a class="btn-ghost" href="https://www.strush.it/" target="_blank" rel="noopener">Visita strush.it ↗</a>
+      </div>
+    </div>
+    <div class="st-hero-art" id="st-hero">
+      <div class="st-card">
+        <video width="1280" height="720" aria-label="Il logo di Strush animato" autoplay muted loop playsinline preload="auto">
+          <source src="assets/video/strush_logo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <img class="st-peek" src="assets/images/STRUSH/STICKER/STICKER_03.png" width="592" height="576" alt="" aria-hidden="true">
+    </div>
+  </div>
+
+  <div class="ticker-wrap st-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">I soldi non crescono <em>sugli alberi</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Strush <em>[strù-sh]</em> · dialetto barese</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Educazione finanziaria <em>a misura di Gen Z</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Fatti consigliare da <em>Bernardino</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Disponibile su <em>App Store e Google Play</em></span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">I soldi non crescono <em>sugli alberi</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Strush <em>[strù-sh]</em> · dialetto barese</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Educazione finanziaria <em>a misura di Gen Z</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Fatti consigliare da <em>Bernardino</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Disponibile su <em>App Store e Google Play</em></span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="st-section st-name">
+    <div class="wrap st-name-grid">
+      <div>
+        <span class="eyebrow">Il nome · Da dove nasce</span>
+        <article class="st-entry">
+          <h2 class="st-entry-word">strush <span>[struʃ]</span></h2>
+          <p class="st-entry-gram">&lt;strù-sh&gt; v.tr. in dialetto barese</p>
+          <p class="st-entry-def"><strong>Pagare, sborsare denaro</strong>, spesso con riluttanza o per obbligo. Usato in contesti informali, spesso con tono ironico.</p>
+          <ul class="st-entry-ex">
+            <li><q>Cud s' strusce tutt' l terris!</q><small>Quello spreca tutti i soldi!</small></li>
+            <li><q>T strusce cient' eur' alla dì!</q><small>Spendi cento euro al giorno!</small></li>
+          </ul>
+        </article>
+      </div>
+      <div>
+        <span class="eyebrow">Core values</span>
+        <ul class="st-values">
+          <li class="st-value">
+            <span class="st-value-icon"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i></span>
+            <div><strong>Chiarezza</strong><p>Un'esperienza d'uso semplice e piacevole, che parli come un amico e agisca come un alleato.</p></div>
+          </li>
+          <li class="st-value">
+            <span class="st-value-icon"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></span>
+            <div><strong>Connessione</strong><p>Connessioni reali e digitali, in un ecosistema dove l'empatia guida ogni scelta condivisa.</p></div>
+          </li>
+          <li class="st-value">
+            <span class="st-value-icon"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></span>
+            <div><strong>Progressione</strong><p>Aiutare le persone a migliorarsi e a prendersi cura delle proprie spese, con strumenti semplici e motivanti.</p></div>
+          </li>
+        </ul>
+        <span class="st-traits-label">Brand personality</span>
+        <ul class="st-traits">
+          <li>Amichevole</li>
+          <li>Trasparente</li>
+          <li>Ironico</li>
+          <li>Affidabile</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section st-geo">
+    <div class="wrap geo-grid">
+      <div class="geo-side">
+        <span class="eyebrow">Costruzione geometrica</span>
+        <h2 class="section-title">Il nostro pittogramma</h2>
+        <ol class="geo-steps">
+          <li><button class="geo-step" type="button" data-to="0.47"><span class="geo-step-n">01</span><span><strong>Griglia & geometrizzazione</strong><small>Cerchi e linee guida tracciati sul modulo</small></span></button></li>
+          <li><button class="geo-step" type="button" data-to="0.63"><span class="geo-step-n">02</span><span><strong>Forma</strong><small>Il corpo nasce dall'incrocio delle curve</small></span></button></li>
+          <li><button class="geo-step" type="button" data-to="0.85"><span class="geo-step-n">03</span><span><strong>Colore</strong><small>Via la griglia, dentro il gradiente</small></span></button></li>
+        </ol>
+        <div class="geo-controls">
+          <button class="geo-play" type="button" aria-label="Riproduci la costruzione"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
+          <input class="geo-range" type="range" min="0" max="1000" value="0" aria-label="Avanzamento della costruzione del logo">
+        </div>
+      </div>
+      <div class="geo-stage" id="geo">
+        <span class="geo-label">01 / Griglia &amp; geometrizzazione</span>
+        <div class="geo-canvas">
+          <div class="geo-pieces" role="img" aria-label="La griglia di cerchi e linee guida su cui è costruita la mascotte di Strush">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector.png" width="496" height="2" alt="" style="left:21.332%;top:92.346%;width:55.982%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-14.png" width="455" height="55" alt="" style="left:23.815%;top:85.696%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-15.png" width="455" height="55" alt="" style="left:23.815%;top:79.046%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-16.png" width="455" height="55" alt="" style="left:23.815%;top:72.396%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-17.png" width="455" height="55" alt="" style="left:23.815%;top:65.747%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-18.png" width="455" height="55" alt="" style="left:23.815%;top:59.097%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-19.png" width="455" height="55" alt="" style="left:23.815%;top:52.447%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-20.png" width="455" height="55" alt="" style="left:23.815%;top:45.797%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-21.png" width="455" height="55" alt="" style="left:23.815%;top:39.147%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-23.png" width="455" height="55" alt="" style="left:23.815%;top:32.497%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-26.png" width="455" height="55" alt="" style="left:23.815%;top:25.721%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-27.png" width="455" height="55" alt="" style="left:23.815%;top:19.072%;width:51.354%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-3.png" width="532" height="374" alt="" style="left:6.433%;top:0%;width:60.045%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-2.png" width="569" height="344" alt="" style="left:0%;top:19.072%;width:64.221%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-4.png" width="393" height="423" alt="" style="left:24.041%;top:7.528%;width:44.357%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-1.png" width="408" height="485" alt="" style="left:53.95%;top:14.304%;width:46.05%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-6.png" width="343" height="389" alt="" style="left:34.312%;top:39.147%;width:38.713%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-5.png" width="343" height="389" alt="" style="left:43.115%;top:37.516%;width:38.713%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-11.png" width="170" height="186" alt="" style="left:39.165%;top:71.393%;width:19.187%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-10.png" width="76" height="83" alt="" style="left:44.47%;top:84.442%;width:8.578%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-12.png" width="132" height="89" alt="" style="left:30.587%;top:88.833%;width:14.898%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-13.png" width="132" height="89" alt="" style="left:52.032%;top:88.833%;width:14.898%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-8.png" width="107" height="118" alt="" style="left:31.828%;top:47.93%;width:12.077%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-7.png" width="84" height="89" alt="" style="left:30.248%;top:54.831%;width:9.481%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-22.png" width="115" height="109" alt="" style="left:46.727%;top:48.432%;width:12.98%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-9.png" width="96" height="104" alt="" style="left:49.323%;top:53.074%;width:10.835%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-24.png" width="81" height="81" alt="" style="left:44.131%;top:29.109%;width:9.142%">
+            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-25.png" width="34" height="34" alt="" style="left:46.84%;top:32.12%;width:3.837%">
+          </div>
+          <img class="geo-fill-img" src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_02.png" width="886" height="797" alt="" aria-hidden="true">
+          <img class="geo-final-img" src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt="" aria-hidden="true">
+        </div>
+        <span class="geo-ruler" aria-hidden="true">0%</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section st-manual">
+    <div class="wrap">
+      <div class="st-head">
+        <div>
+          <span class="eyebrow">Brand manual · 32 pagine</span>
+          <h2 class="section-title">Linee Guida<br>del <em>marchio</em></h2>
+        </div>
+        <p>Valori, tono di voce, palette, tipografia, elementi visivi, animazioni, logo e usi scorretti: tutto il sistema di Strush in un unico manuale. Trascina le pagine, cliccale o usa le frecce per sfogliarlo.</p>
+      </div>
+      <div class="fb" id="fb" tabindex="0" role="group" aria-roledescription="fascicolo" aria-label="Brand manual di Strush" data-pages="32" data-src="assets/images/STRUSH/brand-manual-web/manual_{n}.jpg">
+        <div class="fb-stage">
+          <div class="fb-shift">
+            <div class="fb-book"></div>
+          </div>
+        </div>
+        <div class="fb-bar">
+          <div class="fb-nav">
+            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <span class="fb-count" aria-live="polite">01 / 32</span>
+            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="fb-progress" aria-hidden="true"><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section st-pano">
+    <div class="wrap">
+      <div class="st-head">
+        <div>
+          <span class="eyebrow">Store assets · Carosello</span>
+          <h2 class="section-title">Cosa puoi fare<br>con Strush?</h2>
+        </div>
+        <p>Monitora entrate e uscite, imposta un budget, dividi le spese con amici e coinquilini e segui i tuoi progressi con grafici chiari, mentre il coach Strush analizza le tue abitudini. La finanza personale, finalmente semplice, consapevole e positiva.</p>
+      </div>
+    </div>
+    <div class="pano-scroller" tabindex="0" aria-label="Carosello delle schermate di Strush, scorri in orizzontale">
+      <div class="pano-track">
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 1.jpg" width="1080" height="1920" alt="Controlla le tue spese in modo semplice: la home di Strush con Bernardino e il budget residuo del mese" loading="eager" decoding="async" draggable="false"><figcaption>01 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 2.jpg" width="1080" height="1920" alt="Unica dashboard per la tua vita finanziaria: conti, andamento e uscite del mese" loading="eager" decoding="async" draggable="false"><figcaption>02 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 3.jpg" width="1080" height="1920" alt="Fatti consigliare da Bernardino, un coach personale per gestire le tue spese" loading="eager" decoding="async" draggable="false"><figcaption>03 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 4.jpg" width="1080" height="1920" alt="Crea adesso il tuo budget, e gli abbonamenti sempre in ordine e sotto controllo" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 5.jpg" width="1080" height="1920" alt="Condividi le spese con gli altri utenti: Strush divide tutto in automatico" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 6.jpg" width="1080" height="1920" alt="Tieni traccia dei tuoi anticipi: saprai sempre chi ti deve cosa" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 07</figcaption></figure>
+        <figure class="pano-frame"><img src="assets/images/STRUSH/CAROSELLO 01/frame 7.jpg" width="1080" height="1920" alt="Monitora i rimborsi senza più conti a mente" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 07</figcaption></figure>
+      </div>
+    </div>
+    <div class="wrap pano-bar">
+      <div class="pano-progress" aria-hidden="true"><span></span></div>
+      <span class="pano-hint">Trascina per scorrere</span>
+    </div>
+  </section>
+
+  <section class="st-section st-stickers">
+    <div class="wrap">
+      <div class="st-head">
+        <div>
+          <span class="eyebrow">Illustrazioni · Sticker pack</span>
+          <h2 class="section-title">Bernardino,<br>in tutte le salse</h2>
+        </div>
+        <p>Il calendario delle scadenze, il grafico che sale, il salvadanaio, il conto che piange...<br>Prendili, spostali e attaccali dove vuoi.</p>
+      </div>
+      <div class="st-board" id="board">
+        <p class="st-board-tip" aria-hidden="true">Attaccali dove vuoi</p>
+        <button class="sticker" type="button" style="--k:1.108" aria-label="Sticker: Bernardino con il calendario delle scadenze"><img src="assets/images/STRUSH/STICKER/STICKER_01.png" width="616" height="502" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:1.084" aria-label="Sticker: Bernardino davanti al grafico che sale"><img src="assets/images/STRUSH/STICKER/STICKER_02.png" width="638" height="543" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:1.014" aria-label="Sticker: Bernardino con il sacco dei soldi"><img src="assets/images/STRUSH/STICKER/STICKER_03.png" width="592" height="576" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:0.894" aria-label="Sticker: Bernardino seduto a terra"><img src="assets/images/STRUSH/STICKER/STICKER_04.png" width="508" height="635" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:0.896" aria-label="Sticker: Bernardino con il portafoglio vuoto"><img src="assets/images/STRUSH/STICKER/STICKER_05.png" width="496" height="618" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:0.899" aria-label="Sticker: Bernardino perplesso con il telefono"><img src="assets/images/STRUSH/STICKER/STICKER_06.png" width="273" height="338" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:1.109" aria-label="Sticker: Bernardino con il salvadanaio"><img src="assets/images/STRUSH/STICKER/STICKER_07.png" width="438" height="356" alt="" loading="lazy"></button>
+        <button class="sticker" type="button" style="--k:0.986" aria-label="Sticker: Bernardino che abbraccia i soldi"><img src="assets/images/STRUSH/STICKER/STICKER_08.png" width="712" height="733" alt="" loading="lazy"></button>
+      </div>
+      <div class="board-bar">
+        <p>Trascina gli sticker · un tocco per farli saltare</p>
+        <div class="board-actions">
+          <button class="board-btn" type="button" data-board="shuffle"><i class="fa-solid fa-shuffle" aria-hidden="true"></i>Rimescola</button>
+          <button class="board-btn" type="button" data-board="grid"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>Riordina</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section st-get" id="scarica">
+    <svg class="st-get-lines" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="st-line" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#84CD9D"/>
+          <stop offset="1" stop-color="#9495EA"/>
+        </linearGradient>
+      </defs>
+      <g fill="none" stroke="url(#st-line)" stroke-width="1.5">
+        <path d="M-60 520 C 180 380, 260 760, 520 600 S 860 300, 1260 460"/>
+        <path d="M-80 140 C 200 40, 380 300, 640 180 S 1000 -40, 1280 120"/>
+        <path d="M820 760 C 760 560, 980 420, 1080 520 S 1240 700, 1300 640"/>
+      </g>
+    </svg>
+    <div class="wrap st-get-grid">
+      <div>
+        <span class="eyebrow">Disponibile ora · iOS e Android</span>
+        <h2 class="section-title">Scarica Strush,<br><em>è gratis</em></h2>
+        <p class="st-get-lead">Strush è online su App Store e Google Play: un'app vera, usata ogni giorno per tenere a bada le spese. Scaricala e fatti dire da Bernardino quanto stai strusciando.</p>
+        <div class="app-card">
+          <span class="app-icon"><img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt=""></span>
+          <div>
+            <strong>Strush</strong>
+            <small>Strush SRLS · Finanza personale</small>
+            <ul class="app-tags">
+              <li>Gratis</li>
+              <li>Finanza</li>
+              <li>iPhone · iPad · Mac</li>
+              <li>Android</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stores">
+          <div class="store">
+            <a class="store-badge" href="https://apps.apple.com/it/app/strush/id6766820241" target="_blank" rel="noopener">
+              <i class="fa-brands fa-apple" aria-hidden="true"></i>
+              <span><small>Scarica su</small><b>App Store</b></span>
+            </a>
+            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://apps.apple.com/it/app/strush/id6766820241"></div>Inquadra con l'iPhone</div>
+          </div>
+          <div class="store">
+            <a class="store-badge" href="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med" target="_blank" rel="noopener">
+              <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+              <span><small>Disponibile su</small><b>Google Play</b></span>
+            </a>
+            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med"></div>Inquadra con Android</div>
+          </div>
+        </div>
+      </div>
+      <div class="phones" id="phones" aria-label="Anteprima delle schermate di Strush" role="img">
+        <div class="phone phone--back">
+          <div class="phone-screen"><span class="phone-island"></span></div>
+        </div>
+        <div class="phone phone--front">
+          <div class="phone-screen"><span class="phone-island"></span></div>
+          <div class="phone-dots"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap st-end">
+      <div>
+        <h2 class="section-title">I soldi non crescono <em>sugli alberi ;)</em></h2>
+        <p>Ma con le app giuste si gestiscono meglio. Strush è una startup nata per rendere l'educazione finanziaria semplice, ironica e alla portata di tutti.</p>
+        <div class="project-links">
+          <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="fa-solid fa-globe" aria-hidden="true"></i>Visita strush.it ↗</a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+          <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        </div>
+      </div>
+      <a class="team-card" href="https://www.strush.it/" target="_blank" rel="noopener" aria-label="Vai al sito di Strush">
+        <span class="team-head">
+          <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt="">
+          <span><strong>Strush</strong><small>Startup fintech · Strush SRLS</small></span>
+        </span>
+        <blockquote>Rendere l'educazione finanziaria a misura di Gen Z.</blockquote>
+        <ul class="team-list">
+          <li><b>Cristiano Miolla</b><span>CEO &amp; Founder</span></li>
+          <li class="is-me"><b>Vito Mariano Carnimeo</b><span>Co-founder &amp; Art Director</span></li>
+          <li><b>Silvano Sorino</b><span>Game Designer</span></li>
+          <li><b>Giuseppe Santoro</b><span>UI/UX Designer</span></li>
+        </ul>
+        <span class="team-read">Vai su strush.it ↗</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const pad = (n) => String(n).padStart(2, '0');
+
+  // Hero: tilt 3D + riflesso che seguono il cursore, con easing.
+  (function () {
+    const art = document.getElementById('st-hero');
+    const card = art && art.querySelector('.st-card');
+    if (!card || reduceMotion) return;
+    const maxTilt = 10;
+    const current = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const k in current) {
+        const next = current[k] + (target[k] - current[k]) * 0.12;
+        delta += Math.abs(next - current[k]);
+        current[k] = next;
+      }
+      card.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      card.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      card.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    art.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    art.addEventListener('mouseleave', () => {
+      rect = null;
+      target.rx = 0; target.ry = 0; target.gx = 50; target.gy = 30;
+      start();
+    });
+  })();
+
+  // Costruzione geometrica: un unico avanzamento p da 0 a 1 guida i tre
+  // livelli. La griglia si monta pezzo dopo pezzo (prima la base e le righe,
+  // poi le ellissi grandi, infine cerchi e dettagli): ogni forma arriva da
+  // fuori, verso il centro, e si posa al suo posto. Poi le forme verdi
+  // salgono dal basso, la griglia sparisce ed entra il pittogramma col
+  // gradiente; il pittogramma poi esce come è entrato e si ricomincia.
+  // Gira in loop finché la sezione è in vista; slider e step fermano il
+  // loop su un passaggio, il pulsante lo fa ripartire.
+  (function () {
+    const geo = document.getElementById('geo');
+    if (!geo) return;
+    const gridEl = geo.querySelector('.geo-pieces');
+    const canvas = geo.querySelector('.geo-canvas');
+    const ratio = 886 / 797;
+    // Ogni pezzo parte spostato lungo la direzione centro → pezzo.
+    const pieces = Array.from(gridEl.querySelectorAll('img')).map((img) => {
+      const w = parseFloat(img.style.width);
+      const h = w * (img.getAttribute('height') / img.getAttribute('width')) * ratio;
+      const dx = parseFloat(img.style.left) + w / 2 - 50;
+      const dy = (parseFloat(img.style.top) + h / 2 - 52) / ratio;
+      const len = Math.hypot(dx, dy) || 1;
+      return { img, ux: dx / len, uy: dy / len };
+    });
+    const GRID_END = 0.46;
+    const PIECE = 0.08;
+    const LOOP = 11000;
+    const gap = (GRID_END - PIECE) / Math.max(1, pieces.length - 1);
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const back = (t) => 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
+    const fillImg = geo.querySelector('.geo-fill-img');
+    const finalImg = geo.querySelector('.geo-final-img');
+    const label = geo.querySelector('.geo-label');
+    const ruler = geo.querySelector('.geo-ruler');
+    const section = geo.closest('section');
+    const range = section.querySelector('.geo-range');
+    const steps = Array.from(section.querySelectorAll('.geo-step'));
+    const playBtn = section.querySelector('.geo-play');
+    const names = steps.map((s) => s.querySelector('strong').textContent);
+    let p = 0;
+    let anim = 0;
+    let looping = false;
+    let visible = false;
+
+    const seg = (a, b) => clamp((p - a) / (b - a), 0, 1);
+
+    const render = () => {
+      const f = ease(seg(0.5, 0.62));
+      const out = ease(seg(0.66, 0.78));
+      // Uscita del pittogramma: lo stesso ingresso, al contrario.
+      const fin = out * (1 - ease(seg(0.88, 1)));
+      const dist = canvas.clientWidth * 0.08;
+      pieces.forEach((pc, i) => {
+        const a = gap * i;
+        const t = seg(a, a + PIECE);
+        const m = (1 - easeOut(t)) * dist;
+        pc.img.style.opacity = Math.min(1, t * 2.5).toFixed(3);
+        pc.img.style.transform = t >= 1 ? '' :
+          'translate(' + (pc.ux * m).toFixed(1) + 'px,' + (pc.uy * m).toFixed(1) + 'px) scale(' + (0.85 + 0.15 * back(t)).toFixed(4) + ')';
+      });
+      gridEl.style.opacity = (1 - out).toFixed(3);
+      fillImg.style.clipPath = 'inset(' + ((1 - f) * 100).toFixed(2) + '% 0 0 0)';
+      fillImg.style.opacity = (1 - out).toFixed(3);
+      finalImg.style.opacity = fin.toFixed(3);
+      finalImg.style.transform = 'scale(' + (0.94 + fin * 0.06).toFixed(4) + ')';
+      const stage = p < 0.48 ? 0 : p < 0.64 ? 1 : 2;
+      label.textContent = pad(stage + 1) + ' / ' + names[stage];
+      steps.forEach((s, i) => s.classList.toggle('is-active', i === stage));
+      ruler.textContent = Math.round(p * 100) + '%';
+      range.value = Math.round(p * 1000);
+      range.style.setProperty('--p', (p * 100).toFixed(1) + '%');
+    };
+
+    const animateTo = (to, dur, done) => {
+      cancelAnimationFrame(anim);
+      const from = p;
+      const d = reduceMotion ? 0 : dur;
+      const t0 = performance.now();
+      const step = (now) => {
+        const t = d ? Math.min(1, (now - t0) / d) : 1;
+        p = from + (to - from) * t;
+        render();
+        if (t < 1) anim = requestAnimationFrame(step);
+        else if (done) done();
+      };
+      anim = requestAnimationFrame(step);
+    };
+
+    // Un giro dal punto in cui si è, poi da capo finché il loop è attivo.
+    const run = () => {
+      animateTo(1, (1 - p) * LOOP, () => {
+        if (!looping || !visible) return;
+        p = 0;
+        run();
+      });
+    };
+    const play = () => {
+      if (reduceMotion) { p = 0.8; render(); return; }
+      looping = true;
+      p = 0;
+      if (visible) run(); else render();
+    };
+    const stopLoop = () => { looping = false; cancelAnimationFrame(anim); };
+
+    range.addEventListener('input', () => {
+      stopLoop();
+      p = range.value / 1000;
+      render();
+    });
+    steps.forEach((s) => s.addEventListener('click', () => {
+      stopLoop();
+      const to = Number(s.dataset.to);
+      animateTo(to, 600 + Math.abs(to - p) * 4000);
+    }));
+    playBtn.addEventListener('click', play);
+
+    render();
+    if ('IntersectionObserver' in window) {
+      // Fuori vista il loop si mette in pausa e riprende da dove era.
+      let started = false;
+      new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+        if (!visible) { cancelAnimationFrame(anim); return; }
+        if (!started) { started = true; play(); }
+        else if (looping) run();
+      }, { threshold: 0.45 }).observe(geo);
+    } else {
+      p = 0.8;
+      render();
+    }
+  })();
+
+  // Brand manual: fascicolo spillato. Ogni foglio ha una pagina dispari sul
+  // fronte e la pari successiva sul retro, e gira attorno alla cucitura
+  // centrale. Mentre gira è diviso in strisce che ruotano un po' di più
+  // l'una dell'altra: il foglio si incurva, si illumina e fa ombra sotto.
+  // Si sfoglia trascinando, cliccando sulle pagine, con le frecce o da
+  // tastiera. Su schermi stretti si legge una pagina alla volta.
+  (function () {
+    const fb = document.getElementById('fb');
+    if (!fb) return;
+    const stage = fb.querySelector('.fb-stage');
+    const shift = fb.querySelector('.fb-shift');
+    const book = fb.querySelector('.fb-book');
+    const count = fb.querySelector('.fb-count');
+    const progress = fb.querySelector('.fb-progress span');
+    const prevBtn = fb.querySelector('.fb-arrow[data-step="-1"]');
+    const nextBtn = fb.querySelector('.fb-arrow[data-step="1"]');
+    const narrow = matchMedia('(max-width: 720px)');
+    const pages = Number(fb.dataset.pages);
+    const total = Math.ceil(pages / 2);   // fogli
+    const N = 28;                         // strisce per foglio (tante: niente bande)
+    const BEND = 46;                      // curvatura massima, in gradi
+    const src = (p) => (p < pages ? fb.dataset.src.replace('{n}', pad(p + 1)) : '');
+    let turned = 0;   // fogli già girati
+    let page = 0;     // pagina in lettura (conta su schermi stretti)
+    let drag = null;
+
+    const el = (cls, parent) => {
+      const d = document.createElement('div');
+      d.className = cls;
+      if (parent) parent.appendChild(d);
+      return d;
+    };
+    const side = (cls, parent) => {
+      const s = el('fb-side ' + cls, parent);
+      s.appendChild(document.createElement('i'));
+      return s;
+    };
+
+    // Spessore del fascicolo: blocco 3D sotto le pagine di ciascun lato
+    const block = (side) => {
+      const b = el('fb-block fb-block--' + side, book);
+      ['out', 'spine', 'top', 'bottom'].forEach((k) => el('fb-edge fb-edge--' + k, b));
+      return b;
+    };
+    const stackL = block('l');
+    const stackR = block('r');
+    // i fogli fermi salgono di un decimo di pixel l'uno: il blocco parte
+    // dall'altezza del foglio in cima, così tra dorso e copertina non
+    // spunta il filo bianco delle pagine sotto
+    [stackL, stackR].forEach((b) => { b.style.transform = 'translateZ(' + (total * 0.1).toFixed(1) + 'px)'; });
+    const castL = el('fb-cast l', book);
+    const castR = el('fb-cast r', book);
+    const staples = el('fb-staples', book);
+    // sopra le pagine ferme, sotto il foglio che gira
+    [castL, castR, staples].forEach((d) => { d.style.transform = 'translateZ(' + (total * 0.1 + 1).toFixed(1) + 'px)'; });
+
+    const setPw = () => book.style.setProperty('--pw', book.offsetWidth / 2 + 'px');
+    setPw();
+    if ('ResizeObserver' in window) new ResizeObserver(setPw).observe(book);
+    else addEventListener('resize', setPw);
+
+    const leaves = Array.from({ length: total }, (_, i) => {
+      const leaf = el('fb-leaf', book);
+      const flat = el('fb-flat', leaf);
+      const faces = [side('front', flat), side('back', flat)];
+      const strips = [];
+      let parent = leaf;
+      for (let k = 0; k < N; k++) {
+        const s = el('fb-strip' + (k === 0 ? ' is-spine' : k === N - 1 ? ' is-edge' : ''), parent);
+        if (k === 0) s.style.width = 100 / N + '%';
+        const f = side('front', s);
+        const b = side('back', s);
+        // ogni striscia mostra la sua fetta di pagina; sul retro le fette
+        // sono in ordine inverso perché il foglio è capovolto
+        f.style.setProperty('--k', k / N);
+        b.style.setProperty('--k', (N - 1 - k) / N);
+        faces.push(f, b);
+        strips.push({ el: s, f, b });
+        parent = s;
+      }
+      leaf.setAttribute('role', 'img');
+      leaf.setAttribute('aria-label', 'Brand manual di Strush, pagine ' + (2 * i + 1) + (2 * i + 2 <= pages ? ' e ' + (2 * i + 2) : ''));
+      // fronte del primo foglio e retro dell'ultimo sono le copertine
+      faces.forEach((face) => {
+        const isFront = face.classList.contains('front');
+        if ((i === 0 && isFront) || (i === total - 1 && !isFront)) face.classList.add('is-cover');
+      });
+      return { el: leaf, i, faces, strips, angle: 0, curl: 1, anim: 0, moving: false, loaded: false };
+    });
+
+    const load = (leaf) => {
+      if (leaf.loaded) return;
+      leaf.loaded = true;
+      const f = src(2 * leaf.i), b = src(2 * leaf.i + 1);
+      leaf.faces.forEach((face) => {
+        const url = face.classList.contains('front') ? f : b;
+        if (url) face.style.backgroundImage = 'url("' + url + '")';
+        else face.style.background = '#f4f3ef';
+      });
+      [f, b].forEach((u) => {
+        if (!u) return;
+        const img = new Image();
+        img.src = u;
+        if (img.decode) img.decode().catch(() => {});
+      });
+    };
+
+    // Fogli fermi su un lato (-1 sinistra, 1 destra), escluso quello in mano
+    const resting = (side, except) => leaves.filter((l) => l !== except && !l.moving
+      && !(drag && drag.leaf === l) && (side < 0 ? l.angle <= -179.99 : l.angle >= -0.01)).length;
+
+    // Il fascicolo scorre verso il centro man mano che la copertina (o il
+    // retro) gira. Su schermi stretti lo spostamento lo fa .fb-shift.
+    const layoutBook = () => {
+      const a0 = leaves[0].angle;
+      const aN = leaves[total - 1].angle;
+      const rad = Math.PI / 180;
+      const tx = narrow.matches ? 0 : -25 * (1 + a0 / 180) - 25 * aN / 180;
+      book.style.setProperty('--tx', tx.toFixed(3) + '%');
+      const sl = 50 * (1 - Math.max(0, -Math.cos(a0 * rad)));
+      const sr = 50 * (1 - Math.max(0, Math.cos(aN * rad)));
+      // Il tilt ruota attorno al centro della parte occupata dalle pagine
+      book.style.setProperty('--ox', ((sl + 100 - sr) / 2).toFixed(3) + '%');
+    };
+
+    // Le pagine ferme stanno quasi sullo stesso piano: un decimo di pixel
+    // tra l'una e l'altra evita che si mescolino (anche col tilt). Il
+    // foglio che gira sta sopra tutti.
+    const setAngle = (leaf, a) => {
+      leaf.angle = a;
+      const p = -a / 180;
+      const turning = a < -0.01 && a > -179.99;
+      const z = turning ? total * 0.1 + 2 : (a <= -90 ? leaf.i + 1 : total - leaf.i) * 0.1;
+      leaf.el.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateY(' + a + 'deg)';
+      leaf.el.style.zIndex = turning ? total * 2 : (a <= -90 ? leaf.i : total - leaf.i);
+      leaf.el.classList.toggle('is-turning', turning);
+      if (leaf.i === 0 || leaf.i === total - 1) layoutBook();
+      if (!turning) return;
+      // il bordo libero resta indietro (o va avanti, se lo si tira col dito)
+      const c = leaf.curl * BEND * Math.sin(Math.PI * p);
+      const step = c / (N - 1);
+      // più la striscia è inclinata rispetto a chi guarda, più è in ombra
+      const cosAt = (k) => Math.cos((a + step * clamp(k, 0, N - 1)) * Math.PI / 180);
+      let x = 0;
+      leaf.strips.forEach((s, k) => {
+        s.el.style.transform = k === 0 ? '' : 'rotateY(' + step.toFixed(2) + 'deg)';
+        x += cosAt(k) / N;
+        const c = cosAt(k);
+        s.f.style.setProperty('--lum', (1 - 0.3 * (1 - c)).toFixed(3));
+        s.b.style.setProperty('--lum', (1 - 0.3 * (1 + c)).toFixed(3));
+      });
+      // x: dove cade il bordo libero, da -1 (pagina sinistra) a 1 (destra)
+      const lift = Math.sin(Math.PI * p);
+      const castOn = (cast, pos, dirStr) => {
+        const edge = Math.min(100, Math.abs(pos) * 100);
+        cast.style.background = 'linear-gradient(to ' + dirStr + ', rgba(10,10,20,.5) 0%, rgba(10,10,20,.32) ' + edge.toFixed(1) + '%, rgba(10,10,20,0) ' + Math.min(100, edge + 6 + 22 * lift).toFixed(1) + '%)';
+      };
+      castOn(castR, Math.max(0, x), 'right');
+      castOn(castL, Math.max(0, -x), 'left');
+      // l'ombra cade solo dove c'è davvero una pagina sotto, non sul tavolo
+      castR.style.opacity = resting(1, leaf) ? (x > 0 ? lift * 0.9 : lift * 0.35).toFixed(3) : 0;
+      castL.style.opacity = resting(-1, leaf) ? (x < 0 ? lift * 0.9 : lift * 0.35).toFixed(3) : 0;
+    };
+
+    const anyMoving = () => leaves.some((l) => l.moving);
+    const settle = () => {
+      if (anyMoving() || drag) return;
+      castL.style.opacity = castR.style.opacity = 0;
+      refresh();
+    };
+
+    const tween = (leaf, to) => {
+      cancelAnimationFrame(leaf.anim);
+      const from = leaf.angle;
+      const dur = reduceMotion ? 0 : Math.max(320, 1050 * Math.abs(to - from) / 180);
+      const t0 = performance.now();
+      leaf.moving = true;
+      refresh();
+      const step = (now) => {
+        const t = dur ? Math.min(1, (now - t0) / dur) : 1;
+        setAngle(leaf, from + (to - from) * ease(t));
+        if (t < 1) { leaf.anim = requestAnimationFrame(step); return; }
+        leaf.moving = false;
+        settle();
+      };
+      leaf.anim = requestAnimationFrame(step);
+    };
+
+    // Spessore del blocco di pagine su un lato: esagerato rispetto alla
+    // carta vera (circa 3px per foglio, con un minimo per la sola
+    // copertina) così inclinando si legge bene come libretto
+    const setThickness = (b, sheets, shut) => {
+      b.style.visibility = sheets ? '' : 'hidden';
+      b.style.setProperty('--t', (sheets ? Math.max(12, sheets * 3) : 0).toFixed(1) + 'px');
+      b.classList.toggle('is-shut', shut);
+    };
+
+    // Su schermi stretti si mostra la metà del fascicolo con la pagina in lettura
+    const offset = () => (narrow.matches ? (page % 2 === 1 ? 25 : -25) : 0);
+
+    const refresh = () => {
+      leaves.forEach((l) => {
+        const near = l.i >= turned - 2 && l.i <= turned + 1;
+        l.el.style.visibility = near || l.moving || (drag && drag.leaf === l) ? '' : 'hidden';
+        if (l.i >= turned - 3 && l.i <= turned + 3) load(l);
+      });
+      // i blocchi contano solo i fogli già posati: mentre la copertina (o
+      // l'ultimo foglio) è in volo, dall'altra parte non c'è ancora niente
+      // in cima al blocco c'è la copertina solo se il fascicolo è chiuso
+      const nL = resting(-1), nR = resting(1);
+      setThickness(stackL, nL, nL === total);
+      setThickness(stackR, nR, nR === total);
+      staples.classList.toggle('is-on', turned === total / 2 && !anyMoving() && !drag);
+      shift.style.transform = 'translateX(' + offset() + '%)';
+    };
+
+    const update = () => {
+      if (narrow.matches) {
+        count.textContent = pad(page + 1) + ' / ' + pad(pages);
+        progress.style.width = (page / (pages - 1)) * 100 + '%';
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page === pages - 1;
+      } else {
+        const a = 2 * turned, b = 2 * turned + 1;
+        count.textContent = turned === 0 ? pad(1) + ' / ' + pad(pages)
+          : turned === total ? pad(pages) + ' / ' + pad(pages)
+          : pad(a) + '–' + pad(b) + ' / ' + pad(pages);
+        progress.style.width = (turned / total) * 100 + '%';
+        prevBtn.disabled = turned === 0;
+        nextBtn.disabled = turned === total;
+      }
+      refresh();
+    };
+
+    const flip = (dir, curl) => {
+      const leaf = leaves[dir > 0 ? turned : turned - 1];
+      turned += dir;
+      leaf.curl = curl;
+      tween(leaf, dir > 0 ? -180 : 0);
+    };
+
+    const go = (dir) => {
+      if (narrow.matches) {
+        const next = page + dir;
+        if (next < 0 || next > pages - 1) return;
+        page = next;
+        const t = Math.floor((page + 1) / 2);
+        if (t !== turned) flip(dir, dir);
+      } else {
+        if (turned + dir < 0 || turned + dir > total) return;
+        flip(dir, dir);
+        page = turned === 0 ? 0 : 2 * turned - 1;
+      }
+      update();
+    };
+
+    // Trascinamento: il foglio segue il dito, tirato per il bordo; se è
+    // girato abbastanza (o con uno scatto veloce) completa il giro,
+    // altrimenti ricade. Un tocco senza trascinare sfoglia verso il lato
+    // toccato. Su schermi stretti basta uno scorrimento.
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      const r = (narrow.matches ? stage : book).getBoundingClientRect();
+      let dir = e.clientX >= r.left + r.width / 2 ? 1 : -1;
+      // chiuso, il fascicolo si apre ovunque lo si tocchi
+      if (!narrow.matches && turned === 0) dir = 1;
+      if (!narrow.matches && turned === total) dir = -1;
+      const leaf = narrow.matches ? null : leaves[dir > 0 ? turned : turned - 1];
+      if (!narrow.matches && !leaf) return;
+      drag = { dir, id: e.pointerId, x: e.clientX, t: performance.now(), moved: false, p: 0, w: r.width, leaf };
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved) {
+        if (Math.abs(dx) < 6) return;
+        drag.moved = true;
+        stage.setPointerCapture(drag.id);
+        stage.classList.add('is-dragging');
+        if (drag.leaf) {
+          cancelAnimationFrame(drag.leaf.anim);
+          drag.leaf.moving = false;
+          drag.leaf.curl = -drag.dir;
+          refresh();
+        }
+      }
+      if (!drag.leaf) return;
+      const p = clamp((drag.dir > 0 ? -dx : dx) / (drag.w * 0.55), 0, 1);
+      drag.p = p;
+      setAngle(drag.leaf, drag.dir > 0 ? -180 * p : -180 * (1 - p));
+    });
+    const endDrag = (e, cancelled) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag;
+      drag = null;
+      stage.classList.remove('is-dragging');
+      if (!d.moved) {
+        if (!cancelled) go(d.dir);
+        return;
+      }
+      const dx = e.clientX - d.x;
+      if (!d.leaf) {
+        if (!cancelled && Math.abs(dx) > 30) go(dx < 0 ? 1 : -1);
+        return;
+      }
+      const speed = Math.abs(dx) / (performance.now() - d.t);
+      const commit = !cancelled && (d.p > 0.3 || (speed > 0.5 && d.p > 0.05));
+      if (commit) {
+        turned += d.dir;
+        page = turned === 0 ? 0 : 2 * turned - 1;
+        update();
+      }
+      const flipped = d.dir > 0 ? commit : !commit;
+      tween(d.leaf, flipped ? -180 : 0);
+    };
+    stage.addEventListener('pointerup', (e) => endDrag(e, false));
+    stage.addEventListener('pointercancel', (e) => endDrag(e, true));
+
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
+    fb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+    narrow.addEventListener('change', () => {
+      page = turned === 0 ? 0 : turned === total ? pages - 1 : 2 * turned - 1;
+      layoutBook();
+      update();
+    });
+    leaves.forEach((l) => setAngle(l, 0));
+    // il primo spostamento non va animato
+    shift.style.transition = 'none';
+    update();
+    shift.offsetWidth;
+    shift.style.transition = '';
+
+    // 2 secondi dopo che il fascicolo entra in scena si sfoglia da solo la
+    // prima pagina (una volta sola, e non se lo si è già toccato)
+    (function () {
+      let timer = null;
+      const io = new IntersectionObserver((entries) => {
+        const visible = entries[0].isIntersecting;
+        clearTimeout(timer);
+        if (!visible) return;
+        timer = setTimeout(() => {
+          io.disconnect();
+          if (turned === 0 && page === 0 && !drag && !anyMoving()) go(1);
+        }, 2000);
+      }, { threshold: 0.6 });
+      io.observe(stage);
+    })();
+
+    // Tilt 3D che segue il cursore, con easing (come il catalogo di
+    // iContadini). Solo col mouse, e fermo mentre si trascina un foglio.
+    (function () {
+      if (reduceMotion) return;
+      // Al centro resta piatto; verso i lati ruota di più in orizzontale,
+      // così si vedono lo spessore delle pagine e il dorso: verso sinistra
+      // si scopre il taglio delle pagine, verso destra il dorso (a
+      // fascicolo aperto, i tagli dei due lati)
+      const tiltX = 6;
+      const tiltY = 20;
+      const cur = { rx: 0, ry: 0 };
+      const target = { ...cur };
+      let rafId = null;
+
+      const tick = () => {
+        let delta = 0;
+        for (const k in cur) {
+          const next = cur[k] + (target[k] - cur[k]) * 0.12;
+          delta += Math.abs(next - cur[k]);
+          cur[k] = next;
+        }
+        book.style.setProperty('--rx', cur.rx.toFixed(2) + 'deg');
+        book.style.setProperty('--ry', cur.ry.toFixed(2) + 'deg');
+        rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+      };
+      const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+      stage.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse' || drag) return;
+        const r = book.getBoundingClientRect();
+        const px = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+        const py = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+        target.rx = (0.5 - py) * tiltX * 2;
+        target.ry = (px - 0.5) * tiltY * 2;
+        start();
+      });
+      stage.addEventListener('pointerleave', () => {
+        target.rx = 0; target.ry = 0;
+        start();
+      });
+    })();
+  })();
+  // Carosello: le sette schermate dello store, una accanto all'altra. Col
+  // mouse si scorre trascinando; la barra sotto segue lo scroll.
+  (function () {
+    const section = document.querySelector('.st-pano');
+    if (!section) return;
+    const scroller = section.querySelector('.pano-scroller');
+    const bar = section.querySelector('.pano-progress span');
+
+    const updateBar = () => {
+      const max = scroller.scrollWidth - scroller.clientWidth;
+      const vis = scroller.clientWidth / scroller.scrollWidth;
+      bar.style.width = (vis * 100).toFixed(2) + '%';
+      bar.style.transform = 'translateX(' + (max ? (scroller.scrollLeft / max) * (1 / vis - 1) * 100 : 0).toFixed(2) + '%)';
+    };
+    scroller.addEventListener('scroll', updateBar, { passive: true });
+    addEventListener('resize', updateBar);
+    section.querySelectorAll('img').forEach((img) => img.addEventListener('load', updateBar));
+    updateBar();
+
+    // Trascinamento col mouse (al tocco lo scroll è già nativo), con un po'
+    // di inerzia al rilascio.
+    let drag = null;
+    let glide = 0;
+    scroller.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      cancelAnimationFrame(glide);
+      drag = { x: e.clientX, left: scroller.scrollLeft, v: 0, lastX: e.clientX, lastT: performance.now(), moved: false };
+    });
+    addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 4) { drag.moved = true; scroller.classList.add('is-dragging'); }
+      if (!drag.moved) return;
+      const now = performance.now();
+      drag.v = (e.clientX - drag.lastX) / Math.max(1, now - drag.lastT);
+      drag.lastX = e.clientX;
+      drag.lastT = now;
+      scroller.scrollLeft = drag.left - dx;
+    });
+    addEventListener('pointerup', () => {
+      if (!drag) return;
+      let v = drag.v * 16;
+      drag = null;
+      scroller.classList.remove('is-dragging');
+      if (reduceMotion) return;
+      const step = () => {
+        if (Math.abs(v) < 0.5) return;
+        scroller.scrollLeft -= v;
+        v *= 0.94;
+        glide = requestAnimationFrame(step);
+      };
+      glide = requestAnimationFrame(step);
+    });
+    scroller.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') scroller.scrollBy({ left: 300, behavior: 'smooth' });
+      if (e.key === 'ArrowLeft') scroller.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+
+    // Appena il carosello entra in scena si seleziona la prima schermata,
+    // poi ogni 1,5 secondi la successiva fino all'ultima, e si torna
+    // indietro. Col cursore sopra un'immagine si ferma, e riparte da quella.
+    (function () {
+      const frames = Array.from(scroller.querySelectorAll('.pano-frame'));
+      if (!frames.length) return;
+      let i = 0, dir = 1, timer = null, visible = false, hovered = false;
+
+      const select = (n) => {
+        frames.forEach((f, k) => f.classList.toggle('is-active', k === n));
+        // porta la schermata in vista, scorrendo solo il carosello
+        const f = frames[n];
+        const left = f.offsetLeft, right = left + f.offsetWidth;
+        const pad = 40;
+        let to = null;
+        if (left - pad < scroller.scrollLeft) to = left - pad;
+        else if (right + pad > scroller.scrollLeft + scroller.clientWidth) to = right + pad - scroller.clientWidth;
+        if (to !== null && !drag) scroller.scrollTo({ left: to, behavior: reduceMotion ? 'auto' : 'smooth' });
+      };
+      const tick = () => {
+        if (frames.length > 1) {
+          if (i + dir < 0 || i + dir > frames.length - 1) dir = -dir;
+          i += dir;
+        }
+        select(i);
+      };
+      const stop = () => { clearInterval(timer); timer = null; };
+      const play = () => {
+        stop();
+        if (visible && !hovered) timer = setInterval(tick, 1500);
+      };
+
+      new IntersectionObserver((entries) => {
+        const was = visible;
+        visible = entries[0].isIntersecting;
+        if (visible && !was && !hovered) { i = 0; dir = 1; select(0); }
+        play();
+      }, { threshold: 0.5 }).observe(scroller);
+
+      frames.forEach((f, k) => {
+        f.addEventListener('pointerenter', (e) => {
+          if (e.pointerType !== 'mouse') return;
+          hovered = true;
+          i = k;
+          frames.forEach((g) => g.classList.remove('is-active'));
+          stop();
+        });
+        f.addEventListener('pointerleave', (e) => {
+          if (e.pointerType !== 'mouse') return;
+          hovered = false;
+          f.classList.add('is-active');
+          play();
+        });
+      });
+    })();
+  })();
+
+  // Sticker: si trascinano liberamente sulla bacheca (la posizione è in
+  // frazioni della bacheca, così regge il resize). Preso in mano lo sticker
+  // si raddrizza e si alza; lasciato, si "riattacca" con una nuova
+  // inclinazione. Un tocco senza trascinare lo fa saltare.
+  (function () {
+    const board = document.getElementById('board');
+    if (!board) return;
+    const stickers = Array.from(board.querySelectorAll('.sticker')).map((el) => ({ el, fx: 0, fy: 0, r: 0 }));
+    let top = stickers.length;
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    const place = (s) => {
+      const m = 18;
+      const bw = board.clientWidth - s.el.offsetWidth - m * 2;
+      const bh = board.clientHeight - s.el.offsetHeight - m * 2;
+      s.el.style.setProperty('--x', (m + clamp(s.fx, 0, 1) * bw).toFixed(1) + 'px');
+      s.el.style.setProperty('--y', (m + clamp(s.fy, 0, 1) * bh).toFixed(1) + 'px');
+      s.el.style.setProperty('--r', s.r.toFixed(1) + 'deg');
+    };
+    const placeAll = () => stickers.forEach(place);
+
+    const shuffle = () => {
+      // Celle 4x2 mescolate + un po' di disordine, così non si coprono del tutto
+      const cols = board.clientWidth < 700 ? 2 : 4;
+      const rows = Math.ceil(stickers.length / cols);
+      const cells = stickers.map((_, i) => i).sort(() => Math.random() - 0.5);
+      stickers.forEach((s, i) => {
+        const c = cells[i] % cols;
+        const r = Math.floor(cells[i] / cols);
+        s.fx = clamp(c / (cols - 1 || 1) + rand(-0.08, 0.08), 0, 1);
+        s.fy = clamp(r / (rows - 1 || 1) + rand(-0.12, 0.12), 0, 1);
+        s.r = rand(-16, 16);
+        s.el.style.zIndex = i + 1;
+      });
+      placeAll();
+    };
+    const grid = () => {
+      const cols = board.clientWidth < 700 ? 2 : 4;
+      const rows = Math.ceil(stickers.length / cols);
+      stickers.forEach((s, i) => {
+        s.fx = (i % cols) / (cols - 1 || 1);
+        s.fy = Math.floor(i / cols) / (rows - 1 || 1);
+        s.r = 0;
+      });
+      placeAll();
+    };
+
+    const pop = (el) => {
+      el.classList.remove('is-pop');
+      void el.offsetWidth;
+      el.classList.add('is-pop');
+    };
+
+    let drag = null;
+    stickers.forEach((s) => {
+      s.el.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        s.el.setPointerCapture(e.pointerId);
+        s.el.style.zIndex = ++top;
+        drag = { s, id: e.pointerId, x: e.clientX, y: e.clientY, fx: s.fx, fy: s.fy, moved: false };
+      });
+      s.el.addEventListener('pointermove', (e) => {
+        if (!drag || drag.s !== s || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.x;
+        const dy = e.clientY - drag.y;
+        if (!drag.moved) {
+          if (Math.hypot(dx, dy) < 5) return;
+          drag.moved = true;
+          s.el.classList.add('is-held');
+          s.r = 0;
+        }
+        const bw = board.clientWidth - s.el.offsetWidth - 36;
+        const bh = board.clientHeight - s.el.offsetHeight - 36;
+        s.fx = clamp(drag.fx + dx / (bw || 1), 0, 1);
+        s.fy = clamp(drag.fy + dy / (bh || 1), 0, 1);
+        // Mentre lo trascini si inclina un po' nella direzione del movimento
+        s.r = clamp((e.movementX || 0) * 1.5, -12, 12);
+        place(s);
+      });
+      const release = (e) => {
+        if (!drag || drag.s !== s || e.pointerId !== drag.id) return;
+        const moved = drag.moved;
+        drag = null;
+        s.el.classList.remove('is-held');
+        if (moved) {
+          s.r = rand(-14, 14);
+          place(s);
+        } else if (!reduceMotion) {
+          pop(s.el);
+        }
+      };
+      s.el.addEventListener('pointerup', release);
+      s.el.addEventListener('pointercancel', release);
+      // Da tastiera: frecce per spostarlo, invio per farlo saltare
+      s.el.addEventListener('keydown', (e) => {
+        const k = { ArrowLeft: [-0.05, 0], ArrowRight: [0.05, 0], ArrowUp: [0, -0.08], ArrowDown: [0, 0.08] }[e.key];
+        if (!k) return;
+        e.preventDefault();
+        s.fx = clamp(s.fx + k[0], 0, 1);
+        s.fy = clamp(s.fy + k[1], 0, 1);
+        s.el.style.zIndex = ++top;
+        place(s);
+      });
+      s.el.addEventListener('click', (e) => { if (e.detail === 0 && !reduceMotion) pop(s.el); });
+    });
+
+    board.parentElement.querySelector('[data-board="shuffle"]').addEventListener('click', shuffle);
+    board.parentElement.querySelector('[data-board="grid"]').addEventListener('click', grid);
+    addEventListener('resize', placeAll);
+    shuffle();
+    // Le immagini caricano in lazy: riposiziona quando hanno l'altezza vera
+    stickers.forEach((s) => s.el.querySelector('img').addEventListener('load', () => place(s)));
+  })();
+
+  // Scarica l'app: i due telefoni mostrano le schermate del carosello in
+  // dissolvenza (quello dietro è sfasato di tre), e i QR per gli store.
+  (function () {
+    const phones = document.getElementById('phones');
+    if (!phones) return;
+    const frames = Array.from({ length: 7 }, (_, i) => 'assets/images/STRUSH/CAROSELLO 01/frame ' + (i + 1) + '.jpg');
+    const fill = (screen) => frames.map((src, i) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      screen.appendChild(img);
+      return img;
+    });
+    const front = fill(phones.querySelector('.phone--front .phone-screen'));
+    const back = fill(phones.querySelector('.phone--back .phone-screen'));
+    const dotsWrap = phones.querySelector('.phone-dots');
+    const dots = frames.map(() => dotsWrap.appendChild(document.createElement('span')));
+    let i = 0;
+    const show = () => {
+      front.forEach((img, k) => img.classList.toggle('is-active', k === i));
+      back.forEach((img, k) => img.classList.toggle('is-active', k === (i + 3) % frames.length));
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+    };
+    show();
+    if (!reduceMotion) setInterval(() => { i = (i + 1) % frames.length; show(); }, 2800);
+
+    if (window.QRCode) {
+      document.querySelectorAll('.store-qr-code').forEach((el) => {
+        new QRCode(el, { text: el.dataset.qr, width: 192, height: 192, colorDark: '#121212', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+      });
+    } else {
+      document.querySelectorAll('.store-qr').forEach((el) => el.remove());
+    }
+  })();
+</script>
+
+</body>
+</html>

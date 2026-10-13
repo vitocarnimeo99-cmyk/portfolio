@@ -1,0 +1,260 @@
+// Menu hamburger (mobile): apre/chiude la tendina dei link. Si richiude
+// toccando un link (utile per le ancore nella stessa pagina), toccando fuori
+// dal menu o premendo Esc.
+(function () {
+  const header = document.querySelector('header');
+  const toggle = header && header.querySelector('.nav-toggle');
+  if (!toggle) return;
+
+  const setOpen = (open) => {
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+  };
+
+  toggle.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  header.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('click', (e) => {
+    if (header.classList.contains('is-open') && !header.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header.classList.contains('is-open')) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+})();
+
+// Autoplay solo quando il video è visibile in viewport: senza questo, tutti
+// i video della griglia partirebbero insieme al caricamento della pagina
+// anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
+const lazyVideos = document.querySelectorAll('video.art');
+if ('IntersectionObserver' in window) {
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  lazyVideos.forEach(video => videoObserver.observe(video));
+} else {
+  lazyVideos.forEach(video => video.play().catch(() => {}));
+}
+
+// Rivelazione a cascata dei tile della griglia progetti quando entrano in
+// viewport, per dare un effetto più dinamico allo scroll.
+const gridTiles = document.querySelectorAll('.grid .tile');
+if (gridTiles.length) {
+  if ('IntersectionObserver' in window) {
+    const tileObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const tile = entry.target;
+        const index = Array.from(gridTiles).indexOf(tile);
+        tile.style.transitionDelay = `${(index % 3) * 90}ms`;
+        tile.classList.add('is-visible');
+        obs.unobserve(tile);
+      });
+    }, { threshold: 0.15 });
+    gridTiles.forEach(tile => tileObserver.observe(tile));
+  } else {
+    gridTiles.forEach(tile => tile.classList.add('is-visible'));
+  }
+}
+
+document.querySelectorAll('.zoom-tile').forEach(tile => {
+  const img = tile.querySelector('.art');
+  tile.addEventListener('mousemove', (e) => {
+    const rect = img.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    img.style.transformOrigin = `${x}% ${y}%`;
+  });
+});
+
+// Dispositivi senza mouse (telefoni, tablet): lì mouseover/mouseout vengono
+// simulati al tocco, subito prima di aprire il link, quindi gli effetti al
+// passaggio del mouse non si vedrebbero mai (o resterebbero "incollati").
+const canHover = window.matchMedia('(hover: hover)').matches;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Video con variante al passaggio del mouse (es. "I Contadini").
+// Evita di richiamare load()/play() più volte in sovrapposizione, che causava
+// scatti e "play() request interrupted" quando il mouse entrava/usciva rapidamente.
+// Su touch resta il video di default: lo scambio scaricherebbe un secondo
+// video proprio mentre si sta aprendo la pagina del progetto.
+if (canHover) document.querySelectorAll('video[data-src-hover]').forEach(video => {
+  const source = video.querySelector('source');
+  const defaultSrc = video.dataset.srcDefault;
+  const hoverSrc = video.dataset.srcHover;
+  let switching = false;
+  let pending = null;
+
+  const swapTo = (src) => {
+    if (source.src.endsWith(src)) { pending = null; return; }
+    if (switching) { pending = src; return; }
+    switching = true;
+    source.src = src;
+    video.load();
+    video.play().catch(() => {}).finally(() => {
+      switching = false;
+      if (pending) {
+        const next = pending;
+        pending = null;
+        swapTo(next);
+      }
+    });
+  };
+
+  video.addEventListener('mouseover', () => swapTo(hoverSrc));
+  video.addEventListener('mouseout', () => swapTo(defaultSrc));
+});
+
+// Immagini con variante ciclica al passaggio del mouse (es. "Shallo", "K-Way").
+// data-cycle-prefix/ext compongono il path, data-cycle-frames è il numero
+// totale di file (01 = default, gli altri sono le varianti in hover).
+document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
+  const prefix = img.dataset.cyclePrefix;
+  const ext = img.dataset.cycleExt;
+  const variants = parseInt(img.dataset.cycleFrames, 10) - 1;
+  const defaultSrc = img.src;
+  let step = 0;
+
+  if (canHover) {
+    img.addEventListener('mouseover', () => {
+      step = (step % variants) + 1;
+      img.src = `${prefix}${step + 1}${ext}`;
+    });
+    img.addEventListener('mouseout', () => {
+      step = 0;
+      img.src = defaultSrc;
+    });
+    return;
+  }
+
+  // Su touch le varianti scorrono da sole finché il tile è visibile a schermo,
+  // e si fermano (tornando alla prima) quando esce. Il cambio è una
+  // dissolvenza: la nuova immagine compare sopra in un livello che sfuma,
+  // poi diventa la base e il livello torna trasparente.
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
+  const frames = variants + 1;
+  const FADE_MS = 1200;
+  const layer = document.createElement('img');
+  layer.className = 'art cycle-fade';
+  layer.alt = '';
+  layer.setAttribute('aria-hidden', 'true');
+  layer.style.transition = `opacity ${FADE_MS}ms ease-in-out`;
+  img.after(layer);
+
+  let timer = null;
+  let fadeTimer = null;
+  const showNext = () => {
+    step = (step + 1) % frames;
+    const next = `${prefix}${step + 1}${ext}`;
+    layer.src = next;
+    layer.decode().catch(() => {}).then(() => {
+      if (!timer) return;
+      layer.style.opacity = '1';
+      fadeTimer = setTimeout(() => {
+        img.src = next;
+        img.decode().catch(() => {}).then(() => {
+          layer.style.transition = 'none';
+          layer.style.opacity = '0';
+          layer.offsetWidth; // applica subito l'opacità prima di riattivare la transizione
+          layer.style.transition = `opacity ${FADE_MS}ms ease-in-out`;
+        });
+      }, FADE_MS);
+    });
+  };
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting && !timer) {
+      timer = setInterval(showNext, 3000);
+    } else if (!entry.isIntersecting && timer) {
+      clearInterval(timer);
+      clearTimeout(fadeTimer);
+      timer = null;
+      step = 0;
+      layer.style.transition = 'none';
+      layer.style.opacity = '0';
+      layer.offsetWidth;
+      layer.style.transition = `opacity ${FADE_MS}ms ease-in-out`;
+      img.src = defaultSrc;
+    }
+  }, { threshold: 0.5 }).observe(img);
+});
+
+// Precarica le varianti hover dei tile a ciclo immagini dopo il load della
+// pagina, cosi' il primo mouseover non ha un micro-delay di rete.
+window.addEventListener('load', () => {
+  document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
+    const prefix = img.dataset.cyclePrefix;
+    const ext = img.dataset.cycleExt;
+    const frames = parseInt(img.dataset.cycleFrames, 10);
+    for (let i = 2; i <= frames; i++) {
+      new Image().src = `${prefix}${i}${ext}`;
+    }
+  });
+});
+
+// Le scene 3D (cartellino in home, pillow pack nelle pagine progetto) richiedono
+// Three.js (~600KB): lo carichiamo solo quando il relativo elemento entra in
+// viewport invece che sempre in testa alla pagina, cosi' non compete con le
+// risorse critiche del caricamento iniziale. threePromise evita di iniettare
+// Three.js due volte se una pagina avesse più scene.
+(function () {
+  function supportsWebGL() {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext &&
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  let threePromise = null;
+  function loadThree() {
+    if (!threePromise) {
+      threePromise = new Promise((resolve) => {
+        const three = document.createElement('script');
+        three.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+        three.onload = resolve;
+        document.body.appendChild(three);
+      });
+    }
+    return threePromise;
+  }
+
+  function loadScene(elementId, sceneScriptSrc) {
+    const el = document.getElementById(elementId);
+    if (!el || !supportsWebGL()) return;
+
+    function start() {
+      loadThree().then(() => {
+        const sceneScript = document.createElement('script');
+        sceneScript.src = sceneScriptSrc;
+        document.body.appendChild(sceneScript);
+      });
+    }
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          obs.disconnect();
+          start();
+        }
+      }, { rootMargin: '200px' });
+      observer.observe(el);
+    } else {
+      start();
+    }
+  }
+
+  loadScene('lanyard', 'js/cartellino3d.js');
+  loadScene('wkz-pack', 'js/pillowpack3d.js');
+})();

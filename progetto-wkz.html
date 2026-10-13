@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where's Kud Zamb? / Vito Mariano Carnimeo — Vitq</title>
+<meta name="description" content="Where's Kud Zamb? — progetto di tesi NABA: character design, serie fotografica e animazione lip-sync per un personaggio illustrato nascosto per le strade di Bari.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="js/main.js" defer></script>
+<script src="js/carousel.js" defer></script>
+<style>
+  /* Colore secondario di questa pagina: il rosso della busta (#E43242)
+     leggermente più scuro, al posto del blu di default del sito. */
+  :root{
+    --accent:#C62C39;
+    --accent-soft:#F6E0E3;
+  }
+  /* "Find Nicola in Bari": azzurro dei cerchietti della busta (#04ACE4), un po' più scuro */
+  .project-hero h1 em,
+  .project-hero .eyebrow{ color:#0279A0; }
+  /* Lente d'ingrandimento circolare per la tavola di tesi: ingrandisce solo
+     una piccola area attorno al cursore invece dell'intera immagine.
+     Regola specifica di questa pagina, non tocca lo zoom-tile globale. */
+  .loupe-zoom{ overflow:hidden; }
+  .loupe-lens{
+    position:absolute;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.85);
+    box-shadow:0 0 0 1px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.35);
+    background-repeat:no-repeat;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .12s ease;
+    z-index:3;
+  }
+  .loupe-handle{
+    /* sta SOTTO il cerchio (z-index più basso): la parte che ricade dentro
+       il raggio della lente resta coperta dal riempimento opaco del
+       cerchio e quindi "sparisce"; solo la punta esterna resta visibile */
+    position:absolute;
+    width:22px;
+    height:90px;
+    background:linear-gradient(rgba(255,255,255,.95), rgba(210,210,210,.8));
+    border-radius:0 0 11px 11px;
+    box-shadow:0 4px 10px rgba(0,0,0,.35);
+    transform:rotate(-45deg);
+    transform-origin:top center;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .12s ease;
+    z-index:2;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .loupe-zoom{ cursor:none; }
+    .loupe-zoom:hover .loupe-lens,
+    .loupe-zoom:hover .loupe-handle{ opacity:1; }
+  }
+  /* soluzioni: sovrapposte alla tavola, entrano/escono con dissolvenza di opacità */
+  .wkz-tesi-overlay{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity .6s ease;
+    pointer-events:none;
+    z-index:1;
+  }
+  .wkz-tesi-overlay.is-visible{ opacity:1; }
+  @media (prefers-reduced-motion:reduce){
+    .wkz-tesi-overlay{ transition:none; }
+  }
+  .wkz-tesi-cta-wrap{ display:flex; justify-content:center; padding:32px 16px; }
+  .wkz-tesi-cta-wrap .btn-primary{ border:0; cursor:pointer; font-family:inherit; }
+  @media (max-width:820px){
+    .loupe-lens{ width:170px; height:170px; }
+    .loupe-handle{ width:14px; height:58px; border-radius:0 0 7px 7px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="index.html#top">Vito Mariano Carnimeo / Vitq</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Apri il menu"><span></span><span></span></button>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="index.html#lavori">Lavori</a></li>
+      <li><a href="index.html#about">Chi sono</a></li>
+      <li><a href="index.html#contatti">Contatti</a></li>
+      <li><a href="progetto-wkz.html">Where's Kud Zamb?</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="project-hero wrap">
+    <div class="project-hero-text">
+      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <span class="eyebrow">Progetto di tesi — NABA, Milano</span>
+      <h1>Where's Kud Zamb? <em>Find Nicola in Bari</em></h1>
+          <p><strong>“Where’s Kud Zamb?”</strong> è il titolo del mio progetto di tesi realizzato presso <strong>NABA – Nuova Accademia di Belle Arti di Milano</strong>.<br>
+
+      Il termine <strong>“Zamb”</strong> deriva dal dialetto barese e significa <strong>“cafone”</strong>. Il progetto nasce con l’obiettivo di raccontare, attraverso l’illustrazione e l’animazione, tutta l’energia, l’ironia e il fascino della città di Bari e della sua gente.<br> <br>
+
+      Il protagonista è <strong>Nicola</strong>, un ragazzo dall’atteggiamento apparentemente indifferente e sbruffone, che nasconde in realtà un carattere dolce e simpatico. Un personaggio che, come molti baresi, è profondamente legato alla propria città e ne porta con sé l’identità e lo spirito.<br>
+
+      Il progetto prende la forma di un <strong>gioco di ricerca</strong>, in cui bisogna trovare Nicola e la sua famiglia all’interno di un’illustrazione ricca di dettagli e di personaggi, ambientata nella città di Bari.</p>
+          <div class="project-meta">
+        <div>Anno<span>2024</span></div>
+        <div>Ruolo<span>Character design · Illustrazione · Motion</span></div>
+        <div>Output<span>Telo mare · Sticker · Poster · Shopper </span></div>
+      </div>
+      <div class="project-links">
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni per l'acquisto ↗</a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="project-hero-pack" id="wkz-pack" aria-hidden="true">
+      <div class="wkz-pack-shadow" id="wkz-pack-shadow"></div>
+    </div>
+  </div>
+
+  <section class="project-fullshots">
+    <figure class="fullshot fullshot-contain">
+      <img class="art" src="assets/images/WKZ/CARACTER.jpg" width="6161" height="1912" alt="Character design di Kud Zamb" loading="lazy" decoding="async">
+    </figure>
+    <figure class="fullshot fullshot-contain loupe-zoom">
+      <img class="art" id="wkz-tesi-art" src="assets/images/VITO_CARNIMEO_TESI.JPG" width="7087" height="3898" alt="Vito Mariano Carnimeo — tavola di tesi" loading="lazy" decoding="async">
+      <img class="wkz-tesi-overlay" id="wkz-tesi-soluzioni" src="assets/images/wkz-web/WKZ_SOLUZIONI.jpg" width="7087" height="3898" alt="Tavola di tesi — soluzioni" loading="lazy" decoding="async">
+      <div class="loupe-handle" aria-hidden="true"></div>
+      <div class="loupe-lens" aria-hidden="true"></div>
+    </figure>
+    <div class="wkz-tesi-cta-wrap">
+      <button type="button" class="btn-primary" id="wkz-tesi-toggle" aria-pressed="false">Basta mi arrendo ↗</button>
+    </div>
+    <div class="fullshot-note-wrap">
+      <div class="fullshot-note-track">
+        <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
+        <span class="fullshot-note-sep">•</span>
+        <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="carousel-section dark">
+    <div class="wrap carousel-head">
+      <h2 class="section-title">Prova sul campo</h2>
+      <p>Ho portato il telo con il poster interattivo tra i <strong>passanti</strong>, invitandoli a partecipare al gioco di individuazione dei personaggi.<br>Ho cronometrato i tempi di ciascun partecipante per <strong>analizzare l'efficacia del gioco</strong>, premiando con uno sticker chi riusciva a trovare Nicola in meno di due
+minuti.</p>
+    </div>
+    <div class="carousel carousel-campo" data-carousel>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-01.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 01" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-02.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 02" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-03.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 03" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-04.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 04" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-05.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 05" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-06.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 06" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-07.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 07" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-08.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 08" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-09.jpg" width="6000" height="4000" alt="Trova Nicola per Bari — scatto 09" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-10.jpg" width="5941" height="3961" alt="Trova Nicola per Bari — scatto 10" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-11.jpg" width="2653" height="3979" alt="Trova Nicola per Bari — scatto 11" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-12.jpg" width="3931" height="4914" alt="Trova Nicola per Bari — scatto 12" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-13.jpg" width="3750" height="4687" alt="Trova Nicola per Bari — scatto 13" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-14.jpg" width="3521" height="5282" alt="Trova Nicola per Bari — scatto 14" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="car-btn prev" type="button" aria-label="Foto precedente">‹</button>
+        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">14</span></span>
+        <button class="car-btn next" type="button" aria-label="Foto successiva">›</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="carousel-section">
+    <div class="wrap carousel-head">
+      <h2 class="section-title">Bozzetti & carattere</h2>
+      <p>Una serie di sketch dedicati alla costruzione di Nicola, attraverso espressioni, proporzioni e pose che ne hanno definito progressivamente il carattere e il linguaggio grafico.
+      <br>Gli sketch esplorano i diversi atteggiamenti del protagonista, incarnando l’energia, l’amore e la simpatia dei baresi in un ragazzo apparentemente menefreghista e strafottente, ma in realtà dolce, ironico e profondamente legato alla sua città.</p>
+    </div>
+    <div class="carousel carousel-sketch" data-carousel>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-01.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 01" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-02.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 02" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-03.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 03" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-04.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 04" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-05.jpg" width="1146" height="1146" alt="Sketch di studio del personaggio — 05" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-06.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 06" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-07.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 07" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-08.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 08" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-09.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 09" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-10.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 10" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-11.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 11" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-12.jpg" width="1154" height="1154" alt="Sketch di studio del personaggio — 12" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="car-btn prev" type="button" aria-label="Sketch precedente">‹</button>
+        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">12</span></span>
+        <button class="car-btn next" type="button" aria-label="Sketch successivo">›</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="carousel-section dark">
+    <div class="wrap carousel-head">
+      <h2 class="section-title">Lip-Sync & limited animation</h2>
+      <p>Ho realizzato il character design di Nicola e della sua famiglia, nascosti all’interno del poster.<br>
+          I personaggi sono stati animati con
+          la tecnica della <strong>limited animation</strong>,
+          suddivisi in livelli per un rigging più
+          efficiente e adattati al <strong>Lip-Sync</strong> per
+          un dialogo realistico.</p>
+    </div>
+    <div class="carousel-lipsync wrap">
+      <div class="carousel-lipsync-grid">
+        <figure class="carousel-slide">
+          <video controls preload="metadata" playsinline poster="assets/images/WKZ/ANIMATION/posters/Lip-sync_01_poster.jpg" aria-label="Kud Zamb lip-sync 01">
+            <source src="assets/images/WKZ/ANIMATION/Lip-sync_01.mp4" type="video/mp4">
+          </video>
+        </figure>
+        <figure class="carousel-slide">
+          <video controls preload="metadata" playsinline poster="assets/images/WKZ/ANIMATION/posters/Lip-sync_02_poster.jpg" aria-label="Kud Zamb lip-sync 02">
+            <source src="assets/images/WKZ/ANIMATION/Lip-sync_02.mp4" type="video/mp4">
+          </video>
+        </figure>
+        <figure class="carousel-slide">
+          <video controls preload="metadata" playsinline poster="assets/images/WKZ/ANIMATION/posters/Lip-sync_03_poster.jpg" aria-label="Kud Zamb lip-sync 03">
+            <source src="assets/images/WKZ/ANIMATION/Lip-sync_03.mp4" type="video/mp4">
+          </video>
+        </figure>
+        <figure class="carousel-slide">
+          <video controls preload="metadata" playsinline poster="assets/images/WKZ/ANIMATION/posters/Lip-sync_04_poster.jpg" aria-label="Kud Zamb lip-sync 04">
+            <source src="assets/images/WKZ/ANIMATION/Lip-sync_04.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="carousel-section">
+    <div class="wrap carousel-head">
+      <h2 class="section-title">Lo sticker</h2>
+      <p>Lo sticker doveva suscitare curiosità, così ho deciso di inserire direttamente la domanda, che è anche il titolo del progetto: <strong>“Where’s Kud Zamb?”</strong>. Il lettering rosso e bianco richiama i colori di Bari.<br><br>
+
+Ho scelto di raffigurare sullo sticker il volto di Nicola e il colore della sua maglietta, così da aiutare le persone a riconoscerlo più facilmente nell’illustrazione finale.<br>
+
+Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagram del progetto, dove era possibile vedere l’illustrazione completa.</p>
+    </div>
+    <div class="carousel carousel-sticker" data-carousel>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_01.jpg" width="5118" height="3412" alt="Sticker guerrilla Where's Kud Zamb — 01" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_02.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 02" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_03.jpg" width="5943" height="3962" alt="Sticker guerrilla Where's Kud Zamb — 03" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_04.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 04" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_05.jpg" width="5713" height="3809" alt="Sticker guerrilla Where's Kud Zamb — 05" loading="lazy" decoding="async"></figure>
+          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_06.jpg" width="5692" height="3795" alt="Sticker guerrilla Where's Kud Zamb — 06" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="car-btn prev" type="button" aria-label="Sticker precedente">‹</button>
+        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">06</span></span>
+        <button class="car-btn next" type="button" aria-label="Sticker successivo">›</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="carousel-section dark">
+    <div class="wrap carousel-head packaging-head">
+      <h2 class="section-title">Il packaging </h2>
+      <div class="text-cols">
+        <div class="text-col">
+        <p>Il nuovo merchandising del progetto <strong>"Where's Kud Zamb?"</strong> si arricchisce di un <strong>nuovo packaging</strong>, pensato per rendere l'esperienza ancora più legata al gioco.</p>
+        <p>Il telo è infatti confezionato all'interno di una <strong>busta illustrata che riprende i personaggi da cercare nell'elaborato</strong>, trasformando anche il packaging in parte integrante del progetto e invitando a scoprire chi si nasconde al suo interno.</p>
+        </div>
+        <div class="text-col">
+        <p>Realizzato <strong>Made in Italy</strong> in morbido pile 100%, è un prodotto versatile e certificato <strong>OEKO-TEX</strong> e <strong>Global Organic Textile</strong>, a garanzia di attenzione alla sostenibilità ambientale e sociale.</p>
+        <p>Disponibile da <strong>dicembre 2024</strong>, è il regalo perfetto per portare con sé l'universo di <em>Where's Kud Zamb?</em> e restare al caldo con stile durante l'inverno.</p>
+        </div>
+      </div>
+    </div>
+    <div class="photo-duo-grid">
+      <figure class="is-portrait"><img src="assets/images/wkz-web/foto-finali/foto-fine-01.JPG" width="3835" height="5752" alt="Telo pile Where's Kud Zamb — scatto 01" loading="lazy" decoding="async"></figure>
+      <figure class="is-landscape"><img src="assets/images/wkz-web/foto-finali/foto-fine-02.jpg" width="4740" height="4000" alt="Telo pile Where's Kud Zamb — scatto 02" loading="lazy" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="project-end">
+    <div class="wrap project-end-inner">
+      <h2 class="section-title">Sei interessato all'acquisto?</h2>
+      <p>Teli mare, pile, poster, sticker e altri prodotti sono disponibili.
+Per scoprire quelli disponibili e ricevere maggiori informazioni, contattami.</p>
+      <div class="project-links">
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni ↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Vito Mariano Carnimeo</span>
+  <span>Bari, Italia</span>
+</footer>
+
+<script>
+  (function () {
+    var tile = document.querySelector('.loupe-zoom');
+    var img = tile && tile.querySelector('.art');
+    var lens = tile && tile.querySelector('.loupe-lens');
+    var handle = tile && tile.querySelector('.loupe-handle');
+    if (!tile || !img || !lens || !handle) return;
+
+    var zoomFactor = 1.9;
+
+    function setLensImage() {
+      lens.style.backgroundImage = 'url("' + img.currentSrc + '")';
+    }
+    if (img.complete) setLensImage();
+    img.addEventListener('load', setLensImage);
+
+    var toggle = document.getElementById('wkz-tesi-toggle');
+    var overlay = document.getElementById('wkz-tesi-soluzioni');
+    if (toggle && overlay) {
+      var solved = false;
+      toggle.addEventListener('click', function () {
+        solved = !solved;
+        overlay.classList.toggle('is-visible', solved);
+        toggle.setAttribute('aria-pressed', solved);
+        toggle.textContent = solved ? 'Ricomincio a cercare ↗' : 'Basta mi arrendo ↗';
+        // la lente ingrandisce l'immagine attualmente visibile
+        lens.style.backgroundImage = 'url("' + (solved ? overlay.currentSrc || overlay.src : img.currentSrc) + '")';
+      });
+    }
+
+    tile.addEventListener('mousemove', function (e) {
+      var rect = img.getBoundingClientRect();
+      var lensSize = lens.offsetWidth;
+      var lensRadius = lensSize / 2;
+      var handleThickness = handle.offsetWidth;
+
+      var x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      var y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+
+      lens.style.left = (x - lensRadius) + 'px';
+      lens.style.top = (y - lensRadius) + 'px';
+
+      lens.style.backgroundSize = (rect.width * zoomFactor) + 'px ' + (rect.height * zoomFactor) + 'px';
+      lens.style.backgroundPosition =
+        (-(x * zoomFactor - lensRadius)) + 'px ' +
+        (-(y * zoomFactor - lensRadius)) + 'px';
+
+      // il manico parte esattamente dal bordo del cerchio (centro + raggio
+      // lungo la diagonale a 45°); la parte che ricadrebbe dentro il
+      // cerchio viene coperta dal riempimento opaco della lente sopra di lui
+      var diag = lensRadius * Math.SQRT1_2;
+      handle.style.left = (x + diag - handleThickness / 2) + 'px';
+      handle.style.top = (y + diag) + 'px';
+    });
+  })();
+</script>
+
+</body>
+</html>
