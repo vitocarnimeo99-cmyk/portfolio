@@ -258,9 +258,10 @@
     flex:1;
     -webkit-appearance:none;
     appearance:none;
-    height:4px;
-    border-radius:2px;
-    background: linear-gradient(to right, var(--accent) var(--p,0%), rgba(97,99,198,.2) var(--p,0%));
+    /* Input alto 44px per prenderlo bene col dito; la barra visibile resta
+       di 4px grazie al background limitato in altezza */
+    height:44px;
+    background: linear-gradient(to right, var(--accent) var(--p,0%), rgba(97,99,198,.2) var(--p,0%)) center / 100% 4px no-repeat;
     cursor:pointer;
   }
   .geo-range::-webkit-slider-thumb{
@@ -277,7 +278,11 @@
     background:#fff;
     border:3px solid var(--accent);
   }
-  .geo-range:focus-visible{ outline:2px solid var(--accent); outline-offset:6px; }
+  .geo-range:focus-visible{ outline:2px solid var(--accent); outline-offset:-6px; }
+  @media (hover:none){
+    .geo-range::-webkit-slider-thumb{ width:26px; height:26px; }
+    .geo-range::-moz-range-thumb{ width:20px; height:20px; }
+  }
   .geo-stage{
     position:relative;
     border-radius:24px;
@@ -939,7 +944,7 @@
       </div>
       <div class="project-links">
         <a class="btn-primary btn-site" href="#scarica"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Scarica l'app</a>
-        <a class="btn-ghost" href="https://www.strush.it/" target="_blank" rel="noopener">Visita strush.it ↗</a>
+        <a class="btn-ghost" href="https://www.strush.it/" target="_blank" rel="noopener">Visita strush.it&nbsp;↗</a>
       </div>
     </div>
     <div class="st-hero-art" id="st-hero">
@@ -1226,8 +1231,8 @@
         <h2 class="section-title">I soldi non crescono <em>sugli alberi ;)</em></h2>
         <p>Ma con le app giuste si gestiscono meglio. Strush è una startup nata per rendere l'educazione finanziaria semplice, ironica e alla portata di tutti.</p>
         <div class="project-links">
-          <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="fa-solid fa-globe" aria-hidden="true"></i>Visita strush.it ↗</a>
-          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto ↗</a>
+          <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="fa-solid fa-globe" aria-hidden="true"></i>Visita strush.it&nbsp;↗</a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto&nbsp;↗</a>
           <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
         </div>
       </div>

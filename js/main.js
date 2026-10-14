@@ -12,8 +12,38 @@
     toggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
   };
 
+  // Header fisso su mobile: si nasconde scorrendo verso il basso e ricompare
+  // verso l'alto. Resta visibile in cima alla pagina, a menu aperto, con il
+  // focus da tastiera (non quello lasciato da un tocco) al suo interno e durante lo scroll verso un'ancora del
+  // menu (cosi' la sezione non parte coperta o con un buco sopra).
+  const mobileNav = window.matchMedia('(max-width: 860px)');
+  let lastY = window.scrollY;
+  let ticking = false;
+  let keepVisibleUntil = 0;
+  const updateHeader = () => {
+    ticking = false;
+    const y = Math.max(0, window.scrollY);
+    if (Math.abs(y - lastY) < 6) return;
+    const goingDown = y > lastY;
+    lastY = y;
+    header.classList.toggle('is-hidden',
+      mobileNav.matches && goingDown && y > header.offsetHeight &&
+      !header.classList.contains('is-open') &&
+      !header.querySelector(':focus-visible') &&
+      Date.now() > keepVisibleUntil);
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(updateHeader); }
+  }, { passive: true });
+  header.addEventListener('focusin', (e) => {
+    if (e.target.matches(':focus-visible')) header.classList.remove('is-hidden');
+  });
+
   toggle.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
-  header.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  header.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => {
+    keepVisibleUntil = Date.now() + 1200;
+    setOpen(false);
+  }));
   document.addEventListener('click', (e) => {
     if (header.classList.contains('is-open') && !header.contains(e.target)) setOpen(false);
   });
