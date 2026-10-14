@@ -75,9 +75,9 @@ if ('IntersectionObserver' in window) {
   lazyVideos.forEach(video => video.play().catch(() => {}));
 }
 
-// Rivelazione a cascata dei tile della griglia progetti quando entrano in
+// Rivelazione a cascata dei tile della griglia progetti (e dello sticker) quando entrano in
 // viewport, per dare un effetto più dinamico allo scroll.
-const gridTiles = document.querySelectorAll('.grid .tile');
+const gridTiles = document.querySelectorAll('.grid .tile, .sticker-card');
 if (gridTiles.length) {
   if ('IntersectionObserver' in window) {
     const tileObserver = new IntersectionObserver((entries, obs) => {
@@ -106,13 +106,13 @@ document.querySelectorAll('.zoom-tile').forEach(tile => {
   });
 });
 
-// Tilt 3D delle card progetto in home, come la copertina di K-Way: la card
+// Tilt 3D delle card progetto in home (e dello sticker nei contatti), come la copertina di K-Way: la card
 // si inclina verso il cursore e il riflesso lucido lo segue. Interpolazione
 // con requestAnimationFrame, che si ferma da sola quando la card è ferma.
 if (window.matchMedia('(hover: hover)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.grid .tile').forEach(tile => {
-    const frame = tile.querySelector('.tile-frame');
+  document.querySelectorAll('.grid .tile, .sticker-card').forEach(tile => {
+    const frame = tile.querySelector('.tile-frame, .sticker-frame');
     if (!frame) return;
     const maxTilt = 7;
     const current = { rx: 0, ry: 0, tz: 0, gx: 50, gy: 30 };

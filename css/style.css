@@ -491,13 +491,14 @@ h2.section-title em.semibold{
 .skills-list li{
   display:flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline; /* titolo allineato alla prima riga della descrizione */
   padding: 16px 0;
   border-bottom: 1px solid var(--line);
   font-size: 0.98rem;
 }
 .skills-list li .l{ color: var(--ink-soft); }
 .skills-list li span:last-child{ text-align: right; }
+.skills-list li:has(.software-icons){ align-items: center; }
 
 .software-icons{
   display:flex;
@@ -1272,28 +1273,6 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .home-head .section-title{ margin:0; }
 .home-head p{ margin:0; max-width:40ch; color: var(--ink-soft); font-size:1.02rem; }
 
-/* -------- Bollino tondo (come in Iterum / K-Way) -------- */
-.home-badge{
-  position:absolute;
-  width:108px; height:108px;
-  display:flex; align-items:center; justify-content:center;
-  text-align:center;
-  padding:10px;
-  border-radius:50%;
-  background: var(--pop);
-  color: var(--ink);
-  font-weight:700;
-  font-size:0.7rem;
-  line-height:1.25;
-  text-transform:uppercase;
-  letter-spacing:0.02em;
-  border:3px dashed rgba(23,20,15,.35);
-  box-shadow:0 10px 24px rgba(0,0,0,.25);
-  transition: transform .7s ease;
-  pointer-events:none;
-  z-index:3;
-}
-
 /* -------- In evidenza: la tesi diventa uno sticker -------- */
 .featured-media{
   border:7px solid #fff;
@@ -1337,6 +1316,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .skills-list li .l{ font-weight:700; color: var(--ink); }
 @media (max-width: 520px){
   .skills-list li{ gap:2px; }
+  .br-desk{ display:none; } /* a capo solo su desktop */
 }
 .skills-list li span:last-child{ color: var(--ink-soft); }
 
@@ -1355,7 +1335,70 @@ section.contact::before{
   background: radial-gradient(55% 80% at 85% 20%, rgba(59,75,153,.45), transparent 70%);
   pointer-events:none;
 }
-.contact-inner{ position:relative; }
+.contact-inner{
+  --sticker-w: clamp(200px, 20vw, 260px);
+  position:relative;
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) var(--sticker-w);
+  column-gap: 56px;
+  align-items:stretch;
+}
+/* Testi a sinistra alti quanto la colonna dello sticker: lo stato parte
+   all'altezza dello sticker e l'email cade alla stessa altezza dei social */
+.contact-main{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+/* Colonna destra: sticker con sotto i social */
+.contact-aside{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:32px;
+}
+
+/* Sticker VITQ: card sagomata sul PNG, con tilt e riflesso come le card progetto */
+.sticker-card{
+  --c: var(--pop);
+  width:100%;
+  perspective: 1200px;
+  opacity: 0;
+  position:relative;
+  transform: translateY(28px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.sticker-card.is-visible{ opacity:1; transform: none; }
+.sticker-frame{
+  position:relative;
+  transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px));
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.35));
+  transition: filter .4s ease;
+  will-change: transform;
+}
+.sticker-card:hover .sticker-frame{
+  filter: drop-shadow(0 30px 34px rgba(0,0,0,.45)) drop-shadow(0 0 2px var(--c)) drop-shadow(0 0 16px color-mix(in srgb, var(--c) 45%, transparent));
+}
+.sticker-frame img{ display:block; width:100%; height:auto; }
+/* Riflesso lucido ritagliato sulla sagoma dello sticker */
+.sticker-frame::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 45%);
+  -webkit-mask: url("../assets/images/VITQ_STICKER.png") center / 100% 100% no-repeat;
+          mask: url("../assets/images/VITQ_STICKER.png") center / 100% 100% no-repeat;
+  opacity:0;
+  transition: opacity .35s ease;
+  pointer-events:none;
+}
+.sticker-card:hover .sticker-frame::after{ opacity:1; }
+@media (hover: none){
+  .sticker-card:hover .sticker-frame{ filter: drop-shadow(0 18px 22px rgba(0,0,0,.35)); }
+  .sticker-card:hover .sticker-frame::after{ opacity:0; }
+}
 .contact h2.section-title{
   color: var(--paper);
   font-size: clamp(2.2rem, 5.4vw, 4.2rem);
@@ -1370,16 +1413,14 @@ section.contact::before{
 .contact-row .big{ color: var(--paper); border-color: rgba(247,245,240,.5); }
 .contact-row .big .arrow{ color: var(--pop); }
 .contact-row .big:hover{ color: var(--pop); border-color: var(--pop); }
-.contact .social a{ color: var(--paper); border-color: rgba(247,245,240,.25); }
+.contact .social a{ width:56px; height:56px; font-size:1.6rem; color: var(--paper); border-color: rgba(247,245,240,.25); }
+.contact-social{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+.contact-social-label{ font-size:0.85rem; color: rgba(247,245,240,.7); letter-spacing:0.01em; }
 .contact .social a:hover{ color: var(--ink); background-color: var(--pop); border-color: var(--pop); }
-.contact-badge{
-  top:-10px; right:40px;
-  transform: rotate(14deg);
-}
-.contact-inner:hover .contact-badge{ transform: rotate(374deg); }
 @media (max-width: 860px){
-  .contact-badge{ top:-28px; right:20px; width:92px; height:92px; font-size:0.66rem; }
-  .contact h2.section-title{ padding-right:80px; }
+  .contact-inner{ grid-template-columns: minmax(0, 1fr); }
+  .contact-aside{ margin-top:48px; }
+  .sticker-card{ width: min(180px, 50vw); }
 }
 @media (max-width: 640px){
   section.contact{ padding:64px 0; }
@@ -1388,5 +1429,5 @@ section.contact::before{
 /* Il footer ha anche .wrap, che ne azzerava il padding verticale */
 .home footer.wrap{ padding-top:30px; padding-bottom:40px; }
 @media (prefers-reduced-motion: reduce){
-  .home-badge{ transition:none; }
+  .sticker-card{ transition:none; opacity:1; transform:none; }
 }
