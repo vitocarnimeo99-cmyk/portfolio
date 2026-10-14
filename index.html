@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 </head>
-<body>
+<body class="home">
 
 <header>
   <nav class="wrap">
@@ -28,6 +28,7 @@
     <div class="hero-lanyard" id="lanyard" aria-hidden="true"></div>
     <div class="hero-flex wrap">
       <div class="hero-text">
+        <span class="home-eyebrow">Graphic designer &amp; illustratore — Bari</span>
         <h1>Disegno identità che <em>restano</em> impresse.</h1>
         <p>Dall’identità di un brand a un’illustrazione, da una grafica a un’animazione, fino al design di un sito web.<br>Creo immagini e sistemi visivi pensati per comunicare, sorprendere e farsi ricordare.</p>
         <div class="meta">
@@ -35,119 +36,157 @@
           <div>Ambiti<span>Brand · Editoria · Illustrazione</span></div>
           <div>Base<span>Bari, IT</span></div>
         </div>
+        <div class="project-links hero-links">
+          <a class="btn-primary" href="#lavori">Guarda i lavori&nbsp;↓</a>
+          <a class="btn-ghost" href="#contatti">Parliamone</a>
+          <a class="btn-icon" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+        </div>
       </div>
     </div>
   </div>
 
-<div class="ticker-wrap">
+<div class="ticker-wrap home-ticker">
   <div class="ticker">
     <span class="ticker-item">Scopri i miei lavori e lasciati ispirare</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
     <span class="ticker-item">Hai un progetto in mente? Parliamone</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
     <span class="ticker-item">Hai bisogno di una nuova identità? Sono qui per aiutarti</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
     <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
     <span class="ticker-item">Scopri i miei lavori e lasciati ispirare</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
     <span class="ticker-item">Hai un progetto in mente? Parliamone</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
     <span class="ticker-item">Hai bisogno di una nuova identità? Sono qui per aiutarti</span>
-    <span class="ticker-sep">*</span>
+    <span class="ticker-sep">✦</span>
   </div>
 </div>
 
   <section id="lavori">
     <div class="wrap">
-      <h2 class="section-title">Progetti recenti</h2>
+      <div class="home-head">
+        <div>
+          <span class="home-eyebrow">Portfolio — 2020 / 2026</span>
+          <h2 class="section-title">Progetti <em>recenti</em></h2>
+        </div>
+        <p>Branding, illustrazione, campagne ed eventi: ogni progetto ha il suo mondo e la sua palette. <span class="hint-mouse">Passa sopra le card per scoprirle.</span><span class="hint-touch">Tocca una card per aprire il progetto.</span></p>
+      </div>
       <div class="grid">
-        <a class="tile" href="progetto-contadini.html">
-          <video class="art" id="contadini-video" width="1600" height="900" aria-label="I Contadini" muted loop playsinline preload="metadata"
-             data-src-default="assets/video/ICONTADINI01.mp4"
-             data-src-hover="assets/video/ICONTADINI02.mp4">
-            <source src="assets/video/ICONTADINI01.mp4" type="video/mp4">
-          </video>
-          <div class="cap"><span class="name">I Contadini</span><span class="type">ADV - PED - VIDEO EDITING - BRANDING</span></div>
+        <a class="tile" href="progetto-contadini.html" style="--c:#9A6229">
+          <div class="tile-frame">
+            <video class="art" id="contadini-video" width="1600" height="900" aria-label="I Contadini" muted loop playsinline preload="metadata"
+               data-src-default="assets/video/ICONTADINI01.mp4"
+               data-src-hover="assets/video/ICONTADINI02.mp4">
+              <source src="assets/video/ICONTADINI01.mp4" type="video/mp4">
+            </video>
+            <span class="tile-year">2025</span>
+          </div>
+          <div class="cap"><span class="num">01</span><span class="name">I Contadini</span><span class="type">ADV - PED - VIDEO EDITING - BRANDING</span></div>
         </a>
-        <a class="tile" href="progetto-iterum.html">
-           <img class="art"
-             src="assets/images/ITERUM01.JPG"
-             width="1080" height="1350"
-             alt="Iterum – Apulian Electronic Monday, Orto Botanico Bari"
-             fetchpriority="high" decoding="async"
-             data-cycle-prefix="assets/images/ITERUM0"
-             data-cycle-ext=".JPG"
-             data-cycle-frames="4">
-           <div class="cap"><span class="name">Iterum</span><span class="type">POSTER - EVENT</span></div>
+        <a class="tile" href="progetto-iterum.html" style="--c:#3F6B3D">
+          <div class="tile-frame">
+             <img class="art"
+               src="assets/images/ITERUM01.JPG"
+               width="1080" height="1350"
+               alt="Iterum – Apulian Electronic Monday, Orto Botanico Bari"
+               fetchpriority="high" decoding="async"
+               data-cycle-prefix="assets/images/ITERUM0"
+               data-cycle-ext=".JPG"
+               data-cycle-frames="4">
+            <span class="tile-year">2025</span>
+          </div>
+          <div class="cap"><span class="num">02</span><span class="name">Iterum</span><span class="type">POSTER - EVENT</span></div>
         </a>
-        <a class="tile" href="progetto-karaoke.html">
-          <img class="art"
-             src="assets/images/KARAOKE01.jpg"
-             width="1146" height="1146"
-             alt="Karaoke Dinner – In Your Shoes × Fondazione Burro Studio"
-             loading="lazy" decoding="async"
-             data-cycle-prefix="assets/images/KARAOKE0"
-             data-cycle-ext=".jpg"
-             data-cycle-frames="3">
-          <div class="cap"><span class="name">InYourShoes</span><span class="type">Karaoke Dinner</span></div>
+        <a class="tile" href="progetto-karaoke.html" style="--c:#D8322A">
+          <div class="tile-frame">
+            <img class="art"
+               src="assets/images/KARAOKE01.jpg"
+               width="1146" height="1146"
+               alt="Karaoke Dinner – In Your Shoes × Fondazione Burro Studio"
+               loading="lazy" decoding="async"
+               data-cycle-prefix="assets/images/KARAOKE0"
+               data-cycle-ext=".jpg"
+               data-cycle-frames="3">
+            <span class="tile-year">2023</span>
+          </div>
+          <div class="cap"><span class="num">03</span><span class="name">InYourShoes</span><span class="type">Karaoke Dinner</span></div>
         </a>
-        <a class="tile" href="progetto-kway.html">
-          <img class="art"
-             src="assets/images/KWAY01.jpg"
-             width="1146" height="1146"
-             alt="K-Way – Porta Borsari VR"
-             loading="lazy" decoding="async"
-             data-cycle-prefix="assets/images/KWAY0"
-             data-cycle-ext=".jpg"
-             data-cycle-frames="5">
-          <div class="cap"><span class="name">K-Way</span><span class="type">Porta Borsari - VR</span></div>
+        <a class="tile" href="progetto-kway.html" style="--c:#2347C4">
+          <div class="tile-frame">
+            <img class="art"
+               src="assets/images/KWAY01.jpg"
+               width="1146" height="1146"
+               alt="K-Way – Porta Borsari VR"
+               loading="lazy" decoding="async"
+               data-cycle-prefix="assets/images/KWAY0"
+               data-cycle-ext=".jpg"
+               data-cycle-frames="5">
+            <span class="tile-year">2024</span>
+          </div>
+          <div class="cap"><span class="num">04</span><span class="name">K-Way</span><span class="type">Porta Borsari - VR</span></div>
         </a>
-        <a class="tile" href="progetto-shallo.html">
-          <img class="art"
-             src="assets/images/SHALLO01.jpg"
-             width="1146" height="1146"
-             alt="Shallo – Poster serigrafico"
-             loading="lazy" decoding="async"
-             data-cycle-prefix="assets/images/SHALLO0"
-             data-cycle-ext=".jpg"
-             data-cycle-frames="6">
-          <div class="cap"><span class="name">Shallo</span><span class="type">Beer Shop - event</span></div>
+        <a class="tile" href="progetto-shallo.html" style="--c:#5A2AA0">
+          <div class="tile-frame">
+            <img class="art"
+               src="assets/images/SHALLO01.jpg"
+               width="1146" height="1146"
+               alt="Shallo – Poster serigrafico"
+               loading="lazy" decoding="async"
+               data-cycle-prefix="assets/images/SHALLO0"
+               data-cycle-ext=".jpg"
+               data-cycle-frames="6">
+            <span class="tile-year">2022</span>
+          </div>
+          <div class="cap"><span class="num">05</span><span class="name">Shallo</span><span class="type">Beer Shop - event</span></div>
         </a>
-        <a class="tile" href="progetto-strush.html">
-          <video class="art" width="1280" height="720" aria-label="Strush – Personal finance app" muted loop playsinline preload="metadata">
-            <source src="assets/video/strush_logo.mp4" type="video/mp4">
-          </video>
-          <div class="cap"><span class="name">Strush</span><span class="type">Personal finance app</span></div>
+        <a class="tile" href="progetto-strush.html" style="--c:#6163C6">
+          <div class="tile-frame">
+            <video class="art" width="1280" height="720" aria-label="Strush – Personal finance app" muted loop playsinline preload="metadata">
+              <source src="assets/video/strush_logo.mp4" type="video/mp4">
+            </video>
+            <span class="tile-year">2025</span>
+          </div>
+          <div class="cap"><span class="num">06</span><span class="name">Strush</span><span class="type">Personal finance app</span></div>
         </a>
-        <a class="tile" href="progetto-paninopoli.html">
-          <img class="art"
-             src="assets/images/PANINOPOLI01.jpg"
-             width="1170" height="1161"
-             alt="Paninopoli – Locandina Panini Mashup"
-             loading="lazy" decoding="async"
-             data-cycle-prefix="assets/images/PANINOPOLI0"
-             data-cycle-ext=".jpg"
-             data-cycle-frames="5">
-          <div class="cap"><span class="name">Paninopoli</span><span class="type">FESTIVAL COMUNICATION</span></div>
+        <a class="tile" href="progetto-paninopoli.html" style="--c:#E32227">
+          <div class="tile-frame">
+            <img class="art"
+               src="assets/images/PANINOPOLI01.jpg"
+               width="1170" height="1161"
+               alt="Paninopoli – Locandina Panini Mashup"
+               loading="lazy" decoding="async"
+               data-cycle-prefix="assets/images/PANINOPOLI0"
+               data-cycle-ext=".jpg"
+               data-cycle-frames="5">
+            <span class="tile-year">2023</span>
+          </div>
+          <div class="cap"><span class="num">07</span><span class="name">Paninopoli</span><span class="type">FESTIVAL COMUNICATION</span></div>
         </a>
-        <a class="tile" href="progetto-hiv.html">
-          <img class="art"
-             src="assets/images/I CAN’T GIVE YOU HIV_01.jpg"
-             width="1715" height="1158"
-             alt="CAN’T GIVE YOU HIV"
-             loading="lazy" decoding="async"
-             data-cycle-prefix="assets/images/I CAN’T GIVE YOU HIV_0"
-             data-cycle-ext=".jpg"
-             data-cycle-frames="2">
-          <div class="cap"><span class="name">CAN’T GIVE YOU HIV</span><span class="type">Progetto</span></div>
+        <a class="tile" href="progetto-hiv.html" style="--c:#C8221E">
+          <div class="tile-frame">
+            <img class="art"
+               src="assets/images/I CAN’T GIVE YOU HIV_01.jpg"
+               width="1715" height="1158"
+               alt="CAN’T GIVE YOU HIV"
+               loading="lazy" decoding="async"
+               data-cycle-prefix="assets/images/I CAN’T GIVE YOU HIV_0"
+               data-cycle-ext=".jpg"
+               data-cycle-frames="2">
+            <span class="tile-year">2020</span>
+          </div>
+          <div class="cap"><span class="num">08</span><span class="name">CAN’T GIVE YOU HIV</span><span class="type">Progetto</span></div>
         </a>
-        <a class="tile" href="progetto-raf40.html">
-          <video class="art" width="720" height="1280" aria-label="Raf 40 – Sugar Music" muted loop playsinline preload="metadata">
-            <!-- Su mobile la card è 4:5: versione dedicata, con il 9:16 i testi venivano tagliati -->
-            <source src="assets/video/RAF_40_Versione_Mobile.mp4" type="video/mp4" media="(max-width: 820px)">
-            <source src="assets/video/RAF_40.mp4" type="video/mp4">
-          </video>
-          <div class="cap"><span class="name">Raf 40</span><span class="type">Sugar Music</span></div>
+        <a class="tile" href="progetto-raf40.html" style="--c:#00579C">
+          <div class="tile-frame">
+            <video class="art" width="720" height="1280" aria-label="Raf 40 – Sugar Music" muted loop playsinline preload="metadata">
+              <!-- Su mobile la card è 4:5: versione dedicata, con il 9:16 i testi venivano tagliati -->
+              <source src="assets/video/RAF_40_Versione_Mobile.mp4" type="video/mp4" media="(max-width: 820px)">
+              <source src="assets/video/RAF_40.mp4" type="video/mp4">
+            </video>
+            <span class="tile-year">2024</span>
+          </div>
+          <div class="cap"><span class="num">09</span><span class="name">Raf 40</span><span class="type">Sugar Music</span></div>
         </a>
       </div>
     </div>
@@ -162,8 +201,8 @@
           <p class="featured-lead">Un gioco di ricerca ambientato a <strong>Bari</strong>: trova Nicola, ragazzo sbruffone dal cuore tenero, e la sua famiglia in un poster interattivo ricco di dettagli. Illustrazione, animazione e merchandising per raccontare l'ironia di una città.</p>
         </div>
         <a class="featured-media zoom-tile" href="progetto-wkz.html" aria-label="Apri il progetto Where's Kud Zamb?">
-          <img class="art" src="assets/images/VITO_CARNIMEO_TESI.jpg" width="7087" height="3898" alt="Where's Kud Zamb - progetto di tesi" loading="lazy" decoding="async">
-          <span class="featured-stamp" aria-hidden="true">Premiato</span>
+          <span class="featured-clip"><img class="art" src="assets/images/VITO_CARNIMEO_TESI.jpg" width="7087" height="3898" alt="Where's Kud Zamb - progetto di tesi" loading="lazy" decoding="async"></span>
+          <span class="home-badge featured-badge" aria-hidden="true">Tesi<br>premiata</span>
         </a>
         <a class="featured-cta" href="progetto-wkz.html">Scopri il progetto <span aria-hidden="true">→</span></a>
       </div>
@@ -189,12 +228,13 @@
     <div class="wrap">
       <div class="about-grid">
         <div>
-          <h2 class="section-title">Chi sono</h2>
+          <span class="home-eyebrow">Chi sono</span>
+          <h2 class="section-title">Riflessivo, ironico, <em>sempre in squadra.</em></h2>
           <p>Sono un ragazzo riflessivo e ironico; mi piace stare in compagnia, pertanto prediligo <strong>l’efficace lavoro di squadra</strong> per confrontarmi al meglio con gli altri e
 scoprire cose sempre nuove.</p>
           <p>Nel mio tempo libero coltivo diverse passioni , tra cui il <strong>disegno</strong>, la <strong>fotografia
 analogica</strong> e la <strong>musica</strong>, in particolare suonando la tastiera e l’ukulele.</p>
-          <a class="cv-cta" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il CV</a>
+          <a class="btn-primary cv-cta" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il CV&nbsp;↓</a>
         </div>
         <div class="skills">
           <ul class="skills-list">
@@ -218,8 +258,10 @@ analogica</strong> e la <strong>musica</strong>, in particolare suonando la tast
   </section>
 
   <section id="contatti" class="contact">
-    <div class="wrap">
+    <div class="wrap contact-inner">
+      <span class="home-badge contact-badge" aria-hidden="true">Bari<br>×<br>ovunque</span>
       <span class="contact-status"><i class="dot"></i>Disponibile per nuovi progetti</span>
+      <h2 class="section-title">Hai un progetto in mente? <em>Parliamone.</em></h2>
       <div class="contact-row">
         <a class="big" href="mailto:vitocarnimeo99@gmail.com">vitocarnimeo99@gmail.com<span class="arrow" aria-hidden="true">↗</span></a>
         <ul class="social">

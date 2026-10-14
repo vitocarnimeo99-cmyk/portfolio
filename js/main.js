@@ -107,6 +107,59 @@ document.querySelectorAll('.zoom-tile').forEach(tile => {
   });
 });
 
+// Tilt 3D delle card progetto in home, come la copertina di K-Way: la card
+// si inclina verso il cursore e il riflesso lucido lo segue. Interpolazione
+// con requestAnimationFrame, che si ferma da sola quando la card è ferma.
+if (window.matchMedia('(hover: hover)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.grid .tile').forEach(tile => {
+    const frame = tile.querySelector('.tile-frame');
+    if (!frame) return;
+    const maxTilt = 7;
+    const current = { rx: 0, ry: 0, tz: 0, gx: 50, gy: 30 };
+    const target = { rx: 0, ry: 0, tz: 0, gx: 50, gy: 30 };
+    let rect = null;
+    let rafId = null;
+
+    const tick = () => {
+      let delta = 0;
+      for (const key in current) {
+        const next = current[key] + (target[key] - current[key]) * 0.14;
+        delta += Math.abs(next - current[key]);
+        current[key] = next;
+      }
+      frame.style.setProperty('--rx', current.rx.toFixed(2) + 'deg');
+      frame.style.setProperty('--ry', current.ry.toFixed(2) + 'deg');
+      frame.style.setProperty('--tz', current.tz.toFixed(1) + 'px');
+      frame.style.setProperty('--gx', current.gx.toFixed(1) + '%');
+      frame.style.setProperty('--gy', current.gy.toFixed(1) + '%');
+      rafId = delta > 0.02 ? requestAnimationFrame(tick) : null;
+    };
+    const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+
+    tile.addEventListener('mouseenter', () => {
+      rect = frame.getBoundingClientRect();
+      target.tz = 18;
+      start();
+    });
+    tile.addEventListener('mousemove', (e) => {
+      if (!rect) rect = frame.getBoundingClientRect();
+      const px = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+      const py = Math.min(Math.max((e.clientY - rect.top) / rect.height, 0), 1);
+      target.rx = (0.5 - py) * maxTilt * 2;
+      target.ry = (px - 0.5) * maxTilt * 2;
+      target.gx = px * 100;
+      target.gy = py * 100;
+      start();
+    });
+    tile.addEventListener('mouseleave', () => {
+      rect = null;
+      Object.assign(target, { rx: 0, ry: 0, tz: 0 });
+      start();
+    });
+  });
+}
+
 // Dispositivi senza mouse (telefoni, tablet): lì mouseover/mouseout vengono
 // simulati al tocco, subito prima di aprire il link, quindi gli effetti al
 // passaggio del mouse non si vedrebbero mai (o resterebbero "incollati").

@@ -303,63 +303,90 @@ h2.section-title em.semibold{
   }
 }
 
-/* -------- Work grid -------- */
+/* -------- Work grid --------
+   Ogni card è uno "sticker" come le copertine delle pagine progetto: bordo
+   bianco, angoli morbidi, tilt 3D che segue il mouse (main.js) e bagliore nel
+   colore d'accento della pagina interna (--c, impostato inline nel markup). */
 .grid{
   display:grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 22px;
-  counter-reset: tile;
+  gap: 48px 28px;
+  align-items: start;
 }
 .tile{
+  --c: var(--accent);
   position:relative;
-  overflow:hidden;
-  border-radius: 8px;
-  aspect-ratio: 4/5;
   cursor: pointer;
-  counter-increment: tile;
+  perspective: 1200px;
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
 }
 .tile.is-visible{
   opacity: 1;
   transform: translateY(0);
 }
-.tile:hover{
-  box-shadow: 0 0 25px 8px var(--accent-soft), 0 0 9px 2px rgba(59,75,153,.35);
+.tile-frame{
+  position:relative;
+  overflow:hidden;
+  border-radius: 16px;
+  border: 6px solid #fff;
+  background: var(--paper-dim);
+  aspect-ratio: 4/5;
+  box-shadow: 0 18px 40px -18px rgba(23,20,15,.35);
+  transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px));
+  transform-style: preserve-3d;
+  transition: box-shadow .4s ease;
+  will-change: transform;
 }
-.tile.is-visible:hover{
-  transform: translateY(-6px);
+.tile:hover .tile-frame{
+  box-shadow: 0 30px 60px -20px rgba(23,20,15,.4), 0 0 0 2px var(--c), 0 0 28px 4px color-mix(in srgb, var(--c) 35%, transparent);
 }
-.tile::before{
-  content: counter(tile, decimal-leading-zero);
-  position:absolute;
-  top:16px; left:16px;
+/* Riflesso lucido che segue il cursore */
+.tile-frame::after{
+  content:"";
+  position:absolute; inset:0;
   z-index:2;
-  font-size:0.74rem;
-  font-weight:700;
-  letter-spacing:.04em;
-  color:#F7F5F0;
-  background: rgba(23,20,15,.4);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  padding: 5px 10px;
-  border-radius: 999px;
+  background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.25) 0%, rgba(255,255,255,0) 45%);
   opacity:0;
-  transform: translateY(-6px);
-  transition: opacity .25s ease, transform .25s ease;
+  transition: opacity .35s ease;
   pointer-events:none;
 }
-.tile:hover::before{ opacity:1; transform:translateY(0); }
-.tile:nth-child(1){ grid-column: span 4; aspect-ratio: 18/10; }
-.tile:nth-child(2){ grid-column: span 2; aspect-ratio: 16/20; }
-.tile:nth-child(3){ grid-column: span 2; aspect-ratio: 16/16; }
-.tile:nth-child(4){ grid-column: span 2; aspect-ratio: 16/16; }
-.tile:nth-child(5){ grid-column: span 2; aspect-ratio: 16/16; }
-.tile:nth-child(6){ grid-column: span 4; aspect-ratio: 16/9; }
-.tile:nth-child(7){ grid-column: span 2; aspect-ratio: 16/16; }
-.tile:nth-child(8){ grid-column: span 4; aspect-ratio: 16/9; }
-.tile:nth-child(9){ grid-column: span 2; aspect-ratio: 9/16; }
+.tile:hover .tile-frame::after{ opacity:1; }
+
+/* Anno: pillola nel colore del progetto, come i tag delle pagine interne */
+.tile-year{
+  position:absolute;
+  top:14px; right:14px;
+  z-index:3;
+  padding:5px 11px;
+  border-radius:999px;
+  background: var(--c);
+  color:#fff;
+  font-size:0.72rem;
+  font-weight:700;
+  letter-spacing:0.04em;
+  pointer-events:none;
+  transform: rotate(4deg);
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+}
+.tile:hover .tile-year{ transform: rotate(-6deg) scale(1.08); }
+
+.tile:nth-child(1){ grid-column: span 4; }
+.tile:nth-child(1) .tile-frame{ aspect-ratio: 18/10; }
+.tile:nth-child(2){ grid-column: span 2; }
+.tile:nth-child(2) .tile-frame{ aspect-ratio: 16/20; }
+.tile:nth-child(3), .tile:nth-child(4),
+.tile:nth-child(5), .tile:nth-child(7){ grid-column: span 2; }
+.tile:nth-child(3) .tile-frame, .tile:nth-child(4) .tile-frame,
+.tile:nth-child(5) .tile-frame, .tile:nth-child(7) .tile-frame{ aspect-ratio: 1/1; }
+.tile:nth-child(6), .tile:nth-child(8){ grid-column: span 4; }
+.tile:nth-child(6) .tile-frame, .tile:nth-child(8) .tile-frame{ aspect-ratio: 16/9; }
+.tile:nth-child(9){ grid-column: span 2; }
+.tile:nth-child(9) .tile-frame{ aspect-ratio: 9/16; }
+/* Sfalsamento come i due scatti di K-Way: la card centrale della riga di
+   quadrati scende un po', la griglia sembra impaginata a mano */
+.tile:nth-child(4){ margin-top: 56px; }
 
 .zoom-tile {
   overflow: hidden; /* impedisce all'immagine ingrandita di uscire dal box */
@@ -375,12 +402,12 @@ h2.section-title em.semibold{
 }
 
 /* Su touch l'hover viene simulato al tocco e resta "incollato" finché non si
-   tocca altrove: niente zoom 2x, niente tile sollevato o ingrandito. Le
-   immagini dei tile su touch scorrono da sole (vedi main.js). */
+   tocca altrove: niente zoom 2x, niente tile ingrandito. Le immagini dei tile
+   su touch scorrono da sole (vedi main.js). */
 @media (hover: none){
   .zoom-tile:hover .art{ transform: none; }
-  .tile:hover{ box-shadow: none; }
-  .tile.is-visible:hover{ transform: translateY(0); }
+  .tile:hover .tile-frame{ box-shadow: 0 18px 40px -18px rgba(23,20,15,.35); }
+  .tile:hover .tile-frame::after{ opacity:0; }
   .grid .tile:hover .art{ transform: none; }
 }
 
@@ -397,57 +424,46 @@ h2.section-title em.semibold{
 /* Livello della dissolvenza tra le immagini dei tile su touch (vedi main.js) */
 .tile .art.cycle-fade{ opacity:0; pointer-events:none; }
 .grid .tile:hover .art{
-  transform: scale(1.07);
+  transform: scale(1.06);
 }
+
+/* Didascalia sotto la card, come le figcaption numerate delle pagine progetto */
 .tile .cap{
-  position:absolute;
-  left:0; right:0; bottom:0;
-  padding: 20px 22px;
   display:flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
-  background: linear-gradient(to top, rgba(23,20,15,.75) 0%, rgba(23,20,15,.25) 55%, rgba(23,20,15,0) 100%);
-  color: #F7F5F0;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity .3s ease, transform .3s ease;
-  z-index: 1;
+  align-items:baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  transition: border-color .3s ease;
 }
-.tile:hover .cap{ opacity:1; transform: translateY(0); }
-.cap .name{ font-weight: 700; font-size: 1.08rem; letter-spacing: -0.01em; }
+.tile:hover .cap{ border-color: var(--c); }
+.cap .num{ font-weight:700; color: var(--c); font-size:0.95rem; font-variant-numeric: tabular-nums; }
+.cap .name{ font-weight: 700; font-size: 1.08rem; letter-spacing: -0.01em; transition: color .25s ease; }
+.tile:hover .cap .name{ color: var(--c); }
 .cap .type{
-  flex: 0 0 auto;
-  font-size: 0.72rem;
+  margin-left: auto;
+  font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: .06em;
-  border: 1px solid rgba(247,245,240,.45);
-  padding: 5px 11px;
-  border-radius: 999px;
-  white-space: nowrap;
+  letter-spacing: .05em;
+  color: var(--ink-soft);
+  text-align: right;
 }
 
 @media (max-width: 820px){
-  /* Tutte le card a tutta larghezza, ognuna con le proprie proporzioni:
-     a mezza larghezza le didascalie delle quadrate non ci stavano. */
-  .grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .tile:nth-child(1){ grid-column: span 2; aspect-ratio: 18/10; }
-  .tile:nth-child(2){ grid-column: span 2; aspect-ratio: 4/5; }
-  .tile:nth-child(3), .tile:nth-child(4),
-  .tile:nth-child(5), .tile:nth-child(7){ grid-column: span 2; aspect-ratio: 1/1; }
-  .tile:nth-child(6), .tile:nth-child(8){ grid-column: span 2; aspect-ratio: 16/9; }
+  /* Tutte le card a tutta larghezza, ognuna con le proprie proporzioni */
+  .grid{ grid-template-columns: 1fr; gap: 36px; }
+  .grid .tile{ grid-column: auto; margin-top: 0; }
   /* Raf 40: in 9:16 a tutta larghezza era alta quasi due schermate */
-  .tile:nth-child(9){ grid-column: span 2; aspect-ratio: 4/5; }
-  .tile::before,
-  .tile .cap{
-    opacity: 1;
-    transform: none;
-  }
-  .tile .cap{
-    padding: 16px;
-  }
-  .cap .name{ font-size: 0.98rem; }
+  .tile:nth-child(2) .tile-frame,
+  .tile:nth-child(9) .tile-frame{ aspect-ratio: 4/5; }
+  .tile-frame{ border-width: 5px; border-radius: 14px; }
+  .tile .cap{ margin-top: 14px; padding-top: 12px; }
+  .cap .name{ font-size: 1rem; }
+  /* Il tipo va sotto al nome, allineato a sinistra: a destra veniva spezzato */
+  .cap .type{ flex-basis: 100%; margin-left: 0; text-align: left; font-size: 0.72rem; }
 }
 
 /* -------- About -------- */
@@ -465,18 +481,7 @@ h2.section-title em.semibold{
 }
 .about-grid p strong{ color: var(--ink); font-weight: 700; }
 
-.cv-cta{
-  display:inline-flex; align-items:center; gap:10px;
-  margin-top:16px;
-  padding:14px 26px;
-  background: var(--ink); color: var(--paper);
-  font-weight:700; border-radius:999px;
-  transition: transform .25s ease, background .25s ease;
-}
-.cv-cta:hover{ background: var(--accent); transform: translateY(-2px); }
-@media (prefers-reduced-motion: reduce){
-  .cv-cta{ transition:none; }
-}
+.cv-cta{ margin-top:16px; }
 
 .skills-list{
   list-style: none;
@@ -637,8 +642,8 @@ a:focus-visible, button:focus-visible{
 
 @media (prefers-reduced-motion: reduce){
   .hero{ animation: none; opacity:1; transform:none; }
-  .tile{ transition: box-shadow .35s ease; opacity:1; transform:none; }
-  .tile .cap, .tile .art{ transition:none; }
+  .tile{ transition:none; opacity:1; transform:none; }
+  .tile .cap, .tile .art, .tile-frame, .tile-year{ transition:none; }
   .contact-status .dot{ animation: none; }
 }
 
@@ -1136,16 +1141,6 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   transform: rotate(0deg);
   box-shadow: 0 30px 70px -20px rgba(2,121,160,.6), 0 0 0 1px rgba(255,255,255,.15);
 }
-.featured-stamp{
-  position:absolute; top:18px; left:18px; z-index:2;
-  padding:6px 14px;
-  background: var(--bari);
-  color:#fff;
-  font-size:.72rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
-  border-radius:2px;
-  transform: rotate(-4deg);
-  pointer-events:none;
-}
 .featured-eyebrow{
   display:inline-block;
   font-size:.78rem; letter-spacing:.18em; text-transform:uppercase;
@@ -1224,4 +1219,166 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .project-links:has(> .btn-icon) > .btn-primary,
   .project-links:has(> .btn-icon) > .btn-ghost{ flex: 0 1 auto; min-width: 0; padding: 14px 20px; line-height: 1.3; text-wrap: balance; }
   .project-links > .btn-icon{ flex: none; }
+}
+
+
+/* ==================================================
+   Home — stesso linguaggio delle pagine progetto:
+   eyebrow colorati, corsivi d'accento, bollini tondi
+   rotanti, ticker a colori, chiusura su fondo scuro.
+   ================================================== */
+:root{ --pop: #F2C14E; }
+
+.home-eyebrow{
+  display:inline-block;
+  font-size:0.85rem;
+  font-weight:700;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  color: var(--accent);
+  margin-bottom:22px;
+}
+.section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+
+/* -------- Hero -------- */
+.hero-links{ margin-top:44px; }
+.hero .meta{ margin-top:40px; }
+@media (max-width: 640px){
+  .hero-links{ margin-top:32px; flex-wrap:nowrap; gap:12px; }
+}
+/* Su telefono i tre pulsanti non stanno in riga: resta solo il principale + email */
+@media (max-width: 480px){
+  .hero-links .btn-ghost{ display:none; }
+}
+
+/* -------- Ticker: blu d'accento + stelline gialle -------- */
+.ticker-wrap.home-ticker{ background: var(--accent); }
+.home-ticker .ticker{ animation-duration:32s; }
+.home-ticker .ticker-item{ color:#fff; text-transform:uppercase; letter-spacing:0.04em; font-size:16px; }
+.home-ticker .ticker-sep{ color: var(--pop); }
+@media (prefers-reduced-motion: reduce){
+  .home-ticker .ticker{ animation:none; }
+}
+
+/* -------- Intestazione sezione lavori -------- */
+.home-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px 40px;
+  flex-wrap:wrap;
+  margin-bottom:48px;
+}
+.home-head .section-title{ margin:0; }
+.home-head p{ margin:0; max-width:40ch; color: var(--ink-soft); font-size:1.02rem; }
+
+/* -------- Bollino tondo (come in Iterum / K-Way) -------- */
+.home-badge{
+  position:absolute;
+  width:108px; height:108px;
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+  padding:10px;
+  border-radius:50%;
+  background: var(--pop);
+  color: var(--ink);
+  font-weight:700;
+  font-size:0.7rem;
+  line-height:1.25;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+  border:3px dashed rgba(23,20,15,.35);
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+  transition: transform .7s ease;
+  pointer-events:none;
+  z-index:3;
+}
+
+/* -------- In evidenza: la tesi diventa uno sticker -------- */
+.featured-media{
+  border:7px solid #fff;
+  border-radius:16px;
+  overflow:visible;
+}
+.featured-media .art{ border-radius:9px; }
+.featured-media.zoom-tile{ overflow:visible; }
+/* Il contenitore dello zoom resta ritagliato, il bollino può sporgere */
+.featured-media .featured-clip{ position:absolute; inset:0; overflow:hidden; border-radius:9px; }
+.featured-badge{
+  top:-26px; left:-26px;
+  background: var(--bari);
+  color:#fff;
+  border-color: rgba(255,255,255,.55);
+  transform: rotate(-14deg);
+}
+.featured-media:hover .featured-badge{ transform: rotate(346deg); }
+@media (max-width: 560px){
+  .featured-badge{ top:-20px; left:-10px; width:96px; height:96px; }
+}
+
+/* -------- Chi sono: competenze numerate -------- */
+.skills-list{ counter-reset: skill; }
+.skills-list li{ counter-increment: skill; gap:16px; }
+.skills-list li .l::before{
+  content: counter(skill, decimal-leading-zero);
+  font-weight:700;
+  color: var(--accent);
+  margin-right:12px;
+  font-variant-numeric: tabular-nums;
+}
+.skills-list li .l{ font-weight:700; color: var(--ink); }
+@media (max-width: 520px){
+  .skills-list li{ gap:2px; }
+}
+.skills-list li span:last-child{ color: var(--ink-soft); }
+
+/* -------- Contatti: chiusura su fondo scuro, come la fine dei progetti -------- */
+section.contact{
+  background: var(--ink);
+  color: var(--paper);
+  padding:120px 0;
+  border-top:0;
+  position:relative;
+  overflow:hidden;
+}
+section.contact::before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(55% 80% at 85% 20%, rgba(59,75,153,.45), transparent 70%);
+  pointer-events:none;
+}
+.contact-inner{ position:relative; }
+.contact h2.section-title{
+  color: var(--paper);
+  font-size: clamp(2.2rem, 5.4vw, 4.2rem);
+  line-height:1.02;
+  letter-spacing:-0.02em;
+  max-width: 16ch;
+  margin-bottom:56px;
+}
+.contact h2.section-title em{ display:block; color: var(--pop); }
+.contact-status{ color: rgba(247,245,240,.7); margin-bottom:28px; }
+.contact-status .dot{ background: var(--pop); box-shadow: 0 0 0 4px rgba(242,193,78,.2); }
+.contact-row .big{ color: var(--paper); border-color: rgba(247,245,240,.5); }
+.contact-row .big .arrow{ color: var(--pop); }
+.contact-row .big:hover{ color: var(--pop); border-color: var(--pop); }
+.contact .social a{ color: var(--paper); border-color: rgba(247,245,240,.25); }
+.contact .social a:hover{ color: var(--ink); background-color: var(--pop); border-color: var(--pop); }
+.contact-badge{
+  top:-10px; right:40px;
+  transform: rotate(14deg);
+}
+.contact-inner:hover .contact-badge{ transform: rotate(374deg); }
+@media (max-width: 860px){
+  .contact-badge{ top:-28px; right:20px; width:92px; height:92px; font-size:0.66rem; }
+  .contact h2.section-title{ padding-right:80px; }
+}
+@media (max-width: 640px){
+  section.contact{ padding:64px 0; }
+  .contact h2.section-title{ margin-bottom:36px; }
+}
+/* Il footer ha anche .wrap, che ne azzerava il padding verticale */
+.home footer.wrap{ padding-top:30px; padding-bottom:40px; }
+@media (prefers-reduced-motion: reduce){
+  .home-badge{ transition:none; }
 }
