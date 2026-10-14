@@ -408,14 +408,13 @@ h2.section-title em.semibold{
 }
 
 @media (max-width: 820px){
-  /* Le card quadrate vanno a coppie, orizzontali e verticali a tutta
-     larghezza con le proprie proporzioni. "dense" fa salire Paninopoli (7)
-     accanto a Shallo (5), altrimenti resterebbe un buco accanto a ognuna. */
-  .grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; grid-auto-flow: dense; }
+  /* Tutte le card a tutta larghezza, ognuna con le proprie proporzioni:
+     a mezza larghezza le didascalie delle quadrate non ci stavano. */
+  .grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .tile:nth-child(1){ grid-column: span 2; aspect-ratio: 18/10; }
   .tile:nth-child(2){ grid-column: span 2; aspect-ratio: 4/5; }
   .tile:nth-child(3), .tile:nth-child(4),
-  .tile:nth-child(5), .tile:nth-child(7){ grid-column: span 1; aspect-ratio: 1/1; }
+  .tile:nth-child(5), .tile:nth-child(7){ grid-column: span 2; aspect-ratio: 1/1; }
   .tile:nth-child(6), .tile:nth-child(8){ grid-column: span 2; aspect-ratio: 16/9; }
   .tile:nth-child(9){ grid-column: span 2; aspect-ratio: 9/16; }
   .tile::before,
@@ -1178,5 +1177,5 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .featured{ padding: 48px 0; }
   .project-end{ padding: 56px 0; }
   .hero{ padding-bottom: 40px; }
-  .project-hero{ padding: 36px 0 48px; }
+  .project-hero{ padding: 36px 20px 48px; } /* 20px = margine laterale di .wrap su mobile */
 }
