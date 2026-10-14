@@ -35,21 +35,37 @@ a{ color: inherit; }
 }
 
 /* -------- Nav -------- */
+/* Header fisso in alto su desktop e mobile: scorrendo verso il basso si
+   nasconde, verso l'alto ricompare (classe is-hidden gestita da main.js). */
 header{
-  padding: 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 18px 0;
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
+  transition: transform .3s ease;
 }
+header.is-hidden{ transform: translateY(-100%); }
+/* Le ancore del menu (#lavori, #about…) non finiscono sotto l'header */
+section[id]{ scroll-margin-top: 80px; }
 nav.wrap{
   display:flex;
   justify-content: space-between;
   align-items: center;
 }
+/* Area di tocco di 44px: il padding allarga la zona cliccabile, il margine
+   negativo lo compensa e l'header resta alto uguale. */
 .brand{
   font-weight:700;
-  font-size: 1.15rem;
+  font-size: 1rem;
   letter-spacing: -0.01em;
   text-decoration:none;
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
 }
+
 .navlinks{
   display:flex;
   gap: 32px;
@@ -71,23 +87,7 @@ nav.wrap{
 .nav-toggle{ display:none; }
 
 @media (max-width: 860px){
-  /* Header fisso in alto: scorrendo verso il basso si nasconde, verso l'alto
-     ricompare (classe is-hidden gestita da main.js). */
-  header{
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    padding: 18px 0;
-    background: var(--paper);
-    transition: transform .3s ease;
-  }
-  header.is-hidden{ transform: translateY(-100%); }
-  /* Le ancore del menu (#lavori, #about…) non finiscono sotto l'header */
-  section[id]{ scroll-margin-top: 80px; }
   nav.wrap{ padding: 0 20px; }
-  /* Area di tocco di 44px: il padding allarga la zona cliccabile, il margine
-     negativo lo compensa e l'header resta alto uguale. */
-  .brand{ font-size: 1rem; display: inline-block; padding: 10px 0; margin: -10px 0; }
 
   .nav-toggle{
     display: inline-flex;
@@ -1304,16 +1304,24 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .featured-media.zoom-tile{ overflow:visible; }
 /* Il contenitore dello zoom resta ritagliato, il bollino può sporgere */
 .featured-media .featured-clip{ position:absolute; inset:0; overflow:hidden; border-radius:9px; }
-.featured-badge{
-  top:-26px; left:-26px;
+/* Nastro "Premiato" in diagonale sull'angolo in alto a sinistra, come
+   un'etichetta applicata alla tavola: sta dentro .featured-clip, che ne
+   ritaglia le estremità sul bordo dell'immagine */
+.featured-stamp{
+  position:absolute; z-index:2;
+  top:26px; left:-56px;
+  width:210px;
+  padding:7px 0;
+  text-align:center;
   background: var(--bari);
   color:#fff;
-  border-color: rgba(255,255,255,.55);
-  transform: rotate(-14deg);
+  font-size:.85rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  transform: rotate(-45deg);
+  pointer-events:none;
 }
-.featured-media:hover .featured-badge{ transform: rotate(346deg); }
 @media (max-width: 560px){
-  .featured-badge{ top:-20px; left:-10px; width:96px; height:96px; }
+  .featured-stamp{ top:18px; left:-52px; width:170px; padding:5px 0; font-size:.7rem; }
 }
 
 /* -------- Chi sono: competenze numerate -------- */

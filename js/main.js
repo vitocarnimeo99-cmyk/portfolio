@@ -12,11 +12,10 @@
     toggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
   };
 
-  // Header fisso su mobile: si nasconde scorrendo verso il basso e ricompare
+  // Header fisso: si nasconde scorrendo verso il basso e ricompare
   // verso l'alto. Resta visibile in cima alla pagina, a menu aperto, con il
   // focus da tastiera (non quello lasciato da un tocco) al suo interno e durante lo scroll verso un'ancora del
   // menu (cosi' la sezione non parte coperta o con un buco sopra).
-  const mobileNav = window.matchMedia('(max-width: 860px)');
   let lastY = window.scrollY;
   let ticking = false;
   let keepVisibleUntil = 0;
@@ -27,7 +26,7 @@
     const goingDown = y > lastY;
     lastY = y;
     header.classList.toggle('is-hidden',
-      mobileNav.matches && goingDown && y > header.offsetHeight &&
+      goingDown && y > header.offsetHeight &&
       !header.classList.contains('is-open') &&
       !header.querySelector(':focus-visible') &&
       Date.now() > keepVisibleUntil);
