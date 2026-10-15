@@ -58,6 +58,14 @@
 // i video della griglia partirebbero insieme al caricamento della pagina
 // anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
 const lazyVideos = document.querySelectorAll('video.art');
+
+// Video con una versione dedicata al mobile (es. Raf 40): anche il poster
+// deve essere quello della versione mobile, con lo stesso taglio.
+if (window.matchMedia('(max-width: 820px)').matches) {
+  document.querySelectorAll('video[data-poster-mobile]').forEach(video => {
+    video.poster = video.dataset.posterMobile;
+  });
+}
 if ('IntersectionObserver' in window) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -166,35 +174,35 @@ const canHover = window.matchMedia('(hover: hover)').matches;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Video con variante al passaggio del mouse (es. "I Contadini").
-// Evita di richiamare load()/play() più volte in sovrapposizione, che causava
-// scatti e "play() request interrupted" quando il mouse entrava/usciva rapidamente.
+// La variante è un secondo video sovrapposto, già caricato, che compare in
+// hover: niente load() a ogni passaggio, che ricaricava il video da capo e
+// faceva andare a scatti la card.
 // Su touch resta il video di default: lo scambio scaricherebbe un secondo
 // video proprio mentre si sta aprendo la pagina del progetto.
 if (canHover) document.querySelectorAll('video[data-src-hover]').forEach(video => {
-  const source = video.querySelector('source');
-  const defaultSrc = video.dataset.srcDefault;
-  const hoverSrc = video.dataset.srcHover;
-  let switching = false;
-  let pending = null;
+  const tile = video.closest('.tile') || video;
+  const layer = document.createElement('video');
+  layer.className = 'art cycle-fade';
+  layer.muted = true;
+  layer.loop = true;
+  layer.playsInline = true;
+  layer.preload = 'none';
+  layer.setAttribute('aria-hidden', 'true');
+  video.after(layer);
+  // scaricata dopo il caricamento della pagina, per non rubare banda all'avvio
+  window.addEventListener('load', () => {
+    layer.preload = 'auto';
+    layer.src = video.dataset.srcHover;
+  });
 
-  const swapTo = (src) => {
-    if (source.src.endsWith(src)) { pending = null; return; }
-    if (switching) { pending = src; return; }
-    switching = true;
-    source.src = src;
-    video.load();
-    video.play().catch(() => {}).finally(() => {
-      switching = false;
-      if (pending) {
-        const next = pending;
-        pending = null;
-        swapTo(next);
-      }
-    });
-  };
-
-  video.addEventListener('mouseover', () => swapTo(hoverSrc));
-  video.addEventListener('mouseout', () => swapTo(defaultSrc));
+  tile.addEventListener('mouseenter', () => {
+    if (!layer.src) layer.src = video.dataset.srcHover;
+    layer.play().then(() => { layer.style.opacity = '1'; }).catch(() => {});
+  });
+  tile.addEventListener('mouseleave', () => {
+    layer.style.opacity = '0';
+    layer.pause();
+  });
 });
 
 // Immagini con variante ciclica al passaggio del mouse (es. "Shallo", "K-Way").
@@ -208,12 +216,25 @@ document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
   let step = 0;
 
   if (canHover) {
+    // L'immagine viene scambiata solo quando è già decodificata: cambiare
+    // src al volo costringeva il browser a decodificarla durante l'hover,
+    // con un piccolo blocco dell'animazione.
+    let hovering = false;
     img.addEventListener('mouseover', () => {
+      hovering = true;
       step = (step % variants) + 1;
-      img.src = `${prefix}${step + 1}${ext}`;
+      const src = `${prefix}${step + 1}${ext}`;
+      const next = new Image();
+      next.src = src;
+      next.decode().catch(() => {}).then(() => {
+        if (hovering && img.dataset.cycleWant === src) img.src = src;
+      });
+      img.dataset.cycleWant = src;
     });
     img.addEventListener('mouseout', () => {
+      hovering = false;
       step = 0;
+      img.dataset.cycleWant = '';
       img.src = defaultSrc;
     });
     return;
@@ -270,15 +291,21 @@ document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
   }, { threshold: 0.5 }).observe(img);
 });
 
-// Precarica le varianti hover dei tile a ciclo immagini dopo il load della
-// pagina, cosi' il primo mouseover non ha un micro-delay di rete.
+// Precarica e decodifica le varianti hover dei tile a ciclo immagini dopo il
+// load della pagina, cosi' il primo mouseover non ha né attesa di rete né
+// blocco per la decodifica. Le immagini restano in preloadedFrames perché il
+// browser non butti via la versione già decodificata.
+const preloadedFrames = [];
 window.addEventListener('load', () => {
   document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
     const prefix = img.dataset.cyclePrefix;
     const ext = img.dataset.cycleExt;
     const frames = parseInt(img.dataset.cycleFrames, 10);
     for (let i = 2; i <= frames; i++) {
-      new Image().src = `${prefix}${i}${ext}`;
+      const frame = new Image();
+      frame.src = `${prefix}${i}${ext}`;
+      frame.decode().catch(() => {});
+      preloadedFrames.push(frame);
     }
   });
 });

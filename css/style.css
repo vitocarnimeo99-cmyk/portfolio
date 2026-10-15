@@ -423,6 +423,8 @@ h2.section-title em.semibold{
 }
 /* Livello della dissolvenza tra le immagini dei tile su touch (vedi main.js) */
 .tile .art.cycle-fade{ opacity:0; pointer-events:none; }
+/* Video variante in hover (es. I Contadini): compare in dissolvenza */
+.tile video.cycle-fade{ transition: opacity .35s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
 .grid .tile:hover .art{
   transform: scale(1.06);
 }
