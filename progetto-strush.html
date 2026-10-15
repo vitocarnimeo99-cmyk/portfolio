@@ -800,13 +800,12 @@
   /* Due telefoni con le schermate degli store che scorrono */
   .phones{
     position:relative;
-    height:600px;
+    height:670px;
   }
   .phone{
     position:absolute;
     top:0;
-    width:270px;
-    aspect-ratio:1080/1920;
+    width:290px;
     padding:10px;
     border-radius:44px;
     background:#1d1d1f;
@@ -815,23 +814,27 @@
       0 40px 80px rgba(0,0,0,.55),
       0 0 60px rgba(148,149,234,.18);
   }
-  .phone--front{ left:150px; top:40px; transform: rotate(4deg); z-index:2; }
-  .phone--back{ left:20px; top:0; transform: rotate(-7deg) scale(.9); opacity:.9; }
+  .phone--front{ left:150px; top:40px; transform: rotate(4deg); z-index:2; cursor:pointer; }
+  .phone--back{ left:20px; top:0; transform: rotate(-7deg) scale(.9); opacity:.9; z-index:1; }
   .phone-screen{
     position:relative;
-    width:100%; height:100%;
+    width:100%;
+    aspect-ratio:1242/2688;
     border-radius:34px;
     overflow:hidden;
     background:#fff;
   }
-  .phone-screen img{
-    position:absolute; inset:0;
+  /* Le schermate scorrono di lato come un carosello di Instagram */
+  .phone-track{
+    display:flex;
+    height:100%;
+    transition: transform .6s cubic-bezier(.25,.8,.25,1);
+  }
+  .phone-track img{
+    flex:0 0 100%;
     width:100%; height:100%;
     object-fit:cover;
-    opacity:0;
-    transition: opacity .9s ease;
   }
-  .phone-screen img.is-active{ opacity:1; }
   .phone-island{
     position:absolute;
     top:10px; left:50%;
@@ -844,20 +847,22 @@
   .phone-dots{
     position:absolute;
     left:50%; bottom:-34px;
+    transition: opacity .3s ease;
     transform: translateX(-50%);
     display:flex; gap:6px;
   }
   .phone-dots span{ width:6px; height:6px; border-radius:3px; background: rgba(255,255,255,.25); transition: width .4s ease, background-color .4s ease; }
   .phone-dots span.is-active{ width:18px; background: var(--st-lilac); }
+  .phone--back .phone-dots{ opacity:0; }
   @media (max-width:980px){
     .st-get-grid{ grid-template-columns:minmax(0, 1fr); gap:40px; }
-    .phones{ height:540px; width:100%; max-width:420px; margin:0 auto; }
+    .phones{ height:670px; width:100%; max-width:440px; margin:0 auto; }
   }
   @media (max-width:480px){
-    .phones{ height:460px; }
-    .phone{ width:220px; border-radius:36px; padding:8px; }
+    .phones{ height:530px; }
+    .phone{ width:215px; border-radius:36px; padding:8px; }
     .phone-screen{ border-radius:28px; }
-    .phone--front{ left:auto; right:0; top:30px; }
+    .phone--front{ left:calc(100% - 215px); top:30px; }
     .phone--back{ left:0; }
     .store-badge{ min-width:0; width:100%; }
     .store{ width:100%; }
@@ -914,7 +919,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .st-card, .st-peek, .st-value, .st-traits li, .geo-step, .pano-frame,
-    .sticker, .store-badge, .phone-screen img, .team-card{ transition:none; }
+    .sticker, .store-badge, .phone-track, .phone, .team-card{ transition:none; }
     .sticker.is-pop{ animation:none; }
     .st-ticker .ticker{ animation:none; }
   }
@@ -2089,31 +2094,122 @@
 
   // Scarica l'app: i due telefoni mostrano le schermate del carosello in
   // dissolvenza (quello dietro è sfasato di tre), e i QR per gli store.
+  // Passando sopra il telefono davanti (o toccandolo) i due si scambiano.
   (function () {
     const phones = document.getElementById('phones');
     if (!phones) return;
-    const frames = Array.from({ length: 7 }, (_, i) => 'assets/images/STRUSH/CAROSELLO 01/frame ' + (i + 1) + '.jpg');
-    const fill = (screen) => frames.map((src, i) => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = '';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      screen.appendChild(img);
-      return img;
-    });
+    const frames = Array.from({ length: 6 }, (_, i) => 'assets/images/STRUSH/CAROSELLO 02/' + (i + 1) + ' C.jpg');
+    // In coda c'è una copia della prima schermata: dall'ultima si scorre su
+    // quella e poi si torna all'inizio senza animazione, così il giro è continuo.
+    const fill = (screen) => {
+      const track = document.createElement('div');
+      track.className = 'phone-track';
+      frames.concat(frames[0]).forEach((src) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        track.appendChild(img);
+      });
+      screen.appendChild(track);
+      return track;
+    };
+    const slide = (track, k) => {
+      const prev = track.dataset.k;
+      track.dataset.k = k;
+      if (prev == frames.length - 1 && k === 0 && !reduceMotion) {
+        track.style.transform = 'translateX(-' + frames.length * 100 + '%)';
+        setTimeout(() => {
+          track.style.transition = 'none';
+          track.style.transform = 'translateX(0)';
+          track.offsetWidth;
+          track.style.transition = '';
+        }, 650);
+      } else {
+        track.style.transform = 'translateX(-' + k * 100 + '%)';
+      }
+    };
+    const phoneEls = Array.from(phones.querySelectorAll('.phone'));
     const front = fill(phones.querySelector('.phone--front .phone-screen'));
     const back = fill(phones.querySelector('.phone--back .phone-screen'));
     const dotsWrap = phones.querySelector('.phone-dots');
     const dots = frames.map(() => dotsWrap.appendChild(document.createElement('span')));
-    let i = 0;
+    // I due telefoni partono da schermate diverse (1 e 4) e scorrono allo
+    // stesso ritmo ma sfasati di mezzo giro: non cambiano mai insieme e non
+    // mostrano mai la stessa schermata.
+    const EVERY = 3000;
+    const decks = [
+      { track: front, k: 0, delay: 0 },
+      { track: back, k: 3, delay: EVERY / 2 },
+    ];
     const show = () => {
-      front.forEach((img, k) => img.classList.toggle('is-active', k === i));
-      back.forEach((img, k) => img.classList.toggle('is-active', k === (i + 3) % frames.length));
-      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+      decks.forEach((d) => slide(d.track, d.k));
+      const shown = decks.find((d) => d.track.closest('.phone--front')).k;
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === shown));
     };
     show();
-    if (!reduceMotion) setInterval(() => { i = (i + 1) % frames.length; show(); }, 2800);
+    if (!reduceMotion) decks.forEach((d) => {
+      const step = () => { d.k = (d.k + 1) % frames.length; show(); };
+      setTimeout(() => { step(); setInterval(step, EVERY); }, EVERY + d.delay);
+    });
+
+    // Dopo uno scambio il telefono nuovo davanti può finire sotto il cursore:
+    // si riarma solo quando il mouse ne esce, così non rimbalzano all'infinito.
+    let locked = false, moving = false;
+    // Effetto mazzo di carte: quello davanti esce di lato, passa sotto e
+    // torna dietro; intanto quello dietro avanza al suo posto.
+    const SHUFFLE = 900;
+    const pose = (el) => {
+      const cs = getComputedStyle(el);
+      return { left: parseFloat(cs.left), top: parseFloat(cs.top), transform: cs.transform, opacity: cs.opacity };
+    };
+    const at = (p, extra) => Object.assign({ left: p.left + 'px', top: p.top + 'px', transform: p.transform, opacity: p.opacity }, extra);
+    const swap = () => {
+      locked = moving = true;
+      const out = phones.querySelector('.phone--front');
+      const inc = phones.querySelector('.phone--back');
+      const out0 = pose(out), inc0 = pose(inc);
+      phoneEls.forEach((el) => {
+        el.classList.toggle('phone--front');
+        el.classList.toggle('phone--back');
+      });
+      const out1 = pose(out), inc1 = pose(inc);
+      inc.appendChild(dotsWrap);
+      show();
+
+      if (!reduceMotion) {
+        const w = out.offsetWidth;
+        // Quanto può uscire a destra senza sparire dietro il bordo della sezione
+        const room = phones.closest('section').getBoundingClientRect().right - out.getBoundingClientRect().right;
+        const dx = Math.max(w * 0.3, Math.min(w * 0.75, room + w * 0.45));
+        const opts = { duration: SHUFFLE, easing: 'cubic-bezier(.45,0,.25,1)' };
+        out.animate([
+          at(out0, { zIndex: 2 }),
+          { left: out0.left + dx + 'px', top: out0.top - 24 + 'px', transform: 'rotate(18deg) scale(.96)', opacity: 1, zIndex: 2, offset: .42 },
+          { left: out0.left + dx * 0.9 + 'px', top: out0.top - 20 + 'px', transform: 'rotate(14deg) scale(.93)', opacity: 1, zIndex: 1, offset: .5 },
+          at(out1, { zIndex: 1 }),
+        ], opts);
+        inc.animate([
+          at(inc0, { zIndex: 1 }),
+          { left: inc0.left - w * 0.12 + 'px', top: inc0.top + 10 + 'px', transform: 'rotate(-10deg) scale(.92)', opacity: .9, zIndex: 1, offset: .42 },
+          { left: inc0.left - w * 0.08 + 'px', top: inc0.top + 14 + 'px', transform: 'rotate(-6deg) scale(.95)', opacity: 1, zIndex: 2, offset: .5 },
+          at(inc1, { zIndex: 2 }),
+        ], opts);
+      }
+      setTimeout(() => { moving = false; if (!inc.matches(':hover')) locked = false; }, reduceMotion ? 0 : SHUFFLE);
+    };
+    phoneEls.forEach((el) => {
+      el.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'mouse' && !locked && el.classList.contains('phone--front')) swap();
+      });
+      el.addEventListener('pointerleave', () => {
+        if (!moving && el.classList.contains('phone--front')) locked = false;
+      });
+      el.addEventListener('click', () => {
+        if (!matchMedia('(hover:hover)').matches && el.classList.contains('phone--front')) swap();
+      });
+    });
 
     if (window.QRCode) {
       document.querySelectorAll('.store-qr-code').forEach((el) => {
