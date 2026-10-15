@@ -1,0 +1,7 @@
+{
+  "name": "vitq-portfolio",
+  "private": true,
+  "scripts": {
+    "componi": "node tools/componi.mjs"
+  }
+}

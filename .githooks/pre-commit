@@ -1,0 +1,14 @@
+#!/bin/sh
+# Blocca il commit se le pagine non sono aggiornate con _partials/.
+# Attivato con: git config core.hooksPath .githooks
+
+# Da VS Code il PATH può non includere node installato con nvm
+if ! command -v node >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  . "$HOME/.nvm/nvm.sh" >/dev/null 2>&1
+fi
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node non trovato, salto il controllo delle parti comuni" >&2
+  exit 0
+fi
+
+node "$(git rev-parse --show-toplevel)/tools/componi.mjs" --controlla

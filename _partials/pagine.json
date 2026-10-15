@@ -1,0 +1,68 @@
+{
+  "index.html": {
+    "titolo": "Vito Mariano Carnimeo / Vitq — Portfolio",
+    "descrizione": "Portfolio di Vito Mariano Carnimeo (Vitq), graphic designer e illustratore di Bari: brand identity, illustrazione, editoria, campagne ADV e motion design.",
+    "immagine": "og-home.jpg",
+    "alt_immagine": "Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi"
+  },
+  "progetto-contadini.html": {
+    "titolo": "Vitq — iContadini Ugento · BriefMe / Vito Mariano Carnimeo",
+    "descrizione": "iContadini, azienda agricola di Ugento nel Salento, per BriefMe: campagne ADS B2C e corporate gifting in tre formati e tre lingue, piano editoriale social, video per le stories, still life delle zuppe, affissioni 6x3 e catalogo box regalo da sfogliare.",
+    "immagine": "og-contadini.jpg",
+    "alt_immagine": "iContadini – post social con il calendario dell’orto e i prodotti"
+  },
+  "progetto-hiv.html": {
+    "titolo": "Vitq — I Can’t Give You HIV · U=U / Vito Mariano Carnimeo",
+    "descrizione": "I Can’t Give You HIV – U=U, Burro Studio per ASA Milano e Milano Check Point: campagna per la Giornata Mondiale contro l'AIDS tra poster, affissioni 6x3, social e t-shirt limited edition.",
+    "immagine": "og-hiv.jpg",
+    "alt_immagine": "I Can’t Give You HIV – affissione 6x3 rossa sotto un ponte ferroviario"
+  },
+  "progetto-iterum.html": {
+    "titolo": "Vitq — ÏTERUM · Apulian Electronic Monday / Vito Mariano Carnimeo",
+    "descrizione": "ÏTERUM — Apulian Electronic Monday: mappa isometrica del festival e illustrazioni scena per la 4ª edizione dell'evento electronic open air a Il Giardino dei Tempi, Orto Botanico di Bari.",
+    "immagine": "og-iterum.jpg",
+    "alt_immagine": "ÏTERUM – poster con la mappa isometrica dell’Orto Botanico di Bari"
+  },
+  "progetto-karaoke.html": {
+    "titolo": "Vitq — Karaoke Dinner · IYS & Fondazione Burro Studio / Vito Mariano Carnimeo",
+    "descrizione": "Karaoke Dinner: illustrazione per la serata benefica di Fondazione Burro Studio e In Your Shoes, per raccogliere scarpe da trekking e abbigliamento tecnico per la comunità Sherpa in Nepal. Poster, t-shirt e social.",
+    "immagine": "og-karaoke.jpg",
+    "alt_immagine": "Karaoke Dinner – poster «We Bridge Continents» per In Your Shoes e Fondazione Burro Studio"
+  },
+  "progetto-kway.html": {
+    "titolo": "Vitq — K-Way 25 Verona · Porta Borsari / Vito Mariano Carnimeo",
+    "descrizione": "K-Way 25 Verona: illustrazione esclusiva di Porta Borsari e lettering per la campagna di apertura del primo store K-Way in Corso Porta Borsari, con Burro Studio. Poster, sticker e K-Way in edizione limitata.",
+    "immagine": "og-kway.jpg",
+    "alt_immagine": "K-Way – flyer giallo dell’after party a Porta Borsari, Verona"
+  },
+  "progetto-paninopoli.html": {
+    "titolo": "Vitq — Paninopoli · Panini Mashup / Vito Mariano Carnimeo",
+    "descrizione": "Paninopoli — Panini Mashup: identità illustrata, locandine e social kit per la serie di serate street-food del collettivo Burro Studio, L'Altro Tramezzino e Katsusanderia.",
+    "immagine": "og-paninopoli.jpg",
+    "alt_immagine": "Paninopoli – locandina illustrata di Panini Mashup"
+  },
+  "progetto-raf40.html": {
+    "titolo": "Vitq — RAF 40 · The Unreleased Duets / Vito Mariano Carnimeo",
+    "descrizione": "RAF 40 – The Unreleased Duets, Sugar Music: ritratti al tratto di Raf e dei suoi ospiti (Elodie, Giuliano Sangiorgi, Levante, J-Ax, Bassi Maestro) per cover e stories animate dei sei duetti.",
+    "immagine": "og-raf40.jpg",
+    "alt_immagine": "RAF 40 – The Unreleased Duets, copertina con i ritratti al tratto degli artisti"
+  },
+  "progetto-shallo.html": {
+    "titolo": "Vitq — Shallo Beer Shop · 7 Years / Vito Mariano Carnimeo",
+    "descrizione": "Shallo Beer Shop 7 Years: illustrazione e type design per la campagna del settimo anniversario della birreria milanese, con Burro Studio. Poster dell'evento e t-shirt celebrative.",
+    "immagine": "og-shallo.jpg",
+    "alt_immagine": "Shallo Beer Shop – poster illustrato per i 7 anni"
+  },
+  "progetto-strush.html": {
+    "titolo": "Vitq — Strush · Co-founder & Art Director / Vito Mariano Carnimeo",
+    "descrizione": "Strush, l'app di finanza personale per la Gen Z: brand identity, costruzione geometrica del logo, la mascotte Bernardino, brand manual da sfogliare, sticker e schermate per gli store. Vito Mariano Carnimeo, Co-founder & Art Director.",
+    "immagine": "og-strush.jpg",
+    "alt_immagine": "Strush – logo dell’app con la mascotte Bernardino su fondo nero"
+  },
+  "progetto-wkz.html": {
+    "titolo": "Vitq — Where's Kud Zamb? / Vito Mariano Carnimeo",
+    "descrizione": "Where's Kud Zamb? — progetto di tesi NABA: character design, serie fotografica e animazione lip-sync per un personaggio illustrato nascosto per le strade di Bari.",
+    "immagine": "og-wkz.jpg",
+    "alt_immagine": "Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi"
+  }
+}
