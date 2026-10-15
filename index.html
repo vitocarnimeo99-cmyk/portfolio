@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vito Mariano Carnimeo / Vitq — Portfolio</title>
+<meta name="description" content="Portfolio di Vito Mariano Carnimeo (Vitq), graphic designer e illustratore di Bari: brand identity, illustrazione, editoria, campagne ADV e motion design.">
+<!-- Anteprima per la condivisione (WhatsApp, LinkedIn, Facebook, X) -->
+<link rel="canonical" href="https://vitocarnimeo99-cmyk.github.io/portfolio/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vitq — Vito Mariano Carnimeo">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Vito Mariano Carnimeo / Vitq — Portfolio">
+<meta property="og:description" content="Portfolio di Vito Mariano Carnimeo (Vitq), graphic designer e illustratore di Bari: brand identity, illustrazione, editoria, campagne ADV e motion design.">
+<meta property="og:url" content="https://vitocarnimeo99-cmyk.github.io/portfolio/">
+<meta property="og:image" content="https://vitocarnimeo99-cmyk.github.io/portfolio/assets/og/og-home.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -204,7 +218,12 @@
           <p class="featured-lead">Un gioco di ricerca ambientato a <strong>Bari</strong>: trova Nicola, ragazzo sbruffone dal cuore tenero, e la sua famiglia in un poster interattivo ricco di dettagli. Illustrazione, animazione e merchandising per raccontare l'ironia di una città.</p>
         </div>
         <a class="featured-media zoom-tile" href="progetto-wkz.html" aria-label="Apri il progetto Where's Kud Zamb?">
-          <span class="featured-clip"><img class="art" src="assets/images/VITO_CARNIMEO_TESI_HOME.jpg" width="2400" height="1320" alt="Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi, tra cui cercare Nicola e la sua famiglia" loading="lazy" decoding="async"><span class="featured-stamp" aria-hidden="true">Premiato</span></span>
+          <span class="featured-clip"><picture>
+            <!-- sizes a 1200px su desktop: al passaggio del mouse la tavola si ingrandisce 2x, serve la risoluzione piena -->
+            <source type="image/webp"
+              srcset="assets/images/VITO_CARNIMEO_TESI_HOME-800.webp 800w, assets/images/VITO_CARNIMEO_TESI_HOME-1200.webp 1200w, assets/images/VITO_CARNIMEO_TESI_HOME-1800.webp 1800w, assets/images/VITO_CARNIMEO_TESI_HOME-2400.webp 2400w"
+              sizes="(max-width: 900px) calc(100vw - 80px), 1200px">
+            <img class="art" src="assets/images/VITO_CARNIMEO_TESI_HOME.jpg" width="2400" height="1320" alt="Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi, tra cui cercare Nicola e la sua famiglia" loading="lazy" decoding="async"></picture><span class="featured-stamp" aria-hidden="true">Premiato</span></span>
         </a>
         <a class="featured-cta" href="progetto-wkz.html">Scopri il progetto <span aria-hidden="true">→</span></a>
       </div>
