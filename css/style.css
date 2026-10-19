@@ -1193,7 +1193,8 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .photo-duo-grid figure:hover img{ transform:scale(1.04); }
 @media (max-width: 820px){
   .photo-duo-grid{ flex-direction:column; gap:2px; }
-  .photo-duo-grid figure{ height:auto; flex-grow:0; }
+  /* in colonna flex-basis:0 azzerava l'altezza: le foto sparivano */
+  .photo-duo-grid figure{ height:auto; flex-grow:0; flex-basis:auto; }
   .photo-duo-grid figure.is-portrait{ aspect-ratio: 3835 / 5752; }
   .photo-duo-grid figure.is-landscape{ aspect-ratio: 4740 / 4000; }
   .photo-duo-grid img{ position:static; }

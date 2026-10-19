@@ -44,8 +44,8 @@
   .loupe-zoom{ overflow:hidden; }
   .loupe-lens{
     position:absolute;
-    width:280px;
-    height:280px;
+    width:320px;
+    height:320px;
     border-radius:50%;
     border:2px solid rgba(255,255,255,.85);
     box-shadow:0 0 0 1px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.35);
@@ -60,10 +60,10 @@
        il raggio della lente resta coperta dal riempimento opaco del
        cerchio e quindi "sparisce"; solo la punta esterna resta visibile */
     position:absolute;
-    width:22px;
-    height:90px;
+    width:25px;
+    height:103px;
     background:linear-gradient(rgba(255,255,255,.95), rgba(210,210,210,.8));
-    border-radius:0 0 11px 11px;
+    border-radius:0 0 12.5px 12.5px;
     box-shadow:0 4px 10px rgba(0,0,0,.35);
     transform:rotate(-45deg);
     transform-origin:top center;
@@ -93,11 +93,539 @@
   @media (prefers-reduced-motion:reduce){
     .wkz-tesi-overlay{ transition:none; }
   }
-  .wkz-tesi-cta-wrap{ display:flex; justify-content:center; padding:32px 16px; }
-  .wkz-tesi-cta-wrap .btn-primary{ border:0; cursor:pointer; font-family:inherit; }
   @media (max-width:820px){
-    .loupe-lens{ width:170px; height:170px; }
-    .loupe-handle{ width:14px; height:58px; border-radius:0 0 7px 7px; }
+    .loupe-lens{ width:195px; height:195px; }
+    .loupe-handle{ width:16px; height:66px; border-radius:0 0 8px 8px; }
+  }
+
+  /* Palette della pagina: rosso e bianco di Bari (la busta), l'azzurro dei
+     cerchietti e il verde della maglietta di Nicola per i dettagli */
+  :root{
+    --wkz-red:#E43242;
+    --wkz-azure:#0279A0;
+    --wkz-azure-pale:#E6F3F8;
+    --wkz-sky:#6FCDEB;
+    --wkz-green:#4E9A3A;
+  }
+
+  /* -------- Hero: bollino "Premi & Pubblicazioni" sulla busta. La scritta
+     gira in tondo, la coppa al centro resta ferma; al clic apre la lista
+     dei premi (la stessa della home) in una finestra -------- */
+  .wkz-badge{
+    position:absolute;
+    right:-6px; top:4px;
+    width:118px; height:118px;
+    padding:0;
+    display:flex; align-items:center; justify-content:center;
+    border:none;
+    border-radius:50%;
+    background: var(--wkz-azure);
+    color:#fff;
+    box-shadow:0 10px 24px rgba(2,121,160,.35);
+    transform: rotate(12deg);
+    transition: transform .4s cubic-bezier(.3,1.6,.5,1), box-shadow .3s ease, background-color .3s ease;
+    cursor:pointer;
+    z-index:2;
+    /* l'anello che ruota è un quadrato: a 45° sporgerebbe oltre il cerchio
+       (e su telefono oltre il bordo dello schermo). Lo ritaglio al bollino */
+    overflow:hidden;
+  }
+  .wkz-badge:hover{
+    transform: rotate(0deg) scale(1.08);
+    background: var(--ink);
+    box-shadow:0 14px 30px rgba(23,20,15,.35), 0 0 0 6px rgba(242,193,78,.25);
+  }
+  .wkz-badge:focus-visible{ outline:3px solid #F2C14E; outline-offset:4px; }
+  .wkz-badge-ring{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    animation: wkz-spin 14s linear infinite;
+    pointer-events:none;
+  }
+  .wkz-badge-ring text{
+    fill:#fff;
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+  }
+  .wkz-badge-ring .star{ fill:#F2C14E; }
+  .wkz-badge:hover .wkz-badge-ring{ animation-duration:5s; }
+  .wkz-badge-core{
+    position:relative;
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:#fff;
+    color: var(--wkz-azure);
+    font-size:1.2rem;
+    box-shadow: inset 0 0 0 2px rgba(2,121,160,.15);
+    transition: color .3s ease;
+  }
+  .wkz-badge:hover .wkz-badge-core{ color:#C99A1E; }
+  @keyframes wkz-spin{ to{ transform: rotate(360deg); } }
+
+  /* -------- Finestra dei premi: stesso blocco .awards della home -------- */
+  .wkz-awards{
+    width:min(600px, calc(100% - 32px));
+    max-height:min(86vh, 760px);
+    padding:0;
+    border:none;
+    border-radius:22px;
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow:0 40px 90px rgba(0,0,0,.45);
+    overflow:hidden;
+  }
+  .wkz-awards[open]{ display:flex; flex-direction:column; animation: wkz-pop .45s cubic-bezier(.2,.9,.3,1.2); }
+  .wkz-awards::backdrop{ background: rgba(23,20,15,.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  @keyframes wkz-pop{
+    from{ opacity:0; transform: translateY(18px) scale(.94); }
+    to{ opacity:1; transform:none; }
+  }
+  .wkz-awards-head{
+    position:relative;
+    padding:30px 76px 22px 30px;
+    background: radial-gradient(90% 140% at 0% 0%, rgba(2,121,160,.45), transparent 70%);
+    border-bottom:1px solid rgba(247,245,240,.12);
+  }
+  .wkz-awards-head .eyebrow{
+    display:block;
+    margin-bottom:10px;
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color: var(--wkz-sky);
+  }
+  .wkz-awards-head h2{
+    display:flex; align-items:center; gap:12px;
+    margin:0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height:1.1;
+    letter-spacing:-0.02em;
+  }
+  .wkz-awards-head h2 i{ color:#F2C14E; font-size:.8em; }
+  .wkz-awards-close{
+    position:absolute;
+    top:18px; right:18px;
+    width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(247,245,240,.25);
+    border-radius:50%;
+    background:transparent;
+    color: var(--paper);
+    font-size:1.05rem;
+    cursor:pointer;
+    transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .wkz-awards-close:hover{ background: var(--accent); border-color: var(--accent); transform: rotate(90deg); }
+  .wkz-awards-close:focus-visible{ outline:2px solid #F2C14E; outline-offset:2px; }
+  .wkz-awards-body{ padding:8px 30px 26px; overflow-y:auto; overscroll-behavior:contain; }
+  .wkz-awards .awards{ padding:0; border:none; background:none; }
+  html:has(.wkz-awards[open]){ overflow:hidden; }
+  @media (max-width:560px){
+    .wkz-awards-head{ padding:24px 70px 18px 22px; }
+    .wkz-awards-body{ padding:4px 22px 20px; }
+  }
+
+  /* Busta 3D più grande che nelle regole generali di style.css (380px):
+     la scena Three.js si adatta da sola alle misure del riquadro */
+  #wkz-pack{
+    flex:0 0 480px;
+    width:480px;
+    height:auto;
+    aspect-ratio:380/494;
+  }
+  @media (max-width:1180px){
+    #wkz-pack{ flex-basis:420px; width:420px; }
+  }
+  @media (max-width:980px){
+    #wkz-pack{ flex:0 0 auto; width:min(360px, 84vw); }
+  }
+  .wkz-pack-hint{
+    position:absolute;
+    left:50%; bottom:-58px;
+    transform: translateX(-50%);
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.82rem;
+    color: var(--ink-soft);
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  .wkz-pack-hint i{ color: var(--accent); }
+  @media (max-width:980px){
+    .wkz-badge{ right:-18px; top:-8px; width:98px; height:98px; }
+    .wkz-badge-core{ width:38px; height:38px; font-size:1rem; }
+    .wkz-pack-hint{ bottom:-40px; }
+    /* spazio per il suggerimento sotto la busta prima dell'eyebrow */
+    #wkz-pack{ margin-bottom:68px; }
+  }
+
+  /* -------- Ticker in versione Bari: rosso, bianco e azzurro -------- */
+  .ticker-wrap.wkz-ticker{ background: var(--accent); }
+  .wkz-ticker .ticker{ animation-duration:34s; }
+  .wkz-ticker .ticker-item{ color:#fff; letter-spacing:0.04em; text-transform:uppercase; font-size:16px; }
+  .wkz-ticker .ticker-item em{ font-style:normal; color: var(--wkz-sky); }
+  .wkz-ticker .ticker-sep{ color: var(--wkz-sky); }
+  @media (prefers-reduced-motion:reduce){
+    .wkz-ticker .ticker{ animation:none; }
+  }
+
+  /* -------- Sezioni: eyebrow, titolo con corsivo d'accento e testo a
+     fianco, come nelle altre pagine progetto -------- */
+  .wkz-section .eyebrow{
+    display:inline-block;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:22px;
+  }
+  .wkz-section.dark .eyebrow{ color: var(--wkz-sky); }
+  .wkz-section.dark .section-title em{ color:#F26B76; }
+  .wkz-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px 48px;
+    flex-wrap:wrap;
+    margin-bottom:48px;
+  }
+  .wkz-head .section-title{ margin:0; line-height:1.1; }
+  .wkz-head > p,
+  .wkz-head-text p{ color: var(--ink-soft); max-width:50ch; margin:0; font-size:1.02rem; }
+  .wkz-head-text{ max-width:50ch; }
+  .wkz-section.dark .wkz-head > p,
+  .wkz-section.dark .wkz-head-text p{ color:#B9B4A6; }
+  .wkz-section.dark .wkz-head strong{ color: var(--paper); }
+  section.wkz-tinted{ background: var(--wkz-azure-pale); border-top:none; }
+  section.wkz-tinted + section{ border-top:none; }
+
+  /* -------- Il gioco: chi cercare + la tavola con la lente -------- */
+  /* .project-fullshots (style.css) azzera il padding e mette i figli in
+     colonna flex: qui servono una sezione normale e le .wrap centrate */
+  section.wkz-game{ display:block; padding:90px 0 100px; }
+  @media (max-width:640px){
+    section.wkz-game{ padding:48px 0 56px; }
+  }
+  /* Stessa larghezza della tavola: la fila di personaggi è molto larga
+     (3,2:1) e dentro la colonna di testo restava troppo bassa */
+  .wkz-cast{
+    margin:0 0 110px;
+    padding:20px 24px 12px;
+    border-radius:22px;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(23,20,15,.1);
+  }
+  /* il jpg ha una riga grigia di 1px sul bordo alto e basso: la nascondo */
+  .wkz-cast img{ display:block; width:100%; height:auto; clip-path: inset(2px 0); }
+  .wkz-cast:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+  .wkz-cast-hint{ display:none; }
+  .wkz-board.wrap{ max-width:1500px; }
+  .project-fullshots .fullshot.wkz-tavola{
+    border-radius:22px;
+    box-shadow:0 30px 70px rgba(23,20,15,.18);
+    background: var(--paper-dim);
+  }
+  .wkz-tavola-tag{
+    position:absolute;
+    top:18px; left:18px;
+    z-index:4;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 14px;
+    border-radius:999px;
+    background: var(--accent);
+    color:#fff;
+    font-size:0.74rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    pointer-events:none;
+    transition: opacity .25s ease;
+  }
+  .wkz-tavola:hover .wkz-tavola-tag{ opacity:0; }
+  .wkz-board-bar{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-top:24px;
+  }
+  .wkz-board-bar .fullshot-note-wrap{
+    flex:1 1 auto;
+    min-width:0;
+    padding:12px 0;
+    border-radius:999px;
+    background:#fff;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+  .wkz-board-bar .fullshot-note-item{ font-style:normal; font-size:0.9rem; color: var(--ink-soft); }
+  .wkz-board-bar .fullshot-note-item strong{
+    display:inline-block;
+    margin-right:6px;
+    padding:1px 9px;
+    border-radius:999px;
+    background: var(--wkz-azure);
+    color:#fff;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+  }
+  .wkz-board-bar .fullshot-note-sep{ color: var(--accent); font-style:normal; }
+  .wkz-toggle.btn-primary{
+    flex:none;
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
+    background: var(--accent);
+    color:#fff;
+  }
+  .wkz-toggle.btn-primary:hover{ background: var(--ink); color: var(--paper); }
+  .wkz-toggle::before{
+    font-family:"Font Awesome 6 Free";
+    font-weight:900;
+    content:"\f002";
+  }
+  .wkz-toggle[aria-pressed="true"]::before{ content:"\f2f9"; }
+  .wkz-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  @media (max-width:820px){
+    /* Su schermi stretti i personaggi non si rimpiccioliscono: la card
+       scorre in orizzontale */
+    .wkz-cast{
+      margin-bottom:0;
+      padding:14px 16px 8px;
+      border-radius:16px;
+      overflow-x:auto;
+      overscroll-behavior-x:contain;
+      scrollbar-width:none;
+    }
+    .wkz-cast::-webkit-scrollbar{ display:none; }
+    .wkz-cast img{ width:880px; max-width:none; }
+    .wkz-cast-hint{
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      margin:14px 0 64px;
+      font-size:0.82rem;
+      color: var(--ink-soft);
+    }
+    .wkz-cast-hint i{ color: var(--accent); }
+    .project-fullshots .fullshot.wkz-tavola{ border-radius:14px; }
+    .wkz-board-bar{ flex-direction:column; align-items:stretch; }
+    .wkz-toggle.btn-primary{ align-self:center; }
+  }
+
+  /* -------- Caroselli a scorrimento libero, come quello di Strush: riga
+     di foto che si trascina col mouse (con inerzia), barra di avanzamento
+     sotto e una foto alla volta messa in evidenza. Le foto hanno tutte la
+     stessa altezza e ognuna la sua proporzione. -------- */
+  .pano-scroller{
+    position:relative; /* riferimento per offsetLeft delle foto (vedi script) */
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+    cursor:grab;
+    padding:18px 0 40px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .pano-scroller::-webkit-scrollbar{ display:none; }
+  .pano-scroller:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .pano-scroller.is-dragging{ cursor:grabbing; }
+  .pano-scroller.is-dragging .pano-frame{ pointer-events:none; }
+  .pano-track{
+    display:flex;
+    gap:12px;
+    width:max-content;
+    padding:0 max(40px, calc((100vw - 1180px) / 2 + 40px));
+  }
+  .pano-frame{
+    position:relative;
+    flex:0 0 auto;
+    height: var(--pano-h, min(64vh, 560px));
+    margin:0;
+    overflow:hidden;
+    border-radius:18px;
+    background: var(--paper-dim);
+    box-shadow:0 0 0 1px rgba(23,20,15,.06), 0 18px 40px rgba(23,20,15,.12);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .pano-frame img{
+    display:block;
+    width:auto; height:100%;
+    user-select:none;
+    -webkit-user-select:none;
+    -webkit-user-drag:none;
+  }
+  .pano-frame:hover,
+  .pano-track:not(:hover) .pano-frame.is-active{
+    transform: translateY(-12px) rotate(-1deg);
+    box-shadow:0 0 0 1px rgba(23,20,15,.08), 0 24px 50px rgba(23,20,15,.18), 0 0 26px rgba(198,44,57,.3);
+  }
+  .pano-frame figcaption{
+    position:absolute;
+    left:12px; bottom:12px;
+    padding:5px 10px;
+    border-radius:999px;
+    background: rgba(23,20,15,.75);
+    color:#fff;
+    font-size:0.75rem;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+  }
+  .pano-bar{ display:flex; align-items:center; gap:16px; }
+  .pano-progress{ flex:1; height:3px; border-radius:2px; background: rgba(23,20,15,.12); overflow:hidden; }
+  .pano-progress span{
+    display:block;
+    height:100%; width:20%;
+    background: linear-gradient(90deg, var(--accent), var(--wkz-azure));
+    transform-origin:left;
+  }
+  .pano-hint{ font-size:0.85rem; color: var(--ink-soft); white-space:nowrap; }
+  /* su fondo scuro */
+  .dark .pano-frame{ background:#2a2620; box-shadow:0 0 0 1px rgba(255,255,255,.1), 0 24px 50px rgba(0,0,0,.45); }
+  .dark .pano-frame:hover,
+  .dark .pano-track:not(:hover) .pano-frame.is-active{
+    box-shadow:0 0 0 1px rgba(255,255,255,.2), 0 24px 50px rgba(0,0,0,.45), 0 0 26px rgba(111,205,235,.4);
+  }
+  .dark .pano-progress{ background: rgba(255,255,255,.14); }
+  .dark .pano-progress span{ background: linear-gradient(90deg, #F26B76, var(--wkz-sky)); }
+  .dark .pano-hint{ color: rgba(247,245,240,.6); }
+  /* gli sticker sono tutti orizzontali: un po' più bassi */
+  .pano--sticker{ --pano-h: min(56vh, 480px); }
+  @media (max-width:640px){
+    .pano-track{ padding:0 20px; gap:10px; }
+    .pano-scroller{ padding:14px 0 30px; }
+    .pano-frame{ --pano-h: min(58vh, 420px); border-radius:14px; }
+    .pano--sticker .pano-frame{ --pano-h: 260px; }
+    .pano-hint{ display:none; }
+  }
+  .wkz-stopwatch{
+    display:inline-flex; align-items:center; gap:10px;
+    margin-top:20px;
+    padding:10px 18px;
+    border-radius:999px;
+    background: rgba(111,205,235,.12);
+    border:1px solid rgba(111,205,235,.35);
+    color: var(--paper);
+    font-size:0.9rem;
+    font-weight:700;
+  }
+  .wkz-stopwatch i{ color: var(--wkz-sky); }
+
+  /* -------- Lip-sync: card video arrotondate su fondo azzurro -------- */
+  .wkz-section .carousel-lipsync-grid{ gap:20px; }
+  .wkz-section .carousel-lipsync-grid .carousel-slide{
+    border-radius:18px;
+    background: var(--ink);
+    box-shadow:0 20px 44px rgba(2,121,160,.18);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .wkz-section .carousel-lipsync-grid .carousel-slide:hover{
+    transform: translateY(-6px);
+    box-shadow:0 28px 54px rgba(2,121,160,.26);
+  }
+
+  /* -------- Lo sticker: Nicola che sbuca accanto al titolo -------- */
+  .wkz-title-row{ display:flex; align-items:center; gap:18px; }
+  .wkz-title-sticker{
+    width:132px;
+    height:auto;
+    transform: rotate(8deg);
+    filter: drop-shadow(0 10px 16px rgba(23,20,15,.22));
+    transition: transform .6s cubic-bezier(.3,1.6,.5,1);
+  }
+  .wkz-title-row:hover .wkz-title-sticker{ transform: rotate(-4deg) translateY(-6px) scale(1.06); }
+  @media (max-width:560px){
+    .wkz-title-sticker{ width:96px; }
+  }
+
+  /* -------- Packaging: schede tecniche in pillole -------- */
+  .wkz-section .packaging-head{ max-width:1180px; margin-bottom:48px; }
+  .wkz-section .packaging-head .section-title{ margin-bottom:28px; }
+  .wkz-section .packaging-head .text-cols{ max-width:900px; color:#B9B4A6; }
+  .wkz-section .packaging-head .text-cols strong{ color: var(--paper); }
+  .wkz-specs{ display:flex; flex-wrap:wrap; gap:10px; list-style:none; margin:32px 0 0; padding:0; }
+  .wkz-specs li{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid rgba(247,245,240,.22);
+    font-size:0.86rem;
+    font-weight:700;
+    color: var(--paper);
+  }
+  .wkz-specs i{ color: var(--wkz-sky); }
+
+  /* -------- Chiusura: testo + card dei prodotti -------- */
+  .project-end .wkz-end{
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:64px;
+    align-items:center;
+    text-align:left;
+  }
+  .wkz-end .section-title{ margin:0 0 18px; line-height:1.1; }
+  .wkz-end .project-links{ justify-content:flex-start; }
+  .wkz-end > div > p{ color: var(--ink-soft); max-width:46ch; margin:0 0 32px; }
+  .wkz-shop{
+    position:relative;
+    display:block;
+    padding:34px 32px 28px;
+    border-radius:22px;
+    background: var(--accent);
+    color:#fff;
+    text-decoration:none;
+    box-shadow:0 24px 50px rgba(198,44,57,.28);
+    transform: rotate(1.2deg);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .wkz-shop:hover{ transform: rotate(0deg) translateY(-4px); box-shadow:0 30px 60px rgba(198,44,57,.35); }
+  .wkz-shop:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+  .wkz-shop-sticker{
+    position:absolute;
+    right:-26px; top:-58px;
+    width:150px;
+    height:auto;
+    transform: rotate(10deg);
+    filter: drop-shadow(0 12px 18px rgba(23,20,15,.3));
+    transition: transform .6s cubic-bezier(.3,1.6,.5,1);
+    pointer-events:none;
+  }
+  .wkz-shop:hover .wkz-shop-sticker{ transform: rotate(-3deg) translateY(-8px) scale(1.05); }
+  .wkz-shop-label{
+    display:block;
+    margin-bottom:6px;
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.75);
+  }
+  .wkz-shop strong{ display:block; font-size:1.5rem; line-height:1.15; letter-spacing:-0.01em; margin-bottom:20px; max-width:12ch; text-wrap:balance; }
+  .wkz-shop ul{ list-style:none; margin:0 0 22px; padding:0; }
+  .wkz-shop li{
+    display:flex; justify-content:space-between; gap:16px;
+    padding:11px 0;
+    border-top:1px solid rgba(255,255,255,.22);
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .wkz-shop li span{ font-weight:400; color:rgba(255,255,255,.75); font-size:0.9rem; white-space:normal; text-align:right; }
+  .wkz-shop-cta{ font-weight:700; font-size:0.95rem; }
+  @media (max-width:980px){
+    .project-end .wkz-end{ grid-template-columns:minmax(0, 1fr); gap:72px; }
+    .wkz-shop{ max-width:440px; transform:none; }
+  }
+  @media (max-width:560px){
+    .wkz-shop-sticker{ right:-6px; width:110px; top:-48px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .wkz-badge-ring{ animation:none; }
+    .wkz-awards[open]{ animation:none; }
+    .wkz-badge, .wkz-title-sticker, .wkz-shop, .wkz-shop-sticker,
+    .wkz-section .carousel-lipsync-grid .carousel-slide, .pano-frame{ transition:none; }
   }
 </style>
 </head>
@@ -142,100 +670,167 @@
         <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
       </div>
     </div>
-    <div class="project-hero-pack" id="wkz-pack" aria-hidden="true">
-      <div class="wkz-pack-shadow" id="wkz-pack-shadow"></div>
+    <div class="project-hero-pack" id="wkz-pack">
+      <div class="wkz-pack-shadow" id="wkz-pack-shadow" aria-hidden="true"></div>
+      <button class="wkz-badge" id="wkz-awards-open" type="button" aria-haspopup="dialog" aria-controls="wkz-awards" aria-label="Premi e pubblicazioni: apri la lista">
+        <svg class="wkz-badge-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="wkz-ring-path" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <text><textPath href="#wkz-ring-path" textLength="268" lengthAdjust="spacing">Premi &amp; Pubblicazioni <tspan class="star">✦</tspan></textPath></text>
+        </svg>
+        <span class="wkz-badge-core" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
+      </button>
+      <span class="wkz-pack-hint" aria-hidden="true"><i class="fa-solid fa-hand-pointer"></i>Trascina la busta per girarla</span>
     </div>
   </div>
 
-  <section class="project-fullshots">
-    <figure class="fullshot fullshot-contain">
-      <img class="art" src="assets/images/WKZ/CARACTER.jpg" width="6161" height="1912" alt="Character design di Where’s Kud Zamb?: Nicola e i personaggi della sua famiglia in fila, a figura intera" loading="lazy" decoding="async">
-    </figure>
-    <figure class="fullshot fullshot-contain loupe-zoom">
+  <div class="ticker-wrap wkz-ticker" aria-hidden="true">
+    <div class="ticker">
+      <span class="ticker-item">Where's Kud Zamb?</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Find Nicola <em>in Bari</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Zamb <em>= cafone</em> · dialetto barese</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">430 persone · 21 cani · <em>1 unicorno</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Progetto di tesi <em>NABA Milano</em></span>
+      <span class="ticker-sep">✱</span>
+      <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
+      <span class="ticker-item">Where's Kud Zamb?</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Find Nicola <em>in Bari</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Zamb <em>= cafone</em> · dialetto barese</span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">430 persone · 21 cani · <em>1 unicorno</em></span>
+      <span class="ticker-sep">✱</span>
+      <span class="ticker-item">Progetto di tesi <em>NABA Milano</em></span>
+      <span class="ticker-sep">✱</span>
+    </div>
+  </div>
+
+  <section class="project-fullshots wkz-section wkz-game">
+    <div class="wrap">
+      <div class="wkz-head">
+        <div>
+          <span class="eyebrow">Character design · Chi cercare</span>
+          <h2 class="section-title">Nicola e <em>la sua famiglia</em></h2>
+        </div>
+        <p>Sono loro i personaggi nascosti nella tavola: guardali bene, memorizza facce, vestiti e colori, poi scendi e prova a trovarli tutti tra la folla del lungomare.</p>
+      </div>
+    </div>
+    <div class="wrap wkz-board">
+      <figure class="wkz-cast" tabindex="0" aria-label="Nicola e la sua famiglia, scorri in orizzontale per vederli tutti">
+        <img src="assets/images/WKZ/CARACTER.jpg" width="2400" height="745" alt="Character design di Where’s Kud Zamb?: Nicola e i personaggi della sua famiglia in fila, a figura intera" loading="lazy" decoding="async">
+      </figure>
+      <p class="wkz-cast-hint"><i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i>Scorri per vederli tutti</p>
+    </div>
+    <div class="wrap">
+      <div class="wkz-head">
+        <div>
+          <span class="eyebrow">La tavola · Il gioco</span>
+          <h2 class="section-title">Trova Nicola <em>per Bari</em></h2>
+        </div>
+        <p><span class="hint-mouse">Passa sopra l'illustrazione: la lente ingrandisce i dettagli. </span>Se proprio non ce la fai, sotto c'è il pulsante per vedere le soluzioni.</p>
+      </div>
+    </div>
+    <div class="wrap wkz-board">
+    <figure class="fullshot fullshot-contain loupe-zoom wkz-tavola">
       <img class="art" id="wkz-tesi-art" src="assets/images/VITO_CARNIMEO_TESI.JPG" width="7087" height="3898" alt="Tavola di tesi Where’s Kud Zamb?: il lungomare di Bari affollato di personaggi illustrati, tra cui si nascondono Nicola e la sua famiglia" loading="lazy" decoding="async">
       <img class="wkz-tesi-overlay" id="wkz-tesi-soluzioni" src="assets/images/wkz-web/WKZ_SOLUZIONI.jpg" width="7087" height="3898" alt="Tavola di tesi con le soluzioni: in evidenza Nicola e i membri della sua famiglia nascosti tra la folla" loading="lazy" decoding="async">
       <div class="loupe-handle" aria-hidden="true"></div>
       <div class="loupe-lens" aria-hidden="true"></div>
+      <span class="wkz-tavola-tag hint-mouse" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i>Passa sopra con la lente</span>
     </figure>
-    <div class="wkz-tesi-cta-wrap">
-      <button type="button" class="btn-primary" id="wkz-tesi-toggle" aria-pressed="false">Basta mi arrendo ↗</button>
-    </div>
-    <div class="fullshot-note-wrap">
-      <div class="fullshot-note-track">
-        <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
-        <span class="fullshot-note-sep">•</span>
-        <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="carousel-section dark">
-    <div class="wrap carousel-head">
-      <h2 class="section-title">Prova sul campo</h2>
-      <p>Ho portato il telo con il poster interattivo tra i <strong>passanti</strong>, invitandoli a partecipare al gioco di individuazione dei personaggi.<br>Ho cronometrato i tempi di ciascun partecipante per <strong>analizzare l'efficacia del gioco</strong>, premiando con uno sticker chi riusciva a trovare Nicola in meno di due
-minuti.</p>
-    </div>
-    <div class="carousel carousel-campo" data-carousel>
-      <div class="carousel-viewport">
-        <div class="carousel-track">
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-01.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 01" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-02.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 02" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-03.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 03" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-04.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 04" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-05.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 05" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-06.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 06" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-07.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 07" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-08.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 08" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-09.jpg" width="6000" height="4000" alt="Trova Nicola per Bari — scatto 09" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-10.jpg" width="5941" height="3961" alt="Trova Nicola per Bari — scatto 10" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-11.jpg" width="2653" height="3979" alt="Trova Nicola per Bari — scatto 11" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-12.jpg" width="3931" height="4914" alt="Trova Nicola per Bari — scatto 12" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-13.jpg" width="3750" height="4687" alt="Trova Nicola per Bari — scatto 13" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-14.jpg" width="3521" height="5282" alt="Trova Nicola per Bari — scatto 14" loading="lazy" decoding="async"></figure>
+    <div class="wkz-board-bar">
+      <div class="fullshot-note-wrap">
+        <div class="fullshot-note-track">
+          <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
+          <span class="fullshot-note-sep">•</span>
+          <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430 persone (alieni, pokemon, sirenetti); 21 cani; 10 gatti; 23 palloni; 3 papere; 8 piccioni; 1 polpo; 1 pellicano; 6 topolini; 1 unicorno; 1 foca; 1 granchio; 1 sfera del drago; 2 galli, 1 gabibbo; 4 pesci; 4 tartarughe</span>
         </div>
       </div>
-      <div class="carousel-controls">
-        <button class="car-btn prev" type="button" aria-label="Foto precedente">‹</button>
-        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">14</span></span>
-        <button class="car-btn next" type="button" aria-label="Foto successiva">›</button>
+      <button type="button" class="btn-primary wkz-toggle" id="wkz-tesi-toggle" aria-pressed="false">Basta mi arrendo ↗</button>
+    </div>
+    </div>
+  </section>
+
+  <section class="carousel-section dark wkz-section">
+    <div class="wrap wkz-head">
+      <div>
+        <span class="eyebrow">Test con il pubblico</span>
+        <h2 class="section-title">Prova <em>sul campo</em></h2>
+      </div>
+      <div class="wkz-head-text">
+      <p>Ho portato il telo con il poster interattivo tra i <strong>passanti</strong>, invitandoli a partecipare al gioco di individuazione dei personaggi.<br>Ho cronometrato i tempi di ciascun partecipante per <strong>analizzare l'efficacia del gioco</strong>, premiando con uno sticker chi riusciva a trovare Nicola in meno di due minuti.</p>
+      <span class="wkz-stopwatch"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i>Sotto i 2 minuti = sticker in regalo</span>
+      </div>
+    </div>
+    <div class="pano pano--campo">
+      <div class="pano-scroller" tabindex="0" aria-label="Foto della prova sul campo, scorri in orizzontale">
+        <div class="pano-track">
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-01.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-02.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-03.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-04.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-05.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-06.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-07.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-08.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-09.jpg" width="6000" height="4000" alt="Trova Nicola per Bari — scatto 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-10.jpg" width="5941" height="3961" alt="Trova Nicola per Bari — scatto 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-11.jpg" width="2653" height="3979" alt="Trova Nicola per Bari — scatto 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-12.jpg" width="3931" height="4914" alt="Trova Nicola per Bari — scatto 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-13.jpg" width="3750" height="4687" alt="Trova Nicola per Bari — scatto 13" loading="lazy" decoding="async" draggable="false"><figcaption>13 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-14.jpg" width="3521" height="5282" alt="Trova Nicola per Bari — scatto 14" loading="lazy" decoding="async" draggable="false"><figcaption>14 / 14</figcaption></figure>
+        </div>
+      </div>
+      <div class="wrap pano-bar">
+        <div class="pano-progress" aria-hidden="true"><span></span></div>
+        <span class="pano-hint">Trascina per scorrere</span>
       </div>
     </div>
   </section>
 
-  <section class="carousel-section">
-    <div class="wrap carousel-head">
-      <h2 class="section-title">Bozzetti & carattere</h2>
+  <section class="carousel-section wkz-section">
+    <div class="wrap wkz-head">
+      <div>
+        <span class="eyebrow">Sketch · Studio del personaggio</span>
+        <h2 class="section-title">Bozzetti <em>&amp; carattere</em></h2>
+      </div>
       <p>Una serie di sketch dedicati alla costruzione di Nicola, attraverso espressioni, proporzioni e pose che ne hanno definito progressivamente il carattere e il linguaggio grafico.
-      <br>Gli sketch esplorano i diversi atteggiamenti del protagonista, incarnando l’energia, l’amore e la simpatia dei baresi in un ragazzo apparentemente menefreghista e strafottente, ma in realtà dolce, ironico e profondamente legato alla sua città.</p>
+      </p>
     </div>
-    <div class="carousel carousel-sketch" data-carousel>
-      <div class="carousel-viewport">
-        <div class="carousel-track">
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-01.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 01" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-02.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 02" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-03.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 03" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-04.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 04" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-05.jpg" width="1146" height="1146" alt="Sketch di studio del personaggio — 05" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-06.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 06" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-07.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 07" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-08.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 08" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-09.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 09" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-10.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 10" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-11.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 11" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/sketch/sketch-12.jpg" width="1154" height="1154" alt="Sketch di studio del personaggio — 12" loading="lazy" decoding="async"></figure>
+    <div class="pano pano--sketch">
+      <div class="pano-scroller" tabindex="0" aria-label="Sketch di studio del personaggio, scorri in orizzontale">
+        <div class="pano-track">
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-01.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-02.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-03.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-04.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-05.jpg" width="1146" height="1146" alt="Sketch di studio del personaggio — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-06.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-07.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-08.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-09.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-10.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-11.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-12.jpg" width="1154" height="1154" alt="Sketch di studio del personaggio — 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 12</figcaption></figure>
         </div>
       </div>
-      <div class="carousel-controls">
-        <button class="car-btn prev" type="button" aria-label="Sketch precedente">‹</button>
-        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">12</span></span>
-        <button class="car-btn next" type="button" aria-label="Sketch successivo">›</button>
+      <div class="wrap pano-bar">
+        <div class="pano-progress" aria-hidden="true"><span></span></div>
+        <span class="pano-hint">Trascina per scorrere</span>
       </div>
     </div>
   </section>
 
-  <section class="carousel-section dark">
-    <div class="wrap carousel-head">
-      <h2 class="section-title">Lip-Sync & limited animation</h2>
+  <section class="carousel-section wkz-section wkz-tinted">
+    <div class="wrap wkz-head">
+      <div>
+        <span class="eyebrow">Motion · Animazione</span>
+        <h2 class="section-title">Lip-Sync <em>&amp; limited animation</em></h2>
+      </div>
       <p>Ho realizzato il character design di Nicola e della sua famiglia, nascosti all’interno del poster.<br>
           I personaggi sono stati animati con
           la tecnica della <strong>limited animation</strong>,
@@ -269,37 +864,43 @@ minuti.</p>
     </div>
   </section>
 
-  <section class="carousel-section">
-    <div class="wrap carousel-head">
-      <h2 class="section-title">Lo sticker</h2>
+  <section class="carousel-section wkz-section">
+    <div class="wrap wkz-head">
+      <div>
+        <span class="eyebrow">Guerrilla · Per le strade di Bari</span>
+        <div class="wkz-title-row">
+          <h2 class="section-title">Lo <em>sticker</em></h2>
+          <img class="wkz-title-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker.png" width="640" height="599" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        </div>
+      </div>
       <p>Lo sticker doveva suscitare curiosità, così ho deciso di inserire direttamente la domanda, che è anche il titolo del progetto: <strong>“Where’s Kud Zamb?”</strong>. Il lettering rosso e bianco richiama i colori di Bari.<br><br>
 
 Ho scelto di raffigurare sullo sticker il volto di Nicola e il colore della sua maglietta, così da aiutare le persone a riconoscerlo più facilmente nell’illustrazione finale.<br>
 
 Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagram del progetto, dove era possibile vedere l’illustrazione completa.</p>
     </div>
-    <div class="carousel carousel-sticker" data-carousel>
-      <div class="carousel-viewport">
-        <div class="carousel-track">
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_01.jpg" width="5118" height="3412" alt="Sticker guerrilla Where's Kud Zamb — 01" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_02.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 02" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_03.jpg" width="5943" height="3962" alt="Sticker guerrilla Where's Kud Zamb — 03" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_04.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 04" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_05.jpg" width="5713" height="3809" alt="Sticker guerrilla Where's Kud Zamb — 05" loading="lazy" decoding="async"></figure>
-          <figure class="carousel-slide"><img src="assets/images/wkz-web/STICKER/STICKER_06.jpg" width="5692" height="3795" alt="Sticker guerrilla Where's Kud Zamb — 06" loading="lazy" decoding="async"></figure>
+    <div class="pano pano--sticker">
+      <div class="pano-scroller" tabindex="0" aria-label="Foto dello sticker per le strade, scorri in orizzontale">
+        <div class="pano-track">
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_01.jpg" width="5118" height="3412" alt="Sticker guerrilla Where's Kud Zamb — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_02.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_03.jpg" width="5943" height="3962" alt="Sticker guerrilla Where's Kud Zamb — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_04.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_05.jpg" width="5713" height="3809" alt="Sticker guerrilla Where's Kud Zamb — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_06.jpg" width="5692" height="3795" alt="Sticker guerrilla Where's Kud Zamb — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 06</figcaption></figure>
         </div>
       </div>
-      <div class="carousel-controls">
-        <button class="car-btn prev" type="button" aria-label="Sticker precedente">‹</button>
-        <span class="car-counter"><span class="cur">01</span>&nbsp;/&nbsp;<span class="tot">06</span></span>
-        <button class="car-btn next" type="button" aria-label="Sticker successivo">›</button>
+      <div class="wrap pano-bar">
+        <div class="pano-progress" aria-hidden="true"><span></span></div>
+        <span class="pano-hint">Trascina per scorrere</span>
       </div>
     </div>
   </section>
 
-  <section class="carousel-section dark">
-    <div class="wrap carousel-head packaging-head">
-      <h2 class="section-title">Il packaging </h2>
+  <section class="carousel-section dark wkz-section">
+    <div class="wrap packaging-head">
+      <span class="eyebrow">Merch · Telo in pile</span>
+      <h2 class="section-title">Il <em>packaging</em></h2>
       <div class="text-cols">
         <div class="text-col">
         <p>Il nuovo merchandising del progetto <strong>"Where's Kud Zamb?"</strong> si arricchisce di un <strong>nuovo packaging</strong>, pensato per rendere l'esperienza ancora più legata al gioco.</p>
@@ -310,6 +911,13 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
         <p>Disponibile da <strong>dicembre 2024</strong>, è il regalo perfetto per portare con sé l'universo di <em>Where's Kud Zamb?</em> e restare al caldo con stile durante l'inverno.</p>
         </div>
       </div>
+      <ul class="wkz-specs">
+        <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Made in Italy</li>
+        <li><i class="fa-solid fa-feather" aria-hidden="true"></i>Pile 100%</li>
+        <li><i class="fa-solid fa-leaf" aria-hidden="true"></i>OEKO-TEX</li>
+        <li><i class="fa-solid fa-seedling" aria-hidden="true"></i>Global Organic Textile</li>
+        <li><i class="fa-regular fa-calendar" aria-hidden="true"></i>Da dicembre 2024</li>
+      </ul>
     </div>
     <div class="photo-duo-grid">
       <figure class="is-portrait"><img src="assets/images/wkz-web/foto-finali/foto-fine-01.JPG" width="3835" height="5752" alt="Telo pile Where's Kud Zamb — scatto 01" loading="lazy" decoding="async"></figure>
@@ -318,18 +926,56 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
   </section>
 
   <section class="project-end">
-    <div class="wrap project-end-inner">
-      <h2 class="section-title">Sei interessato all'acquisto?</h2>
-      <p>Teli mare, pile, poster, sticker e altri prodotti sono disponibili.
-Per scoprire quelli disponibili e ricevere maggiori informazioni, contattami.</p>
-      <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni&nbsp;↗</a>
-        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+    <div class="wrap wkz-end">
+      <div>
+        <h2 class="section-title">Sei interessato <em>all'acquisto?</em></h2>
+        <p>Teli mare, pile, poster, sticker e altri prodotti sono disponibili. Per scoprire quelli disponibili e ricevere maggiori informazioni, contattami.</p>
+        <div class="project-links">
+          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni&nbsp;↗</a>
+          <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        </div>
       </div>
+      <a class="wkz-shop" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi per acquistare i prodotti di Where's Kud Zamb?">
+        <img class="wkz-shop-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker.png" width="640" height="599" alt="" loading="lazy" decoding="async">
+        <span class="wkz-shop-label">Merch ufficiale</span>
+        <strong>Porta Nicola a casa</strong>
+        <ul>
+          <li>Telo mare<span>La tavola intera</span></li>
+          <li>Telo in pile<span>Con busta illustrata</span></li>
+          <li>Poster<span>La tavola di tesi</span></li>
+          <li>Sticker &amp; shopper<span>Where's Kud Zamb?</span></li>
+        </ul>
+        <span class="wkz-shop-cta">Scrivimi per ordinare ↗</span>
+      </a>
     </div>
   </section>
 
 </main>
+
+<!-- Premi & Pubblicazioni: stessa lista di index.html (#in-evidenza),
+     se aggiungi un premio aggiornala in entrambe le pagine -->
+<dialog class="wkz-awards" id="wkz-awards" aria-labelledby="wkz-awards-title">
+  <div class="wkz-awards-head">
+    <span class="eyebrow">Where's Kud Zamb? · Riconoscimenti</span>
+    <h2 id="wkz-awards-title"><i class="fa-solid fa-trophy" aria-hidden="true"></i>Premi &amp; Pubblicazioni</h2>
+    <button class="wkz-awards-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  </div>
+  <div class="wkz-awards-body">
+    <div class="awards">
+        <ul class="awards-list">
+          <li><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in collaborazione con Print Club Torino e Graphic Days®, in mostra al festival 2027</span></li>
+          <li><span class="award-year">2026</span><span class="award-name">Vincitore — Farm Cultural Park Award, Premio Neologia</span><span class="award-org">Residenza artistica presso Farm Cultural Park, realtà internazionale di rigenerazione culturale</span></li>
+          <li><span class="award-year">2026</span><span class="award-name">Rassegna Stampa — Neologia Gallery</span><span class="award-org">Il progetto è raccontato in un articolo di Neologia Gallery, archivio dei nuovi talenti della comunicazione visiva italiana</span></li>
+          <li><span class="award-year">2026</span><span class="award-name">Esposizione — Torino Graphic Days®</span><span class="award-org">Opera selezionata per l’XI edizione Graphic Days®</span></li>
+          <li><span class="award-year">2025</span><span class="award-name">Borsa di Studio — Città di Bari</span><span class="award-org">Vincitore per la miglior tesi sulla città di Bari A.A. 2024/2025 — Premiazione a cura del Sindaco di Bari Vito Leccese</span></li>
+          <li><span class="award-year">2025</span><span class="award-name">Pubblicazione Editoriale — Grafica Magazine</span><span class="award-org">Progetto pubblicato nel terzo volume di Grafica Magazine — sold out</span></li>
+          <li><span class="award-year">2024</span><span class="award-name">Rassegna Stampa — Telebari</span><span class="award-org">Pubblicazione a cura di Sara Di Leo</span></li>
+          <li><span class="award-year">2024</span><span class="award-name">Esposizione — Comune di Bari</span><span class="award-org">Opera esposta a "Pane e Pomodoro Beach"</span></li>
+          <li><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per Catalogo Library NABA</span></li>
+        </ul>
+    </div>
+  </div>
+</dialog>
 
 <!-- comune:footer · non modificare qui: _partials/footer.html -->
 <footer class="wrap">
@@ -339,6 +985,149 @@ Per scoprire quelli disponibili e ricevere maggiori informazioni, contattami.</p
 <!-- /comune:footer -->
 
 <script>
+  // Bollino "Premi & Pubblicazioni": apre la lista in una finestra modale.
+  // Si chiude con la X, con Esc (nativo di <dialog>) o cliccando fuori.
+  (function () {
+    var openBtn = document.getElementById('wkz-awards-open');
+    var dialog = document.getElementById('wkz-awards');
+    if (!openBtn || !dialog || typeof dialog.showModal !== 'function') return;
+    // il pulsante sta sopra la busta 3D: il clic non deve avviare il trascinamento
+    openBtn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+    openBtn.addEventListener('click', function () { dialog.showModal(); });
+    dialog.querySelector('.wkz-awards-close').addEventListener('click', function () { dialog.close(); });
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+  })();
+
+  // Caroselli (come quello di Strush): col mouse si scorre trascinando, con
+  // un po' di inerzia al rilascio; al tocco lo scroll è già nativo. La barra
+  // sotto segue lo scroll. Quando il carosello entra in scena si mette in
+  // evidenza la prima foto, poi ogni 1,5 secondi la successiva fino
+  // all'ultima, e si torna indietro. Col cursore sopra una foto si ferma.
+  (function () {
+    var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.pano').forEach(function (pano) {
+      var scroller = pano.querySelector('.pano-scroller');
+      var bar = pano.querySelector('.pano-progress span');
+      var frames = Array.prototype.slice.call(scroller.querySelectorAll('.pano-frame'));
+
+      function updateBar() {
+        var max = scroller.scrollWidth - scroller.clientWidth;
+        var vis = scroller.clientWidth / scroller.scrollWidth;
+        bar.style.width = (vis * 100).toFixed(2) + '%';
+        bar.style.transform = 'translateX(' + (max ? (scroller.scrollLeft / max) * (1 / vis - 1) * 100 : 0).toFixed(2) + '%)';
+      }
+      scroller.addEventListener('scroll', updateBar, { passive: true });
+      window.addEventListener('resize', updateBar);
+      pano.querySelectorAll('img').forEach(function (img) { img.addEventListener('load', updateBar); });
+
+      // All'apertura la riga parte dalla seconda foto, allineata dove
+      // inizierebbe la prima: a sinistra si vede già la coda della prima
+      // invece del margine vuoto. Finché non si tocca il carosello, la
+      // posizione si riallinea se la pagina cambia misura.
+      var first = Math.min(1, frames.length - 1);
+      var touched = false;
+      function startAtSecond() {
+        if (touched || !frames[first]) return;
+        var padL = parseFloat(getComputedStyle(scroller.querySelector('.pano-track')).paddingLeft) || 0;
+        scroller.scrollLeft = frames[first].offsetLeft - padL;
+        updateBar();
+      }
+      ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (type) {
+        scroller.addEventListener(type, function () { touched = true; }, { passive: true });
+      });
+      startAtSecond();
+      window.addEventListener('load', startAtSecond);
+      window.addEventListener('resize', startAtSecond);
+
+      var drag = null;
+      var glide = 0;
+      scroller.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        cancelAnimationFrame(glide);
+        drag = { x: e.clientX, left: scroller.scrollLeft, v: 0, lastX: e.clientX, lastT: performance.now(), moved: false };
+      });
+      window.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        var dx = e.clientX - drag.x;
+        if (!drag.moved && Math.abs(dx) > 4) { drag.moved = true; scroller.classList.add('is-dragging'); }
+        if (!drag.moved) return;
+        var now = performance.now();
+        drag.v = (e.clientX - drag.lastX) / Math.max(1, now - drag.lastT);
+        drag.lastX = e.clientX;
+        drag.lastT = now;
+        scroller.scrollLeft = drag.left - dx;
+      });
+      window.addEventListener('pointerup', function () {
+        if (!drag) return;
+        var v = drag.v * 16;
+        drag = null;
+        scroller.classList.remove('is-dragging');
+        if (reduceMotion) return;
+        (function step() {
+          if (Math.abs(v) < 0.5) return;
+          scroller.scrollLeft -= v;
+          v *= 0.94;
+          glide = requestAnimationFrame(step);
+        })();
+      });
+      scroller.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') scroller.scrollBy({ left: 300, behavior: 'smooth' });
+        if (e.key === 'ArrowLeft') scroller.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      if (!frames.length || !('IntersectionObserver' in window)) return;
+      // l'evidenziazione automatica va dalla seconda foto all'ultima e
+      // ritorno, così non riporta mai la riga all'inizio
+      var i = first, dir = 1, timer = null, visible = false, hovered = false;
+      function select(n) {
+        frames.forEach(function (f, k) { f.classList.toggle('is-active', k === n); });
+        // porta la foto in vista, scorrendo solo il carosello
+        var f = frames[n];
+        var left = f.offsetLeft, right = left + f.offsetWidth;
+        var pad = 40;
+        var to = null;
+        if (left - pad < scroller.scrollLeft) to = left - pad;
+        else if (right + pad > scroller.scrollLeft + scroller.clientWidth) to = right + pad - scroller.clientWidth;
+        if (to !== null && !drag) scroller.scrollTo({ left: to, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+      function tick() {
+        if (frames.length > 1) {
+          if (i + dir < first || i + dir > frames.length - 1) dir = -dir;
+          i += dir;
+        }
+        select(i);
+      }
+      function stop() { clearInterval(timer); timer = null; }
+      function play() {
+        stop();
+        if (visible && !hovered) timer = setInterval(tick, 1500);
+      }
+      new IntersectionObserver(function (entries) {
+        var was = visible;
+        visible = entries[0].isIntersecting;
+        if (visible && !was && !hovered) { i = first; dir = 1; select(first); }
+        play();
+      }, { threshold: 0.5 }).observe(scroller);
+      frames.forEach(function (f, k) {
+        f.addEventListener('pointerenter', function (e) {
+          if (e.pointerType !== 'mouse') return;
+          hovered = true;
+          i = k;
+          frames.forEach(function (g) { g.classList.remove('is-active'); });
+          stop();
+        });
+        f.addEventListener('pointerleave', function (e) {
+          if (e.pointerType !== 'mouse') return;
+          hovered = false;
+          f.classList.add('is-active');
+          play();
+        });
+      });
+    });
+  })();
+
   (function () {
     var tile = document.querySelector('.loupe-zoom');
     var img = tile && tile.querySelector('.art');
@@ -346,7 +1135,7 @@ Per scoprire quelli disponibili e ricevere maggiori informazioni, contattami.</p
     var handle = tile && tile.querySelector('.loupe-handle');
     if (!tile || !img || !lens || !handle) return;
 
-    var zoomFactor = 1.9;
+    var zoomFactor = 2.3;
 
     function setLensImage() {
       lens.style.backgroundImage = 'url("' + img.currentSrc + '")';
