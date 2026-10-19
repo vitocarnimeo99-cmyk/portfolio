@@ -21,7 +21,7 @@
   camera.lookAt(0, 0.35, 0);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setSize(width, height);
   container.appendChild(renderer.domElement);
 
@@ -189,11 +189,27 @@
   });
 
   /* ---------------- resize ---------------- */
+  /* Su mobile il canvas copre tutto l'hero (per poter tirare il cartellino
+     giù fino in fondo), ma l'inquadratura deve restare quella della fascia
+     alta di 420px: la camera "vede" la fascia come prima e il resto del
+     canvas è solo un'estensione verso il basso della stessa vista, quindi
+     scala e posizione del cartellino non cambiano. */
+  const MOBILE_BAND_H = 420;
+  function updateCamera() {
+    if (width <= 980 && height > MOBILE_BAND_H) {
+      camera.aspect = width / MOBILE_BAND_H;
+      camera.setViewOffset(width, MOBILE_BAND_H, 0, 0, width, height);
+    } else {
+      camera.aspect = width / height;
+      camera.clearViewOffset();
+    }
+    camera.updateProjectionMatrix();
+  }
+
   function onResize() {
     width = container.clientWidth; height = container.clientHeight;
     if (!width || !height) return;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+    updateCamera();
     renderer.setSize(width, height);
     updateAnchorX();
   }
@@ -214,6 +230,7 @@
   let lastMoveTime = 0;
   const lastMovePos = new THREE.Vector3();
   let dragging = false;
+  let suppressClickUntil = 0;
 
   /* Se il rilascio è abbastanza "scattante" il cartellino prende a girare
      su se stesso (rotazione attorno all'asse verticale) e rallenta con un
@@ -246,6 +263,7 @@
     if (hit.length === 0) return;
     dragging = true;
     container.classList.add('is-dragging');
+    updateHover();
     renderer.domElement.setPointerCapture(e.pointerId);
     const camDir = new THREE.Vector3();
     camera.getWorldDirection(camDir);
@@ -269,8 +287,33 @@
     e.preventDefault();
   }
 
+  /* Manina solo sopra il cartellino: si controlla col raycast sia quando il
+     mouse si muove sia a ogni frame, perché il cartellino oscilla e può
+     spostarsi sotto (o via da) un mouse fermo. */
+  const hoverNDC = new THREE.Vector2();
+  let pointerInside = false;
+  let hovering = false;
+  function updateHover() {
+    const over = pointerInside && !dragging &&
+      (raycaster.setFromCamera(hoverNDC, camera), raycaster.intersectObject(cardMesh, false).length > 0);
+    if (over !== hovering) {
+      hovering = over;
+      container.classList.toggle('is-hover', over);
+    }
+  }
+
   function onPointerMove(e) {
-    if (!dragging) return;
+    if (!dragging) {
+      if (e.pointerType !== 'mouse') return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      hoverNDC.set(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      );
+      pointerInside = true;
+      updateHover();
+      return;
+    }
     setPointerFromEvent(e);
     raycaster.setFromCamera(pointerNDC, camera);
     if (raycaster.ray.intersectPlane(dragPlane, dragPoint)) {
@@ -302,6 +345,8 @@
     if (!dragging) return;
     dragging = false;
     container.classList.remove('is-dragging');
+    suppressClickUntil = performance.now() + 400;
+    updateHover();
     const last = points[points.length - 1];
     last.pinned = false;
     /* Al rilascio si "scongela" il punto e gli si dà la velocita' misurata
@@ -320,17 +365,49 @@
     }
   }
 
-  renderer.domElement.addEventListener('pointerdown', onPointerDown);
-  renderer.domElement.addEventListener('pointermove', onPointerMove);
+  /* Il layer del cartellino copre tutto l'hero ma è "trasparente" ai click
+     (pointer-events: none in style.css), così testo e CTA sotto restano
+     cliccabili. Gli eventi si ascoltano quindi sull'hero e si decide col
+     raycast se riguardano il cartellino. */
+  const hero = container.parentElement;
+  hero.addEventListener('pointerdown', onPointerDown);
+  hero.addEventListener('pointermove', onPointerMove);
   window.addEventListener('pointerup', onPointerUp);
-  renderer.domElement.addEventListener('pointercancel', onPointerUp);
+  hero.addEventListener('pointercancel', onPointerUp);
+  hero.addEventListener('pointerleave', () => {
+    pointerInside = false;
+    updateHover();
+  });
+
+  /* Touch: il dito tocca l'elemento sotto il cartellino, non il canvas, quindi
+     il browser proverebbe a scorrere la pagina. Se il tocco è partito sul
+     cartellino si blocca lo scroll, così lo si può tirare in qualsiasi
+     direzione (anche giù sopra il testo); toccando fuori la pagina scorre. */
+  hero.addEventListener('touchmove', (e) => {
+    if (dragging && e.cancelable) e.preventDefault();
+  }, { passive: false });
+
+  /* Un tap sul cartellino non deve far scattare anche il link che ci sta
+     sotto (su touch il click arriva all'elemento sotto, non al canvas). */
+  hero.addEventListener('click', (e) => {
+    if (performance.now() < suppressClickUntil) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
 
   /* ---------------- loop ---------------- */
-  function animate() {
-    requestAnimationFrame(animate);
+  /* La fisica avanza a passo fisso di 60 step/sec, indipendente dagli fps:
+     prima faceva uno step per frame disegnato, quindi se la pagina scendeva
+     sotto i 60fps (video, altre animazioni) il cartellino andava al
+     rallentatore, e su schermi a 120Hz andava al doppio della velocità. */
+  const STEP_MS = 1000 / 60;
+  const MAX_STEPS = 5; // evita la "spirale" di recupero dopo una pausa lunga
+  let lastTime = performance.now();
+  let accumulator = 0;
+  let visible = true;
 
-    const last = points[points.length - 1];
-
+  function step() {
     if (!prefersReducedMotion || dragging) simulate();
 
     if (spinVelocity !== 0) {
@@ -352,7 +429,23 @@
       if (Math.abs(diff) < 0.002) spinAngle = 0;
       else spinAngle += diff * SPIN_SETTLE_EASE;
     }
+  }
 
+  function animate(now) {
+    requestAnimationFrame(animate);
+    if (!visible) { lastTime = now; return; }
+
+    accumulator += Math.min(now - lastTime, STEP_MS * MAX_STEPS);
+    lastTime = now;
+    let steps = 0;
+    while (accumulator >= STEP_MS && steps < MAX_STEPS) {
+      step();
+      accumulator -= STEP_MS;
+      steps++;
+    }
+    if (steps === 0 && !dragging) return; // niente di nuovo da disegnare
+
+    const last = points[points.length - 1];
     updateStrap();
 
     const prev = points[points.length - 2];
@@ -369,8 +462,17 @@
     cardGroup.rotation.y = THREE.MathUtils.clamp(-dir.x * 0.6, -0.5, 0.5) + spinAngle;
 
     renderer.render(scene, camera);
+    if (pointerInside) updateHover();
+  }
+
+  /* Fuori viewport non si simula né si disegna: libera GPU/CPU per il
+     resto della pagina. */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      visible = entries[entries.length - 1].isIntersecting;
+    }).observe(container);
   }
 
   onResize();
-  animate();
+  requestAnimationFrame(animate);
 })();

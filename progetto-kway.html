@@ -22,6 +22,7 @@
 <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icons/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
@@ -136,7 +137,7 @@
     color: var(--accent);
     margin-bottom:22px;
   }
-  .kway-street .section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+  .kway-street .section-title em{ color: var(--accent); }
   .kway-street-lead{ font-size:1.05rem; color: var(--ink-soft); max-width:62ch; margin:-24px 0 0; }
   .kway-street-grid{
     display:grid;
@@ -235,7 +236,7 @@
     margin-bottom:22px;
   }
   .kway-triss .section-title{ color:#fff; }
-  .kway-triss .section-title em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .kway-triss .section-title em{ color: var(--pop-yellow); }
   .kway-triss-head{
     display:flex;
     justify-content:space-between;
@@ -390,7 +391,7 @@
     line-height:1.15;
     margin:0 0 14px;
   }
-  .sp-side h3 em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .sp-side h3 em{ font-style:italic; font-weight:500; font-variation-settings:'opsz' 32; letter-spacing:-0.025em; color: var(--pop-yellow); }
   .sp-side > p{ color:rgba(255,255,255,.75); max-width:44ch; margin:0 0 32px; }
 
   .sp-now{
@@ -544,7 +545,7 @@
     margin-bottom:22px;
   }
   .kway-stickers .section-title{ color: var(--paper); }
-  .kway-stickers .section-title em{ font-style:italic; font-weight:400; color: var(--pop-yellow); }
+  .kway-stickers .section-title em{ color: var(--pop-yellow); }
   .kway-stickers-head{
     display:flex;
     justify-content:space-between;

@@ -119,10 +119,11 @@ document.querySelectorAll('.zoom-tile').forEach(tile => {
 // con requestAnimationFrame, che si ferma da sola quando la card è ferma.
 if (window.matchMedia('(hover: hover)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.grid .tile, .sticker-card').forEach(tile => {
-    const frame = tile.querySelector('.tile-frame, .sticker-frame');
+  // Anche i loghi della formazione: lì il riquadro stesso è la "card"
+  document.querySelectorAll('.grid .tile, .sticker-card, .edu-logo').forEach(tile => {
+    const frame = tile.matches('.edu-logo') ? tile : tile.querySelector('.tile-frame, .sticker-frame');
     if (!frame) return;
-    const maxTilt = 7;
+    const maxTilt = tile.matches('.edu-logo') ? 12 : 7;
     const current = { rx: 0, ry: 0, tz: 0, gx: 50, gy: 30 };
     const target = { rx: 0, ry: 0, tz: 0, gx: 50, gy: 30 };
     let rect = null;
@@ -366,4 +367,49 @@ window.addEventListener('load', () => {
 
   loadScene('lanyard', 'js/cartellino3d.js');
   loadScene('wkz-pack', 'js/pillowpack3d.js');
+})();
+
+// Titolo della home: ogni lettera in uno span, così al passaggio del mouse
+// solo quella lettera diventa corsivo rosso (vedi .hero h1 .ch in style.css).
+// Gli spazi restano testo normale per non alterare gli a capo; gli screen
+// reader leggono il titolo intero dall'aria-label invece che lettera per lettera.
+(function () {
+  const h1 = document.querySelector('.hero h1');
+  if (!h1) return;
+  h1.setAttribute('aria-label', h1.innerText.replace(/\s+/g, ' ').trim());
+  const splitText = (node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      Array.from(node.childNodes).forEach(splitText);
+      return;
+    }
+    if (node.nodeType !== Node.TEXT_NODE) return;
+    const frag = document.createDocumentFragment();
+    for (const ch of node.textContent) {
+      if (/\s/.test(ch)) { frag.appendChild(document.createTextNode(ch)); continue; }
+      const span = document.createElement('span');
+      span.className = 'ch';
+      span.dataset.ch = ch;
+      span.setAttribute('aria-hidden', 'true');
+      span.textContent = ch;
+      frag.appendChild(span);
+    }
+    node.replaceWith(frag);
+  };
+  splitText(h1);
+
+  // A ogni passaggio la lettera prende un colore a caso (mai uguale al
+  // precedente) tra quelli già presenti nella pagina: l'accento del sito e i
+  // colori delle tile dei progetti. Il giallo è il #F5C400 di IDEA appena
+  // scurito, altrimenti sul fondo chiaro quasi sparisce.
+  const palette = ['#3B4B99', '#6163C6', '#3F6B3D', '#D8322A', '#2347C4',
+    '#5A2AA0', '#9A6229', '#E32227', '#00579C', '#4F9A16', '#E8B400'];
+  let lastColor = '';
+  h1.addEventListener('mouseover', (e) => {
+    const ch = e.target.closest('.ch');
+    if (!ch) return;
+    let color;
+    do { color = palette[Math.floor(Math.random() * palette.length)]; } while (color === lastColor);
+    lastColor = color;
+    ch.style.setProperty('--ch-color', color);
+  });
 })();

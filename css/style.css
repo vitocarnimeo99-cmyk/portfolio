@@ -1,3 +1,19 @@
+/* Inter variabile (pesi 100-900, dimensione ottica 14-32: sopra i 32px usa il taglio Display), ospitato in locale: assets/fonts/, licenza OFL.txt */
+@font-face{
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/inter-latin-opsz-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/inter-latin-opsz-italic.woff2') format('woff2');
+}
+
 :root{
   --paper: #F7F5F0;
   --paper-dim: #EFEBE2;
@@ -15,13 +31,14 @@ body{
   margin:0;
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
 a{ color: inherit; }
+button, input, textarea, select{ font-family: inherit; }
 
 ::selection{ background: var(--accent); color: var(--paper); }
 
@@ -178,9 +195,14 @@ nav.wrap{
   position:absolute;
   inset: 0;
   z-index: 2;
-  cursor: grab;
-  touch-action: none;
+  /* Trasparente ai click, così testo e CTA sotto restano cliccabili: diventa
+     "solido" solo sopra il cartellino o mentre lo si trascina (classi messe
+     da cartellino3d.js). Fuori dal cartellino resta la freccia normale. */
+  pointer-events: none;
 }
+.hero-lanyard.is-hover,
+.hero-lanyard.is-dragging{ pointer-events: auto; touch-action: none; }
+.hero-lanyard.is-hover{ cursor: grab; }
 .hero-lanyard.is-dragging{ cursor: grabbing; }
 .hero-lanyard canvas{
   display:block;
@@ -197,9 +219,25 @@ nav.wrap{
   max-width: 15ch;
 }
 .hero h1 em{
-  font-style: italic;
-  font-weight: 400;
-  color: var(--accent);
+  font-style: normal;
+}
+/* Lettera sotto il mouse in corsivo colorato (le lettere sono divise in span
+   da main.js, che a ogni passaggio sceglie un colore a caso in --ch-color).
+   La lettera corsivo è disegnata sopra quella originale, che resta
+   al suo posto trasparente: così la larghezza non cambia e le lettere
+   vicine non si spostano. line-height normale = stessa linea di base. */
+.hero h1 .ch{ position: relative; }
+@media (hover: hover){
+  .hero h1 .ch:hover{ color: transparent; }
+  .hero h1 .ch:hover::after{
+    content: attr(data-ch);
+    position: absolute;
+    left: 0;
+    top: 0;
+    line-height: normal;
+    font-style: italic;
+    color: var(--ch-color, var(--accent));
+  }
 }
 .hero p{
   max-width: 46ch;
@@ -237,17 +275,17 @@ nav.wrap{
 
 @media (max-width: 980px){
   .hero-text{ width: 100%; }
-  .hero-lanyard{ touch-action: pan-y; }
 }
 
 /* Su mobile e tablet il testo occupa tutta la larghezza, quindi il cartellino non ha
    più uno spazio libero accanto al titolo: gli riserviamo una fascia in cima
    all'hero (il testo parte sotto) e cartellino3d.js lo centra in orizzontale.
    Lo spazio è riservato sempre, anche prima che Three.js finisca di caricare,
-   cosi' il titolo non salta quando il cartellino compare. */
+   cosi' il titolo non salta quando il cartellino compare. Il layer resta
+   comunque grande quanto tutto l'hero, così il cartellino si può tirare giù
+   anche sopra il testo. */
 @media (max-width: 980px){
   .hero{ padding: 340px 0 64px; }
-  .hero-lanyard{ bottom: auto; height: 420px; }
 }
 
 section{ padding: 90px 0; }
@@ -259,11 +297,6 @@ h2.section-title{
   letter-spacing: -0.01em;
   margin: 0 0 48px;
   max-width: 18ch;
-}
-
-h2.section-title em.semibold{
-  font-weight: 600;
-  font-style: italic;
 }
 
 .ticker-wrap {
@@ -282,7 +315,6 @@ h2.section-title em.semibold{
 
 .ticker-item {
   color: #b3b3e6;
-  font-family: Arial, sans-serif;
   font-weight: 600;
   font-size: 18px;
   margin: 0 20px;
@@ -521,7 +553,29 @@ h2.section-title em.semibold{
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 10px;
+  /* Stesso comportamento delle card: tilt 3D col mouse (main.js) e bagliore
+     nel colore della scuola (--c, inline nel markup) */
+  --c: var(--accent);
+  position: relative;
+  overflow: hidden;
+  transform: perspective(600px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px));
+  transition: box-shadow .4s ease, border-color .4s ease;
+  will-change: transform;
 }
+.edu-logo:hover{
+  border-color: var(--c);
+  box-shadow: 0 14px 28px -12px rgba(23,20,15,.35), 0 0 0 1px var(--c), 0 0 18px 2px color-mix(in srgb, var(--c) 35%, transparent);
+}
+/* Riflesso lucido che segue il cursore */
+.edu-logo::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 55%);
+  opacity:0;
+  transition: opacity .35s ease;
+  pointer-events:none;
+}
+.edu-logo:hover::after{ opacity:1; }
 .edu-logo img{ max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; }
 .edu-list div{ display: flex; flex-direction: column; gap: 2px; font-size: 0.95rem; line-height: 1.35; }
 .edu-list strong{ color: var(--ink); }
@@ -575,8 +629,6 @@ h2.section-title em.semibold{
 /* -------- Contact -------- */
 .contact h2.section-title{ max-width: 20ch; margin-bottom: 22px; }
 .contact h2.section-title em{
-  font-style: italic;
-  font-weight: 400;
   color: var(--accent);
 }
 
@@ -701,6 +753,7 @@ a:focus-visible, button:focus-visible{
   .hero{ animation: none; opacity:1; transform:none; }
   .tile{ transition:none; opacity:1; transform:none; }
   .tile .cap, .tile .art, .tile-frame, .tile-year{ transition:none; }
+  .edu-logo, .edu-logo::after{ transition:none; }
   .contact-status .dot{ animation: none; }
 }
 
@@ -779,6 +832,14 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .project-hero{ flex-wrap:wrap; }
   .project-hero-text{ width:100%; flex:1 1 100%; }
   .project-hero-pack{ flex:0 0 auto; width:280px; height:364px; margin:32px auto 0; touch-action:pan-y; }
+  /* Su mobile la card visual sale in cima, subito sotto "Torna ai lavori":
+     il blocco di testo si "scioglie" (display:contents) così i suoi figli
+     diventano elementi della colonna flex e si possono riordinare */
+  .project-hero{ flex-direction:column; align-items:flex-start; gap:0; }
+  .project-hero-text{ display:contents; }
+  .project-hero-text > *{ order:2; }
+  .project-hero-text > .back-link{ order:0; }
+  .project-hero > .project-hero-text ~ *{ order:1; align-self:center; margin:8px auto 44px; }
 }
 .project-hero .eyebrow{
   display:inline-block;
@@ -799,8 +860,6 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 }
 .project-hero h1 em{
   display:block;
-  font-style:italic;
-  font-weight:400;
   color: var(--accent);
 }
 .project-hero p{
@@ -1295,7 +1354,16 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--accent);
   margin-bottom:22px;
 }
-.section-title em{ font-style:italic; font-weight:400; color: var(--accent); }
+/* Parola in accento nei titoli: Inter Display Italic Medium
+   (non nel titolo della home, dove "restano" è dritto come il resto) */
+.section-title em,
+.project-hero h1 em{
+  font-style:italic;
+  font-weight:500;
+  font-variation-settings:'opsz' 32;
+  letter-spacing:-0.025em;
+}
+.section-title em{ color: var(--accent); }
 
 /* -------- Hero -------- */
 .hero-links{ margin-top:44px; }
