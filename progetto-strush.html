@@ -217,141 +217,52 @@
     .st-entry{ padding:28px 22px 24px; }
   }
 
-  /* -------- Costruzione geometrica del logo -------- */
+  /* -------- Costruzione geometrica del logo: il video ha già la sua
+     griglia a puntini su fondo bianco, la card gli fa solo da cornice -------- */
   .st-geo{ background: var(--st-lilac-pale); }
   section.st-geo{ border-top:none; }
   .geo-grid{
     display:grid;
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
     gap:64px;
-    align-items:center;
   }
-  .geo-steps{ list-style:none; margin:0 0 28px; padding:0; display:grid; gap:10px; }
-  .geo-step{
-    display:grid;
-    grid-template-columns:44px 1fr;
-    gap:14px;
-    align-items:center;
-    width:100%;
-    padding:14px 16px;
-    border:1px solid transparent;
-    border-radius:14px;
-    background:transparent;
-    color: var(--ink-soft);
-    font:inherit;
-    text-align:left;
-    cursor:pointer;
-    transition: background-color .3s ease, border-color .3s ease, color .3s ease;
+  /* Su desktop la colonna del testo è alta quanto la card: i social
+     scendono in fondo e chiudono allineati al bordo inferiore del video */
+  .geo-side{ display:flex; flex-direction:column; }
+  .geo-text{ display:grid; gap:14px; max-width:46ch; }
+  .geo-text p{ margin:0; color: var(--ink-soft); font-size:1.06rem; line-height:1.6; }
+  .geo-text strong{ color: var(--ink); }
+  .geo-follow{ margin-top:auto; padding-top:32px; }
+  .geo-follow .social{ gap:12px; }
+  .geo-follow .social a{ width:44px; height:44px; color: var(--st-night); border-color: rgba(97,99,198,.3); }
+  .geo-follow .social a:hover{ color:#fff; background-color: var(--accent); border-color: var(--accent); }
+  .geo-follow .social a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .geo-stage{
+    position:relative;
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 24px 60px rgba(97,99,198,.14);
+    overflow:hidden;
   }
-  .geo-step:hover{ background: rgba(255,255,255,.6); }
-  .geo-step:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  .geo-step.is-active{ background:#fff; border-color: rgba(97,99,198,.25); color: var(--ink); box-shadow:0 10px 24px rgba(97,99,198,.12); }
-  .geo-step-n{
+  .geo-stage video{ display:block; width:100%; height:auto; aspect-ratio:1080/1244; }
+  .geo-sound{
+    position:absolute;
+    right:16px; bottom:16px;
     width:44px; height:44px;
-    display:flex; align-items:center; justify-content:center;
-    border-radius:50%;
-    border:1.5px solid currentColor;
-    font-weight:800;
-    font-variant-numeric: tabular-nums;
-    transition: background-color .3s ease, color .3s ease, border-color .3s ease;
-  }
-  .geo-step.is-active .geo-step-n{ background: var(--accent); border-color: var(--accent); color:#fff; }
-  .geo-step strong{ display:block; font-size:1.02rem; }
-  .geo-step small{ display:block; font-size:0.86rem; color: var(--ink-soft); }
-  .geo-controls{ display:flex; align-items:center; gap:16px; }
-  .geo-play{
-    flex:0 0 auto;
-    width:46px; height:46px;
     display:flex; align-items:center; justify-content:center;
     border:none;
     border-radius:50%;
     background: var(--st-night);
     color:#fff;
+    font-size:0.95rem;
     cursor:pointer;
     transition: background-color .2s ease, transform .2s ease;
   }
-  .geo-play:hover{ background: var(--accent); transform: scale(1.06); }
-  .geo-play:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  .geo-range{
-    flex:1;
-    -webkit-appearance:none;
-    appearance:none;
-    /* Input alto 44px per prenderlo bene col dito; la barra visibile resta
-       di 4px grazie al background limitato in altezza */
-    height:44px;
-    background: linear-gradient(to right, var(--accent) var(--p,0%), rgba(97,99,198,.2) var(--p,0%)) center / 100% 4px no-repeat;
-    cursor:pointer;
-  }
-  .geo-range::-webkit-slider-thumb{
-    -webkit-appearance:none;
-    width:20px; height:20px;
-    border-radius:50%;
-    background:#fff;
-    border:3px solid var(--accent);
-    box-shadow:0 2px 8px rgba(18,18,18,.2);
-  }
-  .geo-range::-moz-range-thumb{
-    width:14px; height:14px;
-    border-radius:50%;
-    background:#fff;
-    border:3px solid var(--accent);
-  }
-  .geo-range:focus-visible{ outline:2px solid var(--accent); outline-offset:-6px; }
-  @media (hover:none){
-    .geo-range::-webkit-slider-thumb{ width:26px; height:26px; }
-    .geo-range::-moz-range-thumb{ width:20px; height:20px; }
-  }
-  .geo-stage{
-    position:relative;
-    border-radius:24px;
-    background:
-      radial-gradient(circle, rgba(97,99,198,.16) 1px, transparent 1.2px) 0 0/22px 22px,
-      #fff;
-    box-shadow:0 24px 60px rgba(97,99,198,.14);
-    padding:68px 7% 48px;
-    overflow:hidden;
-  }
-  .geo-canvas{ position:relative; aspect-ratio:886/797; }
-  .geo-canvas img{
-    position:absolute; inset:0;
-    display:block;
-    width:100%; height:100%;
-    object-fit:contain;
-    pointer-events:none;
-    user-select:none;
-  }
-  .geo-pieces{ position:absolute; inset:0; }
-  .geo-canvas .geo-pieces img{
-    inset:auto;
-    height:auto;
-    opacity:0;
-    transform-origin:center;
-    will-change: transform, opacity;
-  }
-  .geo-label{
-    position:absolute;
-    left:22px; top:20px;
-    padding:6px 12px;
-    border-radius:999px;
-    background: var(--st-night);
-    color:#fff;
-    font-size:0.78rem;
-    font-weight:700;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-    white-space:nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-  .geo-ruler{
-    position:absolute;
-    right:22px; bottom:18px;
-    font-size:0.75rem;
-    color: var(--ink-soft);
-    font-variant-numeric: tabular-nums;
-  }
+  .geo-sound:hover{ background: var(--accent); transform: scale(1.06); }
+  .geo-sound:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   @media (max-width:980px){
-    .geo-grid{ grid-template-columns:1fr; gap:36px; }
-    .geo-side{ order:2; }
+    .geo-grid{ grid-template-columns:minmax(0, 1fr); gap:36px; }
+    .geo-stage{ width:100%; max-width:460px; justify-self:center; }
   }
 
   /* -------- Brand manual: fascicolo spillato da sfogliare. Aperto mostra
@@ -726,8 +637,27 @@
     align-items:center;
   }
   .st-get .eyebrow{ color: var(--st-green); }
-  .st-get .section-title{ color:#fff; margin-bottom:20px; }
-  .st-get .section-title em{ font-style:italic; font-weight:400; color: var(--st-lilac); }
+  .st-get .section-title{ color:#fff; margin-bottom:0; }
+  /* Titolo con accanto Bernardino che scappa col salvadanaio */
+  .st-get-head{ display:flex; align-items:center; gap:20px; margin-bottom:20px; }
+  .st-get-sticker{
+    flex:0 0 auto;
+    width:242px;
+    height:auto;
+    transform: rotate(-2deg);
+    transform-origin:50% 90%;
+    filter: drop-shadow(0 14px 22px rgba(0,0,0,.45));
+    pointer-events:none;
+  }
+  /* In hover corre sul posto con la valigia: saltelli a ritmo, finché resta il mouse */
+  .st-get-head:hover .st-get-sticker{ animation: st-run .5s ease-in-out infinite; }
+  @keyframes st-run{
+    0%, 100%{ transform: translate(0, 0) rotate(-2deg); }
+    25%{ transform: translate(-5px, -12px) rotate(-7deg); }
+    50%{ transform: translate(-8px, 0) rotate(-2deg) scaleY(.96); }
+    75%{ transform: translate(-3px, -12px) rotate(3deg); }
+  }
+  .st-get .section-title em{ color: var(--st-lilac); }
   .st-get-lead{ color: rgba(247,245,240,.75); font-size:1.08rem; max-width:48ch; margin:0 0 32px; }
   .app-card{
     display:flex;
@@ -864,8 +794,15 @@
     .phone-screen{ border-radius:28px; }
     .phone--front{ left:calc(100% - 215px); top:30px; }
     .phone--back{ left:0; }
+    .st-get-sticker{ width:116px; }
     .store-badge{ min-width:0; width:100%; }
     .store{ width:100%; }
+  }
+  /* Sui telefoni più stretti lo sticker affianca "è gratis", la riga corta,
+     così "Scarica Strush," resta su una riga sola */
+  @media (max-width:400px){
+    .st-get-head{ position:relative; margin-bottom:40px; }
+    .st-get-sticker{ position:absolute; right:0; bottom:-30px; width:105px; }
   }
 
   /* -------- Chiusura: il team -------- */
@@ -918,9 +855,9 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .st-card, .st-peek, .st-value, .st-traits li, .geo-step, .pano-frame,
-    .sticker, .store-badge, .phone-track, .phone, .team-card{ transition:none; }
-    .sticker.is-pop{ animation:none; }
+    .st-card, .st-peek, .st-value, .st-traits li, .geo-sound, .pano-frame,
+    .sticker, .st-get-sticker, .store-badge, .phone-track, .phone, .team-card{ transition:none; }
+    .sticker.is-pop, .st-get-head:hover .st-get-sticker{ animation:none; }
     .st-ticker .ticker{ animation:none; }
   }
 
@@ -1054,53 +991,25 @@
       <div class="geo-side">
         <span class="eyebrow">Costruzione geometrica</span>
         <h2 class="section-title">Il nostro pittogramma</h2>
-        <ol class="geo-steps">
-          <li><button class="geo-step" type="button" data-to="0.47"><span class="geo-step-n">01</span><span><strong>Griglia & geometrizzazione</strong><small>Cerchi e linee guida tracciati sul modulo</small></span></button></li>
-          <li><button class="geo-step" type="button" data-to="0.63"><span class="geo-step-n">02</span><span><strong>Forma</strong><small>Il corpo nasce dall'incrocio delle curve</small></span></button></li>
-          <li><button class="geo-step" type="button" data-to="0.85"><span class="geo-step-n">03</span><span><strong>Colore</strong><small>Via la griglia, dentro il gradiente</small></span></button></li>
-        </ol>
-        <div class="geo-controls">
-          <button class="geo-play" type="button" aria-label="Riproduci la costruzione"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
-          <input class="geo-range" type="range" min="0" max="1000" value="0" aria-label="Avanzamento della costruzione del logo">
+        <div class="geo-text">
+          <p>Ogni app di finanza ha bisogno di qualcuno che ti guardi il portafoglio. Noi abbiamo scelto un T-rex 🦖</p>
+          <p>Ecco <strong>Dinuccio</strong>, il pittogramma di Strush, costruito pezzo per pezzo su una griglia geometrica.</p>
+          <p>Perché un T-rex? Ha il braccino corto. Anche volendo, al portafoglio non ci arriva 💸</p>
+        </div>
+        <div class="geo-follow">
+          <span class="st-traits-label">Segui Strush sui social</span>
+          <ul class="social">
+            <li><a href="https://www.instagram.com/strush.it/" target="_blank" rel="noopener" aria-label="Strush su Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.tiktok.com/@strush.it" target="_blank" rel="noopener" aria-label="Strush su TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.linkedin.com/company/strush/" target="_blank" rel="noopener" aria-label="Strush su LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a></li>
+          </ul>
         </div>
       </div>
       <div class="geo-stage" id="geo">
-        <span class="geo-label">01 / Griglia &amp; geometrizzazione</span>
-        <div class="geo-canvas">
-          <div class="geo-pieces" role="img" aria-label="La griglia di cerchi e linee guida su cui è costruita la mascotte di Strush">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector.png" width="496" height="2" alt="" style="left:21.332%;top:92.346%;width:55.982%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-14.png" width="455" height="55" alt="" style="left:23.815%;top:85.696%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-15.png" width="455" height="55" alt="" style="left:23.815%;top:79.046%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-16.png" width="455" height="55" alt="" style="left:23.815%;top:72.396%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-17.png" width="455" height="55" alt="" style="left:23.815%;top:65.747%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-18.png" width="455" height="55" alt="" style="left:23.815%;top:59.097%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-19.png" width="455" height="55" alt="" style="left:23.815%;top:52.447%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-20.png" width="455" height="55" alt="" style="left:23.815%;top:45.797%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-21.png" width="455" height="55" alt="" style="left:23.815%;top:39.147%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-23.png" width="455" height="55" alt="" style="left:23.815%;top:32.497%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-26.png" width="455" height="55" alt="" style="left:23.815%;top:25.721%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-27.png" width="455" height="55" alt="" style="left:23.815%;top:19.072%;width:51.354%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-3.png" width="532" height="374" alt="" style="left:6.433%;top:0%;width:60.045%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-2.png" width="569" height="344" alt="" style="left:0%;top:19.072%;width:64.221%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-4.png" width="393" height="423" alt="" style="left:24.041%;top:7.528%;width:44.357%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-1.png" width="408" height="485" alt="" style="left:53.95%;top:14.304%;width:46.05%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-6.png" width="343" height="389" alt="" style="left:34.312%;top:39.147%;width:38.713%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-5.png" width="343" height="389" alt="" style="left:43.115%;top:37.516%;width:38.713%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-11.png" width="170" height="186" alt="" style="left:39.165%;top:71.393%;width:19.187%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-10.png" width="76" height="83" alt="" style="left:44.47%;top:84.442%;width:8.578%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-12.png" width="132" height="89" alt="" style="left:30.587%;top:88.833%;width:14.898%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-13.png" width="132" height="89" alt="" style="left:52.032%;top:88.833%;width:14.898%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-8.png" width="107" height="118" alt="" style="left:31.828%;top:47.93%;width:12.077%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-7.png" width="84" height="89" alt="" style="left:30.248%;top:54.831%;width:9.481%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-22.png" width="115" height="109" alt="" style="left:46.727%;top:48.432%;width:12.98%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-9.png" width="96" height="104" alt="" style="left:49.323%;top:53.074%;width:10.835%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-24.png" width="81" height="81" alt="" style="left:44.131%;top:29.109%;width:9.142%">
-            <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_0,5/Vector-25.png" width="34" height="34" alt="" style="left:46.84%;top:32.12%;width:3.837%">
-          </div>
-          <img class="geo-fill-img" src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_02.png" width="886" height="797" alt="" aria-hidden="true">
-          <img class="geo-final-img" src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt="" aria-hidden="true">
-        </div>
-        <span class="geo-ruler" aria-hidden="true">0%</span>
+        <video width="1080" height="1244" aria-label="Dinuccio, il pittogramma di Strush, costruito sulla sua griglia geometrica" poster="assets/video/posters/strush_costruzione.jpg" muted loop playsinline preload="metadata">
+          <source src="assets/video/strush_costruzione.mp4" type="video/mp4">
+        </video>
+        <button class="geo-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
       </div>
     </div>
   </section>
@@ -1206,7 +1115,10 @@
     <div class="wrap st-get-grid">
       <div>
         <span class="eyebrow">Disponibile ora · iOS e Android</span>
-        <h2 class="section-title">Scarica Strush,<br><em>è gratis</em></h2>
+        <div class="st-get-head">
+          <h2 class="section-title">Scarica Strush,<br><em>inizia questo viaggio.</em></h2>
+          <img class="st-get-sticker" src="assets/images/STRUSH/STICKER/STICKER_07.png" width="438" height="356" alt="" aria-hidden="true" loading="lazy">
+        </div>
         <p class="st-get-lead">Strush è online su App Store e Google Play: un'app vera, usata ogni giorno per tenere a bada le spese. Scaricala e fatti dire da Bernardino quanto stai strusciando.</p>
         <div class="app-card">
           <span class="app-icon"><img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt=""></span>
@@ -1337,135 +1249,28 @@
     });
   })();
 
-  // Costruzione geometrica: un unico avanzamento p da 0 a 1 guida i tre
-  // livelli. La griglia si monta pezzo dopo pezzo (prima la base e le righe,
-  // poi le ellissi grandi, infine cerchi e dettagli): ogni forma arriva da
-  // fuori, verso il centro, e si posa al suo posto. Poi le forme verdi
-  // salgono dal basso, la griglia sparisce ed entra il pittogramma col
-  // gradiente; il pittogramma poi esce come è entrato e si ricomincia.
-  // Gira in loop finché la sezione è in vista; slider e step fermano il
-  // loop su un passaggio, il pulsante lo fa ripartire.
+  // Costruzione geometrica: il video gira solo mentre la sezione è in vista.
+  // Con le animazioni ridotte resta fermo sul poster, che è il pittogramma
+  // finito, finché non si attiva l'audio. Parte sempre muto: l'audio lo
+  // accende il pulsante.
   (function () {
-    const geo = document.getElementById('geo');
-    if (!geo) return;
-    const gridEl = geo.querySelector('.geo-pieces');
-    const canvas = geo.querySelector('.geo-canvas');
-    const ratio = 886 / 797;
-    // Ogni pezzo parte spostato lungo la direzione centro → pezzo.
-    const pieces = Array.from(gridEl.querySelectorAll('img')).map((img) => {
-      const w = parseFloat(img.style.width);
-      const h = w * (img.getAttribute('height') / img.getAttribute('width')) * ratio;
-      const dx = parseFloat(img.style.left) + w / 2 - 50;
-      const dy = (parseFloat(img.style.top) + h / 2 - 52) / ratio;
-      const len = Math.hypot(dx, dy) || 1;
-      return { img, ux: dx / len, uy: dy / len };
+    const video = document.querySelector('#geo video');
+    if (!video) return;
+    const soundBtn = document.querySelector('#geo .geo-sound');
+    soundBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      const on = !video.muted;
+      soundBtn.setAttribute('aria-pressed', String(on));
+      soundBtn.setAttribute('aria-label', on ? "Disattiva l'audio" : "Attiva l'audio");
+      soundBtn.querySelector('i').className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+      if (on && video.paused) video.play().catch(() => {});
     });
-    const GRID_END = 0.46;
-    const PIECE = 0.08;
-    const LOOP = 11000;
-    const gap = (GRID_END - PIECE) / Math.max(1, pieces.length - 1);
-    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-    const back = (t) => 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
-    const fillImg = geo.querySelector('.geo-fill-img');
-    const finalImg = geo.querySelector('.geo-final-img');
-    const label = geo.querySelector('.geo-label');
-    const ruler = geo.querySelector('.geo-ruler');
-    const section = geo.closest('section');
-    const range = section.querySelector('.geo-range');
-    const steps = Array.from(section.querySelectorAll('.geo-step'));
-    const playBtn = section.querySelector('.geo-play');
-    const names = steps.map((s) => s.querySelector('strong').textContent);
-    let p = 0;
-    let anim = 0;
-    let looping = false;
-    let visible = false;
-
-    const seg = (a, b) => clamp((p - a) / (b - a), 0, 1);
-
-    const render = () => {
-      const f = ease(seg(0.5, 0.62));
-      const out = ease(seg(0.66, 0.78));
-      // Uscita del pittogramma: lo stesso ingresso, al contrario.
-      const fin = out * (1 - ease(seg(0.88, 1)));
-      const dist = canvas.clientWidth * 0.08;
-      pieces.forEach((pc, i) => {
-        const a = gap * i;
-        const t = seg(a, a + PIECE);
-        const m = (1 - easeOut(t)) * dist;
-        pc.img.style.opacity = Math.min(1, t * 2.5).toFixed(3);
-        pc.img.style.transform = t >= 1 ? '' :
-          'translate(' + (pc.ux * m).toFixed(1) + 'px,' + (pc.uy * m).toFixed(1) + 'px) scale(' + (0.85 + 0.15 * back(t)).toFixed(4) + ')';
-      });
-      gridEl.style.opacity = (1 - out).toFixed(3);
-      fillImg.style.clipPath = 'inset(' + ((1 - f) * 100).toFixed(2) + '% 0 0 0)';
-      fillImg.style.opacity = (1 - out).toFixed(3);
-      finalImg.style.opacity = fin.toFixed(3);
-      finalImg.style.transform = 'scale(' + (0.94 + fin * 0.06).toFixed(4) + ')';
-      const stage = p < 0.48 ? 0 : p < 0.64 ? 1 : 2;
-      label.textContent = pad(stage + 1) + ' / ' + names[stage];
-      steps.forEach((s, i) => s.classList.toggle('is-active', i === stage));
-      ruler.textContent = Math.round(p * 100) + '%';
-      range.value = Math.round(p * 1000);
-      range.style.setProperty('--p', (p * 100).toFixed(1) + '%');
-    };
-
-    const animateTo = (to, dur, done) => {
-      cancelAnimationFrame(anim);
-      const from = p;
-      const d = reduceMotion ? 0 : dur;
-      const t0 = performance.now();
-      const step = (now) => {
-        const t = d ? Math.min(1, (now - t0) / d) : 1;
-        p = from + (to - from) * t;
-        render();
-        if (t < 1) anim = requestAnimationFrame(step);
-        else if (done) done();
-      };
-      anim = requestAnimationFrame(step);
-    };
-
-    // Un giro dal punto in cui si è, poi da capo finché il loop è attivo.
-    const run = () => {
-      animateTo(1, (1 - p) * LOOP, () => {
-        if (!looping || !visible) return;
-        p = 0;
-        run();
-      });
-    };
-    const play = () => {
-      if (reduceMotion) { p = 0.8; render(); return; }
-      looping = true;
-      p = 0;
-      if (visible) run(); else render();
-    };
-    const stopLoop = () => { looping = false; cancelAnimationFrame(anim); };
-
-    range.addEventListener('input', () => {
-      stopLoop();
-      p = range.value / 1000;
-      render();
-    });
-    steps.forEach((s) => s.addEventListener('click', () => {
-      stopLoop();
-      const to = Number(s.dataset.to);
-      animateTo(to, 600 + Math.abs(to - p) * 4000);
-    }));
-    playBtn.addEventListener('click', play);
-
-    render();
-    if ('IntersectionObserver' in window) {
-      // Fuori vista il loop si mette in pausa e riprende da dove era.
-      let started = false;
-      new IntersectionObserver((entries) => {
-        visible = entries[0].isIntersecting;
-        if (!visible) { cancelAnimationFrame(anim); return; }
-        if (!started) { started = true; play(); }
-        else if (looping) run();
-      }, { threshold: 0.45 }).observe(geo);
-    } else {
-      p = 0.8;
-      render();
-    }
+    if (reduceMotion) return;
+    if (!('IntersectionObserver' in window)) { video.play().catch(() => {}); return; }
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    }, { threshold: 0.35 }).observe(video);
   })();
 
   // Brand manual: fascicolo spillato. Ogni foglio ha una pagina dispari sul
