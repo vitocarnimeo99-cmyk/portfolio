@@ -244,6 +244,59 @@
   @media (max-width:980px){
     #wkz-pack{ flex:0 0 auto; width:min(360px, 84vw); }
   }
+  /* Su telefono più piccola: altrimenti la busta riempie tutta la prima
+     schermata e il titolo finisce sotto */
+  /* Anno / Output: il gap di 56px di style.css vale anche tra le
+     righe quando le voci vanno a capo */
+  .project-hero .project-meta{ row-gap:22px; }
+  @media (max-width:640px){
+    /* su telefono: Anno e Output affiancati */
+    .project-hero .project-meta{
+      display:grid;
+      grid-template-columns:max-content minmax(0, 1fr);
+      gap:18px 32px;
+      margin-bottom:36px;
+    }
+  }
+  @media (max-width:640px){
+    #wkz-pack{ width:min(270px, 70vw); }
+    #wkz-pack .wkz-badge{ right:-26px; top:-14px; width:84px; height:84px; }
+    #wkz-pack .wkz-badge-core{ width:32px; height:32px; font-size:0.85rem; }
+  }
+  /* -------- Intro: la seconda parte del testo si apre con "Continua a
+     leggere" (righe della griglia da 0fr a 1fr, così l'altezza si anima) -------- */
+  .project-hero .wkz-intro{ margin-bottom:44px; max-width:60ch; }
+  .project-hero .wkz-intro p{ margin:0; }
+  .wkz-more{
+    display:grid;
+    grid-template-rows:0fr;
+    visibility:hidden;
+    transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1), visibility 0s linear .45s;
+  }
+  .wkz-more.is-open{
+    grid-template-rows:1fr;
+    visibility:visible;
+    transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1), visibility 0s;
+  }
+  .wkz-more-inner{ min-height:0; overflow:hidden; }
+  .project-hero .wkz-more-inner p{ padding-top:1em; }
+  .wkz-more-btn{
+    margin-top:14px;
+    padding:0;
+    border:0;
+    background:none;
+    font:inherit;
+    font-size:1rem;
+    font-weight:700;
+    color: var(--accent);
+    text-decoration:underline;
+    text-underline-offset:4px;
+    cursor:pointer;
+  }
+  .wkz-more-btn:hover{ text-decoration-thickness:2px; }
+  @media (prefers-reduced-motion:reduce){
+    .wkz-more, .wkz-more.is-open{ transition:none; }
+  }
   .wkz-pack-hint{
     position:absolute;
     left:50%; bottom:-58px;
@@ -348,6 +401,84 @@
     transition: opacity .25s ease;
   }
   .wkz-tavola:hover .wkz-tavola-tag{ opacity:0; }
+  /* La lente funziona solo col mouse: su touch l'etichetta diventa un
+     pulsante che apre la tavola a tutto schermo */
+  .wkz-tavola-tag.hint-touch{ display:none; border:0; font-family:inherit; cursor:pointer; pointer-events:auto; }
+  @media (hover:none){
+    .wkz-tavola-tag.hint-mouse{ display:none; }
+    .wkz-tavola-tag.hint-touch{ display:inline-flex; }
+    .wkz-tavola:hover .wkz-tavola-tag{ opacity:1; }
+    .wkz-tavola{ cursor:zoom-in; }
+  }
+
+  /* -------- Tavola a tutto schermo (touch): zoom con due dita, si sposta
+     col dito, doppio tocco per ingrandire. Il pulsante delle soluzioni è
+     lo stesso della pagina, sincronizzato -------- */
+  .wkz-viewer{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    max-width:none; max-height:none;
+    margin:0; padding:0;
+    border:none;
+    background:#0f0d0a;
+    color:#fff;
+    overflow:hidden;
+  }
+  .wkz-viewer::backdrop{ background:#0f0d0a; }
+  .wkz-viewer-stage{ position:absolute; inset:0; overflow:hidden; touch-action:none; cursor:grab; outline:none; }
+  .wkz-viewer-content{ position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; }
+  .wkz-viewer-content.is-anim{ transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+  .wkz-viewer-content img{
+    position:absolute; inset:0;
+    display:block;
+    width:100%; height:100%;
+    user-select:none;
+    -webkit-user-select:none;
+    -webkit-user-drag:none;
+    pointer-events:none;
+  }
+  .wkz-viewer-sol{ opacity:0; transition: opacity .6s ease; }
+  .wkz-viewer.is-solved .wkz-viewer-sol{ opacity:1; }
+  .wkz-viewer-top{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding: max(14px, env(safe-area-inset-top)) 14px 28px 18px;
+    background: linear-gradient(rgba(15,13,10,.8), rgba(15,13,10,0));
+    pointer-events:none;
+  }
+  .wkz-viewer-hint{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.8rem;
+    font-weight:700;
+    transition: opacity .4s ease;
+  }
+  .wkz-viewer-hint i{ color: var(--wkz-sky); }
+  .wkz-viewer.is-touched .wkz-viewer-hint{ opacity:0; }
+  .wkz-viewer-close{
+    flex:none;
+    width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:50%;
+    background: rgba(15,13,10,.55);
+    color:#fff;
+    font-size:1.1rem;
+    cursor:pointer;
+    pointer-events:auto;
+  }
+  .wkz-viewer-close:focus-visible{ outline:2px solid #F2C14E; outline-offset:2px; }
+  .wkz-viewer-bottom{
+    position:absolute; left:0; right:0; bottom:0;
+    display:flex; justify-content:center;
+    padding: 28px 14px max(18px, env(safe-area-inset-bottom));
+    background: linear-gradient(rgba(15,13,10,0), rgba(15,13,10,.8));
+    pointer-events:none;
+  }
+  .wkz-viewer-bottom .wkz-toggle{ pointer-events:auto; }
+  html:has(.wkz-viewer[open]){ overflow:hidden; }
+  @media (prefers-reduced-motion:reduce){
+    .wkz-viewer-content.is-anim, .wkz-viewer-sol{ transition:none; }
+  }
   .wkz-board-bar{
     display:flex;
     align-items:center;
@@ -493,11 +624,13 @@
   .dark .pano-hint{ color: rgba(247,245,240,.6); }
   /* gli sticker sono tutti orizzontali: un po' più bassi */
   .pano--sticker{ --pano-h: min(56vh, 480px); }
+  /* su telefono foto più piccole e ogni foto si ferma al centro dello
+     schermo (scroll-snap), con un pezzo delle vicine ai lati */
   @media (max-width:640px){
-    .pano-track{ padding:0 20px; gap:10px; }
-    .pano-scroller{ padding:14px 0 30px; }
-    .pano-frame{ --pano-h: min(58vh, 420px); border-radius:14px; }
-    .pano--sticker .pano-frame{ --pano-h: 260px; }
+    .pano-track{ padding:0 16px; gap:10px; }
+    .pano-scroller{ padding:14px 0 30px; scroll-snap-type:x mandatory; }
+    .pano-frame{ --pano-h: min(44vh, 320px); border-radius:12px; scroll-snap-align:center; }
+    .pano--sticker .pano-frame{ --pano-h: 200px; }
     .pano-hint{ display:none; }
   }
   .wkz-stopwatch{
@@ -524,6 +657,31 @@
   .wkz-section .carousel-lipsync-grid .carousel-slide:hover{
     transform: translateY(-6px);
     box-shadow:0 28px 54px rgba(2,121,160,.26);
+  }
+  .wkz-lipsync-bar{ display:none; }
+  /* su telefono la griglia diventa un carosello come gli altri: riga a
+     tutta larghezza che scorre col dito, ogni video si ferma al centro */
+  @media (max-width:640px){
+    .wkz-section .carousel-lipsync-grid{
+      display:flex;
+      gap:10px;
+      margin:0 -20px; /* esce dal padding di .wrap */
+      padding:6px 16px 30px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .wkz-section .carousel-lipsync-grid::-webkit-scrollbar{ display:none; }
+    .wkz-section .carousel-lipsync-grid .carousel-slide{
+      flex:0 0 auto;
+      width:min(56vw, 220px);
+      border-radius:12px;
+      scroll-snap-align:center;
+    }
+    .wkz-section .carousel-lipsync-grid .carousel-slide:hover{ transform:none; }
+    .wkz-lipsync-bar{ display:flex; padding:0; }
   }
 
   /* -------- Lo sticker: Nicola che sbuca accanto al titolo -------- */
@@ -613,12 +771,18 @@
   }
   .wkz-shop li span{ font-weight:400; color:rgba(255,255,255,.75); font-size:0.9rem; white-space:normal; text-align:right; }
   .wkz-shop-cta{ font-weight:700; font-size:0.95rem; }
+  /* card attaccata al margine destro: lo sticker sporgerebbe oltre lo schermo */
+  @media (max-width:1200px){
+    .wkz-shop-sticker{ right:-8px; }
+  }
   @media (max-width:980px){
     .project-end .wkz-end{ grid-template-columns:minmax(0, 1fr); gap:72px; }
     .wkz-shop{ max-width:440px; transform:none; }
   }
   @media (max-width:560px){
     .wkz-shop-sticker{ right:-6px; width:110px; top:-48px; }
+    /* più spazio per le righe prodotto · descrizione */
+    .wkz-shop{ padding:28px 22px 24px; }
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -653,16 +817,21 @@
       <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
       <span class="eyebrow">Progetto di tesi — NABA, Milano</span>
       <h1>Where's Kud Zamb? <em>Find Nicola in Bari</em></h1>
-          <p><strong>“Where’s Kud Zamb?”</strong> è il titolo del mio progetto di tesi realizzato presso <strong>NABA – Nuova Accademia di Belle Arti di Milano</strong>.<br>
+      <div class="wkz-intro">
+      <p><strong>“Where’s Kud Zamb?”</strong> è il titolo del mio progetto di tesi realizzato presso <strong>NABA – Nuova Accademia di Belle Arti di Milano</strong>.<br>
 
-      Il termine <strong>“Zamb”</strong> deriva dal dialetto barese e significa <strong>“cafone”</strong>. Il progetto nasce con l’obiettivo di raccontare, attraverso l’illustrazione e l’animazione, tutta l’energia, l’ironia e il fascino della città di Bari e della sua gente.<br> <br>
-
-      Il protagonista è <strong>Nicola</strong>, un ragazzo dall’atteggiamento apparentemente indifferente e sbruffone, che nasconde in realtà un carattere dolce e simpatico. Un personaggio che, come molti baresi, è profondamente legato alla propria città e ne porta con sé l’identità e lo spirito.<br>
+      Il termine <strong>“Zamb”</strong> deriva dal dialetto barese e significa <strong>“cafone”</strong>. Il progetto nasce con l’obiettivo di raccontare, attraverso l’illustrazione e l’animazione, tutta l’energia, l’ironia e il fascino della città di Bari e della sua gente.</p>
+      <div class="wkz-more" id="wkz-more">
+        <div class="wkz-more-inner">
+          <p>Il protagonista è <strong>Nicola</strong>, un ragazzo dall’atteggiamento apparentemente indifferente e sbruffone, che nasconde in realtà un carattere dolce e simpatico. Un personaggio che, come molti baresi, è profondamente legato alla propria città e ne porta con sé l’identità e lo spirito.<br>
 
       Il progetto prende la forma di un <strong>gioco di ricerca</strong>, in cui bisogna trovare Nicola e la sua famiglia all’interno di un’illustrazione ricca di dettagli e di personaggi, ambientata nella città di Bari.</p>
+        </div>
+      </div>
+      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more">Continua a leggere<span aria-hidden="true">…</span></button>
+      </div>
           <div class="project-meta">
         <div>Anno<span>2024</span></div>
-        <div>Ruolo<span>Character design · Illustrazione · Motion</span></div>
         <div>Output<span>Telo mare · Sticker · Poster · Shopper </span></div>
       </div>
       <div class="project-links">
@@ -731,7 +900,7 @@
           <span class="eyebrow">La tavola · Il gioco</span>
           <h2 class="section-title">Trova Nicola <em>per Bari</em></h2>
         </div>
-        <p><span class="hint-mouse">Passa sopra l'illustrazione: la lente ingrandisce i dettagli. </span>Se proprio non ce la fai, sotto c'è il pulsante per vedere le soluzioni.</p>
+        <p><span class="hint-mouse">Passa sopra l'illustrazione: la lente ingrandisce i dettagli. </span><span class="hint-touch">Tocca la tavola per aprirla a tutto schermo e ingrandirla con due dita. </span>Se proprio non ce la fai, sotto c'è il pulsante per vedere le soluzioni.</p>
       </div>
     </div>
     <div class="wrap wkz-board">
@@ -741,6 +910,7 @@
       <div class="loupe-handle" aria-hidden="true"></div>
       <div class="loupe-lens" aria-hidden="true"></div>
       <span class="wkz-tavola-tag hint-mouse" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i>Passa sopra con la lente</span>
+      <button type="button" class="wkz-tavola-tag hint-touch" id="wkz-viewer-open" aria-haspopup="dialog" aria-controls="wkz-viewer"><i class="fa-solid fa-expand" aria-hidden="true"></i>Gioca a tutto schermo</button>
     </figure>
     <div class="wkz-board-bar">
       <div class="fullshot-note-wrap">
@@ -760,10 +930,10 @@
       <div>
         <span class="eyebrow">Test con il pubblico</span>
         <h2 class="section-title">Prova <em>sul campo</em></h2>
+        <span class="wkz-stopwatch"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i>Sotto i 2 minuti = sticker in regalo</span>
       </div>
       <div class="wkz-head-text">
       <p>Ho portato il telo con il poster interattivo tra i <strong>passanti</strong>, invitandoli a partecipare al gioco di individuazione dei personaggi.<br>Ho cronometrato i tempi di ciascun partecipante per <strong>analizzare l'efficacia del gioco</strong>, premiando con uno sticker chi riusciva a trovare Nicola in meno di due minuti.</p>
-      <span class="wkz-stopwatch"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i>Sotto i 2 minuti = sticker in regalo</span>
       </div>
     </div>
     <div class="pano pano--campo">
@@ -861,6 +1031,9 @@
           </video>
         </figure>
       </div>
+      <div class="pano-bar wkz-lipsync-bar">
+        <div class="pano-progress" aria-hidden="true"><span></span></div>
+      </div>
     </div>
   </section>
 
@@ -943,7 +1116,7 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
           <li>Telo mare<span>La tavola intera</span></li>
           <li>Telo in pile<span>Con busta illustrata</span></li>
           <li>Poster<span>La tavola di tesi</span></li>
-          <li>Sticker &amp; shopper<span>Where's Kud Zamb?</span></li>
+          <li>Sticker &amp; shopper<span>Il lettering</span></li>
         </ul>
         <span class="wkz-shop-cta">Scrivimi per ordinare ↗</span>
       </a>
@@ -951,6 +1124,23 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
   </section>
 
 </main>
+
+<!-- Tavola a tutto schermo per i dispositivi touch (le immagini si caricano all'apertura) -->
+<dialog class="wkz-viewer" id="wkz-viewer" aria-label="Tavola di Where's Kud Zamb? a tutto schermo">
+  <div class="wkz-viewer-stage" tabindex="-1" autofocus>
+    <div class="wkz-viewer-content">
+      <img class="wkz-viewer-art" width="7087" height="3898" alt="Tavola di tesi Where’s Kud Zamb?: il lungomare di Bari affollato di personaggi illustrati" draggable="false">
+      <img class="wkz-viewer-sol" width="7087" height="3898" alt="" draggable="false">
+    </div>
+  </div>
+  <div class="wkz-viewer-top">
+    <span class="wkz-viewer-hint"><i class="fa-solid fa-hand" aria-hidden="true"></i>Due dita per ingrandire</span>
+    <button class="wkz-viewer-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  </div>
+  <div class="wkz-viewer-bottom">
+    <button type="button" class="btn-primary wkz-toggle" aria-pressed="false">Basta mi arrendo ↗</button>
+  </div>
+</dialog>
 
 <!-- Premi & Pubblicazioni: stessa lista di index.html (#in-evidenza),
      se aggiungi un premio aggiornala in entrambe le pagine -->
@@ -985,6 +1175,51 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
 <!-- /comune:footer -->
 
 <script>
+  // Intro: "Continua a leggere" apre e richiude la seconda parte del testo
+  (function () {
+    var btn = document.querySelector('.wkz-more-btn');
+    var more = document.getElementById('wkz-more');
+    if (!btn || !more) return;
+    btn.addEventListener('click', function () {
+      var open = more.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open);
+      btn.innerHTML = open ? 'Mostra meno' : 'Continua a leggere<span aria-hidden="true">…</span>';
+    });
+  })();
+
+  // Lip-sync su telefono: la griglia è un carosello (vedi CSS). Parte col
+  // secondo video al centro, come gli altri caroselli, e la barra sotto
+  // segue lo scroll. Su desktop resta la griglia e non fa niente.
+  (function () {
+    var grid = document.querySelector('.wkz-section .carousel-lipsync-grid');
+    var bar = document.querySelector('.wkz-lipsync-bar .pano-progress span');
+    if (!grid || !bar) return;
+    var mobile = matchMedia('(max-width: 640px)');
+    var touched = false;
+    function updateBar() {
+      var max = grid.scrollWidth - grid.clientWidth;
+      var vis = grid.clientWidth / grid.scrollWidth;
+      bar.style.width = (vis * 100).toFixed(2) + '%';
+      bar.style.transform = 'translateX(' + (max ? (grid.scrollLeft / max) * (1 / vis - 1) * 100 : 0).toFixed(2) + '%)';
+    }
+    function start() {
+      if (!mobile.matches) return;
+      if (!touched) {
+        var f = grid.children[Math.min(1, grid.children.length - 1)];
+        var fr = f.getBoundingClientRect(), gr = grid.getBoundingClientRect();
+        grid.scrollLeft += (fr.left + fr.width / 2) - (gr.left + gr.width / 2);
+      }
+      updateBar();
+    }
+    ['pointerdown', 'wheel', 'touchstart'].forEach(function (type) {
+      grid.addEventListener(type, function () { touched = true; }, { passive: true });
+    });
+    grid.addEventListener('scroll', updateBar, { passive: true });
+    window.addEventListener('resize', start);
+    window.addEventListener('load', start);
+    start();
+  })();
+
   // Bollino "Premi & Pubblicazioni": apre la lista in una finestra modale.
   // Si chiude con la X, con Esc (nativo di <dialog>) o cliccando fuori.
   (function () {
@@ -1007,6 +1242,7 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
   // all'ultima, e si torna indietro. Col cursore sopra una foto si ferma.
   (function () {
     var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var mobile = matchMedia('(max-width: 640px)');
     document.querySelectorAll('.pano').forEach(function (pano) {
       var scroller = pano.querySelector('.pano-scroller');
       var bar = pano.querySelector('.pano-progress span');
@@ -1024,14 +1260,16 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
 
       // All'apertura la riga parte dalla seconda foto, allineata dove
       // inizierebbe la prima: a sinistra si vede già la coda della prima
-      // invece del margine vuoto. Finché non si tocca il carosello, la
-      // posizione si riallinea se la pagina cambia misura.
+      // invece del margine vuoto. Su telefono la seconda foto parte invece
+      // esattamente al centro dello schermo. Finché non si tocca il
+      // carosello, la posizione si riallinea se la pagina cambia misura.
       var first = Math.min(1, frames.length - 1);
       var touched = false;
+      function centerOf(f) { return f.offsetLeft + f.offsetWidth / 2 - scroller.clientWidth / 2; }
       function startAtSecond() {
         if (touched || !frames[first]) return;
         var padL = parseFloat(getComputedStyle(scroller.querySelector('.pano-track')).paddingLeft) || 0;
-        scroller.scrollLeft = frames[first].offsetLeft - padL;
+        scroller.scrollLeft = mobile.matches ? centerOf(frames[first]) : frames[first].offsetLeft - padL;
         updateBar();
       }
       ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (type) {
@@ -1088,7 +1326,8 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
         var left = f.offsetLeft, right = left + f.offsetWidth;
         var pad = 40;
         var to = null;
-        if (left - pad < scroller.scrollLeft) to = left - pad;
+        if (mobile.matches) to = centerOf(f); // su telefono la foto evidenziata va al centro
+        else if (left - pad < scroller.scrollLeft) to = left - pad;
         else if (right + pad > scroller.scrollLeft + scroller.clientWidth) to = right + pad - scroller.clientWidth;
         if (to !== null && !drag) scroller.scrollTo({ left: to, behavior: reduceMotion ? 'auto' : 'smooth' });
       }
@@ -1143,17 +1382,26 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
     if (img.complete) setLensImage();
     img.addEventListener('load', setLensImage);
 
-    var toggle = document.getElementById('wkz-tesi-toggle');
+    // "Basta mi arrendo": c'è sotto la tavola e nella vista a tutto schermo,
+    // i due pulsanti condividono lo stesso stato
     var overlay = document.getElementById('wkz-tesi-soluzioni');
-    if (toggle && overlay) {
+    var viewer = document.getElementById('wkz-viewer');
+    var toggles = Array.prototype.slice.call(document.querySelectorAll('#wkz-tesi-toggle, #wkz-viewer .wkz-toggle'));
+    if (overlay && toggles.length) {
       var solved = false;
-      toggle.addEventListener('click', function () {
-        solved = !solved;
+      var setSolved = function (v) {
+        solved = v;
         overlay.classList.toggle('is-visible', solved);
-        toggle.setAttribute('aria-pressed', solved);
-        toggle.textContent = solved ? 'Ricomincio a cercare ↗' : 'Basta mi arrendo ↗';
+        if (viewer) viewer.classList.toggle('is-solved', solved);
+        toggles.forEach(function (b) {
+          b.setAttribute('aria-pressed', solved);
+          b.textContent = solved ? 'Ricomincio a cercare ↗' : 'Basta mi arrendo ↗';
+        });
         // la lente ingrandisce l'immagine attualmente visibile
         lens.style.backgroundImage = 'url("' + (solved ? overlay.currentSrc || overlay.src : img.currentSrc) + '")';
+      };
+      toggles.forEach(function (b) {
+        b.addEventListener('click', function () { setSolved(!solved); });
       });
     }
 
@@ -1181,6 +1429,154 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
       handle.style.left = (x + diag - handleThickness / 2) + 'px';
       handle.style.top = (y + diag) + 'px';
     });
+  })();
+
+  // Tavola a tutto schermo per touch: all'apertura riempie l'altezza dello
+  // schermo (sul telefono in verticale i personaggi sono già riconoscibili e
+  // si scorre di lato). Due dita per ingrandire attorno al punto tra le dita,
+  // un dito per spostarsi, doppio tocco per ingrandire o tornare indietro.
+  (function () {
+    var viewer = document.getElementById('wkz-viewer');
+    var tile = document.querySelector('.wkz-tavola');
+    if (!viewer || !tile || typeof viewer.showModal !== 'function') return;
+    var stage = viewer.querySelector('.wkz-viewer-stage');
+    var content = viewer.querySelector('.wkz-viewer-content');
+    var art = viewer.querySelector('.wkz-viewer-art');
+    var sol = viewer.querySelector('.wkz-viewer-sol');
+    var pageArt = document.getElementById('wkz-tesi-art');
+    var pageSol = document.getElementById('wkz-tesi-soluzioni');
+    var touchOnly = matchMedia('(hover: none)');
+    var ratio = 7087 / 3898;
+    var vw, vh, w0, h0, sFit = 1, sMin = 1, sMax = 6;
+    var s = 1, tx = 0, ty = 0;
+
+    function layout() {
+      vw = stage.clientWidth;
+      vh = stage.clientHeight;
+      // misura di base: la tavola intera dentro lo schermo
+      w0 = Math.min(vw, vh * ratio);
+      h0 = w0 / ratio;
+      content.style.width = w0 + 'px';
+      content.style.height = h0 + 'px';
+      sFit = Math.max(vw / w0, vh / h0);
+      sMax = Math.max(sFit * 4, 6);
+    }
+    function apply() {
+      var w = w0 * s, h = h0 * s;
+      tx = w <= vw ? (vw - w) / 2 : Math.min(0, Math.max(vw - w, tx));
+      ty = h <= vh ? (vh - h) / 2 : Math.min(0, Math.max(vh - h, ty));
+      content.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+    }
+    // ingrandisce tenendo fermo il punto (cx, cy) dello schermo
+    function zoomAt(ns, cx, cy) {
+      ns = Math.min(sMax, Math.max(sMin, ns));
+      var px = (cx - tx) / s, py = (cy - ty) / s;
+      s = ns;
+      tx = cx - px * s;
+      ty = cy - py * s;
+      apply();
+    }
+    var animTimer = 0;
+    function animate() {
+      content.classList.add('is-anim');
+      clearTimeout(animTimer);
+      animTimer = setTimeout(function () { content.classList.remove('is-anim'); }, 320);
+    }
+    function reset() {
+      layout();
+      s = sFit;
+      tx = (vw - w0 * s) / 2;
+      ty = (vh - h0 * s) / 2;
+      apply();
+    }
+
+    var pts = new Map();
+    var start = null;
+    var moved = false;
+    var lastTap = 0;
+    function snapshot() {
+      var a = Array.from(pts.values());
+      if (a.length >= 2) {
+        start = {
+          d: Math.hypot(a[1].x - a[0].x, a[1].y - a[0].y) || 1,
+          mx: (a[0].x + a[1].x) / 2, my: (a[0].y + a[1].y) / 2,
+          s: s, tx: tx, ty: ty
+        };
+      } else if (a.length === 1) {
+        start = { x: a[0].x, y: a[0].y, tx: tx, ty: ty };
+      } else {
+        start = null;
+      }
+    }
+    stage.addEventListener('pointerdown', function (e) {
+      if (stage.setPointerCapture) stage.setPointerCapture(e.pointerId);
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 1) moved = false;
+      content.classList.remove('is-anim');
+      viewer.classList.add('is-touched');
+      snapshot();
+    });
+    stage.addEventListener('pointermove', function (e) {
+      if (!pts.has(e.pointerId) || !start) return;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      var a = Array.from(pts.values());
+      if (a.length >= 2 && start.d) {
+        // il punto della tavola tra le dita resta tra le dita
+        var d = Math.hypot(a[1].x - a[0].x, a[1].y - a[0].y);
+        var mx = (a[0].x + a[1].x) / 2, my = (a[0].y + a[1].y) / 2;
+        var px = (start.mx - start.tx) / start.s, py = (start.my - start.ty) / start.s;
+        s = Math.min(sMax, Math.max(sMin, start.s * d / start.d));
+        tx = mx - px * s;
+        ty = my - py * s;
+        moved = true;
+      } else if (a.length === 1 && start.x !== undefined) {
+        var dx = a[0].x - start.x, dy = a[0].y - start.y;
+        if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+        tx = start.tx + dx;
+        ty = start.ty + dy;
+      }
+      apply();
+    });
+    function release(e) {
+      if (!pts.has(e.pointerId)) return;
+      pts.delete(e.pointerId);
+      if (e.type === 'pointerup' && pts.size === 0 && !moved) {
+        var now = Date.now();
+        if (now - lastTap < 320) {
+          animate();
+          if (s > sFit * 1.5) reset();
+          else zoomAt(sFit * 2.5, e.clientX, e.clientY);
+          lastTap = 0;
+        } else {
+          lastTap = now;
+        }
+      }
+      snapshot();
+    }
+    stage.addEventListener('pointerup', release);
+    stage.addEventListener('pointercancel', release);
+    // rotella / trackpad (es. iPad con trackpad)
+    stage.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      zoomAt(s * Math.exp(-e.deltaY * 0.002), e.clientX, e.clientY);
+    }, { passive: false });
+
+    function open() {
+      if (!art.getAttribute('src')) art.src = pageArt.currentSrc || pageArt.src;
+      if (!sol.getAttribute('src')) sol.src = pageSol.currentSrc || pageSol.src;
+      viewer.classList.remove('is-touched');
+      viewer.showModal();
+      reset();
+    }
+    tile.addEventListener('click', function () {
+      if (touchOnly.matches) open();
+    });
+    document.getElementById('wkz-viewer-open').addEventListener('click', function (e) {
+      e.stopPropagation();
+      open();
+    });
+    viewer.querySelector('.wkz-viewer-close').addEventListener('click', function () { viewer.close(); });
+    window.addEventListener('resize', function () { if (viewer.open) reset(); });
   })();
 </script>
 

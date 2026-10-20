@@ -778,7 +778,9 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 /* -------- Hero progetto -------- */
 .project-hero{
   position:relative;
-  padding: 64px 0 86px;
+  /* solo sopra e sotto: i lati restano quelli di .wrap (40px, 20px su mobile) */
+  padding-top:64px;
+  padding-bottom:86px;
   opacity:0;
   transform: translateY(14px);
   animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards;
