@@ -456,9 +456,13 @@ window.addEventListener('load', () => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   // Due "cicli" indipendenti, ognuno con pause e durate a caso: le lettere
   // accese sono spesso due ma non si accendono né si spengono insieme.
+  // Si sceglie solo tra le lettere spente con entrambe le vicine spente,
+  // così due lettere accese non sono mai una accanto all'altra.
   const autos = [null, null];
+  const isFree = (i) => !timers.has(letters[i - 1]) && !timers.has(letters[i]) && !timers.has(letters[i + 1]);
   const tick = (i) => {
-    flash(letters[Math.floor(Math.random() * letters.length)], 450 + Math.random() * 550);
+    const free = letters.filter((_, j) => isFree(j));
+    if (free.length) flash(free[Math.floor(Math.random() * free.length)], 450 + Math.random() * 550);
     autos[i] = setTimeout(() => tick(i), 700 + Math.random() * 1300);
   };
   new IntersectionObserver(([entry]) => {
