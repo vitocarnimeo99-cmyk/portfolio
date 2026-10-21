@@ -302,6 +302,15 @@ nav.wrap{
 @media (max-width: 980px){
   .hero{ padding: 340px 0 64px; }
 }
+/* Su telefono invece niente fascia: il titolo parte in alto e il cartellino
+   pende a destra delle pillole dei ruoli, sotto il titolo. A riposo sta
+   dietro al testo (il cordino passa dietro alle lettere), mentre lo si
+   trascina torna davanti. */
+@media (max-width: 640px){
+  .hero{ padding-top: 32px; }
+  .hero-lanyard{ z-index: 0; }
+  .hero-lanyard.is-dragging{ z-index: 2; }
+}
 
 section{ padding: 90px 0; }
 section + section{ border-top: 1px solid var(--line); }
@@ -1543,15 +1552,21 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   margin-bottom:22px;
 }
 /* Su telefono l'occhiello dell'hero diventa tre pillole bianche, una per
-   ruolo, con il pallino nei colori delle lettere del titolo. */
+   ruolo, con il pallino nei colori delle lettere del titolo: stanno sotto
+   il titolo, in colonna dalla più larga alla più stretta, e a destra ci
+   pende il cartellino. cartellino3d.js allunga il cordino e, se il
+   cartellino scende più in basso delle pillole, dà al blocco la
+   min-height che serve perché il testo sotto non gli finisca dietro. */
 .hero-roles{ display:none; }
 @media (max-width: 640px){
   .hero .home-eyebrow{ display:none; }
+  .hero h1{ font-size: 2.8rem; margin-bottom: 24px; }
   .hero-roles{
     display:flex;
-    flex-wrap:wrap;
+    flex-direction:column;
+    align-items:flex-start;
     gap:8px;
-    margin:0 0 20px;
+    margin:0 0 24px;
     padding:0;
     list-style:none;
   }
@@ -1577,6 +1592,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     border-radius:50%;
     background: var(--accent);
   }
+  .hero-roles li:nth-child(1)::before{ background:#E8B400; } /* Graphic Designer */
   .hero-roles li:nth-child(2)::before{ background:#3F6B3D; }
   .hero-roles li:nth-child(3)::before{ background:#D8322A; }
 }
@@ -1596,31 +1612,24 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .hero-links{ margin-top:44px; }
 .hero .meta{ margin-top:40px; }
 /* Su telefono restano solo "Guarda i lavori" a tutta larghezza + il tondo
-   della mail, ancorati in fondo alla prima schermata. Sugli schermi alti
-   l'hero è alto quanto lo schermo meno header (81px) e ticker (56px, che
-   così si intravede sotto) e il margin-top:auto spinge i pulsanti in basso.
-   Su quelli bassi, dove il testo non ci sta, i pulsanti restano attaccati
-   al fondo dello schermo (sticky, su una sfumatura del fondo) finché non si
-   arriva alla fine dell'hero. overflow:clip al posto di hidden perché
-   hidden renderebbe l'hero il contenitore dello sticky, che non si
-   attaccherebbe mai allo schermo. */
+   della mail, subito sotto i dati (24px, come gli altri spazi dell'hero).
+   Sugli schermi bassi, dove non ci stanno nella prima schermata, restano
+   attaccati al fondo dello schermo (sticky, su una sfumatura del fondo)
+   finché non si arriva alla fine dell'hero. overflow:clip al posto di
+   hidden perché hidden renderebbe l'hero il contenitore dello sticky, che
+   non si attaccherebbe mai allo schermo. */
 @media (max-width: 640px){
   .hero{
-    display:flex;
-    flex-direction:column;
-    min-height: calc(100svh - 81px - 56px);
     padding-bottom: 8px;
     overflow: clip;
   }
-  .hero-flex, .hero-text{ display:flex; flex-direction:column; flex:1 1 auto; }
-  .hero-flex{ align-items:stretch; }
-  .hero .meta{ margin-top:20px; }
+  .hero .meta{ margin-top:12px; } /* fa coppia con il paragrafo sopra */
   .hero-links{
     position: sticky;
     bottom: 0;
-    margin-top: auto;
-    padding: 32px 0 calc(16px + env(safe-area-inset-bottom));
-    background: linear-gradient(to bottom, transparent, var(--paper) 28px);
+    margin-top: 0;
+    padding: 24px 0 calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(to bottom, transparent, var(--paper) 20px);
     flex-wrap:nowrap;
     gap:12px;
   }

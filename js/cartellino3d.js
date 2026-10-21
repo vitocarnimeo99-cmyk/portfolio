@@ -48,22 +48,120 @@
      La x è proporzionale alla larghezza visibile della camera, così su
      schermi stretti (mobile) resta sempre dentro l'inquadratura. */
   const ANCHOR = new THREE.Vector3(0, 6.6, 0);
-  function updateAnchorX() {
+  const CARD_W = 2.05, CARD_H = 2.7, CARD_D = 0.1;
+  const CLIP_GAP = 0.28; // distanza tra moschettone e bordo alto del cartellino
+
+  /* Su mobile e tablet l'inquadratura è quella di una fascia alta
+     MOBILE_BAND_H px in cima all'hero (vedi updateCamera). Su telefono, dove
+     sotto il titolo ci sono le pillole dei ruoli, la fascia è più bassa
+     così il cartellino viene più piccolo (154px di altezza). */
+  const MOBILE_BAND_H = 420;
+  const PHONE_BAND_H = 360;
+  const roles = document.querySelector('.hero-roles');
+  const title = document.querySelector('.hero h1');
+  const isPhoneLayout = () => !!roles && roles.offsetParent !== null;
+
+  /* Telefono: x (in px dal bordo sinistro dell'hero) del cordino a riposo.
+     Di base il cartellino sta a 20px dal bordo destro, ma il cordino non
+     deve sfiorare la fine di una riga del titolo: si sceglie la posizione
+     più vicina a quella di base che stia ad almeno TEXT_GAP px da ogni
+     riga, potendo avvicinare il cartellino al bordo fino a 8px o spostarlo
+     a sinistra fino alle pillole. Le righe che occupano tutto lo spazio
+     disponibile (il cordino le attraversa comunque, dietro le lettere) non
+     contano. */
+  const TEXT_GAP = 16;
+  // Righe del titolo in px rispetto all'hero: dove finiscono e dove stanno
+  function titleLines() {
+    const box = container.getBoundingClientRect();
+    const lines = {};
+    const range = document.createRange();
+    range.selectNodeContents(title);
+    for (const r of range.getClientRects()) {
+      const key = Math.round(r.top);
+      const line = lines[key] || (lines[key] = { right: 0, bottom: 0 });
+      line.right = Math.max(line.right, r.right - box.left);
+      line.bottom = Math.max(line.bottom, r.bottom - box.top);
+    }
+    return Object.values(lines);
+  }
+  function phoneStrapX(cardHalf, lines) {
+    const box = container.getBoundingClientRect();
+    const w = box.width;
+    const pref = w - 20 - cardHalf;
+    const hi = w - 8 - cardHalf;
+    const lo = Math.min(pref, roles.firstElementChild.getBoundingClientRect().right - box.left + TEXT_GAP + cardHalf);
+    const blocked = lines
+      .map(({ right }) => [0, right + TEXT_GAP])
+      .filter(([a, b]) => !(a <= lo && b >= hi));
+    const free = [pref, ...blocked.map(([, b]) => b)]
+      .map((x) => THREE.MathUtils.clamp(x, lo, hi))
+      .filter((x) => !blocked.some(([a, b]) => x > a && x < b));
+    if (!free.length) return pref;
+    return free.reduce((best, x) => (Math.abs(x - pref) < Math.abs(best - pref) ? x : best));
+  }
+  /* Telefono: bordo alto del cartellino (px dall'hero). Sale il più
+     possibile nello spazio libero a destra delle ultime righe del titolo
+     (accanto a "impresse."): sta sotto ogni riga che arriva fin sopra il
+     cartellino, e ancora più giù sotto quelle che arrivano fin sopra il
+     moschettone, che sporge sopra il cartellino di clipSpace px. */
+  function phoneCardTop(strapX, cardHalf, clipSpace, lines) {
+    let top = title.getBoundingClientRect().top - container.getBoundingClientRect().top;
+    for (const { right, bottom } of lines) {
+      if (right + TEXT_GAP > strapX - 8) top = Math.max(top, bottom + clipSpace);
+      else if (right + TEXT_GAP > strapX - cardHalf) top = Math.max(top, bottom + 12);
+    }
+    return top;
+  }
+
+  let restLen = REST_LEN;
+  // A riposo il cordino si allunga un po' sotto il peso del cartellino
+  // (i vincoli della simulazione non sono rigidi): di quanto, misurato a
+  // occhio sugli screenshot, per far arrivare il cartellino dove deve.
+  const ROPE_STRETCH = 0.044;
+  function updateLayout() {
     const dist = camera.position.z;
     const halfHeight = dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const w = container.clientWidth;
+    restLen = REST_LEN;
+    // Telefono: cartellino a destra delle pillole e centrato con loro in
+    // altezza. Il cartellino scende fino a centrarsi sulle pillole (mai più
+    // in alto di quanto permette phoneCardTop); se deve stare più in basso
+    // sono le pillole a scendere (padding-top) fino al suo centro. Il blocco
+    // delle pillole arriva comunque fin sotto il cartellino, così il
+    // paragrafo non gli finisce dietro. Il cordino si allunga quanto serve.
+    if (isPhoneLayout()) {
+      const pxPerUnit = PHONE_BAND_H / (2 * halfHeight);
+      const cardHalf = CARD_W / 2 * pxPerUnit;
+      const cardH = CARD_H * pxPerUnit;
+      const lines = titleLines();
+      const strapX = phoneStrapX(cardHalf, lines);
+      ANCHOR.x = (strapX - w / 2) / pxPerUnit;
+      const heroTop = container.getBoundingClientRect().top;
+      const rolesTop = roles.getBoundingClientRect().top - heroTop;
+      const pillsH = roles.lastElementChild.getBoundingClientRect().bottom - roles.firstElementChild.getBoundingClientRect().top;
+      const minCardTop = phoneCardTop(strapX, cardHalf, (CLIP_GAP + 0.11) * pxPerUnit + 8, lines);
+      const cardTop = Math.max(minCardTop, rolesTop + (pillsH - cardH) / 2);
+      const pillsPush = Math.max(0, cardTop + cardH / 2 - (rolesTop + pillsH / 2));
+      const cardTopY = camera.position.y + halfHeight - cardTop / pxPerUnit;
+      restLen = (ANCHOR.y - cardTopY - CLIP_GAP) / (SEGMENTS - 1) / (1 + ROPE_STRETCH);
+      roles.style.paddingTop = Math.round(pillsPush) + 'px';
+      roles.style.minHeight = Math.max(0, Math.ceil(cardTop + cardH - rolesTop)) + 'px';
+      return;
+    }
+    if (roles) roles.style.paddingTop = roles.style.minHeight = '';
+    // Tablet (vedi style.css): il cartellino ha una fascia tutta sua sopra
+    // il titolo, lì sta meglio centrato.
+    if (w <= 980) { ANCHOR.x = 0; return; }
     const halfWidth = halfHeight * camera.aspect;
-    // Su mobile (vedi style.css) il cartellino ha una fascia tutta sua sopra
-    // il titolo: lì sta meglio centrato.
-    if (container.clientWidth <= 980) { ANCHOR.x = 0; return; }
     ANCHOR.x = THREE.MathUtils.clamp(halfWidth * 0.62, 0.5, 3.2);
   }
-  updateAnchorX();
+  updateLayout();
   const GRAVITY_Y = -0.03;
   const DAMPING = 0.98;
 
   const points = [];
   for (let i = 0; i < SEGMENTS; i++) {
-    const y = prefersReducedMotion ? ANCHOR.y - i * REST_LEN : ANCHOR.y - i * 0.06;
+    const y = prefersReducedMotion ? ANCHOR.y - i * restLen : ANCHOR.y - i * 0.06;
     const x = ANCHOR.x + (prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.05);
     points.push({
       pos: new THREE.Vector3(x, y, 0),
@@ -89,7 +187,7 @@
         const a = points[i], b = points[i + 1];
         const dx = b.pos.x - a.pos.x, dy = b.pos.y - a.pos.y, dz = b.pos.z - a.pos.z;
         const dist = Math.sqrt(dx * dx + dy * dy + dz * dz) || 0.0001;
-        const diff = (dist - REST_LEN) / dist;
+        const diff = (dist - restLen) / dist;
         const ox = dx * 0.5 * diff, oy = dy * 0.5 * diff, oz = dz * 0.5 * diff;
         if (!a.pinned) { a.pos.x += ox; a.pos.y += oy; a.pos.z += oz; }
         if (!b.pinned) { b.pos.x -= ox; b.pos.y -= oy; b.pos.z -= oz; }
@@ -125,7 +223,6 @@
   scene.add(clipGroup);
 
   /* ---------------- cartellino ---------------- */
-  const CARD_W = 2.05, CARD_H = 2.7, CARD_D = 0.1;
   const sideMat = new THREE.MeshStandardMaterial({ color: 0xefebe2, roughness: 0.9 });
   const backMat = new THREE.MeshStandardMaterial({ color: 0xf7f5f0, roughness: 0.9 });
   const frontMat = new THREE.MeshStandardMaterial({ color: 0xefebe2, roughness: 0.55 });
@@ -137,7 +234,7 @@
      cartellino. Così qualsiasi rotazione applicata al gruppo (oscillazione,
      spin, ecc.) avviene attorno al punto di aggancio, che quindi non si
      sposta mai: il moschettone non può più "staccarsi" dal cartellino. */
-  cardMesh.position.y = -(CARD_H * 0.5 + 0.28);
+  cardMesh.position.y = -(CARD_H * 0.5 + CLIP_GAP);
   const cardGroup = new THREE.Group();
   cardGroup.add(cardMesh);
   scene.add(cardGroup);
@@ -194,11 +291,11 @@
      alta di 420px: la camera "vede" la fascia come prima e il resto del
      canvas è solo un'estensione verso il basso della stessa vista, quindi
      scala e posizione del cartellino non cambiano. */
-  const MOBILE_BAND_H = 420;
   function updateCamera() {
-    if (width <= 980 && height > MOBILE_BAND_H) {
-      camera.aspect = width / MOBILE_BAND_H;
-      camera.setViewOffset(width, MOBILE_BAND_H, 0, 0, width, height);
+    const bandH = isPhoneLayout() ? PHONE_BAND_H : MOBILE_BAND_H;
+    if (width <= 980 && height > bandH) {
+      camera.aspect = width / bandH;
+      camera.setViewOffset(width, bandH, 0, 0, width, height);
     } else {
       camera.aspect = width / height;
       camera.clearViewOffset();
@@ -211,9 +308,12 @@
     if (!width || !height) return;
     updateCamera();
     renderer.setSize(width, height);
-    updateAnchorX();
+    updateLayout();
   }
   new ResizeObserver(onResize).observe(container);
+  // Il font del titolo può cambiare la fine delle righe senza cambiare
+  // l'altezza dell'hero: a font caricato si ricalcola la posizione.
+  if (document.fonts) document.fonts.ready.then(updateLayout);
 
   /* ---------------- drag ---------------- */
   const raycaster = new THREE.Raycaster();
