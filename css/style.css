@@ -1542,6 +1542,45 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--accent);
   margin-bottom:22px;
 }
+/* Su telefono l'occhiello dell'hero diventa tre pillole bianche, una per
+   ruolo, con il pallino nei colori delle lettere del titolo. */
+.hero-roles{ display:none; }
+@media (max-width: 640px){
+  .hero .home-eyebrow{ display:none; }
+  .hero-roles{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:0 0 20px;
+    padding:0;
+    list-style:none;
+  }
+  .hero-roles li{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:#fff;
+    font-size:0.66rem;
+    font-weight:700;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    color: var(--ink);
+  }
+  .hero-roles li::before{
+    content:"";
+    flex:none;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background: var(--accent);
+  }
+  .hero-roles li:nth-child(2)::before{ background:#3F6B3D; }
+  .hero-roles li:nth-child(3)::before{ background:#D8322A; }
+}
+
 /* Parola in accento nei titoli: Inter Display Italic Medium
    (non nel titolo della home, dove "restano" è dritto come il resto) */
 .section-title em,
