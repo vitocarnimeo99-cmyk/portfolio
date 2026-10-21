@@ -1185,18 +1185,25 @@
     transform-style:preserve-3d;
     display:none;
   }
-  .fb-strip .fb-strip{ left:100%; width:100%; }
+  .fb-strip .fb-strip{ left:100%; }
   /* Ogni striscia sborda di un pixel sotto la successiva: niente fessure
-     quando il foglio si piega. L'immagine è posizionata in pixel sulla
-     larghezza della pagina (--pw) così resta allineata. La luce sulla carta
+     quando il foglio si piega. L'immagine è larga quanto la pagina (--pw)
+     e spostata in pixel (--x, dal JS) così resta allineata. La luce sulla carta
      curva scurisce la striscia stessa (filtro, non un velo), così dove due
-     strisce si sovrappongono non compaiono righe. */
+     strisce si sovrappongono non compaiono righe. Niente
+     backface-visibility:hidden qui: tra le strisce lascia righe sottili;
+     fronte e retro restano visibili, staccati di mezzo pixel, e si vede
+     quello rivolto verso chi guarda perché è il più vicino. */
   .fb-strip > .fb-side{
     right:-1px;
     background-size: var(--pw, 100%) 100%;
-    background-position: calc(var(--pw, 0px) * var(--k) * -1) 0;
+    background-position: calc(var(--x, 0px) * -1) 0;
     filter: brightness(var(--lum, 1));
+    backface-visibility:visible;
+    -webkit-backface-visibility:visible;
   }
+  .fb-strip > .fb-side.front{ transform: translateZ(.5px); }
+  .fb-strip > .fb-side.back{ transform: rotateY(180deg) translateZ(.5px); }
   .fb-leaf.is-turning > .fb-flat{ display:none; }
   .fb-leaf.is-turning .fb-strip{ display:block; }
   /* Ombra che il foglio in movimento proietta sulle pagine sotto */
@@ -1207,8 +1214,12 @@
   }
   .fb-cast.l{ left:0; }
   .fb-cast.r{ left:50%; }
+  /* Su schermi stretti il libretto non sta in un rettangolo: le pagine
+     arrivano fino ai bordi dello schermo e lì vengono tagliate, senza
+     far scorrere la pagina in orizzontale */
   @media (max-width:700px){
-    .fb-stage{ overflow:hidden; padding-bottom:36px; }
+    .ct-catalogo{ overflow-x:hidden; overflow-x:clip; }
+    .fb-stage{ padding-bottom:36px; }
     .fb-shift{ width:200%; margin-left:-50%; }
     .fb-book{ width:100%; }
   }
@@ -2583,11 +2594,6 @@ Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories,
     // sopra le pagine ferme, sotto il foglio che gira
     [castL, castR].forEach((d) => { d.style.transform = 'translateZ(' + (total * 0.1 + 1).toFixed(1) + 'px)'; });
 
-    const setPw = () => book.style.setProperty('--pw', book.offsetWidth / 2 + 'px');
-    setPw();
-    if ('ResizeObserver' in window) new ResizeObserver(setPw).observe(book);
-    else addEventListener('resize', setPw);
-
     const leaves = Array.from({ length: total }, (_, i) => {
       const leaf = el('fb-leaf', book);
       const flat = el('fb-flat', leaf);
@@ -2596,13 +2602,8 @@ Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories,
       let parent = leaf;
       for (let k = 0; k < N; k++) {
         const s = el('fb-strip' + (k === 0 ? ' is-spine' : ''), parent);
-        if (k === 0) s.style.width = 100 / N + '%';
         const f = el('fb-side front', s);
         const b = el('fb-side back', s);
-        // ogni striscia mostra la sua fetta di pagina; sul retro le fette
-        // sono in ordine inverso perché il foglio è capovolto
-        f.style.setProperty('--k', k / N);
-        b.style.setProperty('--k', (N - 1 - k) / N);
         faces.push(f, b);
         strips.push({ el: s, f, b });
         parent = s;
@@ -2614,8 +2615,28 @@ Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories,
         const isFront = face.classList.contains('front');
         if ((i === 0 && isFront) || (i === total - 1 && !isFront)) face.classList.add('is-cover');
       });
-      return { el: leaf, i, faces, strips, angle: 0, curl: 1, anim: 0, moving: false, loaded: false };
+      return { el: leaf, i, faces, strips, angle: 0, curl: 1, anim: 0, moving: false, loaded: false, lo: 0, hi: 1 };
     });
+
+    // Strisce larghe un numero intero di pixel: con le frazioni gli
+    // arrotondamenti si sommano di striscia in striscia e tra l'una e
+    // l'altra si aprono fessure. L'ultima prende il resto. Ogni striscia
+    // mostra la sua fetta di pagina (--x); sul retro le fette sono in
+    // ordine inverso perché il foglio è capovolto.
+    const setPw = () => {
+      const pw = book.offsetWidth / 2;
+      const w = Math.floor(pw / N);
+      book.style.setProperty('--pw', pw + 'px');
+      leaves.forEach((leaf) => leaf.strips.forEach((s, k) => {
+        const sw = k < N - 1 ? w : pw - w * (N - 1);
+        s.el.style.width = sw + 'px';
+        s.f.style.setProperty('--x', k * w + 'px');
+        s.b.style.setProperty('--x', pw - k * w - sw - 1 + 'px');
+      }));
+    };
+    setPw();
+    if ('ResizeObserver' in window) new ResizeObserver(setPw).observe(book);
+    else addEventListener('resize', setPw);
 
     // Carica solo le pagine vicine a quella aperta, già decodificate: il
     // browser altrimenti decodifica la faccia nascosta solo quando appare
@@ -2641,17 +2662,16 @@ Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories,
       && !(drag && drag.leaf === l) && (side < 0 ? l.angle <= -179.99 : l.angle >= -0.01)).length;
 
     // Il libro scorre verso il centro man mano che la copertina (o il retro)
-    // gira, e l'ombra copre solo la parte già occupata dalle pagine: così a
-    // metà giro non compare una pagina vuota. Su schermi stretti lo
-    // spostamento lo fa .fb-shift.
+    // gira, e l'ombra copre solo la parte già occupata dalle pagine (col
+    // foglio curvo, non piatto): così a metà giro non compare una pagina
+    // vuota. Su schermi stretti lo spostamento lo fa .fb-shift.
     const layoutBook = () => {
       const a0 = leaves[0].angle;
       const aN = leaves[total - 1].angle;
-      const rad = Math.PI / 180;
       const tx = narrow.matches ? 0 : -25 * (1 + a0 / 180) - 25 * aN / 180;
       book.style.setProperty('--tx', tx.toFixed(3) + '%');
-      const sl = 50 * (1 - Math.max(0, -Math.cos(a0 * rad)));
-      const sr = 50 * (1 - Math.max(0, Math.cos(aN * rad)));
+      const sl = 50 * (1 + leaves[0].lo);
+      const sr = 50 * (1 - leaves[total - 1].hi);
       book.style.setProperty('--sl', sl.toFixed(3) + '%');
       book.style.setProperty('--sr', sr.toFixed(3) + '%');
       // Il tilt ruota attorno al centro della parte visibile del libro
@@ -2669,21 +2689,29 @@ Ogni campagna viene adattata ai diversi formati e canali, dal feed alle stories,
       leaf.el.style.transform = 'translateZ(' + z.toFixed(1) + 'px) rotateY(' + a + 'deg)';
       leaf.el.style.zIndex = turning ? total * 2 : (a <= -90 ? leaf.i : total - leaf.i);
       leaf.el.classList.toggle('is-turning', turning);
-      if (leaf.i === 0 || leaf.i === total - 1) layoutBook();
-      if (!turning) return;
+      // fin dove arriva il foglio, da -1 (bordo sinistro) a 1 (destro)
+      const ends = leaf.i === 0 || leaf.i === total - 1;
+      const cs0 = Math.cos(a * Math.PI / 180);
+      leaf.lo = Math.min(0, cs0);
+      leaf.hi = Math.max(0, cs0);
+      if (!turning) { if (ends) layoutBook(); return; }
       // il bordo libero resta indietro (o va avanti, se lo si tira col dito)
       const c = leaf.curl * BEND * Math.sin(Math.PI * p);
       const step = c / (N - 1);
       // più la striscia è inclinata rispetto a chi guarda, più è in ombra
       const cosAt = (k) => Math.cos((a + step * clamp(k, 0, N - 1)) * Math.PI / 180);
       let x = 0;
+      leaf.lo = leaf.hi = 0;
       leaf.strips.forEach((s, k) => {
         s.el.style.transform = k === 0 ? '' : 'rotateY(' + step.toFixed(2) + 'deg)';
         const cs = cosAt(k);
         x += cs / N;
+        leaf.lo = Math.min(leaf.lo, x);
+        leaf.hi = Math.max(leaf.hi, x);
         s.f.style.setProperty('--lum', (1 - 0.36 * (1 - cs)).toFixed(3));
         s.b.style.setProperty('--lum', (1 - 0.36 * (1 + cs)).toFixed(3));
       });
+      if (ends) layoutBook();
       // x: dove cade il bordo libero, da -1 (pagina sinistra) a 1 (destra)
       const lift = Math.sin(Math.PI * p);
       const castOn = (cast, pos, dirStr) => {

@@ -217,6 +217,12 @@
   @media (max-width:560px){
     .st-entry{ padding:28px 22px 24px; }
   }
+  /* Su telefono niente brand personality: la sezione finisce con i core
+     values (l'etichetta dei social nel pittogramma resta) */
+  @media (max-width:640px){
+    .st-name .st-traits-label, .st-name .st-traits{ display:none; }
+    .st-values{ margin-bottom:0; }
+  }
 
   /* -------- Costruzione geometrica del logo: il video ha già la sua
      griglia a puntini su fondo bianco, la card gli fa solo da cornice -------- */
@@ -238,6 +244,60 @@
   .geo-follow .social a{ width:44px; height:44px; color: var(--st-night); border-color: rgba(97,99,198,.3); }
   .geo-follow .social a:hover{ color:#fff; background-color: var(--accent); border-color: var(--accent); }
   .geo-follow .social a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* -------- "Leggi di più" su telefono (come su WKZ): l'intro mostra sei
+     righe e la settima che sfuma, il pittogramma il primo paragrafo e la
+     riga dopo che sfuma; il pulsante apre il resto (l'altezza la anima lo
+     script). Sopra i 640px testo intero e niente pulsante -------- */
+  /* Su telefono (come su WKZ) Anno e Output affiancati, e sotto Ruolo a
+     tutta larghezza perché è lungo */
+  @media (max-width:640px){
+    .project-hero .project-meta{
+      display:grid;
+      grid-template-columns:max-content minmax(0, 1fr);
+      gap:18px 32px;
+      margin-bottom:36px;
+    }
+    .project-hero .st-meta-role{ grid-row:2; grid-column:1 / -1; }
+  }
+  .st-intro{ max-width:60ch; margin-bottom:44px; }
+  .project-hero .st-intro p{ margin:0; }
+  /* righe da 28.5px nell'intro; nel pittogramma da 27px, con 14px tra i paragrafi */
+  #st-more-intro{ --more-h:12.5rem; }
+  #st-more-geo{ --more-h:7.65rem; }
+  .st-more-btn{
+    align-self:flex-start;
+    margin-top:10px;
+    padding:6px 0;
+    display:inline-flex; align-items:center; gap:8px;
+    border:0;
+    background:none;
+    font:inherit;
+    font-size:1rem;
+    font-weight:700;
+    color: var(--accent);
+    cursor:pointer;
+  }
+  .st-more-btn i{ font-size:.8em; transition: transform .3s ease; }
+  .st-more-btn[aria-expanded="true"] i{ transform: rotate(180deg); }
+  .st-more-btn:hover .st-more-label{ text-decoration:underline; text-underline-offset:4px; }
+  .st-more-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:640px){
+    .st-more{
+      height:var(--more-h);
+      overflow:hidden;
+      -webkit-mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
+              mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
+      transition: height .5s cubic-bezier(.2,.7,.2,1);
+    }
+    .st-more.is-open{ -webkit-mask-image:none; mask-image:none; }
+  }
+  @media (min-width:641px){
+    .st-more-btn{ display:none; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .st-more, .st-more-btn i{ transition:none; }
+  }
   .geo-stage{
     position:relative;
     border-radius:24px;
@@ -446,8 +506,12 @@
   }
   .fb-staples::before{ top:22%; }
   .fb-staples::after{ bottom:22%; }
+  /* Su schermi stretti il fascicolo non sta in un rettangolo: le pagine
+     arrivano fino ai bordi dello schermo e lì vengono tagliate, senza
+     far scorrere la pagina in orizzontale */
   @media (max-width:720px){
-    .fb-stage{ --bw:100%; overflow:hidden; padding-bottom:36px; }
+    .st-manual{ overflow-x:hidden; overflow-x:clip; }
+    .fb-stage{ --bw:100%; padding-bottom:36px; }
     .fb-shift{ width:200%; margin-left:-50%; }
   }
   .fb-bar{
@@ -484,6 +548,7 @@
   .st-pano .eyebrow{ color: var(--st-green); }
   .st-pano .st-head p{ color: rgba(247,245,240,.7); }
   .pano-scroller{
+    position:relative; /* riferimento per offsetLeft delle schermate (vedi script) */
     overflow-x:auto;
     overflow-y:hidden;
     scrollbar-width:none;
@@ -512,11 +577,22 @@
     transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
   }
   .pano-frame img{ display:block; width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none; }
-  .pano-frame:hover,
-  .pano-track:not(:hover) .pano-frame.is-active{
-    transform: translateY(-12px) rotate(-1deg);
-    box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 24px 50px rgba(0,0,0,.45),
-      0 0 26px rgba(148,149,234,.45);
+  @media (hover:hover){
+    .pano-frame:hover,
+    .pano-track:not(:hover) .pano-frame.is-active{
+      transform: translateY(-12px) rotate(-1deg);
+      box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 24px 50px rgba(0,0,0,.45),
+        0 0 26px rgba(148,149,234,.45);
+    }
+  }
+  /* Su touch l'hover resta appiccicato dopo un tocco o uno scroll: si
+     alza solo la schermata in evidenza */
+  @media (hover:none){
+    .pano-frame.is-active{
+      transform: translateY(-12px) rotate(-1deg);
+      box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 24px 50px rgba(0,0,0,.45),
+        0 0 26px rgba(148,149,234,.45);
+    }
   }
   .pano-frame figcaption{
     position:absolute;
@@ -533,9 +609,12 @@
   .pano-progress{ flex:1; height:3px; border-radius:2px; background: rgba(255,255,255,.14); overflow:hidden; }
   .pano-progress span{ display:block; height:100%; width:20%; background: var(--st-grad); transform-origin:left; }
   .pano-hint{ font-size:0.85rem; color: rgba(247,245,240,.6); white-space:nowrap; }
-  @media (max-width:560px){
-    .pano-track{ padding:0 20px; gap:10px; }
-    .pano-frame{ height:min(62vh, 520px); border-radius:18px; }
+  /* Su telefono (come su WKZ) schermate più piccole, e ognuna si ferma al
+     centro dello schermo (scroll-snap) con un pezzo delle vicine ai lati */
+  @media (max-width:640px){
+    .pano-track{ gap:10px; }
+    .pano-scroller{ scroll-snap-type:x mandatory; }
+    .pano-frame{ height:min(50vh, 420px); border-radius:16px; scroll-snap-align:center; }
     .pano-hint{ display:none; }
   }
 
@@ -898,11 +977,16 @@
       <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
       <span class="eyebrow">Brand identity & App - Strush S.R.L.s</span>
       <h1>Strush <em>Fintech Startup</em></h1>
+      <div class="st-intro">
+      <div class="st-more" id="st-more-intro">
       <p><strong>Strush</strong> è l'app di finanza personale che rende l'educazione finanziaria <strong>a misura di Gen Z</strong>: tieni traccia delle spese, imposti un budget, dividi i conti con gli amici e ti fai consigliare da <strong>Bernardino</strong>, il coach personale che ti dice le cose come stanno.<br><br>
       Del progetto sono <strong>Co-founder &amp; Art Director</strong>. Ho costruito l'identità del brand da zero: il logo e la sua costruzione geometrica, la mascotte, la palette e il brand manual, fino alle illustrazioni, agli sticker e alle schermate con cui l'app si presenta sugli store.</p>
+      </div>
+      <button type="button" class="st-more-btn" aria-expanded="false" aria-controls="st-more-intro"><span class="st-more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      </div>
       <div class="project-meta">
         <div>Anno<span>2025 — oggi</span></div>
-        <div>Ruolo<span>Co-founder &amp; Art Director</span></div>
+        <div class="st-meta-role">Ruolo<span>Co-founder &amp; Art Director</span></div>
         <div>Output<span>App</span></div>
       </div>
       <div class="project-links">
@@ -962,6 +1046,7 @@
       </div>
       <div>
         <span class="eyebrow">Core values</span>
+        <div class="peek" id="st-values-more" style="--peek:14rem">
         <ul class="st-values">
           <li class="st-value">
             <span class="st-value-icon"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i></span>
@@ -976,6 +1061,8 @@
             <div><strong>Progressione</strong><p>Aiutare le persone a migliorarsi e a prendersi cura delle proprie spese, con strumenti semplici e motivanti.</p></div>
           </li>
         </ul>
+        </div>
+        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="st-values-more" data-less="Mostra meno">Vedi tutti i valori <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         <span class="st-traits-label">Brand personality</span>
         <ul class="st-traits">
           <li>Amichevole</li>
@@ -992,11 +1079,14 @@
       <div class="geo-side">
         <span class="eyebrow">Costruzione geometrica</span>
         <h2 class="section-title">Il nostro pittogramma</h2>
+        <div class="st-more" id="st-more-geo">
         <div class="geo-text">
           <p>Ogni app di finanza ha bisogno di qualcuno che ti guardi il portafoglio. Noi abbiamo scelto un T-rex 🦖</p>
           <p>Ecco <strong>Dinuccio</strong>, il pittogramma di Strush, costruito pezzo per pezzo su una griglia geometrica.</p>
           <p>Perché un T-rex? Ha il braccino corto. Anche volendo, al portafoglio non ci arriva 💸</p>
         </div>
+        </div>
+        <button type="button" class="st-more-btn" aria-expanded="false" aria-controls="st-more-geo"><span class="st-more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         <div class="geo-follow">
           <span class="st-traits-label">Segui Strush sui social</span>
           <ul class="social">
@@ -1203,6 +1293,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // "Leggi di più" su telefono: apre e richiude il testo. L'altezza va da
+  // quella chiusa (CSS) a quella del testo in px, poi passa ad auto così
+  // il testo si adatta se cambia la larghezza
+  document.querySelectorAll('.st-more-btn').forEach((btn) => {
+    const more = document.getElementById(btn.getAttribute('aria-controls'));
+    const label = btn.querySelector('.st-more-label');
+    more.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'height' && more.classList.contains('is-open')) more.style.height = 'auto';
+    });
+    btn.addEventListener('click', () => {
+      const open = !more.classList.contains('is-open');
+      if (open) {
+        more.classList.add('is-open');
+        more.style.height = reduceMotion ? 'auto' : more.scrollHeight + 'px';
+      } else {
+        more.style.height = more.scrollHeight + 'px';
+        more.offsetHeight; // fissa l'altezza di partenza prima di richiudere
+        more.style.height = '';
+        more.classList.remove('is-open');
+      }
+      btn.setAttribute('aria-expanded', open);
+      label.textContent = open ? 'Leggi di meno' : 'Leggi di più';
+    });
+  });
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const pad = (n) => String(n).padStart(2, '0');
@@ -1687,6 +1802,26 @@
     section.querySelectorAll('img').forEach((img) => img.addEventListener('load', updateBar));
     updateBar();
 
+    // Su telefono (come su WKZ) all'apertura c'è già la seconda schermata
+    // al centro, con un pezzo della prima a sinistra. Finché non si tocca
+    // il carosello, la posizione si riallinea se la pagina cambia misura.
+    const mobile = matchMedia('(max-width: 640px)');
+    const frames = Array.from(scroller.querySelectorAll('.pano-frame'));
+    const first = () => (mobile.matches ? Math.min(1, frames.length - 1) : 0);
+    const centerOf = (f) => f.offsetLeft + f.offsetWidth / 2 - scroller.clientWidth / 2;
+    let touched = false;
+    const startAtSecond = () => {
+      if (touched || !mobile.matches || !frames.length) return;
+      scroller.scrollLeft = centerOf(frames[first()]);
+      updateBar();
+    };
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((type) => {
+      scroller.addEventListener(type, () => { touched = true; }, { passive: true });
+    });
+    startAtSecond();
+    addEventListener('load', startAtSecond);
+    addEventListener('resize', startAtSecond);
+
     // Trascinamento col mouse (al tocco lo scroll è già nativo), con un po'
     // di inerzia al rilascio.
     let drag = null;
@@ -1726,11 +1861,11 @@
       if (e.key === 'ArrowLeft') scroller.scrollBy({ left: -300, behavior: 'smooth' });
     });
 
-    // Appena il carosello entra in scena si seleziona la prima schermata,
-    // poi ogni 1,5 secondi la successiva fino all'ultima, e si torna
-    // indietro. Col cursore sopra un'immagine si ferma, e riparte da quella.
+    // Appena il carosello entra in scena si seleziona la prima schermata
+    // (su telefono la seconda), poi ogni 1,5 secondi la successiva fino
+    // all'ultima, e si torna indietro. Col cursore sopra un'immagine si
+    // ferma, e riparte da quella.
     (function () {
-      const frames = Array.from(scroller.querySelectorAll('.pano-frame'));
       if (!frames.length) return;
       let i = 0, dir = 1, timer = null, visible = false, hovered = false;
 
@@ -1741,13 +1876,14 @@
         const left = f.offsetLeft, right = left + f.offsetWidth;
         const pad = 40;
         let to = null;
-        if (left - pad < scroller.scrollLeft) to = left - pad;
+        if (mobile.matches) to = centerOf(f); // su telefono la schermata in evidenza va al centro
+        else if (left - pad < scroller.scrollLeft) to = left - pad;
         else if (right + pad > scroller.scrollLeft + scroller.clientWidth) to = right + pad - scroller.clientWidth;
         if (to !== null && !drag) scroller.scrollTo({ left: to, behavior: reduceMotion ? 'auto' : 'smooth' });
       };
       const tick = () => {
         if (frames.length > 1) {
-          if (i + dir < 0 || i + dir > frames.length - 1) dir = -dir;
+          if (i + dir < first() || i + dir > frames.length - 1) dir = -dir;
           i += dir;
         }
         select(i);
@@ -1761,7 +1897,7 @@
       new IntersectionObserver((entries) => {
         const was = visible;
         visible = entries[0].isIntersecting;
-        if (visible && !was && !hovered) { i = 0; dir = 1; select(0); }
+        if (visible && !was && !hovered) { i = first(); dir = 1; select(i); }
         play();
       }, { threshold: 0.5 }).observe(scroller);
 
