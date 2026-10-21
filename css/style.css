@@ -764,6 +764,16 @@ footer{
   .hint-touch{ display:inline; }
 }
 
+/* A capo diversi per desktop e mobile:
+   <br class="br-desk"> va a capo solo su desktop, <br class="br-mob"> solo su mobile.
+   Un <br> senza classe va a capo ovunque.
+   .solo-desk nasconde su mobile qualsiasi pezzo di testo. */
+.br-mob{ display:none; }
+@media (max-width: 640px){
+  .br-desk, .solo-desk{ display:none; }
+  .br-mob{ display:inline; }
+}
+
 a:focus-visible, button:focus-visible{
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -1697,7 +1707,6 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .skills-list li .l{ font-weight:700; color: var(--ink); }
 @media (max-width: 520px){
   .skills-list li{ gap:2px; }
-  .br-desk{ display:none; } /* a capo solo su desktop */
 }
 .skills-list li span:last-child{ color: var(--ink-soft); }
 
