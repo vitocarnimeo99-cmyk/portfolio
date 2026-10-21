@@ -885,6 +885,60 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   font-size:1.02rem;
   margin-top:4px;
 }
+/* Su telefono Anno e la voce corta affiancati, sotto a tutta larghezza
+   quella lunga (.meta-wide), come su WKZ */
+@media (max-width: 640px){
+  .project-hero .project-meta{
+    display:grid;
+    grid-template-columns:max-content minmax(0, 1fr);
+    gap:18px 32px;
+    margin-bottom:36px;
+  }
+  .project-hero .project-meta .meta-wide{ grid-column:1 / -1; order:1; }
+}
+
+/* -------- "Leggi di più" (pagine progetto, solo telefono) --------
+   Un testo lungo con la classe .more mostra le prime righe (alte --more-h:
+   di base sei righe dell'intro e la settima che sfuma) e il pulsante
+   .more-btn apre il resto; l'altezza la anima main.js. Sopra i 640px
+   testo intero e niente pulsante. Il colore del pulsante si cambia con
+   --more-c (sezioni scure). */
+.more-btn{ display:none; }
+@media (max-width: 640px){
+  .more{
+    height:var(--more-h, 12.5rem);
+    overflow:hidden;
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
+            mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
+    transition: height .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .more.is-open{ -webkit-mask-image:none; mask-image:none; }
+  .more-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    align-self:flex-start;
+    margin-top:10px;
+    padding:6px 0;
+    border:0;
+    background:none;
+    font:inherit;
+    font-size:1rem;
+    font-weight:700;
+    color: var(--more-c, var(--accent));
+    cursor:pointer;
+  }
+  .more-btn i{ font-size:.8em; transition: transform .3s ease; }
+  .more-btn[aria-expanded="true"] i{ transform: rotate(180deg); }
+  .more-btn:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+  /* nell'intro lo spazio sotto il testo passa al pulsante */
+  .project-hero p.more{ margin-bottom:0; }
+  .project-hero .more-btn{ margin-bottom:44px; }
+}
+@media (max-width: 640px) and (hover: hover){
+  .more-btn:hover .more-label{ text-decoration:underline; text-underline-offset:4px; }
+}
+@media (max-width: 640px) and (prefers-reduced-motion: reduce){
+  .more, .more-btn i{ transition:none; }
+}
 .project-links{ display:flex; gap:16px; flex-wrap:wrap; }
 .btn-primary, .btn-ghost{
   display:inline-flex;

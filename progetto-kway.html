@@ -393,6 +393,12 @@
   }
   .sp-side h3 em{ font-style:italic; font-weight:500; font-variation-settings:'opsz' 32; letter-spacing:-0.025em; color: var(--pop-yellow); }
   .sp-side > p{ color:rgba(255,255,255,.75); max-width:44ch; margin:0 0 32px; }
+  /* su telefono lo spazio sotto il testo passa al pulsante "Leggi di più" */
+  .sp-side{ --more-c: var(--pop-yellow); }
+  @media (max-width:640px){
+    .sp-side > p.more{ margin-bottom:0; }
+    .sp-side .more-btn{ margin-bottom:32px; }
+  }
 
   .sp-now{
     display:flex;
@@ -686,11 +692,12 @@
       <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
       <span class="eyebrow">Campagna store opening — Burro Studio</span>
       <h1>K-Way 25 <em>Porta Borsari, Verona</em></h1>
-      <p>Campagna ideata per celebrare l'inaugurazione del <strong>primo store K-Way</strong> in <strong>Corso Porta Borsari</strong> a Verona.<br><br>
+      <p class="more" id="intro-more">Campagna ideata per celebrare l'inaugurazione del <strong>primo store K-Way</strong> in <strong>Corso Porta Borsari</strong> a Verona.<br><br>
       Per l'occasione ho sviluppato un'<strong>illustrazione esclusiva della storica Porta Borsari</strong>, l'antica porta romana che dà il nome alla via, e un lettering K-Way gonfio e "bagnato" di pioggia. Il disegno è diventato il volto di poster, sticker e di un <strong>K-Way in edizione limitata</strong>, oltre che del flyer per l'after party di inaugurazione.</p>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2024</span></div>
-        <div>Ruolo<span>Illustrazione · Type design</span></div>
+        <div class="meta-wide">Ruolo<span>Illustrazione · Type design</span></div>
         <div>Output<span>Poster · Sticker · K-Way limited</span></div>
       </div>
       <div class="project-links">
@@ -796,7 +803,8 @@
         <div class="sp-side">
           <span class="eyebrow">Live dall'opening</span>
           <h3>La serata, <em>story doopo story</em></h3>
-          <p>L’artwork non si è fermata alla vetrina, ma ha accompagnato l’intera serata, diventando parte dell’esperienza.<br>Tra musica, momenti da condividere nelle stories, sticker da prendere e gadget da portare a casa, il progetto ha continuato a vivere anche fuori dallo spazio dell’evento, attraverso gli occhi e i contenuti di chi lo ha vissuto..</p>
+          <p class="more" id="opening-more" style="--more-h:7.75rem">L’artwork non si è fermata alla vetrina, ma ha accompagnato l’intera serata, diventando parte dell’esperienza.<br>Tra musica, momenti da condividere nelle stories, sticker da prendere e gadget da portare a casa, il progetto ha continuato a vivere anche fuori dallo spazio dell’evento, attraverso gli occhi e i contenuti di chi lo ha vissuto..</p>
+          <button type="button" class="more-btn" aria-expanded="false" aria-controls="opening-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
           <div class="sp-now" aria-live="polite"><span class="sp-now-num">04</span><span class="sp-now-label">Il K-Way in vetrina</span></div>
           <ul class="sp-thumbs">
           <li><button class="sp-thumb is-active" type="button" aria-label="Story 04: Il K-Way in vetrina"><img src="assets/images/K-way_TRISS_04.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>

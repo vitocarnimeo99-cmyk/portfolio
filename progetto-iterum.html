@@ -231,7 +231,11 @@
   }
   .iterum-radio-flip:hover .iterum-radio-flip-front::after,
   .iterum-radio-flip:hover .iterum-radio-flip-back::after{ opacity:1; }
-  .iterum-radio-text{ flex:1; min-width:0; }
+  .iterum-radio-text{ flex:1; min-width:0; --more-c: var(--pop-terracotta); }
+  /* su telefono il testo chiuso finisce col pulsante "Leggi di più" */
+  @media (max-width:640px){
+    .iterum-radio-text p.more{ margin-bottom:0; }
+  }
   .iterum-radio-text h3{
     color: var(--paper);
     font-size:1.3rem;
@@ -291,11 +295,12 @@
       <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
       <span class="eyebrow">Illustrazione &amp; mappa festival — Open air electronic</span>
       <h1>ÏTERUM <em>Apulian Electronic Monday</em></h1>
-      <p><strong>ÏTERUM</strong> firma <strong>Apulian Electronic Monday</strong>, la giornata di musica elettronica open air che anima <strong>Il Giardino dei Tempi</strong>, l'Orto Botanico di Bari. Per la <strong>4ª edizione</strong> ho illustrato tutto l'immaginario visivo dell'evento: una <strong>mappa isometrica</strong> che trasforma il giardino in un percorso da scoprire — tra Main Stage, Pagoda Techno, Area Market e il Maze — e le <strong>scene illustrate</strong> che raccontano cosa succede in ogni angolo, dalla food area al fuoco che chiude la serata.<br><br>
+      <p class="more" id="intro-more"><strong>ÏTERUM</strong> firma <strong>Apulian Electronic Monday</strong>, la giornata di musica elettronica open air che anima <strong>Il Giardino dei Tempi</strong>, l'Orto Botanico di Bari. Per la <strong>4ª edizione</strong> ho illustrato tutto l'immaginario visivo dell'evento: una <strong>mappa isometrica</strong> che trasforma il giardino in un percorso da scoprire — tra Main Stage, Pagoda Techno, Area Market e il Maze — e le <strong>scene illustrate</strong> che raccontano cosa succede in ogni angolo, dalla food area al fuoco che chiude la serata.<br><br>
       Dalle 12 di mezzogiorno a mezzanotte, un'unica giornata disegnata a mano per orientare il pubblico tra i viali e, allo stesso tempo, raccontarne l'atmosfera.</p>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2025</span></div>
-        <div>Ruolo<span>Illustratore · Graphic Designer</span></div>
+        <div class="meta-wide">Ruolo<span>Illustratore · Graphic Designer</span></div>
         <div>Output<span>Mappa · Illustrazioni · Social</span></div>
       </div>
       <div class="project-links">
@@ -353,8 +358,9 @@
       </div>
       <div class="iterum-radio-text">
         <h3>ÏTERUM Radio</h3>
-        <p>In parallelo alla mappa e alle illustrazioni di scena, ho curato l'identità visiva di <strong>ÏTERUM Radio</strong>, l'apecar che ha accompagnato la giornata: grafiche pensate per il palinsesto e per i contenuti social condivisi in tempo reale durante l'evento.<br><br>
+        <p class="more" id="radio-more" style="--more-h:7.85rem">In parallelo alla mappa e alle illustrazioni di scena, ho curato l'identità visiva di <strong>ÏTERUM Radio</strong>, l'apecar che ha accompagnato la giornata: grafiche pensate per il palinsesto e per i contenuti social condivisi in tempo reale durante l'evento.<br><br>
         L’identità è stata quindi progettata per evolversi anche oltre l’evento, accompagnando <strong>ÏTERUM Radio</strong> nel suo percorso itinerante tra le diverse location della Puglia, con DJ set e appuntamenti musicali.</p>
+        <button type="button" class="more-btn" aria-expanded="false" aria-controls="radio-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       </div>
     </div>
   </section>

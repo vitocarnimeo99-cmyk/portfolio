@@ -545,3 +545,29 @@ document.querySelectorAll('.peek-toggle').forEach((btn) => {
   });
   more.addEventListener('peek:open', () => setOpen(true));
 });
+
+// "Leggi di più" delle pagine progetto (solo telefono, vedi .more in
+// style.css): apre e richiude il testo. L'altezza va da quella chiusa a
+// quella del testo in px, poi passa ad auto così il testo si adatta se
+// cambia la larghezza
+document.querySelectorAll('.more-btn').forEach((btn) => {
+  const more = document.getElementById(btn.getAttribute('aria-controls'));
+  const label = btn.querySelector('.more-label');
+  more.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'height' && more.classList.contains('is-open')) more.style.height = 'auto';
+  });
+  btn.addEventListener('click', () => {
+    const open = !more.classList.contains('is-open');
+    if (open) {
+      more.classList.add('is-open');
+      more.style.height = prefersReducedMotion ? 'auto' : more.scrollHeight + 'px';
+    } else {
+      more.style.height = more.scrollHeight + 'px';
+      more.offsetHeight; // fissa l'altezza di partenza prima di richiudere
+      more.style.height = '';
+      more.classList.remove('is-open');
+    }
+    btn.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Leggi di meno' : 'Leggi di più';
+  });
+});

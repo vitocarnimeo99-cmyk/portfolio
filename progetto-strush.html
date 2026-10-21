@@ -245,59 +245,6 @@
   .geo-follow .social a:hover{ color:#fff; background-color: var(--accent); border-color: var(--accent); }
   .geo-follow .social a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  /* -------- "Leggi di più" su telefono (come su WKZ): l'intro mostra sei
-     righe e la settima che sfuma, il pittogramma il primo paragrafo e la
-     riga dopo che sfuma; il pulsante apre il resto (l'altezza la anima lo
-     script). Sopra i 640px testo intero e niente pulsante -------- */
-  /* Su telefono (come su WKZ) Anno e Output affiancati, e sotto Ruolo a
-     tutta larghezza perché è lungo */
-  @media (max-width:640px){
-    .project-hero .project-meta{
-      display:grid;
-      grid-template-columns:max-content minmax(0, 1fr);
-      gap:18px 32px;
-      margin-bottom:36px;
-    }
-    .project-hero .st-meta-role{ grid-row:2; grid-column:1 / -1; }
-  }
-  .st-intro{ max-width:60ch; margin-bottom:44px; }
-  .project-hero .st-intro p{ margin:0; }
-  /* righe da 28.5px nell'intro; nel pittogramma da 27px, con 14px tra i paragrafi */
-  #st-more-intro{ --more-h:12.5rem; }
-  #st-more-geo{ --more-h:7.65rem; }
-  .st-more-btn{
-    align-self:flex-start;
-    margin-top:10px;
-    padding:6px 0;
-    display:inline-flex; align-items:center; gap:8px;
-    border:0;
-    background:none;
-    font:inherit;
-    font-size:1rem;
-    font-weight:700;
-    color: var(--accent);
-    cursor:pointer;
-  }
-  .st-more-btn i{ font-size:.8em; transition: transform .3s ease; }
-  .st-more-btn[aria-expanded="true"] i{ transform: rotate(180deg); }
-  .st-more-btn:hover .st-more-label{ text-decoration:underline; text-underline-offset:4px; }
-  .st-more-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  @media (max-width:640px){
-    .st-more{
-      height:var(--more-h);
-      overflow:hidden;
-      -webkit-mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
-              mask-image: linear-gradient(#000 calc(100% - 1.75rem), transparent);
-      transition: height .5s cubic-bezier(.2,.7,.2,1);
-    }
-    .st-more.is-open{ -webkit-mask-image:none; mask-image:none; }
-  }
-  @media (min-width:641px){
-    .st-more-btn{ display:none; }
-  }
-  @media (prefers-reduced-motion:reduce){
-    .st-more, .st-more-btn i{ transition:none; }
-  }
   .geo-stage{
     position:relative;
     border-radius:24px;
@@ -977,16 +924,12 @@
       <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
       <span class="eyebrow">Brand identity & App - Strush S.R.L.s</span>
       <h1>Strush <em>Fintech Startup</em></h1>
-      <div class="st-intro">
-      <div class="st-more" id="st-more-intro">
-      <p><strong>Strush</strong> è l'app di finanza personale che rende l'educazione finanziaria <strong>a misura di Gen Z</strong>: tieni traccia delle spese, imposti un budget, dividi i conti con gli amici e ti fai consigliare da <strong>Bernardino</strong>, il coach personale che ti dice le cose come stanno.<br><br>
+      <p class="more" id="intro-more"><strong>Strush</strong> è l'app di finanza personale che rende l'educazione finanziaria <strong>a misura di Gen Z</strong>: tieni traccia delle spese, imposti un budget, dividi i conti con gli amici e ti fai consigliare da <strong>Bernardino</strong>, il coach personale che ti dice le cose come stanno.<br><br>
       Del progetto sono <strong>Co-founder &amp; Art Director</strong>. Ho costruito l'identità del brand da zero: il logo e la sua costruzione geometrica, la mascotte, la palette e il brand manual, fino alle illustrazioni, agli sticker e alle schermate con cui l'app si presenta sugli store.</p>
-      </div>
-      <button type="button" class="st-more-btn" aria-expanded="false" aria-controls="st-more-intro"><span class="st-more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
-      </div>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2025 — oggi</span></div>
-        <div class="st-meta-role">Ruolo<span>Co-founder &amp; Art Director</span></div>
+        <div class="meta-wide">Ruolo<span>Co-founder &amp; Art Director</span></div>
         <div>Output<span>App</span></div>
       </div>
       <div class="project-links">
@@ -1079,14 +1022,14 @@
       <div class="geo-side">
         <span class="eyebrow">Costruzione geometrica</span>
         <h2 class="section-title">Il nostro pittogramma</h2>
-        <div class="st-more" id="st-more-geo">
+        <div class="more" id="geo-more" style="--more-h:7.65rem">
         <div class="geo-text">
           <p>Ogni app di finanza ha bisogno di qualcuno che ti guardi il portafoglio. Noi abbiamo scelto un T-rex 🦖</p>
           <p>Ecco <strong>Dinuccio</strong>, il pittogramma di Strush, costruito pezzo per pezzo su una griglia geometrica.</p>
           <p>Perché un T-rex? Ha il braccino corto. Anche volendo, al portafoglio non ci arriva 💸</p>
         </div>
         </div>
-        <button type="button" class="st-more-btn" aria-expanded="false" aria-controls="st-more-geo"><span class="st-more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="more-btn" aria-expanded="false" aria-controls="geo-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         <div class="geo-follow">
           <span class="st-traits-label">Segui Strush sui social</span>
           <ul class="social">
@@ -1293,31 +1236,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // "Leggi di più" su telefono: apre e richiude il testo. L'altezza va da
-  // quella chiusa (CSS) a quella del testo in px, poi passa ad auto così
-  // il testo si adatta se cambia la larghezza
-  document.querySelectorAll('.st-more-btn').forEach((btn) => {
-    const more = document.getElementById(btn.getAttribute('aria-controls'));
-    const label = btn.querySelector('.st-more-label');
-    more.addEventListener('transitionend', (e) => {
-      if (e.propertyName === 'height' && more.classList.contains('is-open')) more.style.height = 'auto';
-    });
-    btn.addEventListener('click', () => {
-      const open = !more.classList.contains('is-open');
-      if (open) {
-        more.classList.add('is-open');
-        more.style.height = reduceMotion ? 'auto' : more.scrollHeight + 'px';
-      } else {
-        more.style.height = more.scrollHeight + 'px';
-        more.offsetHeight; // fissa l'altezza di partenza prima di richiudere
-        more.style.height = '';
-        more.classList.remove('is-open');
-      }
-      btn.setAttribute('aria-expanded', open);
-      label.textContent = open ? 'Leggi di meno' : 'Leggi di più';
-    });
-  });
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const pad = (n) => String(n).padStart(2, '0');
