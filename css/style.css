@@ -1611,8 +1611,10 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 /* -------- Hero -------- */
 .hero-links{ margin-top:44px; }
 .hero .meta{ margin-top:40px; }
-/* Su telefono restano solo "Guarda i lavori" a tutta larghezza + il tondo
-   della mail, subito sotto i dati (24px, come gli altri spazi dell'hero).
+.hero-social{ display:none; }
+/* Su telefono al posto dei pulsanti c'è la barra social (Instagram,
+   Behance, LinkedIn) + il tondo della mail, tutti tondi della stessa
+   misura, subito sotto i dati (24px, come gli altri spazi dell'hero).
    Sugli schermi bassi, dove non ci stanno nella prima schermata, restano
    attaccati al fondo dello schermo (sticky, su una sfumatura del fondo)
    finché non si arriva alla fine dell'hero. overflow:clip al posto di
@@ -1633,8 +1635,11 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     flex-wrap:nowrap;
     gap:12px;
   }
-  .project-links.hero-links > .btn-primary{ flex:1 1 auto; justify-content:center; }
+  .hero-links .btn-primary,
   .hero-links .btn-ghost{ display:none; }
+  .hero-social{ display:flex; gap:12px; }
+  .hero-social a,
+  .hero-links .btn-icon{ width:48px; height:48px; padding:0; font-size:1.3rem; }
 }
 
 /* -------- Ticker: blu d'accento + stelline gialle -------- */
