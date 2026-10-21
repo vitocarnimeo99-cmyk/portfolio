@@ -383,15 +383,24 @@ window.addEventListener('load', () => {
       return;
     }
     if (node.nodeType !== Node.TEXT_NODE) return;
+    // Le lettere di ogni parola stanno in uno span .w che non va a capo:
+    // il corsivo disegnato sopra la lettera (::after assoluto) altrimenti
+    // creerebbe un punto di a capo in mezzo alla parola.
     const frag = document.createDocumentFragment();
-    for (const ch of node.textContent) {
-      if (/\s/.test(ch)) { frag.appendChild(document.createTextNode(ch)); continue; }
-      const span = document.createElement('span');
-      span.className = 'ch';
-      span.dataset.ch = ch;
-      span.setAttribute('aria-hidden', 'true');
-      span.textContent = ch;
-      frag.appendChild(span);
+    for (const part of node.textContent.split(/(\s+)/)) {
+      if (!part) continue;
+      if (/\s/.test(part)) { frag.appendChild(document.createTextNode(part)); continue; }
+      const word = document.createElement('span');
+      word.className = 'w';
+      for (const ch of part) {
+        const span = document.createElement('span');
+        span.className = 'ch';
+        span.dataset.ch = ch;
+        span.setAttribute('aria-hidden', 'true');
+        span.textContent = ch;
+        word.appendChild(span);
+      }
+      frag.appendChild(word);
     }
     node.replaceWith(frag);
   };
@@ -404,14 +413,61 @@ window.addEventListener('load', () => {
   const palette = ['#3B4B99', '#6163C6', '#3F6B3D', '#D8322A', '#2347C4',
     '#5A2AA0', '#9A6229', '#E32227', '#00579C', '#4F9A16', '#E8B400'];
   let lastColor = '';
-  h1.addEventListener('mouseover', (e) => {
-    const ch = e.target.closest('.ch');
-    if (!ch) return;
+  const setColor = (ch) => {
     let color;
     do { color = palette[Math.floor(Math.random() * palette.length)]; } while (color === lastColor);
     lastColor = color;
     ch.style.setProperty('--ch-color', color);
+  };
+  h1.addEventListener('mouseover', (e) => {
+    const ch = e.target.closest('.ch');
+    if (ch) setColor(ch);
   });
+
+  // Su touch non c'è hover: la lettera si accende per un attimo (classe
+  // is-on) quando la si tocca o ci si striscia sopra, e ogni secondo o due
+  // se ne accendono due a caso da sole, solo mentre il titolo è a schermo e
+  // non con "riduci movimento".
+  if (!matchMedia('(hover: none)').matches) return;
+  const letters = Array.from(h1.querySelectorAll('.ch'));
+  const timers = new Map();
+  const flash = (ch, duration = 650) => {
+    if (timers.has(ch)) return;
+    setColor(ch);
+    ch.classList.add('is-on');
+    timers.set(ch, setTimeout(() => {
+      ch.classList.remove('is-on');
+      timers.delete(ch);
+    }, duration));
+  };
+
+  // Mentre si trascina il cartellino sopra il titolo le lettere restano ferme
+  const lanyard = document.getElementById('lanyard');
+  const onTouch = (e) => {
+    if (lanyard && lanyard.classList.contains('is-dragging')) return;
+    for (const t of e.changedTouches) {
+      const ch = document.elementFromPoint(t.clientX, t.clientY)?.closest('.hero h1 .ch');
+      if (ch) flash(ch);
+    }
+  };
+  h1.addEventListener('touchstart', onTouch, { passive: true });
+  h1.addEventListener('touchmove', onTouch, { passive: true });
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Due "cicli" indipendenti, ognuno con pause e durate a caso: le lettere
+  // accese sono spesso due ma non si accendono né si spengono insieme.
+  const autos = [null, null];
+  const tick = (i) => {
+    flash(letters[Math.floor(Math.random() * letters.length)], 450 + Math.random() * 550);
+    autos[i] = setTimeout(() => tick(i), 700 + Math.random() * 1300);
+  };
+  new IntersectionObserver(([entry]) => {
+    autos.forEach(clearTimeout);
+    if (entry.isIntersecting) {
+      autos[0] = setTimeout(() => tick(0), 800);
+      autos[1] = setTimeout(() => tick(1), 1300 + Math.random() * 600);
+    }
+  }).observe(h1);
 })();
 
 // Partner dei premi (home, sezione In evidenza, e hero di WKZ): la fila di
