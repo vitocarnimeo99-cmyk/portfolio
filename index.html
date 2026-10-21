@@ -231,21 +231,44 @@
             <img class="art" src="assets/images/VITO_CARNIMEO_TESI_HOME.jpg" width="2400" height="1320" alt="Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi, tra cui cercare Nicola e la sua famiglia" loading="lazy" decoding="async"></picture><span class="featured-stamp" aria-hidden="true">Premiato</span></span>
         </a>
         <a class="featured-cta" href="progetto-wkz.html">Scopri il progetto <span aria-hidden="true">→</span></a>
+        <!-- Loghi dei partner che scorrono. data-partner collega ogni card alle
+             voci di "Premi & Pubblicazioni" con lo stesso nome (main.js) -->
+        <div class="partners">
+          <p class="partners-head">
+            <span class="partners-tag">Partner</span>
+            <span class="partners-hint">Le realtà dietro i premi <span class="partners-arrow" aria-hidden="true">→</span></span>
+          </p>
+          <div class="partners-marquee">
+            <ul class="partners-track">
+              <li class="partner-card" data-partner="neologia" style="--c:#CDF936"><img src="assets/images/partner/neologia.png" width="320" height="52" alt="Neologia" loading="lazy"></li>
+              <li class="partner-card" data-partner="print-club" style="--c:#fff"><img src="assets/images/partner/print-club-torino.png" width="91" height="128" alt="Print Club Torino" loading="lazy"></li>
+              <li class="partner-card" data-partner="graphic-days" style="--c:#fff"><img src="assets/images/partner/graphic-days.png" width="320" height="105" alt="Graphic Days" loading="lazy"></li>
+              <li class="partner-card" data-partner="farm" style="--c:#AB1C38"><img src="assets/images/partner/farm-cultural-park.png" width="129" height="128" alt="Farm Cultural Park" loading="lazy"></li>
+              <li class="partner-card" data-partner="bari" style="--c:#fff"><img src="assets/images/partner/comune-di-bari.png" width="109" height="128" alt="Comune di Bari" loading="lazy"></li>
+              <li class="partner-card" data-partner="grafica" style="--c:#FFEE00"><img src="assets/images/partner/grafica-magazine.png" width="320" height="79" alt="Grafica Magazine" loading="lazy"></li>
+              <li class="partner-card" data-partner="telebari" style="--c:#fff"><img src="assets/images/partner/telebari.png" width="320" height="70" alt="Telebari" loading="lazy"></li>
+              <li class="partner-card" data-partner="naba" style="--c:#fff"><img src="assets/images/partner/naba.png" width="304" height="128" alt="NABA – Nuova Accademia di Belle Arti" loading="lazy"></li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="featured-body">
         <div class="awards">
           <h3 class="awards-title"><i class="fa-solid fa-trophy" aria-hidden="true"></i>Premi &amp; Pubblicazioni</h3>
+          <div class="peek" id="awards-more" style="--peek:13rem">
           <ul class="awards-list">
-            <li><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in collaborazione con Print Club Torino e Graphic Days®, in mostra al festival 2027</span></li>
-            <li><span class="award-year">2026</span><span class="award-name">Vincitore — Farm Cultural Park Award, Premio Neologia</span><span class="award-org">Residenza artistica presso Farm Cultural Park, realtà internazionale di rigenerazione culturale</span></li>
-            <li><span class="award-year">2026</span><span class="award-name">Rassegna Stampa — Neologia Gallery</span><span class="award-org">Il progetto è raccontato in un articolo di Neologia Gallery, archivio dei nuovi talenti della comunicazione visiva italiana</span></li>
-            <li><span class="award-year">2026</span><span class="award-name">Esposizione — Torino Graphic Days®</span><span class="award-org">Opera selezionata per l’XI edizione Graphic Days®</span></li>
-            <li><span class="award-year">2025</span><span class="award-name">Borsa di Studio — Città di Bari</span><span class="award-org">Vincitore per la miglior tesi sulla città di Bari A.A. 2024/2025 — Premiazione a cura del Sindaco di Bari Vito Leccese</span></li>
-            <li><span class="award-year">2025</span><span class="award-name">Pubblicazione Editoriale — Grafica Magazine</span><span class="award-org">Progetto pubblicato nel terzo volume di Grafica Magazine — sold out</span></li>
-            <li><span class="award-year">2024</span><span class="award-name">Rassegna Stampa — Telebari</span><span class="award-org">Pubblicazione a cura di Sara Di Leo</span></li>
-            <li><span class="award-year">2024</span><span class="award-name">Esposizione — Comune di Bari</span><span class="award-org">Opera esposta a "Pane e Pomodoro Beach"</span></li>
-            <li><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per Catalogo Library NABA</span></li>
+            <li data-partner="neologia print-club graphic-days"><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in collaborazione con Print Club Torino e Graphic Days®, in mostra al festival 2027</span></li>
+            <li data-partner="neologia farm graphic-days"><span class="award-year">2026</span><span class="award-name">Vincitore — Farm Cultural Park Award, Premio Neologia</span><span class="award-org">Residenza artistica presso Farm Cultural Park, realtà internazionale di rigenerazione culturale</span></li>
+            <li data-partner="neologia graphic-days"><span class="award-year">2026</span><span class="award-name">Rassegna Stampa — Neologia Gallery</span><span class="award-org">Il progetto è raccontato in un articolo di Neologia Gallery, archivio dei nuovi talenti della comunicazione visiva italiana</span></li>
+            <li data-partner="neologia graphic-days"><span class="award-year">2026</span><span class="award-name">Esposizione — Torino Graphic Days®</span><span class="award-org">Opera selezionata per l’XI edizione Graphic Days®</span></li>
+            <li data-partner="bari"><span class="award-year">2025</span><span class="award-name">Borsa di Studio — Città di Bari</span><span class="award-org">Vincitore per la miglior tesi sulla città di Bari A.A. 2024/2025 — Premiazione a cura del Sindaco di Bari Vito Leccese</span></li>
+            <li data-partner="grafica"><span class="award-year">2025</span><span class="award-name">Pubblicazione Editoriale — Grafica Magazine</span><span class="award-org">Progetto pubblicato nel terzo volume di Grafica Magazine — sold out</span></li>
+            <li data-partner="telebari"><span class="award-year">2024</span><span class="award-name">Rassegna Stampa — Telebari</span><span class="award-org">Pubblicazione a cura di Sara Di Leo</span></li>
+            <li data-partner="bari"><span class="award-year">2024</span><span class="award-name">Esposizione — Comune di Bari</span><span class="award-org">Opera esposta a "Pane e Pomodoro Beach"</span></li>
+            <li data-partner="naba"><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per Catalogo Library NABA</span></li>
           </ul>
+          </div>
+          <button type="button" class="peek-toggle awards-toggle" aria-expanded="false" aria-controls="awards-more" data-less="Mostra meno">Vedi tutti i premi <span class="peek-count">9</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         </div>
       </div>
     </div>
@@ -261,6 +284,7 @@
           <p>Sono un ragazzo riflessivo e ironico; mi piace stare in compagnia, per questo prediligo <strong>il lavoro di squadra</strong>: confrontarmi con gli altri mi porta a scoprire cose sempre nuove.</p>
           <p>Nel tempo libero coltivo diverse passioni: il <strong>disegno</strong>, la <strong>fotografia analogica</strong> e la <strong>musica</strong>, suonando tastiera e ukulele.</p>
           <h3 class="edu-title">Formazione</h3>
+          <div class="peek" id="edu-more" style="--peek:11rem">
           <ul class="edu-list">
             <li>
               <span class="edu-logo" style="--c:#17140F"><img src="assets/images/LOGO_NABA.png" alt="NABA – Nuova Accademia di Belle Arti" width="56" height="56" loading="lazy"></span>
@@ -287,8 +311,11 @@
               </div>
             </li>
           </ul>
+          </div>
+          <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la formazione <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         </div>
         <div class="skills">
+          <div class="peek" id="skills-more" style="--peek:13rem">
           <ul class="skills-list">
             <li><span class="l">Editoria</span><span>Libri, riviste, cataloghi</span></li>
             <li><span class="l">Advertising</span><span>campagne ADV, affissioni</span></li>
@@ -304,6 +331,8 @@
               <img src="assets/icons/vscode.png" alt="Visual Studio Code" title="Visual Studio Code" width="36" height="36" loading="lazy">
             </span></li>
           </ul>
+          </div>
+          <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="skills-more" data-less="Mostra meno">Vedi tutte le competenze <span class="peek-count">8</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
           <div class="project-links cv-cta">
             <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il CV&nbsp;↓</a>
             <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il portfolio&nbsp;↓</a>

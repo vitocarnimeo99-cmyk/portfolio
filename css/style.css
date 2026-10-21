@@ -1300,6 +1300,69 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .award-year{ grid-area:y; font-weight:800; font-size:1.05rem; color:#f2c14e; }
 .award-name{ grid-area:n; font-weight:700; }
 .award-org{ grid-area:o; font-size:.85rem; color:rgba(247,245,240,.6); }
+/* -------- Anteprima scorrevole (home: premi, formazione, competenze) --------
+   Su telefono l'elenco parte chiuso: si vedono le prime voci (alte --peek,
+   inline nel markup) che si scorrono col dito, e il pulsante lo apre tutto
+   (righe della griglia da 0fr a 1fr, come "Continua a leggere" di WKZ, con
+   l'altezza minima che fa da anteprima). Su desktop resta tutto aperto. */
+.peek-toggle{ display:none; }
+@media (max-width: 640px){
+  .peek{
+    display:grid;
+    grid-template-rows:0fr;
+    transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1);
+    scroll-margin-top:130px; /* richiudendo: testata fissa + titolo */
+  }
+  .peek.is-open{ grid-template-rows:1fr; }
+  /* Le sfumature sopra e sotto compaiono solo se da quella parte c'è altro
+     (classi da main.js) */
+  .peek > ul{
+    --fade-top:0px; --fade-bot:6rem;
+    min-height:var(--peek);
+    overflow-y:auto;
+    scrollbar-width:none;
+    -webkit-mask-image: linear-gradient(transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bot)), transparent);
+            mask-image: linear-gradient(transparent, #000 var(--fade-top), #000 calc(100% - var(--fade-bot)), transparent);
+  }
+  .peek > ul::-webkit-scrollbar{ display:none; }
+  .peek > ul.is-scrolled{ --fade-top:2.5rem; }
+  .peek > ul.is-end{ --fade-bot:0px; }
+  .peek.is-open > ul{ overflow:hidden; -webkit-mask-image:none; mask-image:none; }
+  .peek-toggle{
+    --peek-c: var(--accent); --peek-on: var(--paper);
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%;
+    padding:14px 0;
+    border:0;
+    background:none;
+    font:inherit;
+    font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+    color:var(--peek-c);
+    cursor:pointer;
+  }
+  .peek-count{
+    min-width:1.9em; padding:2px 6px;
+    border-radius:999px;
+    background:var(--peek-c); color:var(--peek-on);
+    letter-spacing:0;
+  }
+  .peek-toggle[aria-expanded="true"] .peek-count{ display:none; }
+  .peek-toggle i{ transition: transform .3s ease; }
+  .peek-toggle[aria-expanded="true"] i{ transform: rotate(180deg); }
+
+  /* Premi: su fondo scuro, il pulsante chiude il riquadro tratteggiato */
+  .awards{ padding-bottom:0; }
+  .awards-toggle{
+    --peek-c:#f2c14e; --peek-on: var(--ink);
+    width:calc(100% + 44px); /* fino ai bordi del riquadro (padding 22px) */
+    margin:0 -22px;
+    padding:16px 22px;
+    border-top:1px dashed rgba(247,245,240,.3);
+  }
+}
+@media (max-width: 640px) and (prefers-reduced-motion: reduce){
+  .peek, .peek-toggle i{ transition:none; }
+}
 .featured-cta{
   margin-top:36px;
   display:inline-flex; align-items:center; gap:10px;
@@ -1428,6 +1491,90 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 }
 @media (max-width: 560px){
   .featured-stamp{ top:18px; left:-52px; width:170px; padding:5px 0; font-size:.7rem; }
+}
+
+/* -------- In evidenza: partner dei premi --------
+   Piccoli sticker a colori che scorrono in loop (la serie viene duplicata
+   da main.js, come il ticker). Passando su un logo si accendono le voci
+   collegate in "Premi & Pubblicazioni" e viceversa; il resto si spegne. */
+.partners{ margin-top:44px; }
+.partners-head{
+  margin:0 0 6px;
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px;
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+}
+.partners-tag{
+  padding:4px 10px;
+  border:1px solid currentColor; border-radius:999px;
+  color:#7fd3ee;
+}
+.partners-hint{ color:rgba(247,245,240,.6); }
+.partners-arrow{ display:inline-block; margin-left:4px; color:#f2c14e; }
+.partners-marquee{
+  --card-w:140px; --card-h:80px;
+  overflow:hidden;
+  padding:16px 0 20px; /* spazio per tilt, ombra e sollevamento */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.partners-track{
+  display:flex; width:max-content;
+  list-style:none; margin:0; padding:0;
+  animation: scroll-left 34s linear infinite;
+}
+/* Si ferma solo con il mouse sopra una card, non sul resto della fila */
+.partners-track:has(.partner-card:hover){ animation-play-state:paused; }
+.partner-card{
+  flex:none;
+  width:var(--card-w); height:var(--card-h);
+  margin-right:14px; /* margine e non gap: il -50% del loop resta esatto */
+  padding:10px 16px;
+  display:grid; place-items:center;
+  background:var(--c, #fff);
+  border-radius:10px;
+  box-shadow: 0 12px 24px -12px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.08);
+  transform: rotate(var(--r, -2deg));
+  transition: transform .3s ease, opacity .3s ease, filter .3s ease, box-shadow .3s ease;
+  cursor:default;
+}
+.partner-card:nth-child(even){ --r: 1.6deg; }
+/* Periodi che dividono 8 (i loghi): la copia ha gli stessi tilt, il loop non scatta */
+.partner-card:nth-child(4n+3){ --r: -.8deg; }
+.partner-card img{
+  display:block;
+  width:auto; height:auto;
+  max-width:100%; max-height:calc(var(--card-h) - 20px);
+}
+.partner-card:hover,
+.partner-card:focus-visible,
+.partner-card.is-lit{
+  transform: rotate(0deg) translateY(-6px) scale(1.07);
+  box-shadow: 0 18px 30px -12px rgba(0,0,0,.8), 0 0 0 2px #f2c14e;
+}
+.partners.is-filtering .partner-card:not(.is-lit){ opacity:.3; filter:grayscale(1); }
+
+.awards-list li{ transition: opacity .3s ease, background .3s ease, box-shadow .3s ease; }
+.awards.is-filtering li:not(.is-lit){ opacity:.3; }
+/* Fondo che sborda ai lati senza spostare il testo */
+.awards-list li.is-lit{
+  background: rgba(242,193,78,.12);
+  box-shadow: -10px 0 0 rgba(242,193,78,.12), 10px 0 0 rgba(242,193,78,.12);
+}
+
+@media (max-width: 900px){
+  /* I premi finiscono sotto: la freccia punta in basso */
+  .partners-arrow{ transform: rotate(90deg); }
+}
+@media (max-width: 560px){
+  .partners{ margin-top:36px; }
+  .partners-marquee{ --card-w:118px; --card-h:68px; }
+  .partner-card{ padding:9px 13px; margin-right:12px; }
+}
+@media (prefers-reduced-motion: reduce){
+  /* Niente loop: la fila si scorre a mano */
+  .partners-track{ animation:none; }
+  .partners-marquee{ overflow-x:auto; -webkit-mask-image:none; mask-image:none; }
+  .partner-card, .awards-list li{ transition:none; }
 }
 
 /* -------- Chi sono: competenze numerate -------- */

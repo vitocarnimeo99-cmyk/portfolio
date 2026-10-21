@@ -413,3 +413,135 @@ window.addEventListener('load', () => {
     ch.style.setProperty('--ch-color', color);
   });
 })();
+
+// Partner dei premi (home, sezione In evidenza, e hero di WKZ): la fila di
+// loghi viene duplicata per il loop continuo (come il ticker; con "riduci
+// movimento" niente copia, la fila si scorre a mano). Passando su un logo si
+// accendono le voci di "Premi & Pubblicazioni" con lo stesso data-partner, e
+// passando su una voce i suoi loghi.
+// Home: su touch lo stesso succede toccando un logo.
+// WKZ (data-dialog): i premi stanno nella finestra del bollino, quindi un
+// clic sul logo la apre con le sue voci già accese.
+(function () {
+  const partners = document.querySelector('.partners');
+  const awards = document.querySelector('.awards');
+  if (!partners || !awards) return;
+  const track = partners.querySelector('.partners-track');
+  const cards = () => partners.querySelectorAll('.partner-card');
+  const items = awards.querySelectorAll('li[data-partner]');
+  const dialog = partners.dataset.dialog && document.getElementById(partners.dataset.dialog);
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    Array.from(track.children).forEach((li) => {
+      const copy = li.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.querySelector('img').alt = '';
+      track.appendChild(copy);
+    });
+  }
+
+  // keys: elenco di partner da accendere (vuoto = spegne tutto)
+  const light = (keys) => {
+    const on = keys.length > 0;
+    partners.classList.toggle('is-filtering', on);
+    awards.classList.toggle('is-filtering', on);
+    cards().forEach((c) => c.classList.toggle('is-lit', keys.includes(c.dataset.partner)));
+    items.forEach((li) => li.classList.toggle('is-lit',
+      li.dataset.partner.split(' ').some((k) => keys.includes(k))));
+  };
+
+  // Con la finestra aperta, uscendo da una voce si torna al logo cliccato
+  let picked = [];
+  const rest = () => (dialog && dialog.open ? picked : []);
+
+  const hover = (root, selector, keysOf) => {
+    root.addEventListener('pointerover', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const el = e.target.closest(selector);
+      if (el) light(keysOf(el));
+    });
+    root.addEventListener('pointerout', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const el = e.target.closest(selector);
+      if (el && !el.contains(e.relatedTarget)) light(rest());
+    });
+  };
+  hover(track, '.partner-card', (c) => [c.dataset.partner]);
+  hover(awards, 'li[data-partner]', (li) => li.dataset.partner.split(' '));
+
+  if (dialog) {
+    const open = (card) => {
+      picked = [card.dataset.partner];
+      light(picked);
+      dialog.showModal();
+      const first = awards.querySelector('li.is-lit');
+      if (first) first.scrollIntoView({ block: 'nearest' });
+    };
+    // Solo le card originali sono raggiungibili da tastiera, non le copie
+    cards().forEach((c) => {
+      if (c.getAttribute('aria-hidden')) return;
+      c.tabIndex = 0;
+      c.setAttribute('role', 'button');
+      c.setAttribute('aria-label', c.querySelector('img').alt + ': vedi i premi');
+      c.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c); }
+      });
+    });
+    track.addEventListener('click', (e) => {
+      const card = e.target.closest('.partner-card');
+      if (card) open(card);
+    });
+    dialog.addEventListener('close', () => { picked = []; light([]); });
+    return;
+  }
+
+  // Touch: un tocco accende, un secondo tocco sullo stesso logo o fuori spegne
+  let tapped = null;
+  document.addEventListener('click', (e) => {
+    if (e.pointerType === 'mouse') return;
+    const card = e.target.closest('.partner-card');
+    tapped = card && card.dataset.partner !== tapped ? card.dataset.partner : null;
+    light(tapped ? [tapped] : []);
+    // Su telefono l'elenco può essere chiuso: lo apre per mostrare le voci accese
+    const peek = awards.querySelector('.peek');
+    if (tapped && peek) peek.dispatchEvent(new Event('peek:open'));
+  });
+})();
+
+// Anteprime scorrevoli della home (premi, formazione, competenze): su
+// telefono ogni elenco parte chiuso con le prime voci, che si scorrono col
+// dito, e il pulsante lo apre/chiude (su desktop il pulsante è nascosto e
+// l'elenco resta sempre aperto, vedi CSS). "peek:open" lo apre da fuori.
+document.querySelectorAll('.peek-toggle').forEach((btn) => {
+  const more = document.getElementById(btn.getAttribute('aria-controls'));
+  const list = more.querySelector('ul');
+  const label = btn.firstChild; // il testo prima del contatore
+  const labels = { false: label.textContent, true: btn.dataset.less + ' ' };
+  btn.querySelector('.peek-count').textContent = list.children.length;
+
+  // Sfuma sopra solo se si è scesi, sotto finché c'è altro
+  list.addEventListener('scroll', () => {
+    list.classList.toggle('is-scrolled', list.scrollTop > 2);
+    list.classList.toggle('is-end', list.scrollTop + list.clientHeight >= list.scrollHeight - 2);
+  }, { passive: true });
+
+  const setOpen = (open) => {
+    more.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    label.textContent = labels[open];
+    // Richiusa, l'anteprima riparte dalla prima voce
+    if (!open) {
+      list.scrollTop = 0;
+      list.classList.remove('is-scrolled', 'is-end');
+    }
+  };
+  btn.addEventListener('click', () => {
+    const open = !more.classList.contains('is-open');
+    setOpen(open);
+    // Richiudendo, se l'elenco è finito sopra lo schermo ci si torna
+    if (!open && more.getBoundingClientRect().top < 0) {
+      more.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  });
+  more.addEventListener('peek:open', () => setOpen(true));
+});

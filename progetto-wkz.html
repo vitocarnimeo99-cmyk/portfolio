@@ -230,16 +230,42 @@
     .wkz-awards-body{ padding:4px 22px 20px; }
   }
 
-  /* Busta 3D più grande che nelle regole generali di style.css (380px):
-     la scena Three.js si adatta da sola alle misure del riquadro */
+  /* Colonna destra (.wkz-hero-side): busta 3D in alto, partner in fondo.
+     La scena Three.js si adatta da sola alle misure del riquadro */
+  .wkz-hero-side{
+    flex:0 0 440px;
+    width:440px;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+  }
   #wkz-pack{
-    flex:0 0 480px;
-    width:480px;
+    flex:none;
+    width:100%;
     height:auto;
     aspect-ratio:380/494;
   }
   @media (max-width:1180px){
-    #wkz-pack{ flex-basis:420px; width:420px; }
+    .wkz-hero-side{ flex-basis:400px; width:400px; }
+  }
+  /* Desktop: la colonna è alta quanto il testo (container-type:size, così
+     non lo allunga lei). La busta parte in cima, all'altezza di "Torna ai
+     lavori", ed è grande quanto lo spazio sopra ai partner (--pack-w);
+     la fila dei loghi ha la stessa larghezza, e tutte e due stanno sul
+     margine destro della pagina, così i bordi coincidono.
+     200px = 84 per "Trascina la busta per girarla" + 34 di intestazione
+     + 116 di fila - 34. Il -34px sotto la fila centra le card sul pulsante
+     "Chiedimi informazioni": 20px di padding + metà card (40) - metà pulsante (26) */
+  @media (min-width:981px){
+    .project-hero{ align-items:stretch; }
+    .wkz-hero-side{
+      container-type:size;
+      align-items:flex-end;
+      --pack-w: min(100cqw, (100cqh - 200px) * 380 / 494);
+    }
+    #wkz-pack{ width:var(--pack-w); margin-bottom:84px; }
+    .project-hero .wkz-hero-side .partners{ width:var(--pack-w); margin-top:auto; margin-bottom:-34px; }
+    .project-hero .wkz-hero-side .partners-head{ flex-wrap:nowrap; white-space:nowrap; letter-spacing:.1em; }
   }
   @media (max-width:980px){
     #wkz-pack{ flex:0 0 auto; width:min(360px, 84vw); }
@@ -297,6 +323,30 @@
   @media (prefers-reduced-motion:reduce){
     .wkz-more, .wkz-more.is-open{ transition:none; }
   }
+  /* -------- Partner (stessa fila della home, style.css): qui su fondo
+     chiaro, e ogni logo è un pulsante che apre la finestra dei premi -------- */
+  /* width:100%: su telefono la colonna è display:contents e la fila
+     diventerebbe un elemento flex stretto sul contenuto */
+  .project-hero .partners{ width:100%; }
+  /* è un <p>: senza questo prende corpo e margini dei paragrafi dell'hero */
+  .project-hero .partners-head{ font-size:.72rem; max-width:none; margin:0 0 6px; }
+  .project-hero .partners-tag{ color: var(--wkz-azure); }
+  .project-hero .partners-hint{ color: var(--ink-soft); }
+  .project-hero .partner-card{
+    cursor:pointer;
+    box-shadow: 0 10px 20px -12px rgba(23,20,15,.45), 0 0 0 1px rgba(23,20,15,.1);
+  }
+  .project-hero .partner-card:hover,
+  .project-hero .partner-card:focus-visible,
+  .project-hero .partner-card.is-lit{
+    outline:none;
+    box-shadow: 0 16px 26px -12px rgba(23,20,15,.5), 0 0 0 2px var(--wkz-azure);
+  }
+  .hint-touch{ display:none; }
+  @media (hover:none){
+    .hint-mouse{ display:none; }
+    .hint-touch{ display:inline; }
+  }
   .wkz-pack-hint{
     position:absolute;
     left:50%; bottom:-58px;
@@ -312,8 +362,12 @@
     .wkz-badge{ right:-18px; top:-8px; width:98px; height:98px; }
     .wkz-badge-core{ width:38px; height:38px; font-size:1rem; }
     .wkz-pack-hint{ bottom:-40px; }
-    /* spazio per il suggerimento sotto la busta prima dell'eyebrow */
-    #wkz-pack{ margin-bottom:68px; }
+    /* La colonna destra si scioglie: la busta sale in cima (come fa
+       style.css con i figli diretti di .project-hero), i partner vanno
+       dopo il testo. 68px sotto: spazio per il suggerimento prima dell'eyebrow */
+    .wkz-hero-side{ display:contents; }
+    #wkz-pack{ order:1; align-self:center; margin:8px auto 68px; }
+    .wkz-hero-side .partners{ order:3; margin-top:44px; }
   }
 
   /* -------- Ticker in versione Bari: rosso, bianco e azzurro -------- */
@@ -839,16 +893,40 @@
         <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
       </div>
     </div>
-    <div class="project-hero-pack" id="wkz-pack">
-      <div class="wkz-pack-shadow" id="wkz-pack-shadow" aria-hidden="true"></div>
-      <button class="wkz-badge" id="wkz-awards-open" type="button" aria-haspopup="dialog" aria-controls="wkz-awards" aria-label="Premi e pubblicazioni: apri la lista">
-        <svg class="wkz-badge-ring" viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="wkz-ring-path" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
-          <text><textPath href="#wkz-ring-path" textLength="268" lengthAdjust="spacing">Premi &amp; Pubblicazioni <tspan class="star">✦</tspan></textPath></text>
-        </svg>
-        <span class="wkz-badge-core" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
-      </button>
-      <span class="wkz-pack-hint" aria-hidden="true"><i class="fa-solid fa-hand-pointer"></i>Trascina la busta per girarla</span>
+    <!-- Colonna destra: busta 3D e sotto i partner. Su telefono si "scioglie"
+         (display:contents): la busta sale in cima, i partner vanno dopo il testo -->
+    <div class="wkz-hero-side">
+      <div class="project-hero-pack" id="wkz-pack">
+        <div class="wkz-pack-shadow" id="wkz-pack-shadow" aria-hidden="true"></div>
+        <button class="wkz-badge" id="wkz-awards-open" type="button" aria-haspopup="dialog" aria-controls="wkz-awards" aria-label="Premi e pubblicazioni: apri la lista">
+          <svg class="wkz-badge-ring" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="wkz-ring-path" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+            <text><textPath href="#wkz-ring-path" textLength="268" lengthAdjust="spacing">Premi &amp; Pubblicazioni <tspan class="star">✦</tspan></textPath></text>
+          </svg>
+          <span class="wkz-badge-core" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
+        </button>
+        <span class="wkz-pack-hint" aria-hidden="true"><i class="fa-solid fa-hand-pointer"></i>Trascina la busta per girarla</span>
+      </div>
+      <!-- Stessi partner della home (index.html #in-evidenza): qui un clic su
+           un logo apre la finestra dei premi con le voci collegate accese -->
+      <div class="partners" data-dialog="wkz-awards">
+        <p class="partners-head">
+          <span class="partners-tag">Partner</span>
+          <span class="partners-hint"><span class="hint-mouse">Clicca</span><span class="hint-touch">Tocca</span> un logo per vedere il premio</span>
+        </p>
+        <div class="partners-marquee">
+          <ul class="partners-track">
+            <li class="partner-card" data-partner="neologia" style="--c:#CDF936"><img src="assets/images/partner/neologia.png" width="320" height="52" alt="Neologia" loading="lazy"></li>
+            <li class="partner-card" data-partner="print-club" style="--c:#fff"><img src="assets/images/partner/print-club-torino.png" width="91" height="128" alt="Print Club Torino" loading="lazy"></li>
+            <li class="partner-card" data-partner="graphic-days" style="--c:#fff"><img src="assets/images/partner/graphic-days.png" width="320" height="105" alt="Graphic Days" loading="lazy"></li>
+            <li class="partner-card" data-partner="farm" style="--c:#AB1C38"><img src="assets/images/partner/farm-cultural-park.png" width="129" height="128" alt="Farm Cultural Park" loading="lazy"></li>
+            <li class="partner-card" data-partner="bari" style="--c:#fff"><img src="assets/images/partner/comune-di-bari.png" width="109" height="128" alt="Comune di Bari" loading="lazy"></li>
+            <li class="partner-card" data-partner="grafica" style="--c:#FFEE00"><img src="assets/images/partner/grafica-magazine.png" width="320" height="79" alt="Grafica Magazine" loading="lazy"></li>
+            <li class="partner-card" data-partner="telebari" style="--c:#fff"><img src="assets/images/partner/telebari.png" width="320" height="70" alt="Telebari" loading="lazy"></li>
+            <li class="partner-card" data-partner="naba" style="--c:#fff"><img src="assets/images/partner/naba.png" width="304" height="128" alt="NABA – Nuova Accademia di Belle Arti" loading="lazy"></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1153,15 +1231,15 @@ Il <strong>QR code</strong> presente sullo sticker rimandava alla pagina Instagr
   <div class="wkz-awards-body">
     <div class="awards">
         <ul class="awards-list">
-          <li><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in collaborazione con Print Club Torino e Graphic Days®, in mostra al festival 2027</span></li>
-          <li><span class="award-year">2026</span><span class="award-name">Vincitore — Farm Cultural Park Award, Premio Neologia</span><span class="award-org">Residenza artistica presso Farm Cultural Park, realtà internazionale di rigenerazione culturale</span></li>
-          <li><span class="award-year">2026</span><span class="award-name">Rassegna Stampa — Neologia Gallery</span><span class="award-org">Il progetto è raccontato in un articolo di Neologia Gallery, archivio dei nuovi talenti della comunicazione visiva italiana</span></li>
-          <li><span class="award-year">2026</span><span class="award-name">Esposizione — Torino Graphic Days®</span><span class="award-org">Opera selezionata per l’XI edizione Graphic Days®</span></li>
-          <li><span class="award-year">2025</span><span class="award-name">Borsa di Studio — Città di Bari</span><span class="award-org">Vincitore per la miglior tesi sulla città di Bari A.A. 2024/2025 — Premiazione a cura del Sindaco di Bari Vito Leccese</span></li>
-          <li><span class="award-year">2025</span><span class="award-name">Pubblicazione Editoriale — Grafica Magazine</span><span class="award-org">Progetto pubblicato nel terzo volume di Grafica Magazine — sold out</span></li>
-          <li><span class="award-year">2024</span><span class="award-name">Rassegna Stampa — Telebari</span><span class="award-org">Pubblicazione a cura di Sara Di Leo</span></li>
-          <li><span class="award-year">2024</span><span class="award-name">Esposizione — Comune di Bari</span><span class="award-org">Opera esposta a "Pane e Pomodoro Beach"</span></li>
-          <li><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per Catalogo Library NABA</span></li>
+          <li data-partner="neologia print-club graphic-days"><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in collaborazione con Print Club Torino e Graphic Days®, in mostra al festival 2027</span></li>
+          <li data-partner="neologia farm graphic-days"><span class="award-year">2026</span><span class="award-name">Vincitore — Farm Cultural Park Award, Premio Neologia</span><span class="award-org">Residenza artistica presso Farm Cultural Park, realtà internazionale di rigenerazione culturale</span></li>
+          <li data-partner="neologia graphic-days"><span class="award-year">2026</span><span class="award-name">Rassegna Stampa — Neologia Gallery</span><span class="award-org">Il progetto è raccontato in un articolo di Neologia Gallery, archivio dei nuovi talenti della comunicazione visiva italiana</span></li>
+          <li data-partner="neologia graphic-days"><span class="award-year">2026</span><span class="award-name">Esposizione — Torino Graphic Days®</span><span class="award-org">Opera selezionata per l’XI edizione Graphic Days®</span></li>
+          <li data-partner="bari"><span class="award-year">2025</span><span class="award-name">Borsa di Studio — Città di Bari</span><span class="award-org">Vincitore per la miglior tesi sulla città di Bari A.A. 2024/2025 — Premiazione a cura del Sindaco di Bari Vito Leccese</span></li>
+          <li data-partner="grafica"><span class="award-year">2025</span><span class="award-name">Pubblicazione Editoriale — Grafica Magazine</span><span class="award-org">Progetto pubblicato nel terzo volume di Grafica Magazine — sold out</span></li>
+          <li data-partner="telebari"><span class="award-year">2024</span><span class="award-name">Rassegna Stampa — Telebari</span><span class="award-org">Pubblicazione a cura di Sara Di Leo</span></li>
+          <li data-partner="bari"><span class="award-year">2024</span><span class="award-name">Esposizione — Comune di Bari</span><span class="award-org">Opera esposta a "Pane e Pomodoro Beach"</span></li>
+          <li data-partner="naba"><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per Catalogo Library NABA</span></li>
         </ul>
     </div>
   </div>
