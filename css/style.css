@@ -783,8 +783,11 @@ a:focus-visible, button:focus-visible{
 
 a.tile{ display:block; text-decoration:none; color:inherit; }
 
+/* display:flex + fit-content: "Torna ai lavori" sta su una riga sua, anche
+   quando l'eyebrow che segue è abbastanza corto da affiancarsi */
 .back-link{
-  display:inline-flex;
+  display:flex;
+  width:fit-content;
   align-items:center;
   gap:6px;
   font-size:0.9rem;
@@ -936,8 +939,11 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .more-btn{
     display:inline-flex; align-items:center; gap:8px;
     align-self:flex-start;
-    margin-top:10px;
-    padding:6px 0;
+    /* area di tocco di 44px; i margini compensano i 4px di padding in
+       più sopra e sotto, così la scritta e ciò che segue restano dov'erano */
+    min-height:44px;
+    margin:6px 0 -4px;
+    padding:10px 0;
     border:0;
     background:none;
     font:inherit;
@@ -951,7 +957,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .more-btn:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
   /* nell'intro lo spazio sotto il testo passa al pulsante */
   .project-hero p.more{ margin-bottom:0; }
-  .project-hero .more-btn{ margin-bottom:44px; }
+  .project-hero .more-btn{ margin-bottom:40px; }
 }
 @media (max-width: 640px) and (hover: hover){
   .more-btn:hover .more-label{ text-decoration:underline; text-underline-offset:4px; }
@@ -1482,8 +1488,6 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .project-end{ padding: 56px 0; }
   .hero{ padding-bottom: 40px; }
   .project-hero{ padding: 36px 20px 48px; } /* 20px = margine laterale di .wrap su mobile */
-  /* "Torna ai lavori" su una riga sua: con un eyebrow corto finivano affiancati */
-  .back-link{ display:flex; width:fit-content; }
   /* Area di tocco di 44px: padding compensato dal margine, la posizione
      del testo non cambia */
   .back-link{ min-height:44px; padding:11px 0; margin:-11px 0 21px; }
@@ -1615,8 +1619,13 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   list-style:none; margin:0; padding:0;
   animation: scroll-left 34s linear infinite;
 }
-/* Si ferma solo con il mouse sopra una card, non sul resto della fila */
-.partners-track:has(.partner-card:hover){ animation-play-state:paused; }
+/* Si ferma solo con il mouse sopra una card, non sul resto della fila.
+   Su touch l'hover resta appiccicato anche solo scorrendo col dito: lì la
+   fila si ferma con un tocco vero sulla card (.is-paused, vedi main.js) */
+@media (hover: hover){
+  .partners-track:has(.partner-card:hover){ animation-play-state:paused; }
+}
+.partners-track.is-paused{ animation-play-state:paused; }
 .partner-card{
   flex:none;
   width:var(--card-w); height:var(--card-h);
@@ -1638,11 +1647,16 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   width:auto; height:auto;
   max-width:100%; max-height:calc(var(--card-h) - 20px);
 }
-.partner-card:hover,
 .partner-card:focus-visible,
 .partner-card.is-lit{
   transform: rotate(0deg) translateY(-6px) scale(1.07);
   box-shadow: 0 18px 30px -12px rgba(0,0,0,.8), 0 0 0 2px #f2c14e;
+}
+@media (hover: hover){
+  .partner-card:hover{
+    transform: rotate(0deg) translateY(-6px) scale(1.07);
+    box-shadow: 0 18px 30px -12px rgba(0,0,0,.8), 0 0 0 2px #f2c14e;
+  }
 }
 .partners.is-filtering .partner-card:not(.is-lit){ opacity:.3; filter:grayscale(1); }
 

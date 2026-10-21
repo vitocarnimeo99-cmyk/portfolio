@@ -495,13 +495,16 @@ window.addEventListener('load', () => {
     return;
   }
 
-  // Touch: un tocco accende, un secondo tocco sullo stesso logo o fuori spegne
+  // Touch: un tocco accende e ferma la fila, un secondo tocco sullo stesso
+  // logo o fuori spegne e la fa ripartire. Il click arriva solo dai tocchi
+  // veri, non quando il dito scorre la pagina
   let tapped = null;
   document.addEventListener('click', (e) => {
     if (e.pointerType === 'mouse') return;
     const card = e.target.closest('.partner-card');
     tapped = card && card.dataset.partner !== tapped ? card.dataset.partner : null;
     light(tapped ? [tapped] : []);
+    track.classList.toggle('is-paused', !!tapped);
     // Su telefono l'elenco può essere chiuso: lo apre per mostrare le voci accese
     const peek = awards.querySelector('.peek');
     if (tapped && peek) peek.dispatchEvent(new Event('peek:open'));

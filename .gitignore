@@ -3,3 +3,6 @@
 # File sorgente pesanti (Photoshop/Illustrator) - non usati dal sito
 *.psd
 *.ai
+
+# Profilo di Chrome usato per gli screenshot di prova
+chrome-prof/
