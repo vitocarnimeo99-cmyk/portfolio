@@ -512,9 +512,11 @@ window.addEventListener('load', () => {
 // telefono ogni elenco parte chiuso con le prime voci, che si scorrono col
 // dito, e il pulsante lo apre/chiude (su desktop il pulsante è nascosto e
 // l'elenco resta sempre aperto, vedi CSS). "peek:open" lo apre da fuori.
+// Lo stesso pulsante apre la griglia dei lavori, che non ha un <ul>: lì
+// le voci sono le card stesse e chiusa ne mostra solo tre (vedi CSS).
 document.querySelectorAll('.peek-toggle').forEach((btn) => {
   const more = document.getElementById(btn.getAttribute('aria-controls'));
-  const list = more.querySelector('ul');
+  const list = more.querySelector('ul') || more;
   const label = btn.firstChild; // il testo prima del contatore
   const labels = { false: label.textContent, true: btn.dataset.less + ' ' };
   btn.querySelector('.peek-count').textContent = list.children.length;

@@ -94,7 +94,7 @@
         </div>
         <p>Branding, illustrazione, campagne ed eventi:<br>ogni progetto ha il suo mondo e la sua palette.<br><span class="hint-mouse">Passa sopra le card per scoprirle.</span><span class="hint-touch">Tocca una card per aprire il progetto.</span></p>
       </div>
-      <div class="grid">
+      <div class="grid" id="lavori-more">
         <a class="tile" href="progetto-strush.html" style="--c:#6163C6">
           <div class="tile-frame">
             <video class="art" width="1280" height="720" aria-label="Strush – Personal finance app" poster="assets/video/posters/strush_logo.jpg" muted loop playsinline preload="metadata">
@@ -116,7 +116,7 @@
                data-cycle-frames="4">
             <span class="tile-year">2025</span>
           </div>
-          <div class="cap"><span class="num">02</span><span class="name">Iterum</span><span class="type">Poster · Event</span></div>
+          <div class="cap"><span class="num" data-mobile="04">02</span><span class="name">Iterum</span><span class="type">Poster · Event</span></div>
         </a>
         <a class="tile" href="progetto-karaoke.html" style="--c:#D8322A">
           <div class="tile-frame">
@@ -130,7 +130,7 @@
                data-cycle-frames="3">
             <span class="tile-year">2023</span>
           </div>
-          <div class="cap"><span class="num">03</span><span class="name">InYourShoes</span><span class="type">Karaoke Dinner</span></div>
+          <div class="cap"><span class="num" data-mobile="05">03</span><span class="name">InYourShoes</span><span class="type">Karaoke Dinner</span></div>
         </a>
         <a class="tile" href="progetto-kway.html" style="--c:#2347C4">
           <div class="tile-frame">
@@ -144,7 +144,7 @@
                data-cycle-frames="5">
             <span class="tile-year">2024</span>
           </div>
-          <div class="cap"><span class="num">04</span><span class="name">K-Way</span><span class="type">Porta Borsari · Verona</span></div>
+          <div class="cap"><span class="num" data-mobile="02">04</span><span class="name">K-Way</span><span class="type">Porta Borsari · Verona</span></div>
         </a>
         <a class="tile" href="progetto-shallo.html" style="--c:#5A2AA0">
           <div class="tile-frame">
@@ -158,18 +158,23 @@
                data-cycle-frames="6">
             <span class="tile-year">2022</span>
           </div>
-          <div class="cap"><span class="num">05</span><span class="name">Shallo</span><span class="type">Beer shop · Event</span></div>
+          <div class="cap"><span class="num" data-mobile="06">05</span><span class="name">Shallo</span><span class="type">Beer shop · Event</span></div>
         </a>
         <a class="tile" href="progetto-contadini.html" style="--c:#9A6229">
           <div class="tile-frame">
-            <video class="art" id="contadini-video" width="1600" height="900" aria-label="I Contadini" poster="assets/video/posters/ICONTADINI01.jpg" muted loop playsinline preload="metadata"
+            <video class="art art-desktop" id="contadini-video" width="1600" height="900" aria-label="I Contadini" poster="assets/video/posters/ICONTADINI01.jpg" muted loop playsinline preload="metadata"
                data-src-default="assets/video/ICONTADINI01.mp4"
                data-src-hover="assets/video/ICONTADINI02.mp4">
               <source src="assets/video/ICONTADINI01.mp4" type="video/mp4">
             </video>
+            <img class="art art-mobile"
+               src="assets/images/icontadini_6x3_01.jpg"
+               width="2400" height="1800"
+               alt="I Contadini – affissione 6x3 «Vivi l’esperienza agricola del Salento» con un contadino che porge un grappolo di pomodori, contro il cielo azzurro"
+               loading="lazy" decoding="async">
             <span class="tile-year">2025-2026</span>
           </div>
-          <div class="cap"><span class="num">06</span><span class="name">I Contadini</span><span class="type">ADV · PED · Video editing · Branding</span></div>
+          <div class="cap"><span class="num" data-mobile="07">06</span><span class="name">I Contadini</span><span class="type">ADV · PED · Video editing · Branding</span></div>
         </a>
         <a class="tile" href="progetto-paninopoli.html" style="--c:#E32227">
           <div class="tile-frame">
@@ -183,7 +188,7 @@
                data-cycle-frames="5">
             <span class="tile-year">2023</span>
           </div>
-          <div class="cap"><span class="num">07</span><span class="name">Paninopoli</span><span class="type">Festival communication</span></div>
+          <div class="cap"><span class="num" data-mobile="08">07</span><span class="name">Paninopoli</span><span class="type">Festival communication</span></div>
         </a>
         <a class="tile" href="progetto-hiv.html" style="--c:#C8221E">
           <div class="tile-frame">
@@ -197,7 +202,7 @@
                data-cycle-frames="2">
             <span class="tile-year">2020</span>
           </div>
-          <div class="cap"><span class="num">08</span><span class="name">CAN’T GIVE YOU HIV</span><span class="type">ASA Milano · Milano Check Point</span></div>
+          <div class="cap"><span class="num" data-mobile="09">08</span><span class="name">CAN’T GIVE YOU HIV</span><span class="type">ASA Milano · Milano Check Point</span></div>
         </a>
         <a class="tile" href="progetto-raf40.html" style="--c:#00579C">
           <div class="tile-frame">
@@ -208,9 +213,10 @@
             </video>
             <span class="tile-year" style="background:#E32227">2024</span>
           </div>
-          <div class="cap"><span class="num">09</span><span class="name">Raf 40</span><span class="type">Sugar Music</span></div>
+          <div class="cap"><span class="num" data-mobile="03">09</span><span class="name">Raf 40</span><span class="type">Sugar Music</span></div>
         </a>
       </div>
+      <button type="button" class="peek-toggle works-toggle" aria-expanded="false" aria-controls="lavori-more" data-less="Mostra meno">Vedi tutti i lavori <span class="peek-count">9</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
     </div>
   </section>
 
@@ -315,6 +321,7 @@
           <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la formazione <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         </div>
         <div class="skills">
+          <h3 class="edu-title skills-title">Competenze</h3>
           <div class="peek" id="skills-more" style="--peek:13rem">
           <ul class="skills-list">
             <li><span class="l">Editoria</span><span>Libri, riviste, cataloghi</span></li>

@@ -415,6 +415,9 @@ h2.section-title{
 .tile:nth-child(6), .tile:nth-child(8){ grid-column: span 4; }
 .tile:nth-child(6) .tile-frame, .tile:nth-child(8) .tile-frame{ aspect-ratio: 16/9; }
 .tile:nth-child(9){ grid-column: span 2; }
+/* Immagine solo per il telefono (vedi sotto, max-width 820px): da desktop
+   nascosta, e con loading="lazy" non viene nemmeno scaricata */
+.tile .art-mobile{ display: none; }
 .tile:nth-child(9) .tile-frame{ aspect-ratio: 9/16; }
 /* Sfalsamento come i due scatti di K-Way: la card centrale della riga di
    quadrati scende un po', la griglia sembra impaginata a mano */
@@ -498,6 +501,18 @@ h2.section-title{
   .cap .name{ font-size: 1rem; }
   /* Il tipo va sotto al nome, allineato a sinistra: a destra veniva spezzato */
   .cap .type{ flex-basis: 100%; margin-left: 0; text-align: left; font-size: 0.72rem; }
+  /* Ordine su telefono: Strush, K-Way, Raf 40, poi gli altri come su desktop.
+     Il numero della didascalia segue l'ordine nuovo (data-mobile nel markup) */
+  .tile:nth-child(1){ order: -3; }
+  .tile:nth-child(4){ order: -2; }
+  .tile:nth-child(9){ order: -1; }
+  /* Card con un'immagine propria per il telefono al posto del video
+     (I Contadini: l'affissione 6x3, in 4:3) */
+  .tile .art-desktop{ display: none; }
+  .tile .art-mobile{ display: block; }
+  .tile:has(.art-mobile) .tile-frame{ aspect-ratio: 4/3; }
+  .cap .num[data-mobile]{ font-size: 0; }
+  .cap .num[data-mobile]::before{ content: attr(data-mobile); font-size: 0.95rem; }
 }
 
 /* -------- About -------- */
@@ -622,8 +637,13 @@ h2.section-title{
   .software-icons{ margin: 6px 0 0; }
 }
 
+/* Il titolo "Competenze" serve solo quando le colonne vanno una sotto
+   l'altra: su desktop l'elenco sta accanto al testo e si spiega da sé */
+.skills-title{ display:none; }
+
 @media (max-width: 820px){
   .about-grid{ grid-template-columns: 1fr; gap: 40px; }
+  .skills-title{ display:block; margin-top:0; }
 }
 
 /* -------- Contact -------- */
@@ -1382,37 +1402,56 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   .peek > ul.is-scrolled{ --fade-top:2.5rem; }
   .peek > ul.is-end{ --fade-bot:0px; }
   .peek.is-open > ul{ overflow:hidden; -webkit-mask-image:none; mask-image:none; }
+  /* Il pulsante chiude l'elenco come un piè di pagina: filetto sopra,
+     testo piccolo e smorzato, così non fa concorrenza al titolo della
+     sezione (che è maiuscolo e colorato) */
   .peek-toggle{
-    --peek-c: var(--accent); --peek-on: var(--paper);
-    display:flex; align-items:center; justify-content:center; gap:10px;
+    --peek-c: var(--ink-soft); --peek-chip: var(--paper-dim); --peek-rule: var(--line);
+    display:flex; align-items:center; gap:8px;
     width:100%;
-    padding:14px 0;
+    min-height:44px;
+    padding:12px 0;
     border:0;
+    border-top:1px solid var(--peek-rule);
     background:none;
     font:inherit;
-    font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+    font-size:.9rem; font-weight:500;
     color:var(--peek-c);
+    text-align:left;
     cursor:pointer;
   }
   .peek-count{
-    min-width:1.9em; padding:2px 6px;
+    min-width:1.7em; padding:1px 7px;
     border-radius:999px;
-    background:var(--peek-c); color:var(--peek-on);
-    letter-spacing:0;
+    background:var(--peek-chip);
+    font-size:.78rem; font-weight:600; text-align:center;
   }
   .peek-toggle[aria-expanded="true"] .peek-count{ display:none; }
-  .peek-toggle i{ transition: transform .3s ease; }
+  .peek-toggle i{ margin-left:auto; font-size:.75em; transition: transform .3s ease; }
   .peek-toggle[aria-expanded="true"] i{ transform: rotate(180deg); }
+  .peek-toggle:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
 
   /* Premi: su fondo scuro, il pulsante chiude il riquadro tratteggiato */
   .awards{ padding-bottom:0; }
   .awards-toggle{
-    --peek-c:#f2c14e; --peek-on: var(--ink);
+    --peek-c: rgba(247,245,240,.7); --peek-chip: rgba(247,245,240,.1);
     width:calc(100% + 44px); /* fino ai bordi del riquadro (padding 22px) */
     margin:0 -22px;
-    padding:16px 22px;
+    padding:14px 22px;
     border-top:1px dashed rgba(247,245,240,.3);
   }
+}
+/* Lavori: chiusa, la griglia mostra solo le prime tre card su telefono
+   (Strush, K-Way e Raf 40, le stesse messe in cima con order più su);
+   le altre entrano con la loro solita animazione quando si apre */
+@media (max-width: 640px){
+  .grid{ scroll-margin-top:130px; }
+  .grid:not(.is-open) > .tile:not(:nth-child(1), :nth-child(4), :nth-child(9)){ display:none; }
+  .works-toggle{ margin-top:28px; }
+}
+@media (max-width: 640px) and (hover: hover){
+  .peek-toggle:hover{ color:var(--ink); }
+  .awards-toggle:hover{ color:var(--paper); }
 }
 @media (max-width: 640px) and (prefers-reduced-motion: reduce){
   .peek, .peek-toggle i{ transition:none; }
