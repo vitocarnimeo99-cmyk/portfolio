@@ -660,8 +660,8 @@ document.querySelectorAll('.peek-toggle').forEach((btn) => {
   more.addEventListener('peek:open', () => setOpen(true));
 });
 
-// "Leggi di più" delle pagine progetto (solo telefono, vedi .more in
-// style.css): apre e richiude il testo. L'altezza va da quella chiusa a
+// "Leggi di più" delle pagine progetto (telefono, e desktop con
+// .more--desk: vedi .more in style.css): apre e richiude il testo. L'altezza va da quella chiusa a
 // quella del testo in px, poi passa ad auto così il testo si adatta se
 // cambia la larghezza
 document.querySelectorAll('.more-btn').forEach((btn) => {

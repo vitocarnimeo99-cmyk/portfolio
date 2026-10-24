@@ -110,6 +110,14 @@
     .ct-badge{ right:6px; top:-26px; width:88px; height:88px; }
   }
 
+  /* Su desktop Output più vicino ad Anno e Cliente. */
+  @media (min-width:641px){
+    .project-hero .project-meta{ row-gap:16px; margin-bottom:32px; }
+  }
+  @media (min-width:981px){
+    .project-hero{ padding-top:40px; }
+  }
+
   .btn-site{ background: var(--accent); color:#fff; }
   .btn-site:hover{ background: var(--ink); color: var(--paper); }
   .btn-site i{ font-size:1.05rem; }
@@ -300,10 +308,57 @@
     .ads-box{ height:clamp(320px, 70vw, 520px); }
     .ads-arrow{ width:40px; height:40px; margin-top:-20px; }
   }
-  @media (max-width:560px){
-    .ads-controls{ justify-content:center; }
-    .ads-seg button{ padding:8px 11px; font-size:0.8rem; }
+  /* Su telefono l'annuncio prende tutta la larghezza: niente frecce (si
+     scorre col dito sull'immagine) e le campagne diventano una fila di
+     miniature che scorre in orizzontale, sotto la didascalia. Il riquadro
+     ha un'altezza fissa, così quando la demo cambia formato la pagina
+     sotto non salta. */
+  @media (max-width:640px){
+    /* minmax(0,…): la colonna resta larga quanto lo schermo anche se il
+       contenuto vorrebbe allargarla */
+    .ads-lab{ grid-template-columns:minmax(0, 1fr); gap:22px; }
+    /* formato e lingua su una riga; sui telefoni più stretti la lingua va sotto */
+    .ads-controls{ gap:8px; margin-bottom:14px; }
+    .ads-seg{ flex:1 1 auto; padding:2px; }
+    .ads-seg button{ flex:1 1 auto; justify-content:center; gap:6px; min-width:44px; min-height:44px; padding:0 8px; font-size:0.8rem; }
     .ads-seg .fmt-label{ display:none; }
+    .ads-box{ height:min(118vw, 60vh); touch-action:pan-y; }
+    .ads-arrow{ display:none; }
+    .ads-caption{ margin-top:14px; }
+
+    .ads-side{
+      display:flex;
+      gap:22px;
+      margin:0 -20px;
+      padding:4px 20px 6px;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .ads-side::-webkit-scrollbar{ display:none; }
+    .ads-group + .ads-group{ margin-top:0; }
+    .ads-group-label{ white-space:nowrap; }
+    .ads-list{ display:flex; gap:10px; }
+    .ads-item{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      width:96px;
+      padding:0;
+      border:none;
+      background:none;
+    }
+    .ads-item:hover{ background:none; transform:none; }
+    .ads-item img{ width:96px; height:96px; border-radius:10px; transition: box-shadow .2s ease; }
+    .ads-item[aria-pressed="true"]{ background:none; box-shadow:none; }
+    .ads-item[aria-pressed="true"] img{ box-shadow:0 0 0 2px var(--ct-cream), 0 0 0 4px var(--accent); }
+    .ads-item b{
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      font-size:0.78rem;
+    }
+    .ads-item small, .ads-item .ads-langs{ display:none; }
   }
 
   /* -------- Video: le stories animate dentro il telefono -------- */
@@ -460,12 +515,17 @@
     font-size:0.8rem;
     color:rgba(244,233,215,.65);
   }
+  /* In colonna prima il titolo e il testo, poi il telefono, poi la lista:
+     la colonna del testo si scioglie nella griglia. Ogni video sta su una
+     riga sola, con l'etichetta a destra */
   @media (max-width:980px){
-    .story-player{ grid-template-columns:1fr; gap:44px; }
-    .sp-device{ order:-1; width:min(100%, 340px); margin:0 auto; }
+    .story-player{ grid-template-columns:minmax(0, 1fr); gap:0; }
+    .sp-side{ display:contents; }
+    .sp-side > .eyebrow{ justify-self:start; }
+    .sp-device{ order:1; width:min(100%, 340px); margin:0 auto 40px; }
+    .sp-list{ order:2; }
     .sp-screen{ transform:none; }
-    .sp-track{ grid-template-columns: 36px 1fr; }
-    .sp-tag{ grid-column:2; white-space:normal; margin-top:-6px; }
+    .sp-track{ grid-template-columns: 36px 1fr auto; padding:12px 4px; }
   }
 
   /* -------- PED: feed social filtrabile per rubrica -------- */
@@ -684,6 +744,7 @@
   @media (max-width:720px){
     .ped-bar{ flex-direction:column; align-items:stretch; gap:16px; }
     .ped-profile{ border-right:none; padding-right:0; }
+    .ped-filters button{ min-height:44px; padding:0 16px; } /* area di tocco di 44px */
     .ped-track{ --bleed:20px; --card:min(70vw, 290px); padding:24px 0 80px; }
     .ped-arrow{ display:none; }
   }
@@ -784,6 +845,9 @@
     /* Su telefono restano solo le frecce esterne: sfogliano le slide e poi
        passano al post dopo, come lo swipe */
     .lb-slide, .lb-slide[hidden]{ display:none; }
+    /* puntini più facili da toccare: il pallino resta uguale, cresce l'area */
+    .lb-dots{ gap:0; margin-top:4px; }
+    .lb-dots button{ flex:0 1 44px; width:auto; height:44px; }
     .lb-prev{ left:8px; }
     .lb-next{ right:8px; }
     .lb-close{ right:8px; top:8px; }
@@ -978,17 +1042,27 @@
       border:4px solid #fff;
       transform: rotate(3deg);
     }
-    .soup-label{ left:10px; bottom:10px; padding:4px 9px; font-size:0.62rem; }
+    .soup-label{ left:10px; bottom:10px; padding:4px 10px; font-size:0.75rem; }
     .soup-bar{ justify-content:center; margin-top:36px; }
-    .soup-lids{ justify-content:center; flex-wrap:nowrap; gap:2px; }
+    /* Cinque colonne a tutta larghezza, ognuna larga quanto il tappo o il
+       suo nome: lo spazio che avanza va tra l'una e l'altra, così i nomi
+       non si toccano */
+    .soup-lids{ display:grid; grid-template-columns:repeat(5, auto); justify-content:space-between; gap:2px; width:100%; }
     .soup-lid{ gap:6px; }
     .soup-lid-img{ width:54px; height:54px; }
     .soup-lid-img img{ inset:5px; width:44px; height:44px; }
-    .soup-lid-name{ font-size:0.66rem; }
+    .soup-lid-name{ font-size:0.75rem; letter-spacing:-0.01em; opacity:.8; }
     .soup-hint{ display:none !important; }
+  }
+  @media (max-width:360px){
+    .soup-lid-name{ font-size:0.7rem; }
   }
 
   /* -------- Affissioni 6x3: palco principale + miniature -------- */
+  /* Palco e miniature larghi uguali: quanto l'affissione più alta (4:3)
+     quando è alta 72vh. Le altre sono più basse, così cambia solo
+     l'altezza del palco e le miniature restano ferme. */
+  .bb-viewer{ width:min(100%, calc(72vh * 4 / 3)); margin:0 auto; }
   .bb-stage{
     position:relative;
     border-radius:10px;
@@ -1073,7 +1147,7 @@
   .bb-thumb:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   @media (max-width:560px){
     .bb-thumbs{ gap:8px; }
-    .bb-arrow{ width:40px; height:40px; margin-top:-20px; }
+    .bb-arrow{ width:44px; height:44px; margin-top:-22px; }
   }
 
   /* -------- Catalogo box regalo: libretto da sfogliare -------- */
@@ -1254,7 +1328,9 @@
   /* -------- Chiusura: il cliente e il link al sito -------- */
   .ct-end{
     display:grid;
-    grid-template-columns: 1fr 440px;
+    /* la colonna del testo tiene sempre i due pulsanti su una riga; sugli
+       schermi più stretti è la card a restringersi (fino a 440px di massimo) */
+    grid-template-columns: minmax(480px, 1fr) minmax(0, 440px);
     gap:64px;
     align-items:center;
   }
@@ -1307,6 +1383,17 @@
     .ct-end{ grid-template-columns:1fr; gap:40px; }
     .client-card{ transform:none; }
   }
+  /* Su telefono la card del cliente (che porta al sito) sale subito sotto
+     il testo; sotto, i due pulsanti a tutta larghezza. La colonna del testo
+     si scioglie nella griglia per poter mettere la card in mezzo. */
+  @media (max-width:640px){
+    .ct-end{ gap:0; }
+    .ct-end > div{ display:contents; }
+    .ct-end > div > p{ margin-bottom:28px; }
+    .client-card{ order:1; margin-bottom:28px; }
+    .ct-end .project-links{ order:2; flex-direction:column; gap:12px; }
+    .ct-end .project-links a{ justify-content:center; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     .ct-card, .ct-card img, .ct-badge, .ads-frame, .ads-frame img, .ads-item, .sp-video, .sp-screen, .sp-track,
@@ -1348,9 +1435,8 @@
       <a class="back-link" href="index.html#lavori">← Torna ai&nbsp;lavori</a>
       <span class="eyebrow">ADS, PED, VIDEO EDITING E&nbsp;BRANDING — BriefMe by Comverta</span>
       <h1>iContadini <em>Ugento</em></h1>
-      <p class="more" id="intro-more"><strong>iContadini</strong> è&nbsp;un'azienda agricola di&nbsp;<strong>Ugento</strong>, nel&nbsp;cuore del&nbsp;Salento.<br class="br-desk"><br class="br-mob">Coltiva, raccoglie e&nbsp;lavora a&nbsp;mano conserve, sughi, legumi e&nbsp;prodotti da&nbsp;forno, con&nbsp;una&nbsp;filiera corta che&nbsp;va dal&nbsp;campo alla&nbsp;tavola.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
-      In&nbsp;<strong>BriefMe</strong>, agenzia di&nbsp;performance marketing e&nbsp;creative design, ho contribuito alla&nbsp;comunicazione del&nbsp;brand attraverso campagne <strong>ADS B2C e&nbsp;B2B</strong>, contenuti per&nbsp;i&nbsp;social, video per&nbsp;stories, affissioni e&nbsp;packaging per&nbsp;il&nbsp;lancio di&nbsp;nuovi&nbsp;prodotti.<br class="br-desk"><br class="br-mob"> Un&nbsp;lavoro trasversale, sviluppato in&nbsp;diversi formati e&nbsp;lingue, per&nbsp;garantire coerenza e&nbsp;continuità alla&nbsp;comunicazione su&nbsp;tutti i&nbsp;canali.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <p><strong>iContadini</strong> è&nbsp;un'azienda agricola di&nbsp;<strong>Ugento</strong>, nel&nbsp;cuore del&nbsp;Salento.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
+      In&nbsp;<strong>BriefMe</strong>, agenzia di&nbsp;performance marketing e&nbsp;creative design, ho&nbsp;contribuito alla&nbsp;comunicazione del&nbsp;brand attraverso campagne <strong>ADS B2C e&nbsp;B2B</strong>, contenuti per&nbsp;i&nbsp;social, video per&nbsp;stories, affissioni e&nbsp;packaging per&nbsp;il&nbsp;lancio di&nbsp;nuovi&nbsp;prodotti.</p>
       <div class="project-meta">
         <div>Anno<span>2025 — 2026</span></div>
         <div>Cliente<span>iContadini · Ugento (LE)</span></div>
@@ -1474,7 +1560,7 @@
             <button class="sp-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
             <span class="sp-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
           </div>
-          <span class="sp-hint">Tocca a&nbsp;destra o&nbsp;a&nbsp;sinistra · tieni premuto per&nbsp;mettere in&nbsp;pausa</span>
+          <span class="sp-hint"><span class="hint-mouse">Clicca</span><span class="hint-touch">Tocca</span> a&nbsp;destra o&nbsp;a&nbsp;sinistra,<br> tieni premuto per&nbsp;mettere in&nbsp;pausa</span>
         </div>
       </div>
     </div>
@@ -1574,11 +1660,11 @@
 
       <div class="soup-bar">
         <div class="soup-lids" role="group" aria-label="Scegli la zuppa">
-          <button class="soup-lid" type="button" aria-pressed="true" data-color="#B83C22" data-name="ceci"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_ceci_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Ceci</span></button>
-          <button class="soup-lid" type="button" aria-pressed="false" data-color="#66332A" data-name="fagioli borlotti"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_fagioliborlotti_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Borlotti</span></button>
-          <button class="soup-lid" type="button" aria-pressed="false" data-color="#94361F" data-name="fagioli cannellini"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_cannellini_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Cannellini</span></button>
-          <button class="soup-lid" type="button" aria-pressed="false" data-color="#7A3B2D" data-name="lenticchie"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_lenticchie_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Lenticchie</span></button>
-          <button class="soup-lid" type="button" aria-pressed="false" data-color="#36432D" data-name="piselli"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/icontadini_zuppe_piselli_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Piselli</span></button>
+          <button class="soup-lid" type="button" aria-pressed="true" data-color="#B83C22" data-name="ceci"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/tappi/icontadini_zuppe_ceci_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Ceci</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#66332A" data-name="fagioli borlotti"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/tappi/icontadini_zuppe_fagioliborlotti_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Borlotti</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#94361F" data-name="fagioli cannellini"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/tappi/icontadini_zuppe_cannellini_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Cannellini</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#7A3B2D" data-name="lenticchie"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/tappi/icontadini_zuppe_lenticchie_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Lenticchie</span></button>
+          <button class="soup-lid" type="button" aria-pressed="false" data-color="#36432D" data-name="piselli"><span class="soup-lid-img"><img src="assets/images/icontadini_ZUPPE/tappi/icontadini_zuppe_piselli_01.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 78 78" aria-hidden="true"><circle class="soup-ring-bg" cx="39" cy="39" r="37"/><circle class="soup-ring" cx="39" cy="39" r="37"/></svg></span><span class="soup-lid-name">Piselli</span></button>
         </div>
         <div class="soup-nav">
           <span class="soup-hint">Scorri gli&nbsp;scatti per&nbsp;cambiare zuppa</span>
@@ -1597,7 +1683,7 @@
           <span class="eyebrow">Affissioni 6x3</span>
           <h2 class="section-title">Il&nbsp;Salento, <em>in&nbsp;grande</em></h2>
         </div>
-        <p>Il&nbsp;racconto esce dal&nbsp;feed e&nbsp;arriva in&nbsp;strada: l'esperienza agricola del&nbsp;Salento sul&nbsp;cartellone, il&nbsp;Salento autentico servito in&nbsp;tavola e&nbsp;la&nbsp;frisella con&nbsp;la&nbsp;degustazione&nbsp;gratuita.</p>
+        <p>Il&nbsp;racconto esce dal&nbsp;feed e&nbsp;arriva in&nbsp;strada.<br class="br-desk"><br class="br-mob"> Tre&nbsp;affissioni: l'esperienza agricola del&nbsp;Salento, il&nbsp;Salento autentico in&nbsp;tavola e&nbsp;la&nbsp;frisella con&nbsp;la&nbsp;degustazione&nbsp;gratuita.</p>
       </div>
       <div class="bb-viewer" id="bb-viewer">
         <div class="bb-stage">
@@ -1624,7 +1710,7 @@
           <span class="eyebrow">Catalogo · Box regalo 2025</span>
           <h2 class="section-title">Da&nbsp;sfogliare, <em>pagina per&nbsp;pagina</em></h2>
         </div>
-        <p>Il&nbsp;catalogo della&nbsp;regalistica: la&nbsp;storia dei&nbsp;tre fratelli, i&nbsp;prodotti e&nbsp;le&nbsp;box regalo 2025,&nbsp;raccolti in&nbsp;un&nbsp;libretto.<br class="br-desk"><br class="br-mob"> Trascina le&nbsp;pagine, cliccale o&nbsp;usa le&nbsp;frecce per&nbsp;sfogliarlo.</p>
+        <p>Il&nbsp;catalogo della&nbsp;regalistica: la&nbsp;storia dei&nbsp;tre fratelli, i&nbsp;prodotti e&nbsp;le&nbsp;box regalo 2025,&nbsp;raccolti in&nbsp;un&nbsp;libretto.<br class="br-desk"><br class="br-mob"> <span class="hint-mouse">Trascina le&nbsp;pagine, cliccale o&nbsp;usa le&nbsp;frecce per&nbsp;sfogliarlo.</span><span class="hint-touch">Scorri col&nbsp;dito, tocca le&nbsp;pagine o&nbsp;usa le&nbsp;frecce per&nbsp;sfogliarlo.</span></p>
       </div>
       <div class="fb" id="fb" tabindex="0" role="group" aria-roledescription="libretto" aria-label="Catalogo Box regalo 2025 di iContadini" data-pages="38" data-src="assets/images/icontadini_catalogo/catalogo_{n}.jpg">
         <div class="fb-stage">
@@ -1650,8 +1736,7 @@
         <h2 class="section-title">Assaggiali <em>subito ;)</em></h2>
         <p>Conserve, sughi, legumi e&nbsp;box regalo coltivati e&nbsp;lavorati a&nbsp;mano a&nbsp;Ugento.</p>
         <div class="project-links">
-          <a class="btn-primary btn-site" href="https://icontadini.it/it/home/" target="_blank" rel="noopener"><i class="fa-solid fa-seedling" aria-hidden="true"></i>Visita icontadini.it&nbsp;↗</a>
-          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto&nbsp;↗</a>
+          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto&nbsp;↗</a>
           <a class="btn-ghost" href="index.html#lavori">← Torna al&nbsp;portfolio</a>
         </div>
       </div>
@@ -1660,7 +1745,7 @@
           <img src="assets/images/icontadini_logo social.jpg" width="1080" height="1080" alt="">
           <span><strong>iContadini</strong><small>Azienda agricola · Ugento (LE)</small></span>
         </span>
-        <blockquote>Coltiviamo, raccogliamo e&nbsp;lavoriamo a&nbsp;mano i&nbsp;nostri prodotti.</blockquote>
+        <blockquote>Coltiviamo, raccogliamo e&nbsp;lavoriamo a&nbsp;mano i&nbsp;nostri&nbsp;prodotti.</blockquote>
         <ul class="client-pills">
           <li>Filiera corta</li>
           <li>Prodotti tipici pugliesi</li>
@@ -1797,6 +1882,9 @@
 
     const box = lab.querySelector('.ads-box');
     const frame = lab.querySelector('.ads-frame');
+    const side = lab.querySelector('.ads-side');
+    // Su telefono niente frecce ai lati e campagne in una fila che scorre
+    const phone = matchMedia('(max-width:640px)');
     const caption = lab.querySelectorAll('.ads-caption span');
     const fmtBtns = Array.from(lab.querySelectorAll('[data-fmt]'));
     const langBtns = Array.from(lab.querySelectorAll('[data-lang]'));
@@ -1828,7 +1916,7 @@
 
     const fit = () => {
       const r = RATIO[fmt];
-      const bw = box.clientWidth - 110, bh = box.clientHeight;
+      const bw = box.clientWidth - (phone.matches ? 0 : 110), bh = box.clientHeight;
       let w = Math.max(160, bw), h = w / r;
       if (h > bh) { h = bh; w = h * r; }
       frame.style.width = Math.round(w) + 'px';
@@ -1841,6 +1929,13 @@
       fmt = c.src[lang][wantFmt] ? wantFmt : 'q';
 
       items.forEach((b, k) => b.setAttribute('aria-pressed', String(k === index)));
+      // Nella fila delle miniature la campagna attiva resta in vista
+      if (phone.matches) {
+        const r = items[index].getBoundingClientRect(), s = side.getBoundingClientRect();
+        if (r.left < s.left || r.right > s.right) {
+          side.scrollTo({ left: side.scrollLeft + r.left - s.left - (s.width - r.width) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
+        }
+      }
       fmtBtns.forEach(b => {
         b.disabled = !c.src[lang][b.dataset.fmt];
         b.setAttribute('aria-pressed', String(b.dataset.fmt === fmt));
@@ -1852,7 +1947,8 @@
       caption[0].innerHTML = '';
       const strong = document.createElement('b');
       strong.textContent = c.name;
-      caption[0].append(strong, ' — ' + FMT_NAME[fmt] + ' · ' + LANG_NAME[lang]);
+      // formato e lingua restano insieme quando la riga va a capo
+      caption[0].append(strong, ' — ' + FMT_NAME[fmt].replace(' ', ' ') + ' · ' + LANG_NAME[lang]);
       caption[1].textContent = pad(index + 1) + ' / ' + pad(CAMPAIGNS.length);
       fit();
 
@@ -1887,6 +1983,19 @@
       if (e.key === 'ArrowLeft') { stopDemo(); show(index - 1); }
     });
     window.addEventListener('resize', fit);
+
+    // Swipe orizzontale sull'annuncio (touch e penna)
+    let sx = null;
+    box.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') sx = e.clientX; });
+    box.addEventListener('pointercancel', () => { sx = null; });
+    box.addEventListener('pointerup', (e) => {
+      if (sx === null) return;
+      const dx = e.clientX - sx;
+      sx = null;
+      if (Math.abs(dx) > 40) { stopDemo(); show(index + (dx < 0 ? 1 : -1)); }
+    });
+    // Chi scorre la fila delle miniature sta scegliendo: la demo si ferma
+    side.addEventListener('pointerdown', () => stopDemo());
 
     // Demo: q → v → o sulla campagna corrente, poi passa alla successiva.
     // Il passo dopo parte solo quando l'immagine attuale è comparsa, così
@@ -2501,8 +2610,9 @@
 
     // Gli scatti nascosti con loading="lazy" Chrome non li carica mai: quando
     // la sezione si avvicina li passiamo a eager, così la tendina non scopre
-    // un riquadro vuoto.
-    const preload = () => sets.flat().forEach(im => { im.loading = 'eager'; });
+    // un riquadro vuoto. Stessa cosa per le miniature dei tappi, così chi
+    // scorre veloce non vede cerchi vuoti.
+    const preload = () => sets.flat().concat(lids.map(l => l.querySelector('img'))).forEach(im => { im.loading = 'eager'; });
     if ('IntersectionObserver' in window) {
       const near = new IntersectionObserver((entries) => {
         if (entries.some(e => e.isIntersecting)) { preload(); near.disconnect(); }
