@@ -1617,11 +1617,18 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     width:7px;
     height:7px;
     border-radius:50%;
-    background: var(--accent);
+    background: var(--dot, var(--accent));
   }
-  .hero-roles li:nth-child(1)::before{ background:#E8B400; } /* Graphic Designer */
-  .hero-roles li:nth-child(2)::before{ background:#3F6B3D; }
-  .hero-roles li:nth-child(3)::before{ background:#D8322A; }
+  .hero-roles li:nth-child(1){ --dot:#E8B400; } /* Graphic Designer */
+  .hero-roles li:nth-child(2){ --dot:#3F6B3D; }
+  .hero-roles li:nth-child(3){ --dot:#D8322A; }
+  /* Colpita dal cartellino (cartellino3d.js la sposta con transform e le
+     dà .is-hit): il pallino si gonfia e manda un'onda del suo colore */
+  .hero-roles li.is-hit::before{ animation: role-hit .55s cubic-bezier(.2,.7,.2,1); }
+}
+@keyframes role-hit{
+  0%{ transform: scale(1.9); box-shadow: 0 0 0 0 var(--dot); }
+  100%{ transform: scale(1); box-shadow: 0 0 0 9px transparent; }
 }
 
 /* Parola in accento nei titoli: Inter Display Italic Medium
