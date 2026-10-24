@@ -40,6 +40,14 @@ body{
 a{ color: inherit; }
 button, input, textarea, select{ font-family: inherit; }
 
+/* Immagini e video non si trascinano sul desktop e la pressione lunga su
+   iPhone non apre "Salva immagine" (il tasto destro lo blocca main.js) */
+img, video, canvas, svg image{
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 ::selection{ background: var(--accent); color: var(--paper); }
 
 .wrap{
