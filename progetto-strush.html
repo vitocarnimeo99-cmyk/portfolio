@@ -1812,11 +1812,51 @@
         if (visible && !hovered) timer = setInterval(tick, 1500);
       };
 
+      // Spostato a mano (dito, trascinamento, rotellina, frecce) l'automatico
+      // si ferma; a scroll finito riparte dalla schermata più vicina al
+      // centro, invece di tornare a quella dove era rimasto
+      let pressing = false, manual = false, settleTimer = null;
+      const nearest = () => {
+        const mid = scroller.scrollLeft + scroller.clientWidth / 2;
+        let best = 0, min = Infinity;
+        frames.forEach((f, k) => {
+          const d = Math.abs(f.offsetLeft + f.offsetWidth / 2 - mid);
+          if (d < min) { min = d; best = k; }
+        });
+        return best;
+      };
+      const settle = () => {
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(() => {
+          if (pressing || drag) return;
+          manual = false;
+          if (!hovered) {
+            i = nearest();
+            frames.forEach((f, k) => f.classList.toggle('is-active', k === i));
+          }
+          play();
+        }, 200);
+      };
+      const grab = () => { manual = true; stop(); settle(); };
+      ['pointerdown', 'wheel', 'keydown'].forEach((type) => {
+        scroller.addEventListener(type, grab, { passive: true });
+      });
+      scroller.addEventListener('touchstart', () => { pressing = true; grab(); }, { passive: true });
+      ['touchend', 'touchcancel'].forEach((type) => {
+        scroller.addEventListener(type, () => { pressing = false; settle(); }, { passive: true });
+      });
+      addEventListener('pointerup', () => { if (manual) settle(); });
+      scroller.addEventListener('scroll', () => { if (manual) settle(); }, { passive: true });
+
       new IntersectionObserver((entries) => {
         const was = visible;
         visible = entries[0].isIntersecting;
-        if (visible && !was && !hovered) { i = first(); dir = 1; select(i); }
-        play();
+        if (visible && !was && !hovered) {
+          if (touched) i = nearest();
+          else { i = first(); dir = 1; }
+          select(i);
+        }
+        if (!manual) play();
       }, { threshold: 0.5 }).observe(scroller);
 
       frames.forEach((f, k) => {
