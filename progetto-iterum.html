@@ -120,11 +120,13 @@
   }
   .iterum-scenes .section-title{ color: var(--paper); }
 
-  .photo-strip-grid{
+  /* la griglia sta in un .wrap: stessi margini laterali di titolo e Radio */
+  .iterum-scenes .photo-strip-grid{
     display:flex;
     width:100%;
     gap:28px;
     align-items:flex-start;
+    margin-bottom:0;
   }
   .photo-strip-item{
     position:relative;
@@ -145,9 +147,12 @@
     box-shadow: 0 0 0 1px rgba(247,245,240,.08);
     transition: box-shadow .45s ease, transform .45s cubic-bezier(.2,.7,.2,1);
   }
-  .photo-strip-item:hover .ps-frame{
-    transform: translateY(-6px);
-    box-shadow: 0 0 0 1px rgba(210,96,26,.55), 0 26px 50px rgba(210,96,26,.22);
+  /* solo col mouse: su touch l'hover resterebbe acceso dopo il tocco */
+  @media (hover: hover){
+    .photo-strip-item:hover .ps-frame{
+      transform: translateY(-6px);
+      box-shadow: 0 0 0 1px rgba(210,96,26,.55), 0 26px 50px rgba(210,96,26,.22);
+    }
   }
   .ps-frame img{
     display:block;
@@ -155,6 +160,21 @@
     height:100%;
     object-fit:contain;
     object-position:center;
+  }
+  /* Lente sulle scene, solo su pc: al passaggio del mouse il disegno si
+     ingrandisce e segue il cursore (scala e origine le muove lo script) */
+  .ps-hint{ display:none; }
+  @media (hover: hover) and (pointer: fine) and (min-width: 821px){
+    .ps-frame{ cursor: zoom-in; }
+    .ps-hint{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:18px;
+      font-size:0.88rem;
+      color:#C9C4B6;
+    }
+    .ps-hint i{ color: var(--pop-terracotta); }
   }
   .photo-strip-item figcaption{
     display:flex;
@@ -165,8 +185,37 @@
   .ps-num{ font-weight:700; color: var(--pop-terracotta); font-size:0.95rem; }
   .ps-label{ font-size:0.92rem; letter-spacing:0.01em; color:#C9C4B6; }
 
+  .ps-bar{ display:none; }
+  /* su tablet e telefono le tre scene diventano un carosello che scorre col
+     dito: ogni scena si ferma allineata al titolo e la successiva sbircia a
+     destra. Il padding di .wrap resta dentro lo scroller, così le immagini
+     scorrono fino al bordo dello schermo. */
   @media (max-width:820px){
-    .photo-strip-grid{ flex-direction:column; gap:36px; }
+    .iterum-scenes .photo-strip-grid{
+      gap:14px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      scroll-padding-inline:40px;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .iterum-scenes .photo-strip-grid::-webkit-scrollbar{ display:none; }
+    .photo-strip-item{
+      flex:0 0 min(78vw, 340px);
+      scroll-snap-align:start;
+    }
+    .photo-strip-item:hover .ps-frame{ transform:none; } /* lo scroller taglierebbe l'alzata */
+    .iterum-scenes .ps-bar{ display:block; margin:22px auto 0; }
+    .ps-progress{ height:3px; border-radius:2px; background: rgba(255,255,255,.14); overflow:hidden; }
+    .ps-progress span{
+      display:block;
+      height:100%; width:33.33%;
+      background: var(--pop-terracotta);
+    }
+  }
+  @media (max-width:640px){
+    .iterum-scenes .photo-strip-grid{ gap:10px; scroll-padding-inline:20px; }
   }
 
   /* -------- ÏTERUM RADIO: card 3D che al passaggio del mouse rivela il retro -------- */
@@ -179,16 +228,18 @@
     align-items:center;
   }
   .iterum-radio-flip{
+    position:relative;
     flex:0 0 auto;
     width:400px;
     aspect-ratio: 4/5;
     perspective: 1100px;
     --rx:0deg; --ry:0deg; --flip:0deg; --tz:0px; --px:50%; --py:50%;
   }
+  /* absolute e non height:100%: nella colonna flex di mobile la percentuale
+     non si risolve e la card restava alta 0 (invisibile) */
   .iterum-radio-flip-inner{
-    position:relative;
-    width:100%;
-    height:100%;
+    position:absolute;
+    inset:0;
     transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--flip))) translateZ(var(--tz));
     transition: box-shadow .4s ease;
     transform-style: preserve-3d;
@@ -196,8 +247,10 @@
     border-radius:8px;
     box-shadow: 0 0 0 1px rgba(247,245,240,.08);
   }
-  .iterum-radio-flip:hover .iterum-radio-flip-inner{
-    box-shadow: 0 0 0 1px rgba(210,96,26,.55), 0 30px 60px rgba(0,0,0,.45), 0 0 25px 6px rgba(210,96,26,.16);
+  @media (hover: hover){
+    .iterum-radio-flip:hover .iterum-radio-flip-inner{
+      box-shadow: 0 0 0 1px rgba(210,96,26,.55), 0 30px 60px rgba(0,0,0,.45), 0 0 25px 6px rgba(210,96,26,.16);
+    }
   }
   .iterum-radio-flip-front,
   .iterum-radio-flip-back{
@@ -229,8 +282,35 @@
     transition: opacity .35s ease;
     pointer-events:none;
   }
-  .iterum-radio-flip:hover .iterum-radio-flip-front::after,
-  .iterum-radio-flip:hover .iterum-radio-flip-back::after{ opacity:1; }
+  @media (hover: hover){
+    .iterum-radio-flip:hover .iterum-radio-flip-front::after,
+    .iterum-radio-flip:hover .iterum-radio-flip-back::after{ opacity:1; }
+  }
+  /* su touch non c'è hover: la card si gira con un tocco, l'etichetta lo dice */
+  @media (hover: none){
+    .iterum-radio-flip{ cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  }
+  .iterum-radio-tag{
+    position:absolute;
+    left:50%; bottom:14px;
+    transform: translateX(-50%);
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border-radius:999px;
+    background: rgba(23,20,15,.82);
+    color: var(--paper);
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.02em;
+    white-space:nowrap;
+    pointer-events:none;
+    z-index:2;
+  }
+  .iterum-radio-tag i{ color: var(--pop-terracotta); }
+  @media (hover: none){
+    .iterum-radio-tag.hint-touch{ display:inline-flex; }
+  }
   .iterum-radio-text{ flex:1; min-width:0; --more-c: var(--pop-terracotta); }
   /* su telefono il testo chiuso finisce col pulsante "Leggi di più" */
   @media (max-width:640px){
@@ -292,19 +372,19 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <a class="back-link" href="index.html#lavori">← Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Illustrazione &amp; mappa festival — Open air electronic</span>
       <h1>ÏTERUM <em>Apulian Electronic Monday</em></h1>
-      <p class="more" id="intro-more"><strong>ÏTERUM</strong> firma <strong>Apulian Electronic Monday</strong>, la giornata di musica elettronica open air che anima <strong>Il Giardino dei Tempi</strong>, l'Orto Botanico di Bari. Per la <strong>4ª edizione</strong> ho illustrato tutto l'immaginario visivo dell'evento: una <strong>mappa isometrica</strong> che trasforma il giardino in un percorso da scoprire — tra Main Stage, Pagoda Techno, Area Market e il Maze — e le <strong>scene illustrate</strong> che raccontano cosa succede in ogni angolo, dalla food area al fuoco che chiude la serata.<br><br>
-      Dalle 12 di mezzogiorno a mezzanotte, un'unica giornata disegnata a mano per orientare il pubblico tra i viali e, allo stesso tempo, raccontarne l'atmosfera.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <p class="more" id="intro-more"><strong>ÏTERUM</strong> firma <strong>Apulian Electronic Monday</strong>, la&nbsp;giornata di&nbsp;musica elettronica open air che&nbsp;anima <strong>Il&nbsp;Giardino dei&nbsp;Tempi</strong>, l'Orto Botanico di&nbsp;Bari.<br class="br-desk"><br class="br-mob"> Per&nbsp;la&nbsp;<strong>4ª edizione</strong> ho illustrato tutto l'immaginario visivo dell'evento: una&nbsp;<strong>mappa isometrica</strong> che&nbsp;trasforma il&nbsp;giardino in&nbsp;un&nbsp;percorso da&nbsp;scoprire — tra&nbsp;Main Stage, Pagoda Techno, Area Market e&nbsp;il&nbsp;Maze — e&nbsp;le&nbsp;<strong>scene illustrate</strong> che&nbsp;raccontano cosa succede in&nbsp;ogni angolo, dalla&nbsp;food area al&nbsp;fuoco che&nbsp;chiude la&nbsp;serata.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
+      Dalle&nbsp;12&nbsp;di&nbsp;mezzogiorno a&nbsp;mezzanotte, un'unica giornata disegnata a&nbsp;mano per&nbsp;orientare il&nbsp;pubblico tra&nbsp;i&nbsp;viali e, allo&nbsp;stesso tempo, raccontarne&nbsp;l'atmosfera.</p>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2025</span></div>
         <div class="meta-wide">Ruolo<span>Illustration · Graphic</span></div>
         <div>Output<span>Mappa · Illustrazioni · Social</span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary" href="https://www.behance.net/gallery/221511797/ITERUM-NIGHT-ORTO-BOTANICO" target="_blank" rel="noopener">Guarda il progetto su Behance&nbsp;↗</a>
+        <a class="btn-primary" href="https://www.behance.net/gallery/221511797/ITERUM-NIGHT-ORTO-BOTANICO" target="_blank" rel="noopener">Guarda il&nbsp;progetto su&nbsp;Behance&nbsp;↗</a>
         <a class="btn-icon" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
       </div>
     </div>
@@ -321,10 +401,11 @@
 
   <section class="iterum-scenes">
     <div class="wrap">
-      <span class="eyebrow">Dentro il festival</span>
-      <h2 class="section-title">Tre soste <br><strong><em>lungo il percorso</em></strong></h2>
+      <span class="eyebrow">Dentro il&nbsp;festival</span>
+      <h2 class="section-title">Tre soste <br><strong><em>lungo il&nbsp;percorso</em></strong></h2>
+      <p class="ps-hint"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>Passa sopra le&nbsp;scene per&nbsp;scoprire i&nbsp;dettagli.</p>
     </div>
-    <div class="photo-strip-grid">
+    <div class="wrap photo-strip-grid">
       <figure class="photo-strip-item">
         <div class="ps-frame">
           <img src="assets/images/ITERUM03.JPG" width="1080" height="1350" alt="ÏTERUM — illustrazione dell'Area Market, bancarelle e persone che ballano tra i viali" loading="lazy" decoding="async">
@@ -341,8 +422,11 @@
         <div class="ps-frame">
           <img src="assets/images/ITERUM04.JPG" width="1080" height="1350" alt="ÏTERUM — performance di fuoco tra il pubblico, a bordo giardino" loading="lazy" decoding="async">
         </div>
-        <figcaption><span class="ps-num">03</span><span class="ps-label">Il fuoco che chiude la notte</span></figcaption>
+        <figcaption><span class="ps-num">03</span><span class="ps-label">Il&nbsp;fuoco che&nbsp;chiude la&nbsp;notte</span></figcaption>
       </figure>
+    </div>
+    <div class="wrap ps-bar">
+      <div class="ps-progress" aria-hidden="true"><span></span></div>
     </div>
 
     <div class="wrap iterum-radio">
@@ -355,23 +439,24 @@
             <img src="assets/images/ITERUM_RADIO_02.jpg" width="1080" height="1350" alt="ÏTERUM Radio — copertina social della puntata in diretta dal festival" loading="lazy" decoding="async">
           </div>
         </div>
+        <span class="iterum-radio-tag hint-touch" aria-hidden="true"><i class="fa-solid fa-rotate" aria-hidden="true"></i>Tocca per&nbsp;girare</span>
       </div>
       <div class="iterum-radio-text">
         <h3>ÏTERUM Radio</h3>
-        <p class="more" id="radio-more" style="--more-h:7.85rem">In parallelo alla mappa e alle illustrazioni di scena, ho curato l'identità visiva di <strong>ÏTERUM Radio</strong>, l'apecar che ha accompagnato la giornata: grafiche pensate per il palinsesto e per i contenuti social condivisi in tempo reale durante l'evento.<br><br>
-        L’identità è stata quindi progettata per evolversi anche oltre l’evento, accompagnando <strong>ÏTERUM Radio</strong> nel suo percorso itinerante tra le diverse location della Puglia, con DJ set e appuntamenti musicali.</p>
-        <button type="button" class="more-btn" aria-expanded="false" aria-controls="radio-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <p class="more" id="radio-more" style="--more-h:7.85rem">In&nbsp;parallelo alla&nbsp;mappa e&nbsp;alle&nbsp;illustrazioni di&nbsp;scena, ho curato l'identità visiva di&nbsp;<strong>ÏTERUM Radio</strong>, l'apecar che&nbsp;ha accompagnato la&nbsp;giornata: grafiche pensate per&nbsp;il&nbsp;palinsesto e&nbsp;per&nbsp;i&nbsp;contenuti social condivisi in&nbsp;tempo reale durante&nbsp;l'evento.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
+        L’identità è&nbsp;stata quindi progettata per&nbsp;evolversi anche oltre l’evento, accompagnando <strong>ÏTERUM Radio</strong> nel&nbsp;suo percorso itinerante tra&nbsp;le&nbsp;diverse location della&nbsp;Puglia, con&nbsp;DJ set e&nbsp;appuntamenti&nbsp;musicali.</p>
+        <button type="button" class="more-btn" aria-expanded="false" aria-controls="radio-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       </div>
     </div>
   </section>
 
   <section class="project-end">
     <div class="wrap project-end-inner">
-      <h2 class="section-title">Illustrazione, wayfinding e social per festival?</h2>
-      <p>Scrivimi per costruire insieme il prossimo mondo da esplorare.</p>
+      <h2 class="section-title">Illustrazione, wayfinding e&nbsp;social per&nbsp;festival?</h2>
+      <p>Scrivimi per&nbsp;costruire insieme il&nbsp;prossimo mondo da&nbsp;esplorare.</p>
       <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto&nbsp;↗</a>
-        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto&nbsp;↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al&nbsp;portfolio</a>
       </div>
     </div>
   </section>
@@ -386,11 +471,101 @@
 <!-- /comune:footer -->
 
 <script>
+  // Scene su tablet/telefono: la griglia è un carosello (vedi CSS) e la
+  // barra sotto segue lo scroll. Su desktop non c'è niente da scorrere.
+  (() => {
+    const grid = document.querySelector('.iterum-scenes .photo-strip-grid');
+    const bar = document.querySelector('.ps-progress span');
+    if (!grid || !bar) return;
+    const updateBar = () => {
+      const max = grid.scrollWidth - grid.clientWidth;
+      const vis = grid.clientWidth / grid.scrollWidth;
+      bar.style.width = (vis * 100).toFixed(2) + '%';
+      bar.style.transform = 'translateX(' + (max ? (grid.scrollLeft / max) * (1 / vis - 1) * 100 : 0).toFixed(2) + '%)';
+    };
+    grid.addEventListener('scroll', updateBar, { passive: true });
+    window.addEventListener('resize', updateBar);
+    updateBar();
+  })();
+
+  // Lente sulle scene (solo pc, con le tre colonne): il disegno si ingrandisce
+  // e il punto sotto il cursore resta sotto il cursore. Scala e origine si
+  // avvicinano al bersaglio a ogni frame, così il movimento è morbido; il
+  // loop si ferma da solo quando l'immagine è ferma. Niente will-change: il
+  // browser ridisegna l'immagine alla nuova scala e i dettagli restano nitidi.
+  (() => {
+    const desk = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 821px)');
+    const zoom = 2.2;
+    const ease = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 0.16;
+    // il bordo del disegno si raggiunge prima del bordo della cornice
+    const edge = 0.08;
+    const clamp01 = v => Math.min(Math.max(v, 0), 1);
+
+    document.querySelectorAll('.iterum-scenes .ps-frame').forEach(frame => {
+      const img = frame.querySelector('img');
+      if (!img) return;
+      const current = { s: 1, x: 50, y: 50 };
+      const target = { s: 1, x: 50, y: 50 };
+      let rafId = null;
+
+      const tick = () => {
+        let delta = 0;
+        for (const key in current) {
+          const next = current[key] + (target[key] - current[key]) * ease;
+          delta += Math.abs(next - current[key]);
+          current[key] = next;
+        }
+        if (delta > 0.01) {
+          img.style.transformOrigin = current.x.toFixed(2) + '% ' + current.y.toFixed(2) + '%';
+          img.style.transform = 'scale(' + current.s.toFixed(4) + ')';
+          rafId = requestAnimationFrame(tick);
+        } else {
+          // tornata a riposo: via gli stili, l'immagine è di nuovo normale
+          if (target.s === 1) img.style.transform = img.style.transformOrigin = '';
+          rafId = null;
+        }
+      };
+      const start = () => { if (rafId === null) rafId = requestAnimationFrame(tick); };
+      const aim = (e) => {
+        const r = frame.getBoundingClientRect();
+        target.x = clamp01(((e.clientX - r.left) / r.width - edge) / (1 - 2 * edge)) * 100;
+        target.y = clamp01(((e.clientY - r.top) / r.height - edge) / (1 - 2 * edge)) * 100;
+      };
+
+      frame.addEventListener('mouseenter', (e) => {
+        if (!desk.matches) return;
+        aim(e);
+        // da fermi si parte già puntati sul cursore, senza scivolare dal
+        // centro; se lo zoom si sta ancora chiudendo prosegue da dov'è
+        if (current.s < 1.01) {
+          current.x = target.x;
+          current.y = target.y;
+        }
+        target.s = zoom;
+        start();
+      });
+      frame.addEventListener('mousemove', (e) => {
+        if (!desk.matches) return;
+        aim(e);
+        start();
+      });
+      frame.addEventListener('mouseleave', () => {
+        target.s = 1;
+        start();
+      });
+    });
+  })();
+
   document.querySelectorAll('.iterum-radio-flip').forEach(card => {
     const inner = card.querySelector('.iterum-radio-flip-inner');
-    if (!inner || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!inner) return;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canHover = matchMedia('(hover: hover)').matches;
+    if (reduceMotion && canHover) return;
+
     const maxTilt = 14;
-    const ease = 0.14;
+    // con meno movimento il tocco gira la card di colpo, senza animazione
+    const ease = reduceMotion ? 1 : 0.14;
     const settleThreshold = 0.02;
 
     let rect = null;
@@ -425,6 +600,16 @@
     const startLoop = () => {
       if (rafId === null) rafId = requestAnimationFrame(tick);
     };
+
+    // Su touch non c'è hover (e i browser simulano mouseenter al tocco):
+    // un tocco gira la card, il successivo la rimette dritta.
+    if (!canHover) {
+      card.addEventListener('click', () => {
+        target.flip = target.flip ? 0 : 180;
+        startLoop();
+      });
+      return;
+    }
 
     card.addEventListener('mouseenter', () => {
       rect = card.getBoundingClientRect();

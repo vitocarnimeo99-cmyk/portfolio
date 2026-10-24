@@ -54,18 +54,67 @@
   });
 })();
 
+// Protezione immagini: niente menu del tasto destro (o pressione lunga su
+// Android) né trascinamento su immagini, video e canvas, anche quando sono
+// coperti da un livello sopra. Il menu resta normale sul resto della pagina e
+// sui link di download (CV e portfolio). Ai video si toglie "Scarica" dai
+// controlli e Cmd/Ctrl+S non salva la pagina con le immagini.
+(function () {
+  const MEDIA = 'img, picture, video, canvas, svg image';
+  const isMedia = (el) => el instanceof Element && (el.matches(MEDIA) ||
+    /url\(/.test(getComputedStyle(el).backgroundImage));
+  const overMedia = (e) => {
+    if (e.target instanceof Element && e.target.closest('a[download]')) return false;
+    const stack = e.clientX || e.clientY
+      ? document.elementsFromPoint(e.clientX, e.clientY)
+      : [e.target];
+    return stack.some(isMedia);
+  };
+
+  document.addEventListener('contextmenu', (e) => {
+    if (overMedia(e)) e.preventDefault();
+  });
+  document.addEventListener('dragstart', (e) => {
+    if (e.target instanceof Element && e.target.matches(MEDIA)) e.preventDefault();
+  });
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') e.preventDefault();
+  });
+  document.querySelectorAll('video').forEach((v) => {
+    v.setAttribute('controlsList', 'nodownload');
+    v.disablePictureInPicture = true;
+  });
+})();
+
 // Autoplay solo quando il video è visibile in viewport: senza questo, tutti
 // i video della griglia partirebbero insieme al caricamento della pagina
 // anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
 const lazyVideos = document.querySelectorAll('video.art');
 
-// Video con una versione dedicata al mobile (es. Raf 40): anche il poster
-// deve essere quello della versione mobile, con lo stesso taglio.
-if (window.matchMedia('(max-width: 820px)').matches) {
-  document.querySelectorAll('video[data-poster-mobile]').forEach(video => {
-    video.poster = video.dataset.posterMobile;
+// Video con una versione dedicata al mobile (es. Raf 40): sotto gli 820px
+// video e poster vengono scambiati con quelli della versione mobile, con lo
+// stesso taglio della card. Lo scambio è esplicito perché l'attributo media
+// del <source> viene letto una volta sola e alcuni browser lo ignorano.
+const mobileVideoQuery = window.matchMedia('(max-width: 820px)');
+const mobileVideos = document.querySelectorAll('video[data-src-mobile]');
+mobileVideos.forEach(video => {
+  video.dataset.srcDesktop = video.querySelector('source:not([media])').getAttribute('src');
+  video.dataset.posterDesktop = video.getAttribute('poster');
+});
+const applyMobileVideos = () => {
+  const isMobile = mobileVideoQuery.matches;
+  mobileVideos.forEach(video => {
+    const src = isMobile ? video.dataset.srcMobile : video.dataset.srcDesktop;
+    if (video.getAttribute('src') === src) return;
+    const wasPlaying = !video.paused;
+    video.poster = isMobile ? video.dataset.posterMobile : video.dataset.posterDesktop;
+    video.src = src;
+    video.load();
+    if (wasPlaying) video.play().catch(() => {});
   });
-}
+};
+applyMobileVideos();
+mobileVideoQuery.addEventListener('change', applyMobileVideos);
 if ('IntersectionObserver' in window) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
