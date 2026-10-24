@@ -91,13 +91,30 @@
 // anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
 const lazyVideos = document.querySelectorAll('video.art');
 
-// Video con una versione dedicata al mobile (es. Raf 40): anche il poster
-// deve essere quello della versione mobile, con lo stesso taglio.
-if (window.matchMedia('(max-width: 820px)').matches) {
-  document.querySelectorAll('video[data-poster-mobile]').forEach(video => {
-    video.poster = video.dataset.posterMobile;
+// Video con una versione dedicata al mobile (es. Raf 40): sotto gli 820px
+// video e poster vengono scambiati con quelli della versione mobile, con lo
+// stesso taglio della card. Lo scambio è esplicito perché l'attributo media
+// del <source> viene letto una volta sola e alcuni browser lo ignorano.
+const mobileVideoQuery = window.matchMedia('(max-width: 820px)');
+const mobileVideos = document.querySelectorAll('video[data-src-mobile]');
+mobileVideos.forEach(video => {
+  video.dataset.srcDesktop = video.querySelector('source:not([media])').getAttribute('src');
+  video.dataset.posterDesktop = video.getAttribute('poster');
+});
+const applyMobileVideos = () => {
+  const isMobile = mobileVideoQuery.matches;
+  mobileVideos.forEach(video => {
+    const src = isMobile ? video.dataset.srcMobile : video.dataset.srcDesktop;
+    if (video.getAttribute('src') === src) return;
+    const wasPlaying = !video.paused;
+    video.poster = isMobile ? video.dataset.posterMobile : video.dataset.posterDesktop;
+    video.src = src;
+    video.load();
+    if (wasPlaying) video.play().catch(() => {});
   });
-}
+};
+applyMobileVideos();
+mobileVideoQuery.addEventListener('change', applyMobileVideos);
 if ('IntersectionObserver' in window) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
