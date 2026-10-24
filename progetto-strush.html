@@ -271,6 +271,12 @@
   @media (max-width:980px){
     .geo-grid{ grid-template-columns:minmax(0, 1fr); gap:36px; }
     .geo-stage{ width:100%; max-width:460px; justify-self:center; }
+    /* In colonna il video segue subito il testo e i social chiudono la
+       sezione: la colonna del testo si scioglie nella griglia */
+    .geo-grid{ gap:0; }
+    .geo-side{ display:contents; }
+    .geo-stage{ margin-top:36px; }
+    .geo-follow{ order:1; }
   }
 
   /* -------- Brand manual: fascicolo spillato da sfogliare. Aperto mostra
@@ -815,21 +821,31 @@
     .st-get-grid{ grid-template-columns:minmax(0, 1fr); gap:40px; }
     .phones{ height:670px; width:100%; max-width:440px; margin:0 auto; }
   }
+  /* Su telefono la sezione si accorcia: telefoni più piccoli, blocchi più
+     vicini e i due badge degli store affiancati (si impilano solo quando
+     non c'è posto) */
   @media (max-width:480px){
-    .phones{ height:530px; }
-    .phone{ width:215px; border-radius:36px; padding:8px; }
-    .phone-screen{ border-radius:28px; }
-    .phone--front{ left:calc(100% - 215px); top:30px; }
-    .phone--back{ left:0; }
-    .st-get-sticker{ width:116px; }
-    .store-badge{ min-width:0; width:100%; }
-    .store{ width:100%; }
+    .st-get-grid{ gap:32px; }
+    .st-get-lead{ margin-bottom:24px; }
+    .app-card{ margin-bottom:20px; }
+    .phones{ height:460px; }
+    .phone{ width:190px; border-radius:32px; padding:8px; }
+    .phone-screen{ border-radius:25px; }
+    .phone--front{ left:calc(100% - 200px); top:24px; }
+    .phone--back{ left:10px; }
+    .stores{ gap:12px; }
+    .store{ flex:1 1 150px; }
+    .store-badge{ min-width:0; width:100%; gap:10px; padding:10px 14px 10px 12px; }
+    .store-badge i{ font-size:1.5rem; width:24px; }
+    .store-badge b{ font-size:1.08rem; }
   }
-  /* Sui telefoni più stretti lo sticker affianca "è gratis", la riga corta,
-     così "Scarica Strush," resta su una riga sola */
-  @media (max-width:400px){
-    .st-get-head{ position:relative; margin-bottom:40px; }
-    .st-get-sticker{ position:absolute; right:0; bottom:-30px; width:105px; }
+  /* Su telefono lo sticker esce dalla riga del titolo e si appoggia sopra,
+     in alto a destra accanto all'occhiello, così non copre più le scritte;
+     l'occhiello si stringe per lasciargli posto */
+  @media (max-width:560px){
+    .st-get-head{ position:relative; display:block; }
+    .st-get .eyebrow{ max-width:58%; }
+    .st-get-sticker{ position:absolute; right:-14px; bottom:calc(100% + 4px); width:124px; transform:rotate(8deg); }
   }
 
   /* -------- Chiusura: il team -------- */
@@ -874,8 +890,13 @@
   .team-list li.is-me b{ color: var(--st-lilac); }
   .team-read{ display:inline-flex; gap:8px; margin-top:22px; font-size:0.9rem; font-weight:700; color: var(--st-green); }
   @media (max-width:980px){
-    .st-end{ grid-template-columns:1fr; gap:40px; }
+    .st-end{ grid-template-columns:1fr; gap:0; }
     .team-card{ transform:none; }
+    /* In colonna la team-card segue subito il testo e i bottoni chiudono la
+       pagina; "Visita strush.it" sparisce perché la card porta già al sito */
+    .st-end > div{ display:contents; }
+    .st-end .project-links{ order:1; margin-top:32px; }
+    .st-end .btn-site{ display:none; }
   }
   @media (max-width:420px){
     .team-list li{ flex-direction:column; gap:0; }
@@ -897,6 +918,9 @@
   @media (max-width:640px){
     .st-get{ padding:60px 0; }
     .pano-scroller{ padding:32px 0 40px; }
+    /* Il testo resta attaccato al suo titolo */
+    .st-head{ gap:20px; }
+    .geo-side .section-title{ margin-bottom:20px; }
   }
 </style>
 </head>
@@ -921,12 +945,12 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <a class="back-link" href="index.html#lavori">← Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Brand identity & App - Strush S.R.L.s</span>
       <h1>Strush <em>Fintech Startup</em></h1>
-      <p class="more" id="intro-more"><strong>Strush</strong> è l'app di finanza personale che rende l'educazione finanziaria <strong>a misura di Gen Z</strong>: tieni traccia delle spese, imposti un budget, dividi i conti con gli amici e ti fai consigliare da <strong>Bernardino</strong>, il coach personale che ti dice le cose come stanno.<br><br>
-      Del progetto sono <strong>Co-founder &amp; Art Director</strong>. Ho costruito l'identità del brand da zero: il logo e la sua costruzione geometrica, la mascotte, la palette e il brand manual, fino alle illustrazioni, agli sticker e alle schermate con cui l'app si presenta sugli store.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <p class="more" id="intro-more"><strong>Strush</strong> è&nbsp;l'app di&nbsp;finanza personale che&nbsp;rende l'educazione finanziaria <strong>a&nbsp;misura di&nbsp;Gen Z</strong>: tieni traccia delle&nbsp;spese, imposti un&nbsp;budget, dividi i&nbsp;conti con&nbsp;gli&nbsp;amici e&nbsp;ti fai consigliare da&nbsp;<strong>Bernardino</strong>, il&nbsp;coach personale che&nbsp;ti dice le&nbsp;cose come&nbsp;stanno.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
+      Del&nbsp;progetto sono <strong>Co-founder &amp; Art&nbsp;Director</strong>.<br class="br-desk"><br class="br-mob"> Ho costruito l'identità del&nbsp;brand da&nbsp;zero: il&nbsp;logo e&nbsp;la&nbsp;sua costruzione geometrica, la&nbsp;mascotte, la&nbsp;palette e&nbsp;il&nbsp;brand manual, fino alle&nbsp;illustrazioni, agli&nbsp;sticker e&nbsp;alle&nbsp;schermate con&nbsp;cui l'app si&nbsp;presenta sugli&nbsp;store.</p>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2025 — oggi</span></div>
         <div class="meta-wide">Ruolo<span>Co-founder &amp; Art Director</span></div>
@@ -949,26 +973,26 @@
 
   <div class="ticker-wrap st-ticker" aria-hidden="true">
     <div class="ticker">
-      <span class="ticker-item">I soldi non crescono <em>sugli alberi</em></span>
+      <span class="ticker-item">I&nbsp;soldi non&nbsp;crescono <em>sugli&nbsp;alberi</em></span>
       <span class="ticker-sep">✱</span>
       <span class="ticker-item">Strush <em>[strù-sh]</em> · dialetto barese</span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Educazione finanziaria <em>a misura di Gen Z</em></span>
+      <span class="ticker-item">Educazione finanziaria <em>a&nbsp;misura di&nbsp;Gen Z</em></span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Fatti consigliare da <em>Bernardino</em></span>
+      <span class="ticker-item">Fatti consigliare da&nbsp;<em>Bernardino</em></span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Disponibile su <em>App Store e Google Play</em></span>
+      <span class="ticker-item">Disponibile su&nbsp;<em>App Store e&nbsp;Google Play</em></span>
       <span class="ticker-sep">✱</span>
       <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
-      <span class="ticker-item">I soldi non crescono <em>sugli alberi</em></span>
+      <span class="ticker-item">I&nbsp;soldi non&nbsp;crescono <em>sugli&nbsp;alberi</em></span>
       <span class="ticker-sep">✱</span>
       <span class="ticker-item">Strush <em>[strù-sh]</em> · dialetto barese</span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Educazione finanziaria <em>a misura di Gen Z</em></span>
+      <span class="ticker-item">Educazione finanziaria <em>a&nbsp;misura di&nbsp;Gen Z</em></span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Fatti consigliare da <em>Bernardino</em></span>
+      <span class="ticker-item">Fatti consigliare da&nbsp;<em>Bernardino</em></span>
       <span class="ticker-sep">✱</span>
-      <span class="ticker-item">Disponibile su <em>App Store e Google Play</em></span>
+      <span class="ticker-item">Disponibile su&nbsp;<em>App Store e&nbsp;Google Play</em></span>
       <span class="ticker-sep">✱</span>
     </div>
   </div>
@@ -976,14 +1000,14 @@
   <section class="st-section st-name">
     <div class="wrap st-name-grid">
       <div>
-        <span class="eyebrow">Il nome · Da dove nasce</span>
+        <span class="eyebrow">Il&nbsp;nome · Da&nbsp;dove nasce</span>
         <article class="st-entry">
           <h2 class="st-entry-word">strush <span>[struʃ]</span></h2>
-          <p class="st-entry-gram">&lt;strù-sh&gt; v.tr. in dialetto barese</p>
-          <p class="st-entry-def"><strong>Pagare, sborsare denaro</strong>, spesso con riluttanza o per obbligo. Usato in contesti informali, spesso con tono ironico.</p>
+          <p class="st-entry-gram">&lt;strù-sh&gt; v.tr. in&nbsp;dialetto&nbsp;barese</p>
+          <p class="st-entry-def"><strong>Pagare, sborsare denaro</strong>, spesso con&nbsp;riluttanza o&nbsp;per&nbsp;obbligo.<br class="br-desk"><br class="br-mob"> Usato in&nbsp;contesti informali, spesso con&nbsp;tono&nbsp;ironico.</p>
           <ul class="st-entry-ex">
-            <li><q>Cud s' strusce tutt' l terris!</q><small>Quello spreca tutti i soldi!</small></li>
-            <li><q>T strusce cient' eur' alla dì!</q><small>Spendi cento euro al giorno!</small></li>
+            <li><q>Cud s' strusce tutt' l terris!</q><small>Quello spreca tutti i&nbsp;soldi!</small></li>
+            <li><q>T strusce cient' eur' alla&nbsp;dì!</q><small>Spendi cento euro al&nbsp;giorno!</small></li>
           </ul>
         </article>
       </div>
@@ -993,19 +1017,19 @@
         <ul class="st-values">
           <li class="st-value">
             <span class="st-value-icon"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i></span>
-            <div><strong>Chiarezza</strong><p>Un'esperienza d'uso semplice e piacevole, che parli come un amico e agisca come un alleato.</p></div>
+            <div><strong>Chiarezza</strong><p>Un'esperienza d'uso semplice e&nbsp;piacevole, che&nbsp;parli come un&nbsp;amico e&nbsp;agisca come un&nbsp;alleato.</p></div>
           </li>
           <li class="st-value">
             <span class="st-value-icon"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></span>
-            <div><strong>Connessione</strong><p>Connessioni reali e digitali, in un ecosistema dove l'empatia guida ogni scelta condivisa.</p></div>
+            <div><strong>Connessione</strong><p>Connessioni reali e&nbsp;digitali, in&nbsp;un&nbsp;ecosistema dove l'empatia guida ogni scelta&nbsp;condivisa.</p></div>
           </li>
           <li class="st-value">
             <span class="st-value-icon"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></span>
-            <div><strong>Progressione</strong><p>Aiutare le persone a migliorarsi e a prendersi cura delle proprie spese, con strumenti semplici e motivanti.</p></div>
+            <div><strong>Progressione</strong><p>Aiutare le&nbsp;persone a&nbsp;migliorarsi e&nbsp;a&nbsp;prendersi cura delle&nbsp;proprie spese, con&nbsp;strumenti semplici e&nbsp;motivanti.</p></div>
           </li>
         </ul>
         </div>
-        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="st-values-more" data-less="Mostra meno">Vedi tutti i valori <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="st-values-more" data-less="Mostra meno">Vedi tutti i&nbsp;valori <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         <span class="st-traits-label">Brand personality</span>
         <ul class="st-traits">
           <li>Amichevole</li>
@@ -1021,17 +1045,17 @@
     <div class="wrap geo-grid">
       <div class="geo-side">
         <span class="eyebrow">Costruzione geometrica</span>
-        <h2 class="section-title">Il nostro pittogramma</h2>
+        <h2 class="section-title">Il&nbsp;nostro pittogramma</h2>
         <div class="more" id="geo-more" style="--more-h:7.65rem">
         <div class="geo-text">
-          <p>Ogni app di finanza ha bisogno di qualcuno che ti guardi il portafoglio. Noi abbiamo scelto un T-rex 🦖</p>
-          <p>Ecco <strong>Dinuccio</strong>, il pittogramma di Strush, costruito pezzo per pezzo su una griglia geometrica.</p>
-          <p>Perché un T-rex? Ha il braccino corto. Anche volendo, al portafoglio non ci arriva 💸</p>
+          <p>Ogni app di&nbsp;finanza ha bisogno di&nbsp;qualcuno che&nbsp;ti guardi il&nbsp;portafoglio.<br class="br-desk"><br class="br-mob"> Noi abbiamo scelto un&nbsp;T-rex&nbsp;🦖</p>
+          <p>Ecco <strong>Dinuccio</strong>, il&nbsp;pittogramma di&nbsp;Strush, costruito pezzo per&nbsp;pezzo su&nbsp;una&nbsp;griglia&nbsp;geometrica.</p>
+          <p>Perché un&nbsp;T-rex?<br class="br-desk"><br class="br-mob"> Ha il&nbsp;braccino&nbsp;corto.<br class="br-desk"><br class="br-mob"> Anche volendo, al&nbsp;portafoglio non&nbsp;ci&nbsp;arriva&nbsp;💸</p>
         </div>
         </div>
-        <button type="button" class="more-btn" aria-expanded="false" aria-controls="geo-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="more-btn" aria-expanded="false" aria-controls="geo-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         <div class="geo-follow">
-          <span class="st-traits-label">Segui Strush sui social</span>
+          <span class="st-traits-label">Segui Strush sui&nbsp;social</span>
           <ul class="social">
             <li><a href="https://www.instagram.com/strush.it/" target="_blank" rel="noopener" aria-label="Strush su Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
             <li><a href="https://www.tiktok.com/@strush.it" target="_blank" rel="noopener" aria-label="Strush su TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a></li>
@@ -1052,10 +1076,10 @@
     <div class="wrap">
       <div class="st-head">
         <div>
-          <span class="eyebrow">Brand manual · 32 pagine</span>
-          <h2 class="section-title">Linee Guida<br>del <em>marchio</em></h2>
+          <span class="eyebrow">Brand manual · 32&nbsp;pagine</span>
+          <h2 class="section-title">Linee Guida<br>del&nbsp;<em>marchio</em></h2>
         </div>
-        <p>Valori, tono di voce, palette, tipografia, elementi visivi, animazioni, logo e usi scorretti: tutto il sistema di Strush in un unico manuale. Trascina le pagine, cliccale o usa le frecce per sfogliarlo.</p>
+        <p>Valori, tono di&nbsp;voce, palette, tipografia, elementi visivi, animazioni, logo e&nbsp;usi scorretti: tutto il&nbsp;sistema di&nbsp;Strush in&nbsp;un&nbsp;unico&nbsp;manuale.<br class="br-desk"><br class="br-mob"> Trascina le&nbsp;pagine, cliccale o&nbsp;usa le&nbsp;frecce per&nbsp;sfogliarlo.</p>
       </div>
       <div class="fb" id="fb" tabindex="0" role="group" aria-roledescription="fascicolo" aria-label="Brand manual di Strush" data-pages="32" data-src="assets/images/STRUSH/brand-manual-web/manual_{n}.jpg">
         <div class="fb-stage">
@@ -1080,9 +1104,9 @@
       <div class="st-head">
         <div>
           <span class="eyebrow">Store assets · Carosello</span>
-          <h2 class="section-title">Cosa puoi fare<br>con Strush?</h2>
+          <h2 class="section-title">Cosa puoi fare<br>con&nbsp;Strush?</h2>
         </div>
-        <p>Monitora entrate e uscite, imposta un budget, dividi le spese con amici e coinquilini e segui i tuoi progressi con grafici chiari, mentre il coach Strush analizza le tue abitudini. La finanza personale, finalmente semplice, consapevole e positiva.</p>
+        <p>Monitora entrate e&nbsp;uscite, imposta un&nbsp;budget, dividi le&nbsp;spese con&nbsp;amici e&nbsp;coinquilini e&nbsp;segui i&nbsp;tuoi progressi con&nbsp;grafici chiari, mentre il&nbsp;coach Strush analizza le&nbsp;tue&nbsp;abitudini.<br class="br-desk"><br class="br-mob"> La&nbsp;finanza personale, finalmente semplice, consapevole e&nbsp;positiva.</p>
       </div>
     </div>
     <div class="pano-scroller" tabindex="0" aria-label="Carosello delle schermate di Strush, scorri in orizzontale">
@@ -1098,7 +1122,7 @@
     </div>
     <div class="wrap pano-bar">
       <div class="pano-progress" aria-hidden="true"><span></span></div>
-      <span class="pano-hint">Trascina per scorrere</span>
+      <span class="pano-hint">Trascina per&nbsp;scorrere</span>
     </div>
   </section>
 
@@ -1107,12 +1131,12 @@
       <div class="st-head">
         <div>
           <span class="eyebrow">Illustrazioni · Sticker pack</span>
-          <h2 class="section-title">Bernardino,<br>in tutte le salse</h2>
+          <h2 class="section-title">Bernardino,<br>in&nbsp;tutte le&nbsp;salse</h2>
         </div>
-        <p>Il calendario delle scadenze, il grafico che sale, il salvadanaio, il conto che piange...<br>Prendili, spostali e attaccali dove vuoi.</p>
+        <p>Il&nbsp;calendario delle&nbsp;scadenze, il&nbsp;grafico che&nbsp;sale, il&nbsp;salvadanaio, il&nbsp;conto che&nbsp;piange...<br class="br-desk"><br class="br-mob">Prendili, spostali e&nbsp;attaccali dove&nbsp;vuoi.</p>
       </div>
       <div class="st-board" id="board">
-        <p class="st-board-tip" aria-hidden="true">Attaccali dove vuoi</p>
+        <p class="st-board-tip" aria-hidden="true">Attaccali dove&nbsp;vuoi</p>
         <button class="sticker" type="button" style="--k:1.108" aria-label="Sticker: Bernardino con il calendario delle scadenze"><img src="assets/images/STRUSH/STICKER/STICKER_01.png" width="616" height="502" alt="" loading="lazy"></button>
         <button class="sticker" type="button" style="--k:1.084" aria-label="Sticker: Bernardino davanti al grafico che sale"><img src="assets/images/STRUSH/STICKER/STICKER_02.png" width="638" height="543" alt="" loading="lazy"></button>
         <button class="sticker" type="button" style="--k:1.014" aria-label="Sticker: Bernardino con il sacco dei soldi"><img src="assets/images/STRUSH/STICKER/STICKER_03.png" width="592" height="576" alt="" loading="lazy"></button>
@@ -1123,7 +1147,7 @@
         <button class="sticker" type="button" style="--k:0.986" aria-label="Sticker: Bernardino che abbraccia i soldi"><img src="assets/images/STRUSH/STICKER/STICKER_08.png" width="712" height="733" alt="" loading="lazy"></button>
       </div>
       <div class="board-bar">
-        <p>Trascina gli sticker · un tocco per farli saltare</p>
+        <p>Trascina gli&nbsp;sticker · un&nbsp;tocco per&nbsp;farli&nbsp;saltare</p>
         <div class="board-actions">
           <button class="board-btn" type="button" data-board="shuffle"><i class="fa-solid fa-shuffle" aria-hidden="true"></i>Rimescola</button>
           <button class="board-btn" type="button" data-board="grid"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>Riordina</button>
@@ -1148,12 +1172,12 @@
     </svg>
     <div class="wrap st-get-grid">
       <div>
-        <span class="eyebrow">Disponibile ora · iOS e Android</span>
+        <span class="eyebrow">Disponibile ora · iOS&nbsp;e&nbsp;Android</span>
         <div class="st-get-head">
           <h2 class="section-title">Scarica Strush,<br><em>inizia questo viaggio.</em></h2>
           <img class="st-get-sticker" src="assets/images/STRUSH/STICKER/STICKER_07.png" width="438" height="356" alt="" aria-hidden="true" loading="lazy">
         </div>
-        <p class="st-get-lead">Strush è online su App Store e Google Play: un'app vera, usata ogni giorno per tenere a bada le spese. Scaricala e fatti dire da Bernardino quanto stai strusciando.</p>
+        <p class="st-get-lead">Strush è&nbsp;online su&nbsp;App Store e&nbsp;Google Play: un'app vera, usata ogni giorno per&nbsp;tenere a&nbsp;bada le&nbsp;spese.<br class="br-desk"><br class="br-mob"> Scaricala e&nbsp;fatti dire da&nbsp;Bernardino quanto stai&nbsp;strusciando.</p>
         <div class="app-card">
           <span class="app-icon"><img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt=""></span>
           <div>
@@ -1173,14 +1197,14 @@
               <i class="fa-brands fa-apple" aria-hidden="true"></i>
               <span><small>Scarica su</small><b>App Store</b></span>
             </a>
-            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://apps.apple.com/it/app/strush/id6766820241"></div>Inquadra con l'iPhone</div>
+            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://apps.apple.com/it/app/strush/id6766820241"></div>Inquadra con&nbsp;l'iPhone</div>
           </div>
           <div class="store">
             <a class="store-badge" href="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med" target="_blank" rel="noopener">
               <i class="fa-brands fa-google-play" aria-hidden="true"></i>
               <span><small>Disponibile su</small><b>Google Play</b></span>
             </a>
-            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med"></div>Inquadra con Android</div>
+            <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med"></div>Inquadra con&nbsp;Android</div>
           </div>
         </div>
       </div>
@@ -1199,12 +1223,12 @@
   <section class="project-end">
     <div class="wrap st-end">
       <div>
-        <h2 class="section-title">I soldi non crescono<br><em>sugli alberi ;)</em></h2>
-        <p>Ma con le app giuste si gestiscono meglio. Strush è una startup nata per rendere l'educazione finanziaria semplice, ironica e alla portata di tutti.</p>
+        <h2 class="section-title">I&nbsp;soldi non&nbsp;crescono<br><em>sugli&nbsp;alberi ;)</em></h2>
+        <p>Ma&nbsp;con&nbsp;le&nbsp;app giuste si&nbsp;gestiscono&nbsp;meglio.<br class="br-desk"><br class="br-mob"> Strush è&nbsp;una&nbsp;startup nata per&nbsp;rendere l'educazione finanziaria semplice, ironica e&nbsp;alla&nbsp;portata di&nbsp;tutti.</p>
         <div class="project-links">
           <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="fa-solid fa-globe" aria-hidden="true"></i>Visita strush.it&nbsp;↗</a>
-          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto&nbsp;↗</a>
-          <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto&nbsp;↗</a>
+          <a class="btn-ghost" href="index.html#lavori">← Torna al&nbsp;portfolio</a>
         </div>
       </div>
       <a class="team-card" href="https://www.strush.it/" target="_blank" rel="noopener" aria-label="Vai al sito di Strush">
@@ -1212,14 +1236,14 @@
           <img src="assets/images/STRUSH/GEOMETRIC CONSTRUCTION/GEOMETRIC CONSTRUCTION_03.png" width="885" height="796" alt="">
           <span><strong>Strush</strong><small>Startup fintech · Strush SRLS</small></span>
         </span>
-        <blockquote>Rendere l'educazione finanziaria a misura di Gen Z.</blockquote>
+        <blockquote>Rendere l'educazione finanziaria a&nbsp;misura di&nbsp;Gen Z.</blockquote>
         <ul class="team-list">
           <li><b>Cristiano Miolla</b><span>CEO &amp; Founder</span></li>
           <li class="is-me"><b>Vito Mariano Carnimeo</b><span>Co-founder &amp; Art Director</span></li>
-          <li><b>Silvano Sorino</b><span>Game Designer</span></li>
+          <li><b>Silvano Sorino</b><span>Co-founder &amp; Game Designer</span></li>
           <li><b>Giuseppe Santoro</b><span>UI/UX Designer</span></li>
         </ul>
-        <span class="team-read">Vai su strush.it ↗</span>
+        <span class="team-read">Vai su&nbsp;strush.it ↗</span>
       </a>
     </div>
   </section>
@@ -1284,7 +1308,10 @@
   })();
 
   // Costruzione geometrica: il video gira solo mentre la sezione è in vista.
-  // Con le animazioni ridotte resta fermo sul poster, che è il pittogramma
+  // Parte quando la card è quasi tutta sullo schermo: mentre entra si vede
+  // il poster col pittogramma finito invece dei primi fotogrammi, quasi
+  // bianchi, e la costruzione comincia sotto gli occhi. Al primo avvio salta
+  // il mezzo secondo iniziale, tutto vuoto. Con le animazioni ridotte resta fermo sul poster, che è il pittogramma
   // finito, finché non si attiva l'audio. Parte sempre muto: l'audio lo
   // accende il pulsante.
   (function () {
@@ -1301,10 +1328,13 @@
     });
     if (reduceMotion) return;
     if (!('IntersectionObserver' in window)) { video.play().catch(() => {}); return; }
+    let started = false;
     new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) video.play().catch(() => {});
-      else video.pause();
-    }, { threshold: 0.35 }).observe(video);
+      if (entries[0].isIntersecting) {
+        if (!started) { started = true; video.currentTime = 0.5; }
+        video.play().catch(() => {});
+      } else video.pause();
+    }, { threshold: 0.6 }).observe(video);
   })();
 
   // Brand manual: fascicolo spillato. Ogni foglio ha una pagina dispari sul

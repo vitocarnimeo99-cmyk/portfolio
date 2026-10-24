@@ -166,10 +166,14 @@
 
   @media (max-width:980px){
     .shallo-hero-art{ width:380px; margin:36px auto 40px; }
+    /* In colonna il poster sale sopra il testo: sotto resta posto per
+       "Clicca per brindare", che sta fuori dalla card, così non si attacca
+       all'occhiello che segue */
+    .project-hero > .project-hero-text ~ .shallo-hero-art{ margin-bottom:76px; }
   }
   @media (max-width:560px){
     .shallo-hero-art{ flex:0 0 auto; width:100%; max-width:380px; }
-    .shallo-badge{ right:-8px; top:-18px; width:90px; height:90px; font-size:0.54rem; }
+    .shallo-badge{ right:-8px; top:-18px; width:90px; height:90px; font-size:0.66rem; }
     .shallo-badge b{ font-size:1.9rem; }
   }
 
@@ -217,7 +221,7 @@
     transition: color .2s ease, padding-left .25s ease;
   }
   .char-notes li:last-child .char-note{ border-bottom:1px solid var(--line); }
-  .char-note .cn-num{ font-weight:700; color: var(--accent); font-size:0.95rem; }
+  .char-note .cn-num{ flex:0 0 22px; font-weight:700; color: var(--accent); font-size:0.95rem; font-variant-numeric: tabular-nums; }
   .char-note .cn-label{ font-weight:700; font-size:1.02rem; }
   .char-note .cn-meta{ margin-left:auto; font-size:0.85rem; color: var(--ink-soft); }
   .char-note:hover, .char-note.is-active{ padding-left:10px; color: var(--accent); }
@@ -272,9 +276,15 @@
     z-index:1;
   }
   .char-frame.is-looking .char-tag{ opacity:0; }
+  /* Col dito sulla lente il trascinamento la sposta invece di scorrere la pagina */
+  .char-frame.is-touch{ touch-action:none; }
   @media (max-width:880px){
     .char-grid{ grid-template-columns:1fr; gap:40px; }
     .char-frame{ transform:none; }
+  }
+  /* Su telefono la lente è più piccola: sull'illustrazione stretta resta spazio per spostarla */
+  @media (max-width:560px){
+    .char-loupe{ width:180px; height:180px; margin:-90px 0 0 -90px; }
   }
 
   /* -------- Merch: configuratore t-shirt -------- */
@@ -408,9 +418,17 @@
   .merch-thumb.is-active{ opacity:1; border-color: var(--accent); transform: translateY(-3px); }
   .merch-thumb:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
+  /* In colonna prima il titolo e il testo, poi la maglietta, poi le
+     miniature in fila: la colonna di testo si scioglie nella griglia. Le
+     miniature bastano a scegliere colore e lato, i bottoni spariscono */
   @media (max-width:980px){
-    .merch-grid{ grid-template-columns:1fr; gap:44px; }
-    .merch-stage{ order:-1; width:min(100%, 540px); margin:0 auto; }
+    .merch-grid{ grid-template-columns:1fr; gap:0; }
+    .merch-side{ display:contents; }
+    .merch-side > .eyebrow{ justify-self:start; }
+    .merch-stage{ order:1; width:min(100%, 540px); margin:0 auto; }
+    .merch-now, .merch-thumbs{ order:2; }
+    .merch-group{ display:none; }
+    .merch-thumbs{ grid-template-columns:repeat(4, 1fr); max-width:none; margin-top:20px; }
   }
 
   /* -------- La festa: fisarmonica di foto su un'unica riga -------- */
@@ -525,6 +543,10 @@
   /* Su mobile le sezioni di questa pagina sono meno distanziate */
   @media (max-width:640px){
     .shallo-merch{ padding:56px 0 60px; }
+    /* Titoli più compatti e testo attaccato al suo titolo */
+    main h2.section-title{ line-height:1.2; }
+    .char-text p, .merch-side > p, .shallo-party .wrap > p{ margin-top:-28px; }
+    .project-end .section-title{ margin-bottom:20px; }
   }
 </style>
 </head>
@@ -549,19 +571,19 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori">← Torna ai lavori</a>
+      <a class="back-link" href="index.html#lavori">← Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Campagna anniversario — Burro Studio</span>
-      <h1>Shallo Beer Shop <em>7 Years, Milano</em></h1>
-      <p class="more" id="intro-more">Campagna ideata per celebrare il <strong>settimo anniversario</strong> di una delle birrerie più rinomate e apprezzate di Milano: <strong>Shallo – Beer Shop</strong>.<br><br>
-      Ho curato <strong>illustrazione e type design</strong>: una lattina di birra artigianale che se ne va a spasso nel bosco, disegnata in stile cartoon anni '30, e un lettering "Shallo" morbido e gonfio. Il disegno è diventato il volto del <strong>poster dell'evento</strong> in Piazza Mirabello e di una serie di <strong>t-shirt celebrative</strong>. Art direction e graphic design di Burro Studio.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <h1>Shallo Beer Shop <em>7&nbsp;Years, Milano</em></h1>
+      <p class="more" id="intro-more">Campagna ideata per&nbsp;celebrare il&nbsp;<strong>settimo anniversario</strong> di&nbsp;una&nbsp;delle&nbsp;birrerie più rinomate e&nbsp;apprezzate di&nbsp;Milano: <strong>Shallo – Beer&nbsp;Shop</strong>.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
+      Ho curato <strong>illustrazione e&nbsp;type design</strong>: una&nbsp;lattina di&nbsp;birra artigianale che&nbsp;se&nbsp;ne&nbsp;va a&nbsp;spasso nel&nbsp;bosco, disegnata in&nbsp;stile cartoon anni '30, e&nbsp;un&nbsp;lettering "Shallo" morbido e&nbsp;gonfio.<br class="br-desk"><br class="br-mob"> Il&nbsp;disegno è&nbsp;diventato il&nbsp;volto del&nbsp;<strong>poster dell'evento</strong> in&nbsp;Piazza Mirabello e&nbsp;di&nbsp;una&nbsp;serie di&nbsp;<strong>t-shirt&nbsp;celebrative</strong>.<br class="br-desk"><br class="br-mob"> Art direction e&nbsp;graphic design di&nbsp;Burro&nbsp;Studio.</p>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
       <div class="project-meta">
         <div>Anno<span>2022</span></div>
         <div>Ruolo<span>Illustration · Graphic</span></div>
         <div class="meta-wide">Output<span>Poster · Sticker · T-shirt</span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary" href="https://www.behance.net/gallery/209158235/Shallo-Beer-Shop-Burro-Studio" target="_blank" rel="noopener">Vedi il progetto su Behance&nbsp;↗</a>
+        <a class="btn-primary" href="https://www.behance.net/gallery/209158235/Shallo-Beer-Shop-Burro-Studio" target="_blank" rel="noopener">Vedi il&nbsp;progetto su&nbsp;Behance&nbsp;↗</a>
         <a class="btn-icon" href="https://www.behance.net/gallery/209158235/Shallo-Beer-Shop-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
       </div>
     </div>
@@ -570,13 +592,13 @@
         <img src="assets/images/SHALLO01.jpg" width="1146" height="1146" alt="Poster Shallo 7 Years: una lattina di birra a cartoni animati cammina nel bosco tra il lettering viola, 14.07.2022, 12PM–12AM, Piazza Mirabello, special lunch by Brosetti" loading="eager" decoding="async">
       </button>
       <span class="shallo-badge" aria-hidden="true"><b>7</b>Years</span>
-      <span class="shallo-cheers" aria-live="polite"><i class="fa-solid fa-beer-mug-empty" aria-hidden="true"></i>Clicca per brindare · <span class="shallo-count">0</span> cin cin</span>
+      <span class="shallo-cheers" aria-live="polite"><i class="fa-solid fa-beer-mug-empty" aria-hidden="true"></i><span><span class="hint-mouse">Clicca</span><span class="hint-touch">Tocca</span> per&nbsp;brindare ·</span> <span class="shallo-count">0</span> cin cin</span>
     </div>
   </div>
 
   <div class="ticker-wrap shallo-ticker" aria-hidden="true">
     <div class="ticker">
-      <span class="ticker-item">Shallo 7 Years</span>
+      <span class="ticker-item">Shallo 7&nbsp;Years</span>
       <span class="ticker-sep">✱</span>
       <span class="ticker-item">14.07.2022</span>
       <span class="ticker-sep">✱</span>
@@ -587,7 +609,7 @@
       <span class="ticker-item">Special lunch by Brosetti</span>
       <span class="ticker-sep">✱</span>
       <!-- ripeti gli stessi elementi per lo scorrimento continuo senza "buchi" -->
-      <span class="ticker-item">Shallo 7 Years</span>
+      <span class="ticker-item">Shallo 7&nbsp;Years</span>
       <span class="ticker-sep">✱</span>
       <span class="ticker-item">14.07.2022</span>
       <span class="ticker-sep">✱</span>
@@ -603,20 +625,21 @@
   <section class="shallo-char">
     <div class="wrap char-grid">
       <div class="char-text">
-        <span class="eyebrow">Il personaggio</span>
-        <h2 class="section-title">Una lattina <br><em>a spasso nel bosco</em></h2>
-        <p>Guanti bianchi, sneakers enormi, linea nera spessa e retino halftone sull'arancio: un omaggio ai cartoon rubber hose, con la lattina appena stappata che saluta mentre attraversa il bosco. <span class="hint-mouse">Passa sopra l'illustrazione per guardare i dettagli da vicino.</span><span class="hint-touch">Tocca un dettaglio qui sotto per guardarlo da vicino con la lente.</span></p>
+        <span class="eyebrow">Il&nbsp;personaggio</span>
+        <h2 class="section-title">Una&nbsp;lattina <br><em>a&nbsp;spasso nel&nbsp;bosco</em></h2>
+        <p>Guanti bianchi, sneakers enormi, linea nera spessa e&nbsp;retino halftone sull'arancio: un&nbsp;omaggio ai&nbsp;cartoon rubber hose, con&nbsp;la&nbsp;lattina appena stappata che&nbsp;saluta mentre attraversa il&nbsp;bosco.<br class="br-desk"><br class="br-mob"> <span class="hint-mouse">Passa sopra l'illustrazione per&nbsp;guardare i&nbsp;dettagli da&nbsp;vicino.</span><span class="hint-touch">Tocca l'illustrazione o&nbsp;un&nbsp;dettaglio qui sotto per&nbsp;guardarlo da&nbsp;vicino con&nbsp;la&nbsp;lente.</span></p>
         <ul class="char-notes">
           <li><button class="char-note" type="button" data-x="0.52" data-y="0.14"><span class="cn-num">01</span><span class="cn-label">Appena stappata</span><span class="cn-meta">Fizz &amp; sparkle</span></button></li>
-          <li><button class="char-note" type="button" data-x="0.58" data-y="0.4"><span class="cn-num">02</span><span class="cn-label">Retino halftone</span><span class="cn-meta">Texture a punti</span></button></li>
-          <li><button class="char-note" type="button" data-x="0.74" data-y="0.48"><span class="cn-num">03</span><span class="cn-label">Il segno di approvazione</span><span class="cn-meta">Guanti bianchi</span></button></li>
+          <li><button class="char-note" type="button" data-x="0.58" data-y="0.4"><span class="cn-num">02</span><span class="cn-label">Retino halftone</span><span class="cn-meta">Texture a&nbsp;punti</span></button></li>
+          <li><button class="char-note" type="button" data-x="0.74" data-y="0.48"><span class="cn-num">03</span><span class="cn-label">Il&nbsp;segno di&nbsp;approvazione</span><span class="cn-meta">Guanti bianchi</span></button></li>
           <li><button class="char-note" type="button" data-x="0.27" data-y="0.84"><span class="cn-num">04</span><span class="cn-label">Sneakers XXL</span><span class="cn-meta">Rubber hose style</span></button></li>
         </ul>
       </div>
       <figure class="char-frame" id="char-frame">
         <img src="assets/images/SHALLO04.jpg" width="1146" height="1146" alt="Dettaglio dell'illustrazione: la lattina arancione con retino halftone, guanti bianchi e sneakers che cammina tra gli alberi" loading="lazy" decoding="async">
         <span class="char-loupe" aria-hidden="true"></span>
-        <span class="char-tag hint-mouse">Passa sopra con la lente</span>
+        <span class="char-tag hint-mouse">Passa sopra con&nbsp;la&nbsp;lente</span>
+        <span class="char-tag hint-touch">Tocca e&nbsp;trascina la&nbsp;lente</span>
       </figure>
     </div>
   </section>
@@ -626,7 +649,7 @@
       <div class="merch-side">
         <span class="eyebrow">Merch</span>
         <h2 class="section-title"> T-shirt</h2>
-        <p>L'illustrazione esce dal poster e finisce sulle t-shirt dell'anniversario: logo piccolo sul petto, artwork completo sulla schiena.</p>
+        <p>L'illustrazione esce dal&nbsp;poster e&nbsp;finisce sulle&nbsp;t-shirt dell'anniversario: logo piccolo sul&nbsp;petto, artwork completo sulla&nbsp;schiena.</p>
 
         <div class="merch-group">
           <span class="merch-group-label" id="lbl-color">Colore</span>
@@ -643,7 +666,7 @@
           </div>
         </div>
 
-        <div class="merch-now" aria-live="polite"><span class="merch-now-num">01</span><span class="merch-now-label">Bianca · Fronte</span><span class="merch-now-meta">Logo sul petto</span></div>
+        <div class="merch-now" aria-live="polite"><span class="merch-now-num">01</span><span class="merch-now-label">Bianca · Fronte</span><span class="merch-now-meta">Logo sul&nbsp;petto</span></div>
 
         <ul class="merch-thumbs">
           <li><button class="merch-thumb is-active" type="button" data-color="white" data-side="front" aria-label="T-shirt bianca, fronte"><img src="assets/images/SHALLO02.jpg" width="1146" height="1146" alt="" loading="lazy" decoding="async"></button></li>
@@ -664,46 +687,46 @@
             <img data-color="black" src="assets/images/SHALLO03.jpg" width="1146" height="1146" alt="T-shirt nera Shallo, retro: artwork completo in viola, arancio e rosa con Shallo 7 Years" loading="lazy" decoding="async">
           </span>
         </button>
-        <span class="merch-hint"><i class="fa-solid fa-rotate" aria-hidden="true"></i>Clicca la maglietta per girarla</span>
+        <span class="merch-hint"><i class="fa-solid fa-rotate" aria-hidden="true"></i><span><span class="hint-mouse">Clicca</span><span class="hint-touch">Tocca</span> la&nbsp;maglietta per&nbsp;girarla</span></span>
       </div>
     </div>
   </section>
 
   <section class="shallo-party">
     <div class="wrap">
-      <span class="eyebrow">Il giorno della festa</span>
+      <span class="eyebrow">Il&nbsp;giorno della&nbsp;festa</span>
       <h2 class="section-title">14/07/2022</h2>
-      <p>Dal poster alla piazza: magliette indossate, sticker sui tavoli e la fila davanti al beer shop.</p>
+      <p>Dal&nbsp;poster alla&nbsp;piazza: magliette indossate, sticker sui&nbsp;tavoli e&nbsp;la&nbsp;fila davanti al&nbsp;beer&nbsp;shop.</p>
       <ul class="party-row">
         <li class="is-active"><button class="party-shot" type="button" aria-pressed="true">
           <img src="assets/images/Shallo_FOTO_01.jpg" width="1170" height="1149" alt="Una persona con la t-shirt gialla Shallo 7 Years tiene in mano tre bottiglie di birra Mönchsambacher" loading="lazy" decoding="async">
           <span class="party-num">01</span>
-          <span class="party-cap"><b>La t-shirt in servizio</b><span>Tre bottiglie e il logo sul petto</span></span>
+          <span class="party-cap"><b>La&nbsp;t-shirt in&nbsp;servizio</b><span>Tre bottiglie e&nbsp;il&nbsp;logo sul&nbsp;petto</span></span>
         </button></li>
         <li><button class="party-shot" type="button" aria-pressed="false">
           <img src="assets/images/Shallo_FOTO_02.jpg" width="1170" height="859" alt="Le spine della birra all'aperto in Piazza Mirabello, dietro due ragazzi con la maglietta Shallo brindano al sole" loading="lazy" decoding="async">
           <span class="party-num">02</span>
-          <span class="party-cap"><b>Spine in piazza</b><span>Piazza Mirabello, 14.07.2022</span></span>
+          <span class="party-cap"><b>Spine in&nbsp;piazza</b><span>Piazza Mirabello, 14.07.2022</span></span>
         </button></li>
         <li><button class="party-shot" type="button" aria-pressed="false">
           <img src="assets/images/Shallo_FOTO_03.jpg" width="1170" height="1159" alt="Un secchiello con gli adesivi Shallo 7 Years e Parco Shallo, un bicchiere di birra e lo sticker della lattina sul tavolo" loading="lazy" decoding="async">
           <span class="party-num">03</span>
-          <span class="party-cap"><b>Sticker ovunque</b><span>La lattina finisce su pc e secchielli</span></span>
+          <span class="party-cap"><b>Sticker ovunque</b><span>La&nbsp;lattina finisce su&nbsp;pc e&nbsp;secchielli</span></span>
         </button></li>
         <li><button class="party-shot" type="button" aria-pressed="false">
           <img src="assets/images/Shallo_FOTO_04.jpg" width="1169" height="1158" alt="La fila serale davanti all'insegna Shallo Beer Shop, in primo piano un ragazzo di spalle con la t-shirt gialla Shallo 7 Years" loading="lazy" decoding="async">
           <span class="party-num">04</span>
-          <span class="party-cap"><b>La fila davanti al beer shop</b><span>Il retro della maglia, a fine serata</span></span>
+          <span class="party-cap"><b>La&nbsp;fila davanti al&nbsp;beer shop</b><span>Il&nbsp;retro della&nbsp;maglia, a&nbsp;fine serata</span></span>
         </button></li>
         <li><button class="party-shot" type="button" aria-pressed="false">
           <img src="assets/images/Shallo_FOTO_05.jpg" width="1170" height="2016" alt="Un ragazzo di spalle con la t-shirt nera Shallo 7 Years davanti alla vetrina del beer shop, con la scritta Sono arrivate anche le t-shirt" loading="lazy" decoding="async">
           <span class="party-num">05</span>
-          <span class="party-cap"><b>Sono arrivate le t-shirt</b><span>La versione nera, davanti alla vetrina</span></span>
+          <span class="party-cap"><b>Sono arrivate le&nbsp;t-shirt</b><span>La&nbsp;versione nera, davanti alla&nbsp;vetrina</span></span>
         </button></li>
         <li><button class="party-shot" type="button" aria-pressed="false">
           <img src="assets/images/Shallo_FOTO_06.jpg" width="871" height="1476" alt="Una mano tiene lo sticker Shallo 7 Years con la lattina che cammina nel bosco e il lettering viola" loading="lazy" decoding="async">
           <span class="party-num">06</span>
-          <span class="party-cap"><b>Lo sticker</b><span>Lattina e lettering, pronti da attaccare</span></span>
+          <span class="party-cap"><b>Lo&nbsp;sticker</b><span>Lattina e&nbsp;lettering, pronti da&nbsp;attaccare</span></span>
         </button></li>
       </ul>
     </div>
@@ -711,11 +734,11 @@
 
   <section class="project-end">
     <div class="wrap project-end-inner">
-      <h2 class="section-title">Un anniversario da festeggiare?</h2>
-      <p>Lettering, personaggi e illustrazioni per eventi, poster e merch. Scrivimi e disegniamo insieme la prossima festa.</p>
+      <h2 class="section-title">Un&nbsp;anniversario da&nbsp;festeggiare?</h2>
+      <p>Lettering, personaggi e&nbsp;illustrazioni per&nbsp;eventi, poster e&nbsp;merch.<br class="br-desk"><br class="br-mob"> Scrivimi e&nbsp;disegniamo insieme la&nbsp;prossima&nbsp;festa.</p>
       <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per un progetto&nbsp;↗</a>
-        <a class="btn-ghost" href="index.html#lavori">← Torna al portfolio</a>
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto&nbsp;↗</a>
+        <a class="btn-ghost" href="index.html#lavori">← Torna al&nbsp;portfolio</a>
       </div>
     </div>
   </section>
@@ -806,6 +829,9 @@
 
   // Personaggio: lente d'ingrandimento circolare che segue il cursore.
   // Le note a fianco spostano la lente sul dettaglio corrispondente.
+  // Su touch un tocco mette la lente sotto il dito, trascinando la si
+  // sposta e un tocco fuori la chiude; la lente sta sopra il dito (sotto,
+  // vicino al bordo alto) così il dettaglio non resta coperto.
   (function () {
     const frame = document.getElementById('char-frame');
     if (!frame) return;
@@ -815,28 +841,56 @@
     const ZOOM = 1.9;
     loupe.style.backgroundImage = `url("${img.getAttribute('src')}")`;
 
-    // px, py: posizione normalizzata (0–1) dentro il riquadro
-    const lookAt = (px, py) => {
+    // px, py: posizione normalizzata (0–1) dentro il riquadro;
+    // dy sposta in verticale solo il cerchio, non il punto ingrandito.
+    // Con inside il cerchio resta tutto dentro il riquadro
+    const lookAt = (px, py, dy = 0, inside = false) => {
       const w = frame.clientWidth;
       const h = frame.clientHeight;
       const r = loupe.offsetWidth / 2;
-      frame.style.setProperty('--lx', (px * w).toFixed(1) + 'px');
-      frame.style.setProperty('--ly', (py * h).toFixed(1) + 'px');
+      const clamp = (v, max) => (inside ? Math.min(Math.max(v, r), max - r) : v);
+      frame.style.setProperty('--lx', clamp(px * w, w).toFixed(1) + 'px');
+      frame.style.setProperty('--ly', clamp(py * h + dy, h).toFixed(1) + 'px');
       loupe.style.backgroundSize = `${w * ZOOM}px ${h * ZOOM}px`;
       loupe.style.backgroundPosition = `${(-px * w * ZOOM + r).toFixed(1)}px ${(-py * h * ZOOM + r).toFixed(1)}px`;
       frame.classList.add('is-looking');
     };
     const clearNotes = () => notes.forEach(n => n.classList.remove('is-active'));
 
-    frame.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
+    const follow = (e) => {
       const b = frame.getBoundingClientRect();
+      const px = (e.clientX - b.left) / b.width;
+      const py = (e.clientY - b.top) / b.height;
+      const touch = e.pointerType !== 'mouse';
+      let dy = 0;
+      if (touch) {
+        const lift = loupe.offsetWidth / 2 + 30;
+        dy = py * b.height > lift + 40 ? -lift : lift;
+      }
       frame.classList.add('is-tracking');
       clearNotes();
-      lookAt((e.clientX - b.left) / b.width, (e.clientY - b.top) / b.height);
+      lookAt(Math.min(Math.max(px, 0), 1), Math.min(Math.max(py, 0), 1), dy, touch);
+    };
+    const close = () => {
+      clearNotes();
+      frame.classList.remove('is-looking', 'is-tracking', 'is-touch');
+    };
+
+    frame.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') return;
+      frame.classList.add('is-touch');
+      follow(e);
     });
-    frame.addEventListener('pointerleave', () => {
-      frame.classList.remove('is-looking', 'is-tracking');
+    frame.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' && !frame.classList.contains('is-touch')) return;
+      follow(e);
+    });
+    frame.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') frame.classList.remove('is-looking', 'is-tracking');
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' || frame.contains(e.target) || e.target.closest('.char-note')) return;
+      if (frame.classList.contains('is-looking')) close();
     });
 
     notes.forEach((n) => {
@@ -844,18 +898,28 @@
         clearNotes();
         n.classList.add('is-active');
         frame.classList.remove('is-tracking');
-        lookAt(parseFloat(n.dataset.x), parseFloat(n.dataset.y));
+        lookAt(parseFloat(n.dataset.x), parseFloat(n.dataset.y), 0, true);
       };
       n.addEventListener('mouseenter', focus);
       n.addEventListener('focus', focus);
-      n.addEventListener('click', focus);
+      n.addEventListener('click', () => {
+        focus();
+        // Su touch la lista sta sopra l'illustrazione: se non si vede
+        // tutta la porta sullo schermo
+        if (!matchMedia('(hover: none)').matches) return;
+        const b = frame.getBoundingClientRect();
+        if (b.top < 0 || b.bottom > innerHeight) {
+          frame.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+        }
+      });
       n.addEventListener('mouseleave', () => {
         n.classList.remove('is-active');
-        frame.classList.remove('is-looking');
+        if (!frame.classList.contains('is-touch')) frame.classList.remove('is-looking');
       });
       n.addEventListener('blur', () => {
         n.classList.remove('is-active');
-        frame.classList.remove('is-looking');
+        // il tocco sull'illustrazione toglie il focus alla nota: la lente resta
+        if (!frame.classList.contains('is-touch')) frame.classList.remove('is-looking');
       });
     });
   })();
