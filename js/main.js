@@ -54,6 +54,103 @@
   });
 })();
 
+// Header animato. Al passaggio del mouse il nome o il link prende un colore
+// a caso (con la sottolineatura, in style.css). Nella home, quando il cartellino sbatte
+// contro l'header (cartellino3d.js, evento cartellino-hit), un'onda di
+// colore parte dal punto del colpo e corre per tutto l'header, più lontano
+// quanto più il colpo è forte, e il bordo basso si accende da lì verso i
+// lati; il sobbalzo della barra lo fa cartellino3d.js.
+(function () {
+  const header = document.querySelector('header');
+  if (!header) return;
+  const targets = Array.from(header.querySelectorAll('.brand, .navlinks a'));
+
+  // I colori delle lettere del titolo: le lettere dell'header, sul fondo
+  // chiaro, prendono il tono pieno; il bordo che si accende, sull'hero
+  // scuro, quello schiarito che usa il titolo
+  const palette = [['#3B4B99', '#727DB6'], ['#6163C6', '#7476CD'], ['#3F6B3D', '#658964'],
+    ['#D8322A', '#DD4B44'], ['#2347C4', '#617BD5'], ['#5A2AA0', '#9272C0'], ['#9A6229', '#A67543'],
+    ['#E32227', '#E74145'], ['#00579C', '#4283B6'], ['#4F9A16', '#4F9A16'], ['#E8B400', '#F5C400']];
+  let lastColor = null;
+  const randomColor = () => {
+    let color;
+    do { color = palette[Math.floor(Math.random() * palette.length)]; } while (color === lastColor);
+    lastColor = color;
+    return color;
+  };
+
+  // Il colore al passaggio del mouse, nuovo ogni volta
+  for (const el of targets) {
+    el.addEventListener('mouseenter', () => el.style.setProperty('--hover-color', randomColor()[0]));
+  }
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Lettere in span .ch dentro parole .w che non vanno a capo, come nel titolo
+  for (const el of targets) {
+    const label = el.textContent.trim();
+    el.setAttribute('aria-label', label);
+    el.textContent = '';
+    for (const part of label.split(/(\s+)/)) {
+      if (/\s/.test(part)) { el.appendChild(document.createTextNode(' ')); continue; }
+      const word = document.createElement('span');
+      word.className = 'w';
+      word.setAttribute('aria-hidden', 'true');
+      for (const ch of part) {
+        const span = document.createElement('span');
+        span.className = 'ch';
+        span.textContent = ch;
+        word.appendChild(span);
+      }
+      el.appendChild(word);
+    }
+  }
+  const letters = Array.from(header.querySelectorAll('.ch'));
+  const toggle = header.querySelector('.nav-toggle');
+
+  // Ogni elemento si colora in ritardo quanto più è lontano da x (px dal
+  // bordo della finestra), speed in px/ms, e solo fin dove arriva l'onda:
+  // amp·e^(-distanza/reach) deve restare almeno 0,6. Si saltano quelli
+  // nascosti, come i link della tendina su telefono, che stanno sotto l'header.
+  const wave = (items, x, { amp, reach, speed, color }) => {
+    const bottom = header.getBoundingClientRect().bottom;
+    const moving = [];
+    for (const el of items) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || r.top >= bottom) continue;
+      const d = Math.abs(r.left + r.width / 2 - x);
+      const a = amp * Math.exp(-d / reach);
+      if (a < 0.6) continue;
+      el.style.setProperty('--delay', Math.round(d / speed) + 'ms');
+      el.style.setProperty('--wave-color', color);
+      el.classList.remove('is-tint');
+      moving.push(el);
+    }
+    void header.offsetWidth; // fa ripartire l'animazione
+    for (const el of moving) el.classList.add('is-tint');
+  };
+  header.addEventListener('animationend', (e) => {
+    e.target.classList.remove(e.target === header ? 'is-hit' : 'is-tint');
+  });
+
+  // Il sobbalzo della barra al colpo lo fa cartellino3d.js: qui solo il colore
+  header.addEventListener('cartellino-hit', (e) => {
+    const { x, strength } = e.detail;
+    const [color, glow] = randomColor();
+    wave(toggle ? [...letters, toggle] : letters, x, {
+      amp: Math.min(5 + strength * 1.2, 18),
+      reach: 260 + strength * 40,
+      speed: 1.1,
+      color
+    });
+    header.style.setProperty('--hit-x', Math.round(x - header.getBoundingClientRect().left) + 'px');
+    header.style.setProperty('--hit-color', glow);
+    header.classList.remove('is-hit');
+    void header.offsetWidth;
+    header.classList.add('is-hit');
+  });
+})();
+
 // Protezione immagini: niente menu del tasto destro (o pressione lunga su
 // Android) né trascinamento su immagini, video e canvas, anche quando sono
 // coperti da un livello sopra. Il menu resta normale sul resto della pagina e

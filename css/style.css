@@ -94,6 +94,14 @@ nav.wrap{
   display: inline-block;
   padding: 10px 0;
   margin: -10px 0;
+  transition: color .2s ease;
+}
+/* Come i link: colore a caso e sottolineatura, 2px sotto il testo (sopra
+   i 10px di padding). È uno sfondo e non text-decoration, che sulle
+   lettere divise da main.js verrebbe a trattini. */
+.brand:hover{
+  color: var(--hover-color, var(--ink));
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 8px) / 100% 1px no-repeat;
 }
 
 .navlinks{
@@ -110,7 +118,9 @@ nav.wrap{
   padding-bottom: 2px;
   transition: color .2s ease, border-color .2s ease;
 }
-.navlinks a:hover{ color: var(--ink); border-color: var(--ink); }
+/* Al passaggio del mouse il link prende un colore a caso tra quelli del
+   titolo (--hover-color, da main.js) e si sottolinea dello stesso colore */
+.navlinks a:hover{ color: var(--hover-color, var(--ink)); border-color: currentColor; }
 
 /* Pulsante hamburger: visibile solo sotto gli 860px, dove brand + 4 link
    non stanno più su una riga. Le due linee diventano una X quando è aperto. */
@@ -176,6 +186,59 @@ nav.wrap{
   header, .nav-toggle span, .navlinks{ transition: none !important; }
 }
 
+/* Lettere dell'header: main.js divide nome e link in lettere .ch, per
+   l'onda di colore del colpo del cartellino */
+header .w{ white-space: nowrap; }
+/* Colpo del cartellino: un'onda di colore (--wave-color) passa sulle
+   lettere, ognuna con il suo ritardo (--delay); al colpo sobbalza anche
+   tutta la barra (cartellino3d.js) */
+header .ch.is-tint,
+.nav-toggle.is-tint{ animation: header-tint .9s ease-out var(--delay, 0ms); }
+@keyframes header-tint{
+  10%, 45%{ color: var(--wave-color); }
+}
+/* Colpo del cartellino (home): il bordo basso si accende nel colore
+   dell'onda a partire dal punto del colpo (--hit-x) e si allarga verso i
+   lati sfumando, con un alone che cola sull'hero. */
+header::after{
+  content:"";
+  position: absolute;
+  left: 0; right: 0;
+  top: 100%;
+  height: 16px;
+  background: var(--hit-color, var(--accent));
+  -webkit-mask-image: linear-gradient(#000 2px, rgba(0,0,0,.45) 2px, transparent);
+  mask-image: linear-gradient(#000 2px, rgba(0,0,0,.45) 2px, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+header.is-hit::after{ animation: header-glow .8s ease-out; }
+/* Colpita, la barra sobbalza (cartellino3d.js) e scopre il posto in cui
+   stava: nella home, quando sale, sotto continua il nero dell'hero, non il
+   chiaro della pagina (è solo la cima dello sfondo, il resto lo copre
+   l'hero). Quando rimbalza giù, sopra resta chiaro: dietro la barra c'è un
+   fondo chiaro che sporge di 60px sopra, fuori dallo schermo a riposo, e
+   si muove con lei; quando gira, cartellino3d.js la allarga quanto basta
+   a coprire i lati. Quello che sborda per un attimo non fa scorrere la
+   pagina in orizzontale (overflow-x: clip su html: sul body Chrome non lo
+   passa alla finestra). */
+html:has(body.home){ overflow-x: clip; }
+body.home{ background: linear-gradient(#17140F, #17140F) top / 100% 300px no-repeat, var(--paper); }
+body.home header::before{
+  content:"";
+  position: absolute;
+  top: -60px; bottom: 0;
+  left: 0; right: 0;
+  z-index: -1;
+  background: var(--paper);
+  pointer-events: none;
+}
+@keyframes header-glow{
+  0%{ opacity: 1; clip-path: inset(0 calc(100% - var(--hit-x, 50%)) 0 var(--hit-x, 50%)); }
+  40%{ opacity: 1; }
+  100%{ opacity: 0; clip-path: inset(0); }
+}
+
 /* -------- Hero -------- */
 /* Hero su fondo scuro (lo stesso nero caldo dei contatti), header escluso:
    dentro .hero i colori del sito si invertono ridefinendo le variabili, così
@@ -188,7 +251,9 @@ nav.wrap{
   --line: rgba(247,245,240,.22);
   --accent: #9AA8EE;
   position: relative;
-  overflow: hidden;
+  /* Come overflow: hidden, ma lascia uscire 60px in alto, dietro l'header:
+     lì sporge il canvas del cartellino (vedi .hero-lanyard canvas) */
+  clip-path: inset(-60px 0 0 0);
   padding: 130px 0 110px;
   background: var(--paper);
   color: var(--ink);
@@ -206,6 +271,21 @@ nav.wrap{
 }
 @media (max-width: 640px){
   .hero::before{ background: radial-gradient(90% 50% at 80% 40%, rgba(59,75,153,.25), transparent 70%); }
+}
+/* Con il cartellino (cartellino3d.js dà .has-bleed e --hero-h, l'altezza
+   dell'hero) l'alone parte 60px più su, dietro l'header, e continua nel
+   posto che l'header scopre quando sobbalza. Le stesse misure di sopra,
+   ma in px sull'altezza dell'hero, così nell'hero l'alone non cambia
+   (Chrome non accetta calc() con % e px insieme nelle misure dell'alone). */
+.hero.has-bleed::before{
+  top: -60px;
+  background: radial-gradient(55% calc(var(--hero-h) * .8) at 82% calc(var(--hero-h) * .35 + 60px), rgba(59,75,153,.25), transparent 70%);
+}
+@media (max-width: 980px){
+  .hero.has-bleed::before{ background: radial-gradient(90% calc(var(--hero-h) * .45) at 50% calc(var(--hero-h) * .15 + 60px), rgba(59,75,153,.25), transparent 70%); }
+}
+@media (max-width: 640px){
+  .hero.has-bleed::before{ background: radial-gradient(90% calc(var(--hero-h) * .5) at 80% calc(var(--hero-h) * .4 + 60px), rgba(59,75,153,.25), transparent 70%); }
 }
 @keyframes rise{ to{ opacity:1; transform: translateY(0); } }
 
@@ -230,7 +310,7 @@ nav.wrap{
 
 /* Il cartellino è un layer assoluto agganciato subito sotto il menu (bordo
    dell'header) e limitato al riquadro dell'hero: non può mai scendere sotto
-   il banner scorrevole perché .hero ha overflow:hidden. */
+   il banner scorrevole perché .hero lo ritaglia (clip-path). */
 .hero-lanyard{
   position:absolute;
   inset: 0;
@@ -244,10 +324,15 @@ nav.wrap{
 .hero-lanyard.is-dragging{ pointer-events: auto; touch-action: none; }
 .hero-lanyard.is-hover{ cursor: grab; }
 .hero-lanyard.is-dragging{ cursor: grabbing; }
+/* Il canvas sporge di 60px sopra l'hero, dietro l'header che a riposo lo
+   copre: quando l'header sobbalza al colpo del cartellino, nel posto che
+   scopre continua il cordino (cartellino3d.js, TOP_BLEED) */
 .hero-lanyard canvas{
   display:block;
+  position: relative;
+  top: -60px;
   width: 100% !important;
-  height: 100% !important;
+  height: calc(100% + 60px) !important;
 }
 
 .hero h1{
@@ -1705,14 +1790,11 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
    piccoli, subito sotto i dati (24px, come gli altri spazi dell'hero).
    Sugli schermi bassi, dove non ci stanno nella prima schermata, restano
    attaccati al fondo dello schermo (sticky, su una sfumatura del fondo)
-   finché non si arriva alla fine dell'hero. overflow:clip al posto di
-   hidden perché hidden renderebbe l'hero il contenitore dello sticky, che
-   non si attaccherebbe mai allo schermo. */
+   finché non si arriva alla fine dell'hero (l'hero si ritaglia con
+   clip-path e non con overflow: hidden, che lo renderebbe il contenitore
+   dello sticky e non lo farebbe mai attaccare allo schermo). */
 @media (max-width: 640px){
-  .hero{
-    padding-bottom: 8px;
-    overflow: clip;
-  }
+  .hero{ padding-bottom: 8px; }
   .hero .meta{ margin-top:12px; } /* fa coppia con il paragrafo sopra */
   .hero-links{
     position: sticky;

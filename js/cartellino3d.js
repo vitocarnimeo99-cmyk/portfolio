@@ -20,9 +20,16 @@
   camera.position.set(0, 0.35, 6.76);
   camera.lookAt(0, 0.35, 0);
 
+  /* Il canvas sporge di TOP_BLEED px sopra l'hero, dietro l'header che a
+     riposo lo copre: quando l'header sobbalza (vedi più giù) nel posto che
+     scopre si vede il cordino. L'inquadratura non cambia: la fascia in più
+     è un'estensione verso l'alto della stessa vista (vedi updateCamera).
+     Deve combaciare con style.css (.hero e .hero-lanyard canvas). */
+  const TOP_BLEED = 60;
+
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-  renderer.setSize(width, height);
+  renderer.setSize(width, height + TOP_BLEED);
   container.appendChild(renderer.domElement);
 
   /* Ambiente per i riflessi: una stanza finta con tre pannelli luminosi
@@ -300,8 +307,90 @@
     }
   }
 
+  /* ---------------- header ----------------
+     Il bordo basso dell'header fa da soffitto: se il cartellino (o il
+     moschettone) ci sbatte contro, rimbalza giù, la barra dell'header
+     sobbalza e riceve l'evento cartellino-hit con il punto del colpo e la
+     sua forza (main.js ci fa partire l'onda di colore delle lettere). Conta
+     solo un cartellino arrivato da sotto: non quello che scende dall'alto
+     al caricamento, né quello sopra cui l'header passa quando ricompare
+     scorrendo la pagina. */
+  const header = document.querySelector('header');
+  const HEADER_BOUNCE = 0.45;
+  let headerY = null;       // bordo basso dell'header a riposo, in px dall'hero (null = non conta)
+  let heroLeft = 0;
+  let lastHeaderY = null, lastTop = null;
+  let headerArmed = false;  // il cartellino è tutto sotto l'header: il prossimo contatto è un colpo
+  let headerTouching = false;
+  let headerHitAt = 0;
+  function measureHeader() {
+    if (!header || header.classList.contains('is-hidden') || header.classList.contains('is-open')) {
+      headerY = null;
+      return;
+    }
+    const box = container.getBoundingClientRect();
+    heroLeft = box.left;
+    // Senza il sobbalzo della barra, che sposterebbe il soffitto
+    const moved = [header.style.translate, header.style.rotate, header.style.scale];
+    if (bar.moving) header.style.translate = header.style.rotate = header.style.scale = '';
+    headerY = Math.round(header.getBoundingClientRect().bottom - box.top);
+    if (bar.moving) [header.style.translate, header.style.rotate, header.style.scale] = moved;
+  }
+
+  /* La barra dell'header, colpita, si muove come una pillola dell'occhiello
+     (stesse molle) ma con metà della forza: viene spinta in alto, si
+     schiaccia e ruota attorno al centro, di più quanto più il colpo è
+     lontano dal centro e quanto più la barra è corta (su telefono ruota
+     più che su desktop). Si sposta con translate, rotate e scale, che si
+     sommano al transform con cui l'header si nasconde scorrendo. */
+  const BAR_POWER = 0.5;
+  const BAR_MAX_ANGLE = 0.06;
+  const bar = { y: 0, vy: 0, a: 0, va: 0, s: 0, vs: 0, moving: false };
+  function kickBar(x, strength) {
+    // La spinta di un colpo dritto da sotto su una pillola, a metà
+    const j = strength * (1 + PILL_BOUNCE) * PILL_SHARE * BAR_POWER;
+    const w = header.offsetWidth;
+    bar.vy -= j;
+    // Rotazione come per le pillole (0,00018 su una pillola larga 100px),
+    // con l'inerzia che cresce col quadrato della larghezza
+    bar.va -= (x - w / 2) * j * 1.8 / (w * w);
+    bar.vs += Math.min(j * 0.012, 0.1);
+    bar.moving = true;
+  }
+  function stepBar() {
+    if (!bar.moving) return;
+    bar.vy = (bar.vy - bar.y * PILL_SPRING) * PILL_DAMPING;
+    bar.y = THREE.MathUtils.clamp(bar.y + bar.vy, -PILL_MAX_Y, PILL_MAX_Y);
+    bar.va = (bar.va - bar.a * PILL_ANGLE_SPRING) * PILL_ANGLE_DAMPING;
+    bar.a = THREE.MathUtils.clamp(bar.a + bar.va, -BAR_MAX_ANGLE, BAR_MAX_ANGLE);
+    bar.vs = (bar.vs - bar.s * 0.22) * 0.78;
+    bar.s = THREE.MathUtils.clamp(bar.s + bar.vs, -0.15, 0.15);
+    const still = Math.abs(bar.y) + Math.abs(bar.vy) < 0.05 &&
+      Math.abs(bar.a) + Math.abs(bar.va) + Math.abs(bar.s) + Math.abs(bar.vs) < 0.0005;
+    if (still) {
+      bar.y = bar.vy = bar.a = bar.va = bar.s = bar.vs = 0;
+      bar.moving = false;
+    }
+  }
+  function drawBar() {
+    if (!header || (!bar.moving && !header.style.translate)) return;
+    if (!bar.moving) {
+      header.style.translate = header.style.rotate = header.style.scale = '';
+      return;
+    }
+    // Ruotata, la barra si allarga appena perché i suoi lati, compreso il
+    // fondo chiaro di 60px sopra (header::before in style.css), restino
+    // oltre i bordi della finestra: niente spicchi scuri agli angoli
+    const half = header.offsetWidth / 2;
+    const reach = header.offsetHeight / 2 + 60;
+    const cover = (half + reach * Math.abs(Math.sin(bar.a))) / (half * Math.cos(bar.a));
+    header.style.translate = `0 ${bar.y.toFixed(2)}px`;
+    header.style.rotate = `${bar.a.toFixed(4)}rad`;
+    header.style.scale = `${cover.toFixed(4)} ${(1 - bar.s).toFixed(3)}`;
+  }
+
   let restLen = REST_LEN;
-  let pillsPxPerUnit = 0; // px per unità di scena, per le pillole (0 = non ancora misurato)
+  let pillsPxPerUnit = 0; // px per unità di scena, per le pillole e l'header (0 = non ancora misurato)
   // A riposo il cordino si allunga un po' sotto il peso del cartellino
   // (i vincoli della simulazione non sono rigidi): di quanto, misurato a
   // occhio sugli screenshot, per far arrivare il cartellino dove deve.
@@ -793,24 +882,27 @@
      giù fino in fondo), ma l'inquadratura deve restare quella della fascia
      alta di 420px: la camera "vede" la fascia come prima e il resto del
      canvas è solo un'estensione verso il basso della stessa vista, quindi
-     scala e posizione del cartellino non cambiano. */
+     scala e posizione del cartellino non cambiano. Allo stesso modo, su
+     tutti gli schermi, la fascia di TOP_BLEED px sopra l'hero estende la
+     vista verso l'alto. */
   function updateCamera() {
     const bandH = isPhoneLayout() ? PHONE_BAND_H : MOBILE_BAND_H;
-    if (width <= 980 && height > bandH) {
-      camera.aspect = width / bandH;
-      camera.setViewOffset(width, bandH, 0, 0, width, height);
-    } else {
-      camera.aspect = width / height;
-      camera.clearViewOffset();
-    }
+    const viewH = width <= 980 && height > bandH ? bandH : height;
+    camera.aspect = width / viewH;
+    camera.setViewOffset(width, viewH, 0, -TOP_BLEED, width, height + TOP_BLEED);
     camera.updateProjectionMatrix();
   }
+  // Un punto proiettato dalla camera, in px dall'hero
+  const toHero = (v) => ({ x: (v.x + 1) / 2 * width, y: (1 - v.y) / 2 * (height + TOP_BLEED) - TOP_BLEED });
 
   function onResize() {
     width = container.clientWidth; height = container.clientHeight;
     if (!width || !height) return;
     updateCamera();
-    renderer.setSize(width, height);
+    renderer.setSize(width, height + TOP_BLEED);
+    // L'alone dell'hero sale anche lui di TOP_BLEED px (style.css, .has-bleed)
+    container.parentElement.style.setProperty('--hero-h', height + 'px');
+    container.parentElement.classList.add('has-bleed');
     updateLayout();
   }
   new ResizeObserver(onResize).observe(container);
@@ -1037,16 +1129,19 @@
      dall'alto oscillando e, se passa sul testo, lo urta già da solo. */
   camera.updateMatrixWorld();
 
-  function stepPills() {
-    if (!pillsPxPerUnit || !pills.length || prefersReducedMotion) return;
-
-    // Il cartellino in px dall'hero, e la sua velocità in px/passo
+  // Il contorno del cartellino in px dall'hero
+  function projectCard() {
     cardGroup.updateMatrixWorld(true);
-    const card = cardCorners.map((c) => {
+    return cardCorners.map((c) => {
       corner.copy(c);
-      cardMesh.localToWorld(corner).project(camera);
-      return { x: (corner.x + 1) / 2 * width, y: (1 - corner.y) / 2 * height };
+      return toHero(cardMesh.localToWorld(corner).project(camera));
     });
+  }
+
+  function stepPills(card) {
+    if (!pills.length) return;
+
+    // La velocità del cartellino in px/passo
     const center = centroid(card);
     const cvx = lastCardCenter ? center.x - lastCardCenter.x : 0;
     const cvy = lastCardCenter ? center.y - lastCardCenter.y : 0;
@@ -1172,6 +1267,60 @@
     }
   }
 
+  const attach = new THREE.Vector3();
+  const CLIP_TOP = 0.11; // quanto il moschettone sporge sopra il punto d'aggancio
+  function stepHeader(card) {
+    // Il punto più alto tra gli spigoli del cartellino e la cima del
+    // moschettone. Trascinando, il punto d'aggancio segue il dito ma non
+    // esce dall'hero: è il moschettone che sporge a toccare l'header.
+    const last = points[points.length - 1];
+    const clip = toHero(attach.copy(last.pos).project(camera));
+    const outline = [...card, { x: clip.x, y: clip.y - CLIP_TOP * pillsPxPerUnit }];
+    const top = Math.min(...outline.map((v) => v.y));
+    const vy = lastTop === null ? 0 : top - lastTop; // px/passo, negativo verso l'alto
+    lastTop = top;
+    const moved = headerY !== lastHeaderY;
+    lastHeaderY = headerY;
+    if (headerY === null) { headerArmed = headerTouching = false; return; }
+
+    const depth = headerY - top;
+    if (depth <= 0) {
+      headerTouching = false;
+      if (depth < -2) headerArmed = true;
+      return;
+    }
+    // È l'header che è sceso sul cartellino, o il cartellino è arrivato da sopra
+    if (moved || !headerArmed) { headerArmed = false; return; }
+
+    if (!headerTouching) {
+      headerTouching = true;
+      const now = performance.now();
+      if (-vy > 1.5 && now - headerHitAt > 150) {
+        headerHitAt = now;
+        // Il punto del colpo, dentro lo schermo; la forza ha un tetto
+        // perché uno strappo che ribalta il cartellino ne sposta gli
+        // spigoli di centinaia di px in un passo
+        const above = outline.filter((v) => v.y < headerY);
+        const x = THREE.MathUtils.clamp(above.reduce((sum, v) => sum + v.x, 0) / above.length, 0, width);
+        const strength = Math.min(-vy, 20);
+        header.dispatchEvent(new CustomEvent('cartellino-hit', { detail: { x: heroLeft + x, strength } }));
+        kickBar(heroLeft + x - header.getBoundingClientRect().left, strength);
+        if (dragging && -vy > 5 && now - lastPulse > 120 && navigator.vibrate) {
+          lastPulse = now;
+          navigator.vibrate(8);
+        }
+      }
+    }
+    // Tenuto in mano, il cartellino passa dietro l'header; lasciato lì,
+    // riscende senza scatti e conta di nuovo solo quando è tornato sotto
+    if (dragging) { headerArmed = false; return; }
+    // Rimbalzo: giù fuori dall'header, con la velocità verso l'alto
+    // rovesciata e smorzata (in scena la y va verso l'alto)
+    const up = last.pos.y - last.old.y;
+    last.pos.y -= depth / pillsPxPerUnit;
+    last.old.y = up > 0 ? last.pos.y + up * HEADER_BOUNCE : last.pos.y - up;
+  }
+
   // Le pillole si spostano solo con transform: niente ricalcolo del layout
   function drawPills() {
     for (const p of pills) {
@@ -1206,15 +1355,30 @@
     }
 
     placeCard();
-    stepPills();
+    if (pillsPxPerUnit && !prefersReducedMotion) {
+      const card = projectCard();
+      stepPills(card);
+      stepHeader(card);
+    }
+    stepBar();
   }
 
   function animate(now) {
     requestAnimationFrame(animate);
-    if (!visible) { lastTime = now; return; }
+    if (!visible) {
+      lastTime = now;
+      // L'header resta a schermo: la barra non deve restare a metà sobbalzo
+      if (bar.moving) {
+        bar.y = bar.vy = bar.a = bar.va = bar.s = bar.vs = 0;
+        bar.moving = false;
+        drawBar();
+      }
+      return;
+    }
 
     accumulator += Math.min(now - lastTime, STEP_MS * MAX_STEPS);
     lastTime = now;
+    measureHeader();
     let steps = 0;
     while (accumulator >= STEP_MS && steps < MAX_STEPS) {
       step();
@@ -1228,6 +1392,7 @@
     updateStrap();
     placeShadow();
     drawPills();
+    drawBar();
 
     renderer.render(scene, camera);
     if (pointerInside) updateHover();
