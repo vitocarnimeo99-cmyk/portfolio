@@ -25,7 +25,33 @@
   renderer.setSize(width, height);
   container.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+  /* Ambiente per i riflessi: una stanza finta con tre pannelli luminosi
+     (soffitto e due laterali), trasformata in mappa di riflessione. È lei
+     a dare la lucentezza alla plastificazione del cartellino, il cromo
+     all'anello e i colori al sigillo olografico, che senza riflessi
+     sarebbero piatti. Si calcola una volta sola. */
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envScene = new THREE.Scene();
+  envScene.add(new THREE.Mesh(
+    new THREE.BoxGeometry(12, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xb8b2a5, side: THREE.BackSide })
+  ));
+  function envPanel(w, h, x, y, z, color, intensity) {
+    const panel = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(intensity), side: THREE.DoubleSide })
+    );
+    panel.position.set(x, y, z);
+    panel.lookAt(0, 0, 0);
+    envScene.add(panel);
+  }
+  envPanel(7, 2.5, 0, 5.5, 2.5, 0xffffff, 4);
+  envPanel(2, 6, -5.5, 0.5, 2, 0xfff1dc, 2.4);
+  envPanel(2, 6, 5.5, 1, -1.5, 0xdbe3ff, 1.8);
+  scene.environment = pmrem.fromScene(envScene, 0.03).texture;
+  pmrem.dispose();
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
   const key = new THREE.DirectionalLight(0xffffff, 1.0);
   key.position.set(3, 5, 6);
   scene.add(key);
@@ -48,7 +74,7 @@
      La x è proporzionale alla larghezza visibile della camera, così su
      schermi stretti (mobile) resta sempre dentro l'inquadratura. */
   const ANCHOR = new THREE.Vector3(0, 6.6, 0);
-  const CARD_W = 2.05, CARD_H = 2.7, CARD_D = 0.1;
+  const CARD_W = 2.05, CARD_H = 2.7, CARD_D = 0.08;
   const CLIP_GAP = 0.28; // distanza tra moschettone e bordo alto del cartellino
 
   /* Su mobile e tablet l'inquadratura è quella di una fascia alta
@@ -368,39 +394,185 @@
     }
   }
 
-  /* ---------------- laccetto (mesh) ---------------- */
-  const strapMaterial = new THREE.MeshStandardMaterial({ color: 0x3b4b99, roughness: 0.65, metalness: 0.05 });
-  let strapMesh = null;
-  const strapCurvePts = points.map(p => p.pos.clone());
-  const strapCurve = new THREE.CatmullRomCurve3(strapCurvePts);
-  function updateStrap() {
-    for (let i = 0; i < points.length; i++) strapCurvePts[i].copy(points[i].pos);
-    const curve = strapCurve;
-    const geo = new THREE.TubeGeometry(curve, 24, 0.055, 8, false);
-    if (strapMesh) {
-      strapMesh.geometry.dispose();
-      strapMesh.geometry = geo;
-    } else {
-      strapMesh = new THREE.Mesh(geo, strapMaterial);
-      scene.add(strapMesh);
+  /* ---------------- laccetto (mesh) ----------------
+     Un nastro piatto stampato, come i laccetti veri, invece di un tubo. La
+     geometria è una striscia di STRAP_SAMPLES coppie di vertici lungo la
+     curva della corda, aggiornata sul posto a ogni frame (niente geometrie
+     nuove da creare e buttare). Il nastro guarda la camera e, verso il
+     fondo, si attorciglia per seguire il cartellino quando gira. */
+  const STRAP_W = 0.3;
+  const STRAP_SAMPLES = 72;
+  const STRAP_TEX_RATIO = 8; // larghezza/altezza della texture del nastro
+
+  function makeStrapTexture() {
+    const w = 1024, h = w / STRAP_TEX_RATIO;
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#3B4B99';
+    ctx.fillRect(0, 0, w, h);
+    // Trama del tessuto: righe sottili appena più chiare e più scure
+    for (let y = 0; y < h; y += 3) {
+      ctx.fillStyle = y % 6 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.06)';
+      ctx.fillRect(0, y, w, 1);
     }
+    // Cuciture lungo i bordi
+    ctx.strokeStyle = 'rgba(247,245,240,0.55)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 7]);
+    for (const y of [11, h - 11]) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#F7F5F0';
+    ctx.textBaseline = 'middle';
+    ctx.font = '700 46px Inter, "Helvetica Neue", Arial, sans-serif';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '6px';
+    ctx.fillText('VITQ', 34, h / 2 + 2);
+    ctx.font = '600 26px Inter, "Helvetica Neue", Arial, sans-serif';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '5px';
+    ctx.fillText('ILLUSTRATOR · GRAPHIC & MOTION DESIGNER', 196, h / 2 + 2);
+    // Stellina finale, prima che il motivo ricominci
+    ctx.font = '700 34px Inter, "Helvetica Neue", Arial, sans-serif';
+    ctx.fillStyle = '#F2C14E';
+    ctx.fillText('✦', w - 64, h / 2 + 1);
+    const tex = new THREE.CanvasTexture(canvas);
+    if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    return tex;
   }
 
-  /* ---------------- moschettone ---------------- */
-  const clipMaterial = new THREE.MeshStandardMaterial({ color: 0x17140f, roughness: 0.4, metalness: 0.3 });
-  const clipGroup = new THREE.Group();
-  clipGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), clipMaterial));
-  const clipTab = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.3, 10), clipMaterial);
-  clipTab.position.y = -0.18;
-  clipGroup.add(clipTab);
-  scene.add(clipGroup);
+  const strapMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff, roughness: 0.82, metalness: 0, side: THREE.DoubleSide
+  });
+  const strapGeo = new THREE.BufferGeometry();
+  const strapPos = new Float32Array(STRAP_SAMPLES * 2 * 3);
+  const strapNorm = new Float32Array(STRAP_SAMPLES * 2 * 3);
+  const strapUv = new Float32Array(STRAP_SAMPLES * 2 * 2);
+  const strapIndex = [];
+  for (let i = 0; i < STRAP_SAMPLES - 1; i++) {
+    const a = i * 2;
+    strapIndex.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+  }
+  strapGeo.setIndex(strapIndex);
+  strapGeo.setAttribute('position', new THREE.BufferAttribute(strapPos, 3));
+  strapGeo.setAttribute('normal', new THREE.BufferAttribute(strapNorm, 3));
+  strapGeo.setAttribute('uv', new THREE.BufferAttribute(strapUv, 2));
+  const strapMesh = new THREE.Mesh(strapGeo, strapMaterial);
+  strapMesh.frustumCulled = false;
+  scene.add(strapMesh);
 
-  /* ---------------- cartellino ---------------- */
-  const sideMat = new THREE.MeshStandardMaterial({ color: 0xefebe2, roughness: 0.9 });
-  const backMat = new THREE.MeshStandardMaterial({ color: 0xf7f5f0, roughness: 0.9 });
-  const frontMat = new THREE.MeshStandardMaterial({ color: 0xefebe2, roughness: 0.55 });
-  const cardGeo = new THREE.BoxGeometry(CARD_W, CARD_H, CARD_D);
-  const cardMesh = new THREE.Mesh(cardGeo, [sideMat, sideMat, sideMat, sideMat, frontMat, backMat]);
+  const strapCurvePts = points.map(p => p.pos.clone());
+  const strapCurve = new THREE.CatmullRomCurve3(strapCurvePts);
+  const sP = new THREE.Vector3(), sPrev = new THREE.Vector3(), sT = new THREE.Vector3();
+  const sB = new THREE.Vector3(), sN = new THREE.Vector3(), sB2 = new THREE.Vector3(), sN2 = new THREE.Vector3();
+  const VIEW_Z = new THREE.Vector3(0, 0, 1);
+  function updateStrap() {
+    for (let i = 0; i < points.length; i++) strapCurvePts[i].copy(points[i].pos);
+    /* Torsione in fondo al nastro: uguale alla rotazione del cartellino
+       attorno al suo asse verticale, riportata tra -π e π (un nastro girato
+       di un giro intero è uguale a uno dritto). Si distribuisce sull'ultimo
+       terzo del nastro. */
+    const yaw = cardGroup.rotation.y;
+    const endTwist = ((yaw + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
+    let len = 0;
+    for (let i = 0; i < STRAP_SAMPLES; i++) {
+      const t = i / (STRAP_SAMPLES - 1);
+      strapCurve.getPoint(t, sP);
+      strapCurve.getTangent(t, sT);
+      if (i) len += sP.distanceTo(sPrev);
+      sPrev.copy(sP);
+      sB.crossVectors(sT, VIEW_Z).normalize();
+      sN.crossVectors(sB, sT).normalize();
+      const k = THREE.MathUtils.smoothstep(t, 0.66, 1);
+      const th = endTwist * k, c = Math.cos(th), s = Math.sin(th);
+      sB2.copy(sB).multiplyScalar(c).addScaledVector(sN, s);
+      sN2.copy(sN).multiplyScalar(c).addScaledVector(sB, -s);
+      const u = len / (STRAP_W * STRAP_TEX_RATIO);
+      for (let side = 0; side < 2; side++) {
+        const v = i * 2 + side, o = side ? -STRAP_W / 2 : STRAP_W / 2;
+        strapPos[v * 3] = sP.x + sB2.x * o;
+        strapPos[v * 3 + 1] = sP.y + sB2.y * o;
+        strapPos[v * 3 + 2] = sP.z + sB2.z * o;
+        strapNorm[v * 3] = sN2.x;
+        strapNorm[v * 3 + 1] = sN2.y;
+        strapNorm[v * 3 + 2] = sN2.z;
+        strapUv[v * 2] = u;
+        strapUv[v * 2 + 1] = side;
+      }
+    }
+    strapGeo.attributes.position.needsUpdate = true;
+    strapGeo.attributes.normal.needsUpdate = true;
+    strapGeo.attributes.uv.needsUpdate = true;
+  }
+
+  /* ---------------- cartellino ----------------
+     Rettangolo dagli angoli arrotondati estruso con un piccolo smusso (che
+     prende la luce sui bordi), con una vera asola in alto: l'anello del
+     laccetto ci passa attraverso. Il bordo è blu, come i biglietti da
+     visita con l'anima colorata. */
+  const CARD_R = 0.15;         // raggio degli angoli
+  const CARD_BEVEL = 0.014;    // smusso dei bordi
+  const SLOT_W = 0.46, SLOT_H = 0.1;
+  const SLOT_Y = 0.16;         // centro dell'asola, dal bordo alto
+
+  function roundedRect(path, x, y, w, h, r) {
+    path.moveTo(x + r, y);
+    path.lineTo(x + w - r, y);
+    path.absarc(x + w - r, y + r, r, -Math.PI / 2, 0, false);
+    path.lineTo(x + w, y + h - r);
+    path.absarc(x + w - r, y + h - r, r, 0, Math.PI / 2, false);
+    path.lineTo(x + r, y + h);
+    path.absarc(x + r, y + h - r, r, Math.PI / 2, Math.PI, false);
+    path.lineTo(x, y + r);
+    path.absarc(x + r, y + r, r, Math.PI, Math.PI * 1.5, false);
+    return path;
+  }
+
+  function makeCardGeometry() {
+    const w = CARD_W - CARD_BEVEL * 2, h = CARD_H - CARD_BEVEL * 2;
+    const shape = roundedRect(new THREE.Shape(), -w / 2, -h / 2, w, h, CARD_R - CARD_BEVEL);
+    const slotW = SLOT_W + CARD_BEVEL * 2, slotH = SLOT_H + CARD_BEVEL * 2;
+    shape.holes.push(roundedRect(new THREE.Path(), -slotW / 2, CARD_H / 2 - SLOT_Y - slotH / 2, slotW, slotH, slotH / 2));
+    const geo = new THREE.ExtrudeGeometry(shape, {
+      depth: CARD_D - CARD_BEVEL * 2,
+      bevelEnabled: true,
+      bevelThickness: CARD_BEVEL,
+      bevelSize: CARD_BEVEL,
+      bevelSegments: 3,
+      curveSegments: 14
+    });
+    geo.translate(0, 0, -(CARD_D - CARD_BEVEL * 2) / 2);
+    /* ExtrudeGeometry mette le due facce in un solo gruppo (prima quella
+       dietro, poi quella davanti, con lo stesso numero di triangoli) e il
+       bordo in un secondo: le si separa per dare a ognuna il suo
+       materiale, e si rifanno le UV in modo che la texture copra
+       esattamente il cartellino (sul retro specchiata, perché lo si
+       guarda da dietro). */
+    const lid = geo.groups[0], side = geo.groups[1];
+    const half = lid.count / 2;
+    geo.clearGroups();
+    geo.addGroup(side.start, side.count, 0);
+    geo.addGroup(lid.start, half, 1);
+    geo.addGroup(lid.start + half, half, 2);
+    const pos = geo.attributes.position, uv = geo.attributes.uv;
+    for (let i = lid.start; i < lid.start + lid.count; i++) {
+      const u = (pos.getX(i) + CARD_W / 2) / CARD_W;
+      uv.setXY(i, i < lid.start + half ? 1 - u : u, (pos.getY(i) + CARD_H / 2) / CARD_H);
+    }
+    return geo;
+  }
+
+  const edgeMat = new THREE.MeshStandardMaterial({ color: 0x3b4b99, roughness: 0.45 });
+  const backMat = new THREE.MeshPhysicalMaterial({
+    color: 0xefebe2, roughness: 0.5, clearcoat: 0.6, clearcoatRoughness: 0.3
+  });
+  // Fronte plastificato lucido (clearcoat), come i pass veri
+  const frontMat = new THREE.MeshPhysicalMaterial({
+    color: 0xf7f5f0, roughness: 0.45, clearcoat: 1, clearcoatRoughness: 0.16
+  });
+  const cardMesh = new THREE.Mesh(makeCardGeometry(), [edgeMat, backMat, frontMat]);
   /* Il cartellino è figlio del gruppo, spostato in basso rispetto
      all'origine: l'origine del gruppo è il punto di aggancio al laccetto
      (lo stesso punto dove sta il moschettone), non il centro del
@@ -412,6 +584,81 @@
   cardGroup.add(cardMesh);
   scene.add(cardGroup);
 
+  /* ---------------- moschettone ----------------
+     Il nastro finisce in un morsetto di metallo da cui pende un anello
+     cromato che passa nell'asola. Stanno nel gruppo del cartellino, quindi
+     girano con lui. L'anello sta su un piano verticale ruotato rispetto al
+     cartellino, così da davanti si vede come un'ellisse; qualsiasi
+     rotazione attorno all'asse verticale lo fa comunque passare per
+     l'asola. */
+  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe4e4e4, metalness: 1, roughness: 0.22 });
+  const crimpMat = new THREE.MeshStandardMaterial({ color: 0x2b2a28, metalness: 0.85, roughness: 0.35 });
+  const crimpW = STRAP_W + 0.04, crimpH = 0.15, crimpBevel = 0.012;
+  const crimpGeo = new THREE.ExtrudeGeometry(
+    roundedRect(new THREE.Shape(), -crimpW / 2 + crimpBevel, -crimpH / 2 + crimpBevel, crimpW - crimpBevel * 2, crimpH - crimpBevel * 2, 0.025),
+    { depth: 0.035, bevelEnabled: true, bevelThickness: crimpBevel, bevelSize: crimpBevel, bevelSegments: 2, curveSegments: 6 }
+  );
+  crimpGeo.translate(0, 0, -0.0175);
+  const crimp = new THREE.Mesh(crimpGeo, crimpMat);
+  crimp.position.y = 0.04;
+  cardGroup.add(crimp);
+  const ringTop = -0.03, ringBottom = -(CLIP_GAP + SLOT_Y);
+  const ringR = (ringTop - ringBottom) / 2;
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(ringR, 0.018, 12, 48), chromeMat);
+  ring.position.y = ringTop - ringR;
+  ring.rotation.y = Math.PI / 2 - 0.6;
+  cardGroup.add(ring);
+
+  /* ---------------- ombra ----------------
+     Un'ombra morbida su un piano dietro al cartellino, come se fosse
+     appeso davanti a una parete: segue posizione e inclinazione del
+     cartellino e si stringe quando lui gira di taglio. */
+  function makeShadowTexture() {
+    const w = 256, h = Math.round(256 * (CARD_H / CARD_W)), pad = 40;
+    const canvas = document.createElement('canvas');
+    canvas.width = w + pad * 2; canvas.height = h + pad * 2;
+    const ctx = canvas.getContext('2d');
+    /* La sfocatura si fa con shadowBlur (ctx.filter non c'è su Safari): si
+       disegna il rettangolo fuori dal canvas e se ne tiene solo l'ombra. */
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 26;
+    ctx.shadowOffsetX = 2000;
+    ctx.fillStyle = '#000';
+    const rr = new Path2D();
+    const r = CARD_R / CARD_W * w;
+    rr.roundRect ? rr.roundRect(pad - 2000, pad, w, h, r) : rr.rect(pad - 2000, pad, w, h);
+    ctx.fill(rr);
+    return new THREE.CanvasTexture(canvas);
+  }
+  const SHADOW_PAD = 40 / 256;
+  const shadowMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(CARD_W * (1 + SHADOW_PAD * 2), CARD_H + CARD_W * SHADOW_PAD * 2),
+    new THREE.MeshBasicMaterial({ map: makeShadowTexture(), color: 0x17140f, transparent: true, opacity: 0.2, depthWrite: false })
+  );
+  scene.add(shadowMesh);
+  const SHADOW_OFFSET = new THREE.Vector3(0.16, -0.22, -0.55);
+  const cardCenter = new THREE.Vector3();
+  function placeShadow() {
+    cardMesh.getWorldPosition(cardCenter);
+    shadowMesh.position.copy(cardCenter).add(SHADOW_OFFSET);
+    shadowMesh.rotation.z = cardGroup.rotation.z;
+    shadowMesh.scale.x = Math.max(0.1, Math.abs(Math.cos(cardGroup.rotation.y)));
+  }
+
+  /* ---------------- grafica del cartellino ----------------
+     Fronte: solo la foto, con un bordino chiaro sottile. Retro:
+     l'illustrazione VITQ. Disegnati su canvas grandi
+     quanto il cartellino (TEX_W px di larghezza), con Inter appena
+     caricato. */
+  const TEX_W = 1024, TEX_H = Math.round(TEX_W * (CARD_H / CARD_W));
+  const U = TEX_W / CARD_W; // px per unità di scena
+  const FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  const DOTS = ['#D8322A', '#E8B400', '#3F6B3D', '#3B4B99'];
+  const slotBox = {
+    x: TEX_W / 2 - SLOT_W / 2 * U, y: (SLOT_Y - SLOT_H / 2) * U,
+    w: SLOT_W * U, h: SLOT_H * U
+  };
+
   function roundRectPath(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -422,40 +669,123 @@
     ctx.closePath();
   }
 
-  function drawCover(ctx, img, w, h) {
+  // Ritaglio "cover" con un punto di fuoco (fy: 0 = in alto, 1 = in basso)
+  function drawCover(ctx, img, x, y, w, h, fy = 0.5) {
     const ir = img.width / img.height, cr = w / h;
     let sw, sh, sx, sy;
     if (ir > cr) { sh = img.height; sw = sh * cr; sx = (img.width - sw) / 2; sy = 0; }
-    else { sw = img.width; sh = sw / cr; sx = 0; sy = (img.height - sh) / 2; }
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
+    else { sw = img.width; sh = sw / cr; sx = 0; sy = (img.height - sh) * fy; }
+    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
   }
 
-  const loader = new THREE.ImageLoader();
-  loader.load('assets/images/VITO.JPG', (img) => {
-    const w = 512, h = Math.round(512 * (CARD_H / CARD_W));
+  function newCanvas(w = TEX_W, h = TEX_H) {
     const canvas = document.createElement('canvas');
     canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#EFEBE2';
-    ctx.fillRect(0, 0, w, h);
-    ctx.save();
-    roundRectPath(ctx, 6, 6, w - 12, h - 12, 26);
-    ctx.clip();
-    drawCover(ctx, img, w, h);
-    ctx.restore();
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = '#F7F5F0';
-    roundRectPath(ctx, 6, 6, w - 12, h - 12, 26);
+    return [canvas, canvas.getContext('2d')];
+  }
+
+  function text(ctx, str, x, y, font, color, spacing = 0, align = 'left') {
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = spacing + 'px';
+    ctx.fillText(str, x, y);
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  }
+
+  // Rinforzo stampato attorno all'asola
+  function drawSlotRing(ctx, color) {
+    const g = 10;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = color;
+    roundRectPath(ctx, slotBox.x - g, slotBox.y - g, slotBox.w + g * 2, slotBox.h + g * 2, slotBox.h / 2 + g);
     ctx.stroke();
-    ctx.beginPath();
-    ctx.fillStyle = '#17140F';
-    ctx.arc(w / 2, 26, 7, 0, Math.PI * 2);
+  }
+
+  // Fascia a quattro colori in fondo, gli stessi dei pallini dell'occhiello
+  function drawColorBar(ctx, h) {
+    const segW = TEX_W / DOTS.length;
+    DOTS.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i * segW, TEX_H - h, segW + 1, h);
+    });
+  }
+
+  const BORDER = 30;                               // bordino attorno alla foto
+  const PHOTO = { x: BORDER, y: BORDER, w: TEX_W - BORDER * 2, h: TEX_H - BORDER * 2 };
+
+  function drawFront(ctx, photo) {
+    ctx.fillStyle = '#F7F5F0';
+    ctx.fillRect(0, 0, TEX_W, TEX_H);
+    // Foto, con gli angoli concentrici a quelli del cartellino
+    ctx.save();
+    roundRectPath(ctx, PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h, CARD_R * U - BORDER);
+    ctx.clip();
+    drawCover(ctx, photo, PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h, 0.2);
+    ctx.restore();
+    // L'asola taglia la foto: attorno le si lascia lo stesso bordino chiaro
+    const g = BORDER * 0.6;
+    ctx.fillStyle = '#F7F5F0';
+    roundRectPath(ctx, slotBox.x - g, slotBox.y - g, slotBox.w + g * 2, slotBox.h + g * 2, slotBox.h / 2 + g);
     ctx.fill();
+  }
+
+  function drawBack(ctx, sticker) {
+    ctx.fillStyle = '#EFEBE2';
+    ctx.fillRect(0, 0, TEX_W, TEX_H);
+    // Puntinato leggero
+    ctx.fillStyle = 'rgba(23,20,15,0.07)';
+    for (let y = 30; y < TEX_H; y += 34) {
+      for (let x = 30 + (Math.round(y / 34) % 2) * 17; x < TEX_W; x += 34) {
+        ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    drawSlotRing(ctx, '#DBD5C6');
+    if (sticker) {
+      const sh = 860, sw = sh * (sticker.width / sticker.height);
+      ctx.drawImage(sticker, (TEX_W - sw) / 2, 150, sw, sh);
+    }
+    text(ctx, 'Disegno identità', TEX_W / 2, TEX_H - 216, `700 50px ${FONT}`, '#17140F', -1, 'center');
+    text(ctx, 'che restano impresse.', TEX_W / 2, TEX_H - 160, `700 50px ${FONT}`, '#17140F', -1, 'center');
+    text(ctx, '@VITQ1999', TEX_W / 2, TEX_H - 86, `700 22px ${FONT}`, '#3B4B99', 4, 'center');
+    drawColorBar(ctx, 30);
+  }
+
+  function canvasTexture(canvas, srgb) {
     const tex = new THREE.CanvasTexture(canvas);
-    if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
-    frontMat.map = tex;
+    if (srgb && 'colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    return tex;
+  }
+
+  const loadImage = (src) => new Promise((resolve) => {
+    new THREE.ImageLoader().load(src, resolve, undefined, () => resolve(null));
+  });
+  // Inter deve essere caricato prima di disegnare, o il canvas userebbe il font di riserva
+  const fontsReady = document.fonts
+    ? Promise.all([document.fonts.load(`700 40px Inter`), document.fonts.load(`500 40px Inter`)]).catch(() => {})
+    : Promise.resolve();
+
+  fontsReady.then(() => {
+    strapMaterial.map = makeStrapTexture();
+    strapMaterial.needsUpdate = true;
+  });
+
+  Promise.all([loadImage('assets/images/VITO.JPG'), fontsReady]).then(([photo]) => {
+    if (!photo) return;
+    const [front, fctx] = newCanvas();
+    drawFront(fctx, photo);
+    frontMat.map = canvasTexture(front, true);
     frontMat.color.set(0xffffff);
     frontMat.needsUpdate = true;
+  });
+
+  Promise.all([loadImage('assets/images/VITQ_STICKER-cartellino.png'), fontsReady]).then(([sticker]) => {
+    const [back, bctx] = newCanvas();
+    drawBack(bctx, sticker);
+    backMat.map = canvasTexture(back, true);
+    backMat.color.set(0xffffff);
+    backMat.needsUpdate = true;
   });
 
   /* ---------------- resize ---------------- */
@@ -680,16 +1010,15 @@
   let accumulator = 0;
   let visible = true;
 
-  /* Moschettone e cartellino seguono l'ultimo punto della corda. Il gruppo
-     del cartellino sta sempre nello stesso punto del moschettone: e' il
-     cartellino (figlio, spostato in basso) a ruotarci attorno, quindi il
-     punto di aggancio non si sposta mai. */
+  /* Il cartellino (con moschettone e anello) segue l'ultimo punto della
+     corda: il gruppo sta sempre nel punto di aggancio ed e' il cartellino
+     (figlio, spostato in basso) a ruotarci attorno, quindi il punto di
+     aggancio non si sposta mai. */
   const ropeDir = new THREE.Vector3();
   function placeCard() {
     const last = points[points.length - 1];
     const prev = points[points.length - 2];
     ropeDir.subVectors(last.pos, prev.pos).normalize();
-    clipGroup.position.copy(last.pos);
     cardGroup.position.copy(last.pos);
     cardGroup.rotation.z = Math.atan2(ropeDir.x, -ropeDir.y);
     cardGroup.rotation.y = THREE.MathUtils.clamp(-ropeDir.x * 0.6, -0.5, 0.5) + spinAngle;
@@ -894,9 +1223,10 @@
     }
     if (steps === 0 && !dragging) return; // niente di nuovo da disegnare
 
-    updateStrap();
     // Il rimbalzo sulle pillole può aver spostato il cartellino dopo placeCard
     placeCard();
+    updateStrap();
+    placeShadow();
     drawPills();
 
     renderer.render(scene, camera);
