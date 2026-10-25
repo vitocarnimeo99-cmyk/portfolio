@@ -457,10 +457,11 @@ window.addEventListener('load', () => {
 
   // A ogni passaggio la lettera prende un colore a caso (mai uguale al
   // precedente) tra quelli già presenti nella pagina: l'accento del sito e i
-  // colori delle tile dei progetti. Il giallo è il #F5C400 di IDEA appena
-  // scurito, altrimenti sul fondo chiaro quasi sparisce.
-  const palette = ['#3B4B99', '#6163C6', '#3F6B3D', '#D8322A', '#2347C4',
-    '#5A2AA0', '#9A6229', '#E32227', '#00579C', '#4F9A16', '#E8B400'];
+  // colori delle tile dei progetti. L'hero è su fondo scuro, quindi i toni
+  // più cupi sono schiariti quanto basta per leggersi sul nero (contrasto
+  // almeno 4,5:1); il giallo è il #F5C400 di IDEA, verde e giallo erano già ok.
+  const palette = ['#727DB6', '#7476CD', '#658964', '#DD4B44', '#617BD5',
+    '#9272C0', '#A67543', '#E74145', '#4283B6', '#4F9A16', '#F5C400'];
   let lastColor = '';
   const randomColor = () => {
     let color;

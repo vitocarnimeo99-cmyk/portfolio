@@ -177,17 +177,44 @@ nav.wrap{
 }
 
 /* -------- Hero -------- */
+/* Hero su fondo scuro (lo stesso nero caldo dei contatti), header escluso:
+   dentro .hero i colori del sito si invertono ridefinendo le variabili, così
+   testi, pulsanti, tondi social e sfumature passano al chiaro da soli.
+   L'accento diventa un blu più chiaro, che sul nero si legge. */
 .hero{
+  --ink: #F7F5F0;
+  --ink-soft: rgba(247,245,240,.7);
+  --paper: #17140F;
+  --line: rgba(247,245,240,.22);
+  --accent: #9AA8EE;
   position: relative;
   overflow: hidden;
   padding: 130px 0 110px;
-  opacity: 0;
-  transform: translateY(14px);
-  animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards;
+  background: var(--paper);
+  color: var(--ink);
+}
+/* Alone di colore come in "In evidenza", nel blu del sito (lo stesso del
+   laccetto e del ticker) e dietro al cartellino, che ne esce in risalto */
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(55% 80% at 82% 35%, rgba(59,75,153,.25), transparent 70%);
+  pointer-events:none;
+}
+@media (max-width: 980px){
+  .hero::before{ background: radial-gradient(90% 45% at 50% 15%, rgba(59,75,153,.25), transparent 70%); }
+}
+@media (max-width: 640px){
+  .hero::before{ background: radial-gradient(90% 50% at 80% 40%, rgba(59,75,153,.25), transparent 70%); }
 }
 @keyframes rise{ to{ opacity:1; transform: translateY(0); } }
 
+/* Entra il contenuto, non il riquadro: il fondo nero c'è da subito e non
+   lampeggia dal chiaro al caricamento */
 .hero-flex{
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards;
   position: relative;
   z-index: 1;
   display:flex;
@@ -827,7 +854,7 @@ a:focus-visible, button:focus-visible{
 }
 
 @media (prefers-reduced-motion: reduce){
-  .hero{ animation: none; opacity:1; transform:none; }
+  .hero-flex{ animation: none; opacity:1; transform:none; }
   .tile{ transition:none; opacity:1; transform:none; }
   .tile .cap, .tile .art, .tile-frame, .tile-year{ transition:none; }
   .edu-logo, .edu-logo::after{ transition:none; }
@@ -1588,7 +1615,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--accent);
   margin-bottom:22px;
 }
-/* Su telefono l'occhiello dell'hero diventa tre pillole bianche, una per
+/* Su telefono l'occhiello dell'hero diventa tre pillole scure, una per
    ruolo, con il pallino nei colori delle lettere del titolo: stanno sotto
    il titolo, in colonna dalla più larga alla più stretta, e a destra ci
    pende il cartellino. cartellino3d.js allunga il cordino e, se il
@@ -1602,7 +1629,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .hero .home-eyebrow > span:nth-child(1){ --dot:#D8322A; } /* Illustrator */
 .hero .home-eyebrow > span:nth-child(2){ --dot:#E8B400; }
 .hero .home-eyebrow > span:nth-child(3){ --dot:var(--ink); } /* & */
-.hero .home-eyebrow > span:nth-child(4){ --dot:#3F6B3D; }
+.hero .home-eyebrow > span:nth-child(4){ --dot:#658964; } /* il verde schiarito per il nero */
 .hero .home-eyebrow > span.is-hit{ animation: word-hit .55s cubic-bezier(.2,.7,.2,1); }
 @keyframes word-hit{
   0%{ color: var(--dot); }
@@ -1627,7 +1654,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     padding:8px 14px;
     border:1px solid var(--line);
     border-radius:999px;
-    background:#fff;
+    background: var(--paper); /* pieno, copre il cordino che passa dietro */
     font-size:0.66rem;
     font-weight:700;
     letter-spacing:0.07em;
@@ -1643,7 +1670,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     background: var(--dot, var(--accent));
   }
   .hero-roles li:nth-child(1){ --dot:#E8B400; } /* Graphic Designer */
-  .hero-roles li:nth-child(2){ --dot:#3F6B3D; }
+  .hero-roles li:nth-child(2){ --dot:#658964; }
   .hero-roles li:nth-child(3){ --dot:#D8322A; }
   /* Colpita dal cartellino (cartellino3d.js la sposta con transform e le
      dà .is-hit): il pallino si gonfia e manda un'onda del suo colore */
