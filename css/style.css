@@ -563,6 +563,58 @@ h2.section-title{
 }
 .tile:hover .tile-year{ transform: rotate(-6deg) scale(1.08); }
 
+/* Invito ad aprire il progetto: bollino in vetro smerigliato scuro e
+   semitrasparente, così non copre troppo l'immagine. A riposo un cerchio con
+   la freccia ↗, in hover si allarga in "Apri progetto" e la freccia gira a ↖,
+   verso il centro della card */
+.tile-open{
+  position:absolute;
+  right:14px; bottom:14px;
+  z-index:3;
+  display:inline-flex;
+  align-items:center;
+  height:38px;
+  padding:0 12px;
+  border-radius:999px;
+  background: rgba(23,20,15,.26);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(255,255,255,.28);
+  color:#fff;
+  font-size:0.8rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  box-shadow: 0 6px 16px -8px rgba(23,20,15,.35);
+  pointer-events:none;
+  transition: background-color .3s ease;
+}
+.tile-open i{
+  font-size:0.9rem;
+  transform: rotate(-45deg);
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+}
+.tile-open-label{
+  max-width:0;
+  overflow:hidden;
+  white-space:nowrap;
+  opacity:0;
+  transition: max-width .45s cubic-bezier(.2,.7,.2,1), margin .45s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+}
+.tile:hover .tile-open, .tile:focus-visible .tile-open{ background: rgba(23,20,15,.38); }
+.tile:hover .tile-open i, .tile:focus-visible .tile-open i{ transform: rotate(-135deg); }
+.tile:hover .tile-open-label, .tile:focus-visible .tile-open-label{
+  max-width:10em;
+  margin-right:9px;
+  opacity:1;
+}
+/* Su touch non c'è hover: la scritta resta sempre aperta */
+@media (hover: none){
+  .tile-open,
+  .tile:hover .tile-open{ height:34px; background: rgba(23,20,15,.26); }
+  .tile-open i{ transform: rotate(-135deg); }
+  .tile-open-label{ max-width:none; margin-right:8px; opacity:1; }
+}
+
 .tile:nth-child(1){ grid-column: span 4; }
 .tile:nth-child(1) .tile-frame{ aspect-ratio: 18/10; }
 .tile:nth-child(2){ grid-column: span 2; }
@@ -941,7 +993,8 @@ a:focus-visible, button:focus-visible{
 @media (prefers-reduced-motion: reduce){
   .hero-flex{ animation: none; opacity:1; transform:none; }
   .tile{ transition:none; opacity:1; transform:none; }
-  .tile .cap, .tile .art, .tile-frame, .tile-year{ transition:none; }
+  .tile .cap, .tile .art, .tile-frame, .tile-year,
+  .tile-open, .tile-open i, .tile-open-label{ transition:none; }
   .edu-logo, .edu-logo::after{ transition:none; }
   .contact-status .dot{ animation: none; }
 }
@@ -1170,6 +1223,10 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--ink);
 }
 .btn-ghost:hover{ border-color: var(--ink); transform: translateY(-2px); }
+/* Frecce: la stessa icona del bollino delle card al posto dei caratteri
+   ← → ↓ ↗. La diagonale è la freccia a destra ruotata, come nel bollino */
+.arrow-ico{ font-size:0.85em; }
+.arrow-ne{ transform: rotate(-45deg); }
 .btn-icon{
   display:inline-flex;
   align-items:center;

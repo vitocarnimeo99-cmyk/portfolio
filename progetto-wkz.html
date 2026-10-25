@@ -893,7 +893,7 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori">← Torna ai&nbsp;lavori</a>
+      <a class="back-link" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Progetto di&nbsp;tesi — NABA, Milano</span>
       <h1>Where's<br class="br-desk"><br class="br-mob"> Kud&nbsp;Zamb? <em>Find Nicola in&nbsp;Bari</em></h1>
       <div class="wkz-intro">
@@ -914,7 +914,7 @@
         <div>Output<span>Telo mare · Sticker · Poster · Shopper </span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni per&nbsp;l'acquisto&nbsp;↗</a>
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni per&nbsp;l'acquisto<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
         <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
       </div>
     </div>
@@ -1023,7 +1023,7 @@
           <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430&nbsp;persone (alieni, pokemon, sirenetti); 21&nbsp;cani; 10&nbsp;gatti; 23&nbsp;palloni; 3&nbsp;papere; 8&nbsp;piccioni; 1&nbsp;polpo; 1&nbsp;pellicano; 6&nbsp;topolini; 1&nbsp;unicorno; 1&nbsp;foca; 1&nbsp;granchio; 1&nbsp;sfera del&nbsp;drago; 2&nbsp;galli, 1&nbsp;gabibbo; 4&nbsp;pesci; 4&nbsp;tartarughe</span>
         </div>
       </div>
-      <button type="button" class="btn-primary wkz-toggle" id="wkz-tesi-toggle" aria-pressed="false">Basta mi&nbsp;arrendo ↗</button>
+      <button type="button" class="btn-primary wkz-toggle" id="wkz-tesi-toggle" aria-pressed="false">Basta mi&nbsp;arrendo<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></button>
     </div>
     </div>
   </section>
@@ -1209,8 +1209,8 @@
         <h2 class="section-title">Sei interessato <em>all'acquisto?</em></h2>
         <p>Teli mare, pile, poster, sticker e&nbsp;altri prodotti sono&nbsp;disponibili.<br class="br-desk"><br class="br-mob"> Per&nbsp;scoprire quelli disponibili e&nbsp;ricevere maggiori informazioni,&nbsp;contattami.</p>
         <div class="project-links">
-          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni&nbsp;↗</a>
-          <a class="btn-ghost" href="index.html#lavori">← Torna al&nbsp;portfolio</a>
+          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
+          <a class="btn-ghost" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna al&nbsp;portfolio</a>
         </div>
       </div>
       <a class="wkz-shop" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi per acquistare i prodotti di Where's Kud Zamb?">
@@ -1223,7 +1223,7 @@
           <li>Poster<span>Formato a&nbsp;scelta</span></li>
           <li>Sticker &amp; shopper<span>Anche in&nbsp;set</span></li>
         </ul>
-        <span class="wkz-shop-cta">Scrivimi per&nbsp;ordinare ↗</span>
+        <span class="wkz-shop-cta">Scrivimi per&nbsp;ordinare&nbsp;<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></span>
       </a>
     </div>
   </section>
@@ -1243,7 +1243,7 @@
     <button class="wkz-viewer-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
   </div>
   <div class="wkz-viewer-bottom">
-    <button type="button" class="btn-primary wkz-toggle" aria-pressed="false">Basta mi arrendo ↗</button>
+    <button type="button" class="btn-primary wkz-toggle" aria-pressed="false">Basta mi arrendo<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></button>
   </div>
 </dialog>
 
@@ -1644,7 +1644,7 @@
         if (viewer) viewer.classList.toggle('is-solved', solved);
         toggles.forEach(function (b) {
           b.setAttribute('aria-pressed', solved);
-          b.textContent = solved ? 'Ricomincio a cercare ↗' : 'Basta mi arrendo ↗';
+          b.innerHTML = (solved ? 'Ricomincio a cercare' : 'Basta mi arrendo') + '<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i>';
         });
         // la lente ingrandisce l'immagine attualmente visibile
         lens.style.backgroundImage = 'url("' + (solved ? overlay.currentSrc || overlay.src : img.currentSrc) + '")';
