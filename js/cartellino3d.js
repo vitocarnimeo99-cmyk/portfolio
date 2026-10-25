@@ -113,8 +113,13 @@
     return top;
   }
 
-  /* ---------------- pillole dei ruoli (telefono) ----------------
-     Le tre pillole sono "corpi" leggeri legati con una molla al loro posto.
+  /* ---------------- pillole dei ruoli ----------------
+     Sul telefono le pillole sono quelle dei ruoli; su tablet e desktop, dove
+     al loro posto c'è l'occhiello, fanno da pillole le sue quattro parti
+     ("Illustrator," "Graphic" "&" "Motion Designer"), con la stessa fisica.
+     In tutti e due i casi lo sono anche le parole del titolo (gli span .w
+     creati da main.js).
+     Le pillole sono "corpi" leggeri legati con una molla al loro posto.
      A ogni passo il contorno del cartellino viene proiettato sullo schermo
      (un quadrilatero, che si stringe quando gira su se stesso) e confrontato
      con quello di ogni pillola (una capsula): se si toccano, la pillola
@@ -141,14 +146,25 @@
   const PILL_MAX_STEPS = 180;    // 3 s
   const PILL_SNAP_STEPS = 90;    // 1,5 s di rientro al massimo
   let pillClock = 0;
-  const pills = roles ? Array.from(roles.children).map((el) => ({
-    el, hx: 0, hy: 0, w: 0, h: 0,      // posto (centro, px dall'hero) e misure
+  // shrink: quanto togliere all'altezza (in frazione) perché le righe del
+  // titolo, attaccate tra loro, a riposo non si tocchino
+  const makePills = (els, shrink = 0) => Array.from(els).map((el) => ({
+    el, shrink, hx: 0, hy: 0, w: 0, h: 0, // posto (centro, px dall'hero) e misure
     x: 0, y: 0, vx: 0, vy: 0,          // spostamento dal posto e velocità, px/passo
     a: 0, va: 0, s: 0, vs: 0,          // rotazione e schiacciamento
     poly: null, hitAt: 0, moving: false,
     lastHit: 0, startedAt: 0,            // passo dell'ultimo colpo e di quando ha cominciato a muoversi
     returning: false, returnAt: 0        // se sta rientrando, e da quando
-  })) : [];
+  }));
+  const titlePills = makePills(title.querySelectorAll('.w'), 0.2);
+  const rolePills = [...(roles ? makePills(roles.children) : []), ...titlePills];
+  const eyebrowPills = [...makePills(document.querySelectorAll('.hero .home-eyebrow > span')), ...titlePills];
+  let pills = rolePills; // quelle del layout attuale
+  function usePills(list) {
+    if (list === pills) return;
+    resetPills();
+    pills = list;
+  }
 
   function measurePills() {
     const box = container.getBoundingClientRect();
@@ -160,7 +176,7 @@
       p.hx = r.left + r.width / 2 - box.left;
       p.hy = r.top + r.height / 2 - box.top;
       p.w = r.width;
-      p.h = r.height;
+      p.h = r.height * (1 - p.shrink);
     }
   }
   function resetPills() {
@@ -172,8 +188,9 @@
   }
 
   // Contorno della capsula: due semicerchi da 5 punti, ruotati con la pillola
+  // (la "&" è più stretta che alta: diventa un cerchio largo quanto lei)
   function pillPolygon(p) {
-    const r = p.h / 2, half = p.w / 2 - r;
+    const r = Math.min(p.w, p.h) / 2, half = p.w / 2 - r;
     const cos = Math.cos(p.a), sin = Math.sin(p.a);
     const cx = p.hx + p.x, cy = p.hy + p.y;
     const poly = [];
@@ -245,6 +262,9 @@
     if (now - p.hitAt < 220) return;
     p.hitAt = now;
     p.el.classList.remove('is-hit');
+    // Prima dell'animazione: main.js ne approfitta per dare alle parole del
+    // titolo un colore a caso (in --dot)
+    p.el.dispatchEvent(new CustomEvent('cartellino-hit', { bubbles: true }));
     void p.el.offsetWidth; // fa ripartire l'animazione
     p.el.classList.add('is-hit');
     // Sui telefoni Android un colpo forte si sente anche in mano
@@ -255,7 +275,7 @@
   }
 
   let restLen = REST_LEN;
-  let phonePxPerUnit = 0; // px per unità di scena sul telefono (0 = non è il layout del telefono)
+  let pillsPxPerUnit = 0; // px per unità di scena, per le pillole (0 = non ancora misurato)
   // A riposo il cordino si allunga un po' sotto il peso del cartellino
   // (i vincoli della simulazione non sono rigidi): di quanto, misurato a
   // occhio sugli screenshot, per far arrivare il cartellino dove deve.
@@ -265,6 +285,8 @@
     const halfHeight = dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     const w = container.clientWidth;
     restLen = REST_LEN;
+    // Le parole del titolo spostate falserebbero la misura delle sue righe
+    resetPills();
     // Telefono: cartellino a destra delle pillole e centrato con loro in
     // altezza. Il cartellino scende fino a centrarsi sulle pillole (mai più
     // in alto di quanto permette phoneCardTop); se deve stare più in basso
@@ -288,13 +310,18 @@
       restLen = (ANCHOR.y - cardTopY - CLIP_GAP) / (SEGMENTS - 1) / (1 + ROPE_STRETCH);
       roles.style.paddingTop = Math.round(pillsPush) + 'px';
       roles.style.minHeight = Math.max(0, Math.ceil(cardTop + cardH - rolesTop)) + 'px';
-      phonePxPerUnit = pxPerUnit;
+      usePills(rolePills);
+      pillsPxPerUnit = pxPerUnit;
       measurePills();
       return;
     }
-    phonePxPerUnit = 0;
-    resetPills();
     if (roles) roles.style.paddingTop = roles.style.minHeight = '';
+    // Tablet e desktop: pillole dell'occhiello. La camera inquadra la
+    // fascia alta (tablet) o tutto l'hero (desktop), vedi updateCamera.
+    usePills(eyebrowPills);
+    const viewH = w <= 980 && height > MOBILE_BAND_H ? MOBILE_BAND_H : height;
+    pillsPxPerUnit = viewH / (2 * halfHeight);
+    measurePills();
     // Tablet (vedi style.css): il cartellino ha una fascia tutta sua sopra
     // il titolo, lì sta meglio centrato.
     if (w <= 980) { ANCHOR.x = 0; return; }
@@ -508,7 +535,6 @@
     const hit = raycaster.intersectObject(cardMesh, false);
     if (hit.length === 0) return;
     dragging = true;
-    pillsArmed = true;
     container.classList.add('is-dragging');
     updateHover();
     renderer.domElement.setPointerCapture(e.pointerId);
@@ -678,14 +704,12 @@
   ];
   const corner = new THREE.Vector3();
   let lastCardCenter = null;
-  /* Le collisioni partono dalla prima presa: al caricamento il cartellino
-     scende dall'alto con un'oscillazione disordinata e toccherebbe le
-     pillole da solo, senza che nessuno l'abbia mosso. */
-  let pillsArmed = false;
+  /* Le collisioni valgono da subito: al caricamento il cartellino scende
+     dall'alto oscillando e, se passa sul testo, lo urta già da solo. */
   camera.updateMatrixWorld();
 
   function stepPills() {
-    if (!pillsArmed || !phonePxPerUnit || !pills.length || prefersReducedMotion) return;
+    if (!pillsPxPerUnit || !pills.length || prefersReducedMotion) return;
 
     // Il cartellino in px dall'hero, e la sua velocità in px/passo
     cardGroup.updateMatrixWorld(true);
@@ -721,7 +745,7 @@
       if (!p.moving) { p.moving = true; p.startedAt = p.lastHit = pillClock; }
       if (!dragging) {
         // Il cartellino rimbalza indietro (in scena la y va verso l'alto)
-        const back = depth * (1 - PILL_SHARE) / phonePxPerUnit;
+        const back = depth * (1 - PILL_SHARE) / pillsPxPerUnit;
         last.pos.x -= nx * back;
         last.pos.y += ny * back;
       }

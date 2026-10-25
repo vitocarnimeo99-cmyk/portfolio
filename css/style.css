@@ -241,6 +241,16 @@ nav.wrap{
    vicine non si spostano. line-height normale = stessa linea di base. */
 .hero h1 .w{ white-space: nowrap; }
 .hero h1 .ch{ position: relative; }
+/* Come le parti dell'occhiello, le parole si spostano quando le colpisce
+   il cartellino (cartellino3d.js) e si accendono un attimo di un colore a
+   caso tra quelli delle lettere (--dot, messo da main.js). */
+.hero h1 .w{ display: inline-block; --dot: var(--accent); }
+/* Più lunga che nell'occhiello: il colore resta pieno un attimo prima di
+   sfumare, altrimenti sulle parole grandi in movimento quasi non si vede */
+.hero h1 .w.is-hit{ animation: title-hit .9s ease-out; }
+@keyframes title-hit{
+  0%, 45%{ color: var(--dot); }
+}
 .hero h1 .ch::after{
   content: attr(data-ch);
   position: absolute;
@@ -1584,6 +1594,19 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
    pende il cartellino. cartellino3d.js allunga il cordino e, se il
    cartellino scende più in basso delle pillole, dà al blocco la
    min-height che serve perché il testo sotto non gli finisca dietro. */
+/* Su tablet e desktop le quattro parti dell'occhiello si comportano come le
+   pillole del telefono: cartellino3d.js le sposta con transform quando il
+   cartellino le colpisce e dà .is-hit, che le accende un attimo del colore
+   del ruolo. */
+.hero .home-eyebrow > span{ display:inline-block; }
+.hero .home-eyebrow > span:nth-child(1){ --dot:#D8322A; } /* Illustrator */
+.hero .home-eyebrow > span:nth-child(2){ --dot:#E8B400; }
+.hero .home-eyebrow > span:nth-child(3){ --dot:var(--ink); } /* & */
+.hero .home-eyebrow > span:nth-child(4){ --dot:#3F6B3D; }
+.hero .home-eyebrow > span.is-hit{ animation: word-hit .55s cubic-bezier(.2,.7,.2,1); }
+@keyframes word-hit{
+  0%{ color: var(--dot); }
+}
 .hero-roles{ display:none; }
 @media (max-width: 640px){
   .hero .home-eyebrow{ display:none; }
@@ -1643,12 +1666,16 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .section-title em{ color: var(--accent); }
 
 /* -------- Hero -------- */
-.hero-links{ margin-top:44px; }
+/* "Guarda i lavori" seguito dalla barra social (Instagram, Behance,
+   LinkedIn) e dal tondo della mail, tutti tondi della stessa misura e alti
+   quanto il pulsante. */
+.hero-links{ margin-top:44px; align-items:center; gap:12px; }
 .hero .meta{ margin-top:40px; }
-.hero-social{ display:none; }
-/* Su telefono al posto dei pulsanti c'è la barra social (Instagram,
-   Behance, LinkedIn) + il tondo della mail, tutti tondi della stessa
-   misura, subito sotto i dati (24px, come gli altri spazi dell'hero).
+.hero-social{ display:flex; gap:12px; }
+.hero-social a,
+.hero-links .btn-icon{ width:52px; height:52px; padding:0; font-size:1.3rem; }
+/* Su telefono il pulsante sparisce e restano solo i tondi, un po' più
+   piccoli, subito sotto i dati (24px, come gli altri spazi dell'hero).
    Sugli schermi bassi, dove non ci stanno nella prima schermata, restano
    attaccati al fondo dello schermo (sticky, su una sfumatura del fondo)
    finché non si arriva alla fine dell'hero. overflow:clip al posto di
@@ -1667,13 +1694,10 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
     padding: 24px 0 calc(16px + env(safe-area-inset-bottom));
     background: linear-gradient(to bottom, transparent, var(--paper) 20px);
     flex-wrap:nowrap;
-    gap:12px;
   }
-  .hero-links .btn-primary,
-  .hero-links .btn-ghost{ display:none; }
-  .hero-social{ display:flex; gap:12px; }
+  .hero-links .btn-primary{ display:none; }
   .hero-social a,
-  .hero-links .btn-icon{ width:48px; height:48px; padding:0; font-size:1.3rem; }
+  .hero-links .btn-icon{ width:48px; height:48px; }
 }
 
 /* -------- Ticker: blu d'accento + stelline gialle -------- */

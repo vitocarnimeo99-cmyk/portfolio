@@ -462,22 +462,27 @@ window.addEventListener('load', () => {
   const palette = ['#3B4B99', '#6163C6', '#3F6B3D', '#D8322A', '#2347C4',
     '#5A2AA0', '#9A6229', '#E32227', '#00579C', '#4F9A16', '#E8B400'];
   let lastColor = '';
-  const setColor = (ch) => {
+  const randomColor = () => {
     let color;
     do { color = palette[Math.floor(Math.random() * palette.length)]; } while (color === lastColor);
     lastColor = color;
-    ch.style.setProperty('--ch-color', color);
+    return color;
   };
+  const setColor = (ch) => ch.style.setProperty('--ch-color', randomColor());
+  // Parola colpita dal cartellino (cartellino3d.js): si accende di un
+  // colore a caso della stessa tavolozza
+  h1.addEventListener('cartellino-hit', (e) => {
+    e.target.style.setProperty('--dot', randomColor());
+  });
   h1.addEventListener('mouseover', (e) => {
     const ch = e.target.closest('.ch');
     if (ch) setColor(ch);
   });
 
-  // Su touch non c'è hover: la lettera si accende per un attimo (classe
-  // is-on) quando la si tocca o ci si striscia sopra, e ogni secondo o due
-  // se ne accendono due a caso da sole, solo mentre il titolo è a schermo e
-  // non con "riduci movimento".
-  if (!matchMedia('(hover: none)').matches) return;
+  // Ogni secondo o due se ne accendono per un attimo (classe is-on) due a
+  // caso da sole, su tutti gli schermi, solo mentre il titolo è a schermo e
+  // non con "riduci movimento". Su touch, dove non c'è hover, si accende
+  // anche la lettera che si tocca o su cui ci si striscia sopra.
   const letters = Array.from(h1.querySelectorAll('.ch'));
   const timers = new Map();
   const flash = (ch, duration = 650) => {
