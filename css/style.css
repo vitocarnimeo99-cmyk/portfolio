@@ -403,9 +403,11 @@ body.home header::before{
   margin-top: 4px;
 }
 
-/* Su telefono i dati diventano una sola riga piccola, "7 anni · Bari, IT":
-   restano solo i valori (le etichette spariscono con font-size 0) e Ambiti
-   si toglie, perché lo dice già il sottotitolo. */
+/* Su telefono i dati diventano una sola riga piccola,
+   "7 anni di esperienza · Bari, IT": restano solo i valori (le etichette
+   spariscono con font-size 0), agli anni si aggiunge "di esperienza" perché
+   da soli sembravano l'età, e Ambiti si toglie, perché lo dice già il
+   sottotitolo. */
 @media (max-width: 640px){
   .hero p{ text-wrap: pretty; }
   .hero .meta{
@@ -421,6 +423,7 @@ body.home header::before{
     color: var(--ink-soft);
   }
   .hero .meta div + div span::before{ content: "·"; margin: 0 0.5em; }
+  .hero .meta div:first-child span::after{ content: "\a0 di\a0 esperienza"; }
 }
 
 @media (max-width: 980px){
