@@ -299,68 +299,95 @@
 
   <section id="about">
     <div class="wrap">
-      <!-- Titolo fuori dalla griglia: così la skill list parte all'altezza del primo paragrafo -->
-      <span class="home-eyebrow">Chi&nbsp;sono?</span>
-      <h2 class="section-title">Un&nbsp;tipo <em>particolare</em>...</h2>
-      <div class="about-grid">
-        <div>
+      <!-- Stories di "Chi sono", come lo story player di K-Way ma con i video
+           e l'audio: ogni tacca della barra in alto porta la sua story, un
+           video (data-src e data-poster) o una foto (data-photo e data-alt),
+           con titolo, luogo (data-place) e colore; il telefono ha un solo
+           <video> che carica i video uno alla volta e un'immagine per le
+           foto (main.js) -->
+      <div class="ab-player" id="about-stories">
+        <div class="ab-side">
+          <span class="home-eyebrow">Chi&nbsp;sono?</span>
+          <h2 class="section-title">Un&nbsp;tipo <em>particolare</em>...</h2>
           <p>Sono un&nbsp;ragazzo riflessivo e&nbsp;ironico; mi&nbsp;piace stare in&nbsp;compagnia,<br class="br-desk"><br class="br-mob"> per&nbsp;questo prediligo <strong>il&nbsp;lavoro<br class="br-mob"> di&nbsp;squadra</strong>: confrontarmi con&nbsp;gli&nbsp;altri<br class="br-desk"> mi&nbsp;porta a&nbsp;scoprire cose sempre&nbsp;nuove.</p>
           <p>Nel&nbsp;tempo libero coltivo diverse passioni: il&nbsp;<strong>disegno</strong>, la&nbsp;<strong>fotografia analogica</strong> e&nbsp;la&nbsp;<strong>musica</strong>, suonando tastiera e&nbsp;ukulele.</p>
-          <h3 class="edu-title">Formazione</h3>
-          <div class="peek" id="edu-more" style="--peek:11rem">
-          <ul class="edu-list">
-            <li>
-              <span class="edu-logo" style="--c:#17140F"><img src="assets/images/LOGO_NABA.png" alt="NABA – Nuova Accademia di Belle Arti" width="56" height="56" loading="lazy"></span>
-              <div>
-                <span class="edu-when">2021 – 2024 · Milano</span>
-                <strong>Laurea Triennale<br class="br-desk"> Graphic Design &amp; Art Direction</strong>
-                <span>NABA&nbsp;– Nuova Accademia di&nbsp;Belle&nbsp;Arti · 110/110</span>
-              </div>
-            </li>
-            <li>
-              <span class="edu-logo" style="--c:#F5C400"><img src="assets/images/LOGO_IDEA.png" alt="IDEA – Italian Design Experience Academy" width="96" height="29" loading="lazy"></span>
-              <div>
-                <span class="edu-when">2019 · Bari</span>
-                <strong>Qualifica professionale<br class="br-desk"> Graphic Design &amp; Art Director</strong>
-                <span>IDEAcademy – Italian Design Academy</span>
-              </div>
-            </li>
-            <li>
-              <span class="edu-logo" style="--c:#1B6FB5"><img src="assets/images/LOGO_LICEO.jpg" alt="Liceo Artistico “G. De Nittis” – Pascali" width="1024" height="576" loading="lazy"></span>
-              <div>
-                <span class="edu-when">2013 – 2018 · Bari</span>
-                <strong>Diploma di&nbsp;Primo Grado<br class="br-desk"> Indirizzo Grafica</strong>
-                <span>Liceo Artistico “G. De Nittis”</span>
-              </div>
-            </li>
-          </ul>
+          <div class="ab-edu">
+            <h3 class="edu-title">Formazione</h3>
+            <div class="peek" id="edu-more" style="--peek:11rem">
+            <ul class="edu-list">
+              <li>
+                <span class="edu-logo" style="--c:#17140F"><img src="assets/images/LOGO_NABA.png" alt="NABA – Nuova Accademia di Belle Arti" width="56" height="56" loading="lazy"></span>
+                <div>
+                  <span class="edu-when">2021 – 2024 · Milano</span>
+                  <strong>Laurea Triennale<br class="br-desk"> Graphic Design &amp; Art Direction</strong>
+                  <span>NABA&nbsp;– Nuova Accademia di&nbsp;Belle&nbsp;Arti · 110/110</span>
+                </div>
+              </li>
+              <li>
+                <span class="edu-logo" style="--c:#F5C400"><img src="assets/images/LOGO_IDEA.png" alt="IDEA – Italian Design Experience Academy" width="96" height="29" loading="lazy"></span>
+                <div>
+                  <span class="edu-when">2019 · Bari</span>
+                  <strong>Qualifica professionale<br class="br-desk"> Graphic Design &amp; Art Director</strong>
+                  <span>IDEAcademy – Italian Design Academy</span>
+                </div>
+              </li>
+              <li>
+                <span class="edu-logo" style="--c:#1B6FB5"><img src="assets/images/LOGO_LICEO.jpg" alt="Liceo Artistico “G. De Nittis” – Pascali" width="1024" height="576" loading="lazy"></span>
+                <div>
+                  <span class="edu-when">2013 – 2018 · Bari</span>
+                  <strong>Diploma di&nbsp;Primo Grado<br class="br-desk"> Indirizzo Grafica</strong>
+                  <span>Liceo Artistico “G. De Nittis”</span>
+                </div>
+              </li>
+            </ul>
+            </div>
+            <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la&nbsp;formazione <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
           </div>
-          <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la&nbsp;formazione <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
         </div>
-        <div class="skills">
-          <h3 class="edu-title skills-title">Competenze</h3>
-          <div class="peek" id="skills-more" style="--peek:13rem">
-          <ul class="skills-list">
-            <li><span class="l">Editoria</span><span>Libri, riviste, cataloghi</span></li>
-            <li><span class="l">Advertising</span><span>campagne ADV, affissioni</span></li>
-            <li><span class="l">Branding</span><span>Identità visiva, loghi, sistemi grafici</span></li>
-            <li><span class="l">Packaging</span><span>Confezioni, etichette, scatole</span></li>
-            <li><span class="l">Social &amp; Digital</span><span>PED, contenuti social, banner</span></li>
-            <li><span class="l">Motion Design</span><span>Animazione, video editing,<br class="br-desk"> motion graphics</span></li>
-            <li><span class="l">Web Design</span><span>Siti web</span></li>
-            <li><span class="l">Software</span><span class="software-icons">
-              <img src="assets/icons/creative-cloud.png" alt="Adobe Creative Cloud" title="Adobe Creative Cloud" width="36" height="36" loading="lazy">
-              <img src="assets/icons/figma.png" alt="Figma" title="Figma" width="36" height="36" loading="lazy">
-              <img src="assets/icons/procreate.svg" alt="Procreate" title="Procreate" width="36" height="36" loading="lazy">
-              <img src="assets/icons/vscode.png" alt="Visual Studio Code" title="Visual Studio Code" width="36" height="36" loading="lazy">
-            </span></li>
-          </ul>
+        <div class="ab-device">
+          <div class="ab-bars" aria-hidden="true">
+            <span class="ab-bar" style="--c:#E8B400" data-src="assets/video/Chi_Sono_01.MOV" data-poster="assets/video/posters/Chi_Sono_01.jpg" data-place="Islanda" data-label="Musica"><span></span></span>
+            <span class="ab-bar" style="--c:#D8322A" data-photo="assets/images/Chi_Sono_02-720.jpg" data-place="Bari" data-label="Pane e Pomodoro" data-alt="Vito con il sindaco di Bari Vito Leccese davanti alla tavola di Where’s Kud Zamb? esposta alla spiaggia di Pane e Pomodoro"><span></span></span>
+            <span class="ab-bar" style="--c:#658964" data-photo="assets/images/Chi_Sono_03-720.jpg" data-place="Bari" data-label="Premio del Comune di Bari" data-alt="Vito riceve dal sindaco Vito Leccese la borsa di studio del Comune di Bari per Where’s Kud Zamb? e mostra il telo illustrato del progetto"><span></span></span>
+            <span class="ab-bar" style="--c:#3B4B99" data-photo="assets/images/Chi_Sono_04-720.jpg" data-place="Torino" data-label="Premio Neologia" data-alt="Vito sul palco della premiazione Neologia 2026 con l’attestato di Where’s Kud Zamb?, tra i due presentatori"><span></span></span>
           </div>
-          <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="skills-more" data-less="Mostra meno">Vedi tutte le&nbsp;competenze <span class="peek-count">8</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
-          <div class="project-links cv-cta">
-            <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il&nbsp;CV<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
-            <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il&nbsp;portfolio<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
+          <div class="ab-screen">
+            <video class="ab-video" width="1080" height="1920" poster="assets/video/posters/Chi_Sono_01.jpg" src="assets/video/Chi_Sono_01.MOV" muted playsinline preload="metadata" aria-label="Story di Vito: Musica"></video>
+            <img class="ab-photo" width="720" height="1243" alt="" decoding="async">
+            <img class="ab-cover" src="assets/video/posters/Chi_Sono_01.jpg" width="720" height="1280" alt="" decoding="async">
+            <span class="ab-user" aria-hidden="true"><span class="ab-avatar"></span>vitq1999<span class="ab-when">Islanda</span></span>
+            <button class="ab-tap ab-tap--prev" type="button" aria-label="Story precedente"></button>
+            <button class="ab-tap ab-tap--next" type="button" aria-label="Story successiva"></button>
+            <button class="ab-vol" type="button" aria-pressed="false" aria-label="Attiva l’audio"><span class="ab-vol-label">Attiva l’audio</span><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
+            <span class="ab-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
           </div>
+          <span class="ab-hint">Tocca ai&nbsp;lati · tieni premuto per&nbsp;la&nbsp;pausa</span>
+        </div>
+      </div>
+
+      <div class="about-skills">
+        <h3 class="edu-title">Competenze</h3>
+        <div class="peek" id="skills-more" style="--peek:13rem">
+        <ul class="skills-list">
+          <li><span class="l">Editoria</span><span>Libri, riviste, cataloghi</span></li>
+          <li><span class="l">Advertising</span><span>campagne ADV, affissioni</span></li>
+          <li><span class="l">Branding</span><span>Identità visiva, loghi, sistemi grafici</span></li>
+          <li><span class="l">Packaging</span><span>Confezioni, etichette, scatole</span></li>
+          <li><span class="l">Social &amp; Digital</span><span>PED, contenuti social, banner</span></li>
+          <li><span class="l">Motion Design</span><span>Animazione, video editing, motion&nbsp;graphics</span></li>
+          <li><span class="l">Web Design</span><span>Siti web</span></li>
+          <li><span class="l">Software</span><span class="software-icons">
+            <img src="assets/icons/creative-cloud.png" alt="Adobe Creative Cloud" title="Adobe Creative Cloud" width="36" height="36" loading="lazy">
+            <img src="assets/icons/figma.png" alt="Figma" title="Figma" width="36" height="36" loading="lazy">
+            <img src="assets/icons/procreate.svg" alt="Procreate" title="Procreate" width="36" height="36" loading="lazy">
+            <img src="assets/icons/vscode.png" alt="Visual Studio Code" title="Visual Studio Code" width="36" height="36" loading="lazy">
+          </span></li>
+        </ul>
+        </div>
+        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="skills-more" data-less="Mostra meno">Vedi tutte le&nbsp;competenze <span class="peek-count">8</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <div class="project-links cv-cta">
+          <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il&nbsp;CV<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
+          <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il&nbsp;portfolio<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
         </div>
       </div>
     </div>

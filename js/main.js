@@ -514,6 +514,7 @@ if (canHover) window.addEventListener('load', () => {
   loadScene('wkz-pack', 'js/pillowpack3d.js');
 })();
 
+
 // Titolo della home: ogni lettera in uno span, così al passaggio del mouse
 // solo quella lettera diventa corsivo rosso (vedi .hero h1 .ch in style.css).
 // Gli spazi restano testo normale per non alterare gli a capo; gli screen
@@ -787,3 +788,210 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
     label.textContent = open ? 'Leggi di meno' : 'Leggi di più';
   });
 });
+
+// Stories di "Chi sono" in home: lo story player di K-Way, con video e foto.
+// Avanza da solo quando è a schermo (la barra segue il video, o 5s per le
+// foto, e alla fine passa alla story dopo), tocco ai lati e frecce della
+// tastiera per navigare, tieni premuto per la pausa. Ogni tacca della barra
+// porta i dati della sua story: data-src e data-poster per un video,
+// data-photo e data-alt per una foto, più data-label, data-place (il luogo
+// accanto al nome) e --c. Parte muto,
+// perché i browser non avviano da soli un video con l'audio: lo accende il
+// tasto in alto a destra (o M da tastiera) e resta acceso per i video dopo.
+// Un solo <video> che carica i video uno alla volta: su iPhone l'audio,
+// permesso con un tocco, vale per quell'elemento anche quando cambia story.
+(function () {
+  const player = document.getElementById('about-stories');
+  if (!player) return;
+  const video = player.querySelector('.ab-video');
+  const photo = player.querySelector('.ab-photo');
+  const cover = player.querySelector('.ab-cover');
+  const screen = player.querySelector('.ab-screen');
+  const stories = Array.from(player.querySelectorAll('.ab-bar'));
+  const bars = stories.map(s => s.firstElementChild);
+  const volBtn = player.querySelector('.ab-vol');
+  const volIcon = volBtn.querySelector('i');
+  const place = player.querySelector('.ab-when');
+  const PHOTO_DURATION = 5000;
+
+  let index = 0;
+  let inView = false;
+  let held = false;
+  // Con "riduci movimento" niente partenza da sola: parte al primo tocco
+  let started = !prefersReducedMotion;
+  let suppressClick = false;
+  let rafId = null;
+  let photoProgress = 0; // 0–1, avanzamento della story con la foto
+  let last = 0;
+
+  const isPhoto = () => 'photo' in stories[index].dataset;
+
+  const progress = () => {
+    if (isPhoto()) return photoProgress;
+    return video.duration ? Math.min(video.currentTime / video.duration, 1) : 0;
+  };
+  const render = () => {
+    const p = progress();
+    bars.forEach((b, i) => b.style.setProperty('--p', i < index ? 1 : i === index ? p : 0));
+  };
+
+  const playing = () => inView && !held && started && !document.hidden;
+
+  // Un solo ciclo per la barra: per i video legge il tempo del video, per le
+  // foto fa avanzare il tempo da sé
+  const tick = (t) => {
+    if (isPhoto()) {
+      if (!playing()) { rafId = null; return; }
+      photoProgress += (last ? t - last : 0) / PHOTO_DURATION;
+      last = t;
+      if (photoProgress >= 1) { rafId = null; show(index + 1); return; }
+    } else if (video.paused) {
+      render();
+      rafId = null;
+      return;
+    }
+    render();
+    rafId = requestAnimationFrame(tick);
+  };
+  const run = () => {
+    if (rafId === null) { last = 0; rafId = requestAnimationFrame(tick); }
+  };
+
+  const setSound = (on) => {
+    video.muted = !on;
+    player.classList.toggle('is-sound', on);
+    if (on) player.classList.add('was-sound');
+    volBtn.setAttribute('aria-pressed', String(on));
+    volBtn.setAttribute('aria-label', on ? 'Disattiva l’audio' : 'Attiva l’audio');
+    volIcon.className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+  };
+
+  const sync = () => {
+    if (isPhoto()) {
+      video.pause();
+      if (playing()) run();
+      return;
+    }
+    if (!playing()) { video.pause(); return; }
+    video.play().catch((err) => {
+      // Audio non ancora permesso dal browser: riparte muto
+      if (err.name === 'NotAllowedError' && !video.muted) {
+        setSound(false);
+        video.play().catch(() => {});
+      }
+    });
+  };
+
+  // Colore, luogo e titolo della story in corso
+  const mark = (i) => {
+    index = (i + stories.length) % stories.length;
+    const t = stories[index];
+    player.style.setProperty('--now', t.style.getPropertyValue('--c'));
+    place.textContent = t.dataset.place || '';
+    video.setAttribute('aria-label', 'Story di Vito: ' + t.dataset.label);
+    render();
+  };
+
+  const show = (i) => {
+    mark(i);
+    const t = stories[index];
+    if (isPhoto()) {
+      // La foto entra sopra il video, che resta fermo sotto
+      photoProgress = 0;
+      photo.classList.remove('is-on');
+      photo.src = t.dataset.photo;
+      photo.alt = t.dataset.alt || '';
+      photo.offsetWidth;
+      photo.classList.add('is-on');
+      cover.classList.add('is-hidden');
+    } else {
+      photo.classList.remove('is-on');
+      photo.alt = '';
+      // Il poster della story nuova entra come le stories di K-Way e copre il
+      // cambio di video; sfuma quando il video parte
+      cover.classList.add('is-entering');
+      cover.classList.remove('is-hidden');
+      cover.src = t.dataset.poster;
+      cover.offsetWidth;
+      cover.classList.remove('is-entering');
+      video.poster = t.dataset.poster;
+      // Stesso file della story di prima: si riparte da capo senza ricaricarlo
+      if (video.getAttribute('src') !== t.dataset.src) video.src = t.dataset.src;
+      else video.currentTime = 0;
+    }
+    render();
+    sync();
+  };
+
+  video.addEventListener('playing', () => {
+    cover.classList.add('is-hidden');
+    run();
+  });
+  video.addEventListener('seeked', () => { if (!video.paused) cover.classList.add('is-hidden'); });
+  video.addEventListener('ended', () => { if (!isPhoto()) show(index + 1); });
+  video.addEventListener('loadedmetadata', render);
+
+  const go = (i) => { started = true; show(i); };
+  player.querySelector('.ab-tap--prev').addEventListener('click', () => {
+    if (!suppressClick) go(index - 1);
+  });
+  player.querySelector('.ab-tap--next').addEventListener('click', () => {
+    if (!suppressClick) go(index + 1);
+  });
+
+  volBtn.addEventListener('click', () => {
+    started = true;
+    setSound(video.muted);
+    sync();
+  });
+  // Il tasto dell'audio sta sopra lo schermo: premerlo non è "tieni premuto"
+  volBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+
+  // Tieni premuto = pausa (come su Instagram). Un tap breve resta navigazione.
+  let holdTimer = null;
+  screen.addEventListener('pointerdown', () => {
+    suppressClick = false;
+    holdTimer = setTimeout(() => {
+      held = true;
+      suppressClick = true;
+      player.classList.add('is-paused');
+      sync();
+    }, 220);
+  });
+  const release = () => {
+    clearTimeout(holdTimer);
+    if (!held) return;
+    held = false;
+    player.classList.remove('is-paused');
+    sync();
+  };
+  screen.addEventListener('pointerup', release);
+  screen.addEventListener('pointerleave', release);
+  screen.addEventListener('pointercancel', release);
+
+  player.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') go(index + 1);
+    if (e.key === 'ArrowLeft') go(index - 1);
+    if (e.key === 'm' || e.key === 'M') volBtn.click();
+  });
+
+  // Gira solo con metà telefono a schermo e la scheda in primo piano
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      sync();
+    }, { threshold: 0.5 }).observe(screen);
+  } else {
+    inView = true;
+  }
+  document.addEventListener('visibilitychange', sync);
+
+  // Precarica le foto dopo il caricamento della pagina: il passaggio dal
+  // video alla foto è istantaneo
+  window.addEventListener('load', () => {
+    stories.forEach((t) => { if ('photo' in t.dataset) new Image().src = t.dataset.photo; });
+  });
+
+  mark(0);
+  sync();
+})();
