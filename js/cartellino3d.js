@@ -447,6 +447,33 @@
   const GRAVITY_Y = -0.03;
   const DAMPING = 0.98;
 
+  /* Scroll della pagina: il cartellino è appeso all'hero, quindi quando la
+     pagina accelera resta indietro per inerzia, come appeso a una bacheca
+     che si sposta, e poi la gravità lo riporta giù oscillando. Conta la
+     variazione della velocità di scroll: più lo scatto è veloce, più forte
+     la spinta. Una parte va di lato (nel verso dello scroll), altrimenti in
+     verticale il cartellino rimbalzerebbe soltanto senza oscillare. */
+  const SCROLL_INERTIA = 0.14;   // 1 = fisica vera
+  const SCROLL_SIDE = 0.35;      // quota della spinta che va di lato
+  const SCROLL_MAX_KICK = 0.0175; // spinta massima per passo, unità di scena
+  let lastScrollY = window.scrollY;
+  let scrollVel = 0;             // velocità di scroll, px/passo
+  let scrollTargetVel = 0;       // quella misurata nell'ultimo frame
+
+  function applyScroll() {
+    const accel = scrollTargetVel - scrollVel;
+    scrollVel = scrollTargetVel;
+    if (!accel || !pillsPxPerUnit || dragging) return;
+    const kick = THREE.MathUtils.clamp(accel / pillsPxPerUnit * SCROLL_INERTIA, -SCROLL_MAX_KICK, SCROLL_MAX_KICK);
+    const side = Math.abs(kick) * SCROLL_SIDE * Math.sign(scrollVel || accel);
+    // Più si scende lungo la corda, più il punto risente della spinta
+    for (let i = 1; i < points.length; i++) {
+      const w = i / (points.length - 1);
+      points[i].old.y += kick * w;  // scroll giù = l'hero sale, il cartellino resta giù
+      points[i].old.x -= side * w;
+    }
+  }
+
   const points = [];
   for (let i = 0; i < SEGMENTS; i++) {
     const y = prefersReducedMotion ? ANCHOR.y - i * restLen : ANCHOR.y - i * 0.06;
@@ -860,7 +887,7 @@
     strapMaterial.needsUpdate = true;
   });
 
-  Promise.all([loadImage('assets/images/VITO.JPG'), fontsReady]).then(([photo]) => {
+  Promise.all([loadImage('assets/images/VITO-1080.webp'), fontsReady]).then(([photo]) => {
     if (!photo) return;
     const [front, fctx] = newCanvas();
     drawFront(fctx, photo);
@@ -1332,6 +1359,7 @@
   }
 
   function step() {
+    if (!prefersReducedMotion) applyScroll();
     if (!prefersReducedMotion || dragging) simulate();
 
     if (spinVelocity !== 0) {
@@ -1367,6 +1395,9 @@
     requestAnimationFrame(animate);
     if (!visible) {
       lastTime = now;
+      // Al rientro nell'hero lo scroll fatto fuori non deve dare uno strattone
+      lastScrollY = window.scrollY;
+      scrollVel = scrollTargetVel = 0;
       // L'header resta a schermo: la barra non deve restare a metà sobbalzo
       if (bar.moving) {
         bar.y = bar.vy = bar.a = bar.va = bar.s = bar.vs = 0;
@@ -1379,6 +1410,12 @@
     accumulator += Math.min(now - lastTime, STEP_MS * MAX_STEPS);
     lastTime = now;
     measureHeader();
+    // Lo scroll del frame, diviso sui passi di fisica che lo coprono
+    const plannedSteps = Math.min(MAX_STEPS, Math.floor(accumulator / STEP_MS));
+    if (plannedSteps > 0) {
+      scrollTargetVel = (window.scrollY - lastScrollY) / plannedSteps;
+      lastScrollY = window.scrollY;
+    }
     let steps = 0;
     while (accumulator >= STEP_MS && steps < MAX_STEPS) {
       step();

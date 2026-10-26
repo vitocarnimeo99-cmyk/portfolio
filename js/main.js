@@ -187,31 +187,6 @@
 // i video della griglia partirebbero insieme al caricamento della pagina
 // anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
 const lazyVideos = document.querySelectorAll('video.art');
-
-// Video con una versione dedicata al mobile (es. Raf 40): sotto gli 820px
-// video e poster vengono scambiati con quelli della versione mobile, con lo
-// stesso taglio della card. Lo scambio è esplicito perché l'attributo media
-// del <source> viene letto una volta sola e alcuni browser lo ignorano.
-const mobileVideoQuery = window.matchMedia('(max-width: 820px)');
-const mobileVideos = document.querySelectorAll('video[data-src-mobile]');
-mobileVideos.forEach(video => {
-  video.dataset.srcDesktop = video.querySelector('source:not([media])').getAttribute('src');
-  video.dataset.posterDesktop = video.getAttribute('poster');
-});
-const applyMobileVideos = () => {
-  const isMobile = mobileVideoQuery.matches;
-  mobileVideos.forEach(video => {
-    const src = isMobile ? video.dataset.srcMobile : video.dataset.srcDesktop;
-    if (video.getAttribute('src') === src) return;
-    const wasPlaying = !video.paused;
-    video.poster = isMobile ? video.dataset.posterMobile : video.dataset.posterDesktop;
-    video.src = src;
-    video.load();
-    if (wasPlaying) video.play().catch(() => {});
-  });
-};
-applyMobileVideos();
-mobileVideoQuery.addEventListener('change', applyMobileVideos);
 if ('IntersectionObserver' in window) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -336,10 +311,21 @@ if (canHover) document.querySelectorAll('video[data-src-hover]').forEach(video =
   layer.preload = 'none';
   layer.setAttribute('aria-hidden', 'true');
   video.after(layer);
-  // scaricata dopo il caricamento della pagina, per non rubare banda all'avvio
+  // scaricata dopo il caricamento della pagina, per non rubare banda all'avvio,
+  // e solo quando la card si avvicina allo schermo
   window.addEventListener('load', () => {
-    layer.preload = 'auto';
-    layer.src = video.dataset.srcHover;
+    const fetchLayer = () => {
+      if (layer.src) return;
+      layer.preload = 'auto';
+      layer.src = video.dataset.srcHover;
+    };
+    if (!('IntersectionObserver' in window)) { fetchLayer(); return; }
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      fetchLayer();
+    }, { rootMargin: '400px 0px' });
+    io.observe(tile);
   });
 
   tile.addEventListener('mouseenter', () => {
@@ -438,13 +424,16 @@ document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
   }, { threshold: 0.5 }).observe(img);
 });
 
-// Precarica e decodifica le varianti hover dei tile a ciclo immagini dopo il
-// load della pagina, cosi' il primo mouseover non ha né attesa di rete né
-// blocco per la decodifica. Le immagini restano in preloadedFrames perché il
-// browser non butti via la versione già decodificata.
+// Precarica e decodifica le varianti hover dei tile a ciclo immagini, cosi'
+// il primo mouseover non ha né attesa di rete né blocco per la decodifica.
+// Solo con il mouse (su touch le varianti scorrono una alla volta e si
+// caricano mentre girano) e solo per i tile vicini allo schermo: tutte
+// insieme al load erano diversi MB scaricati anche per card mai viste.
+// Le immagini restano in preloadedFrames perché il browser non butti via la
+// versione già decodificata.
 const preloadedFrames = [];
-window.addEventListener('load', () => {
-  document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
+if (canHover) window.addEventListener('load', () => {
+  const preload = (img) => {
     const prefix = img.dataset.cyclePrefix;
     const ext = img.dataset.cycleExt;
     const frames = parseInt(img.dataset.cycleFrames, 10);
@@ -454,7 +443,17 @@ window.addEventListener('load', () => {
       frame.decode().catch(() => {});
       preloadedFrames.push(frame);
     }
-  });
+  };
+  const imgs = document.querySelectorAll('img[data-cycle-prefix]');
+  if (!('IntersectionObserver' in window)) { imgs.forEach(preload); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      io.unobserve(entry.target);
+      preload(entry.target);
+    });
+  }, { rootMargin: '400px 0px' });
+  imgs.forEach(img => io.observe(img));
 });
 
 // Le scene 3D (cartellino in home, pillow pack nelle pagine progetto) richiedono
@@ -513,6 +512,238 @@ window.addEventListener('load', () => {
 
   loadScene('lanyard', 'js/cartellino3d.js');
   loadScene('wkz-pack', 'js/pillowpack3d.js');
+})();
+
+// Aereo di carta nella hero: ogni tanto entra da sotto a sinistra ed esce in
+// alto a destra, ondeggiando, con il muso che segue la traiettoria. Ogni volo
+// è un po' diverso (altezza, onde) e vola solo con l'hero a schermo e la
+// scheda in primo piano; con "riduci movimento" non c'è (style.css).
+(function () {
+  const plane = document.querySelector('.hero-plane');
+  if (!plane || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hero = plane.closest('.hero');
+  // Dove punta il muso nell'immagine, in gradi (0 = verso destra)
+  const HEADING = -50;
+  let inView = true;
+  let flying = false;
+  let timer = null;
+
+  function schedule(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(fly, ms);
+  }
+
+  function fly() {
+    timer = null;
+    if (!inView || document.hidden) return;
+    flying = true;
+    const W = hero.clientWidth;
+    const H = hero.clientHeight;
+    const w = plane.offsetWidth;
+    const h = plane.offsetHeight;
+    const x0 = -w * 1.5;
+    const x1 = W + w * 0.5;
+    const y0 = H * (0.65 + Math.random() * 0.25);
+    const y1 = H * (0.05 + Math.random() * 0.2) - h;
+    const amp = Math.min(H * 0.06, 40) * (0.6 + Math.random() * 0.8);
+    const waves = 1 + Math.random();
+    const dur = Math.min(Math.max((x1 - x0) / 0.25, 4000), 8000);
+    const point = (t) => [
+      x0 + (x1 - x0) * t,
+      y0 + (y1 - y0) * t + Math.sin(t * waves * 2 * Math.PI) * amp
+    ];
+    const start = performance.now();
+    plane.classList.add('is-flying');
+
+    function frame(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const [x, y] = point(t);
+      const [xa, ya] = point(t + 0.005);
+      const angle = Math.atan2(ya - y, xa - x) * 180 / Math.PI;
+      // Un piccolo dondolio, come una papera che si gira a guardare
+      const rock = Math.sin(t * Math.PI * 6) * 4;
+      plane.style.transform = `translate(${x}px, ${y}px) rotate(${angle - HEADING + rock}deg)`;
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        flying = false;
+        plane.classList.remove('is-flying');
+        schedule(9000 + Math.random() * 8000);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Tornando sull'hero (o sulla scheda) riparte presto se era in attesa
+  function resume() {
+    if (inView && !document.hidden && !flying && !timer) schedule(1500);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      resume();
+    }, { threshold: 0.3 }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', resume);
+
+  // Il primo volo dopo l'entrata del testo
+  schedule(2500);
+})();
+
+// Cursori disegnati, solo con il mouse (style.css, .img-cursor): la matita in
+// "Chi sono" e la moka in "Lavori", per prendersi il tempo di un caffè
+// mentre si guardano i progetti. Il contenitore segue il mouse con la punta
+// (la mina, il beccuccio) sotto il puntatore, dove resta il clic; il gesto
+// al clic è sull'immagine dentro e fa perno lì. Scorrendo la pagina senza
+// muovere il mouse la sezione passa sotto il puntatore: lì si ricontrolla
+// cosa c'è sotto.
+(function () {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  // tipX e tipY: la punta nell'immagine, in frazioni di larghezza e altezza
+  function imgCursor({ section, name, src, width, height, tipX, tipY }) {
+    if (!document.querySelector(section)) return;
+    const cursor = document.createElement('span');
+    cursor.className = `img-cursor ${name}-cursor`;
+    cursor.setAttribute('aria-hidden', 'true');
+    const img = new Image(width, height);
+    img.src = src;
+    img.alt = '';
+    img.decoding = 'async';
+    cursor.appendChild(img);
+    document.body.appendChild(cursor);
+    document.documentElement.classList.add(`has-${name}`);
+
+    let x = -1;
+    let y = -1;
+    let on = false;
+    let w = 0;
+    let h = 0;
+    const measure = () => { w = img.offsetWidth; h = img.offsetHeight; };
+    measure();
+    window.addEventListener('resize', measure);
+
+    function toggle(target) {
+      const inside = !!(target && target.closest && target.closest(section));
+      if (inside === on) return;
+      on = inside;
+      cursor.classList.toggle('is-on', on);
+      if (!on) cursor.classList.remove('is-pressed');
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      cursor.style.transform = `translate(${x - tipX * w}px, ${y - tipY * h}px)`;
+      toggle(e.target);
+    }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (x >= 0) toggle(document.elementFromPoint(x, y));
+    }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => toggle(null));
+    document.addEventListener('mousedown', () => { if (on) cursor.classList.add('is-pressed'); });
+    document.addEventListener('mouseup', () => cursor.classList.remove('is-pressed'));
+  }
+
+  imgCursor({ section: '#about', name: 'pencil', src: 'assets/images/MATITA-260.webp',
+    width: 214, height: 260, tipX: 0.0216, tipY: 0.9935 });
+  imgCursor({ section: '#lavori', name: 'moka', src: 'assets/images/MOKA-260.webp',
+    width: 202, height: 260, tipX: 0.0064, tipY: 0.3286 });
+})();
+
+// Palloncino di "In evidenza": sale dal basso fino a uscire in alto, come
+// sfuggito di mano a un bambino. Prende velocità piano piano, dondola a
+// destra e sinistra, il vento lo sposta un po' di lato e rimpicciolisce
+// allontanandosi; il filo, legato al nodo del muso, penzola e resta indietro
+// a ogni dondolio. Parte quando la sezione arriva a schermo, poi ripassa ogni
+// tanto finché ci resta.
+(function () {
+  const sky = document.querySelector('.featured-sky');
+  if (!sky || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const balloon = sky.querySelector('.featured-balloon');
+  const string = sky.querySelector('.balloon-string path');
+  // Il nodo nell'immagine, in frazioni di larghezza e altezza
+  const KNOT_X = 0.914;
+  const KNOT_Y = 0.27;
+  let inView = false;
+  let flying = false;
+  let timer = null;
+
+  function schedule(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(fly, ms);
+  }
+
+  function fly() {
+    timer = null;
+    if (!inView || document.hidden) return;
+    flying = true;
+    const W = sky.clientWidth;
+    const H = sky.clientHeight;
+    const bw = balloon.offsetWidth;
+    const bh = balloon.offsetHeight;
+    const len = bh * 1.3;
+    const x0 = W * (0.1 + Math.random() * 0.7);
+    const drift = W * (Math.random() - 0.5) * 0.3;
+    const y0 = H + 20;
+    const y1 = -bh - len - 20;
+    const sway = 16 + Math.random() * 14;
+    const period = 2400 + Math.random() * 800;
+    const dur = Math.min(Math.max((y0 - y1) / 0.13, 6000), 11000);
+    const start = performance.now();
+    sky.classList.add('is-flying');
+
+    function frame(now) {
+      const ms = now - start;
+      const t = Math.min(ms / dur, 1);
+      const p = 0.6 * t + 0.4 * t * t;
+      const phase = ms / period * 2 * Math.PI;
+      const x = x0 + drift * p + Math.sin(phase) * sway;
+      const y = y0 + (y1 - y0) * p;
+      const angle = Math.sin(phase - 0.6) * 6;
+      const s = 1 - 0.2 * p;
+      balloon.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg) scale(${s})`;
+
+      // Il nodo dopo rotazione e scala intorno al centro dell'immagine
+      const a = angle * Math.PI / 180;
+      const kx = (KNOT_X - 0.5) * bw * s;
+      const ky = (KNOT_Y - 0.5) * bh * s;
+      const ax = x + bw / 2 + kx * Math.cos(a) - ky * Math.sin(a);
+      const ay = y + bh / 2 + kx * Math.sin(a) + ky * Math.cos(a);
+      // Il filo resta indietro rispetto al dondolio e serpeggia un po'
+      const l = len * s;
+      const lag = -Math.cos(phase) * sway * 0.9;
+      const w1 = Math.sin(phase * 1.7) * 7;
+      const w2 = Math.sin(phase * 1.7 + 2) * 9;
+      string.setAttribute('d',
+        `M${ax},${ay} C${ax + w1},${ay + l * 0.35} ${ax + lag * 0.6 + w2},${ay + l * 0.7} ${ax + lag},${ay + l}`);
+
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        flying = false;
+        sky.classList.remove('is-flying');
+        schedule(12000 + Math.random() * 8000);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function resume() {
+    if (inView && !document.hidden && !flying && !timer) schedule(1200);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      resume();
+    // Con un margine e non una soglia: su telefono la sezione è più alta
+    // dello schermo e una percentuale potrebbe non arrivare mai
+    }, { rootMargin: '-20% 0px' }).observe(sky);
+  } else {
+    inView = true;
+    resume();
+  }
+  document.addEventListener('visibilitychange', resume);
 })();
 
 // Titolo della home: ogni lettera in uno span, così al passaggio del mouse
@@ -788,3 +1019,210 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
     label.textContent = open ? 'Leggi di meno' : 'Leggi di più';
   });
 });
+
+// Stories di "Chi sono" in home: lo story player di K-Way, con video e foto.
+// Avanza da solo quando è a schermo (la barra segue il video, o 5s per le
+// foto, e alla fine passa alla story dopo), tocco ai lati e frecce della
+// tastiera per navigare, tieni premuto per la pausa. Ogni tacca della barra
+// porta i dati della sua story: data-src e data-poster per un video,
+// data-photo e data-alt per una foto, più data-label, data-place (il luogo
+// accanto al nome) e --c. Parte muto,
+// perché i browser non avviano da soli un video con l'audio: lo accende il
+// tasto in alto a destra (o M da tastiera) e resta acceso per i video dopo.
+// Un solo <video> che carica i video uno alla volta: su iPhone l'audio,
+// permesso con un tocco, vale per quell'elemento anche quando cambia story.
+(function () {
+  const player = document.getElementById('about-stories');
+  if (!player) return;
+  const video = player.querySelector('.ab-video');
+  const photo = player.querySelector('.ab-photo');
+  const cover = player.querySelector('.ab-cover');
+  const screen = player.querySelector('.ab-screen');
+  const stories = Array.from(player.querySelectorAll('.ab-bar'));
+  const bars = stories.map(s => s.firstElementChild);
+  const volBtn = player.querySelector('.ab-vol');
+  const volIcon = volBtn.querySelector('i');
+  const place = player.querySelector('.ab-when');
+  const PHOTO_DURATION = 5000;
+
+  let index = 0;
+  let inView = false;
+  let held = false;
+  // Con "riduci movimento" niente partenza da sola: parte al primo tocco
+  let started = !prefersReducedMotion;
+  let suppressClick = false;
+  let rafId = null;
+  let photoProgress = 0; // 0–1, avanzamento della story con la foto
+  let last = 0;
+
+  const isPhoto = () => 'photo' in stories[index].dataset;
+
+  const progress = () => {
+    if (isPhoto()) return photoProgress;
+    return video.duration ? Math.min(video.currentTime / video.duration, 1) : 0;
+  };
+  const render = () => {
+    const p = progress();
+    bars.forEach((b, i) => b.style.setProperty('--p', i < index ? 1 : i === index ? p : 0));
+  };
+
+  const playing = () => inView && !held && started && !document.hidden;
+
+  // Un solo ciclo per la barra: per i video legge il tempo del video, per le
+  // foto fa avanzare il tempo da sé
+  const tick = (t) => {
+    if (isPhoto()) {
+      if (!playing()) { rafId = null; return; }
+      photoProgress += (last ? t - last : 0) / PHOTO_DURATION;
+      last = t;
+      if (photoProgress >= 1) { rafId = null; show(index + 1); return; }
+    } else if (video.paused) {
+      render();
+      rafId = null;
+      return;
+    }
+    render();
+    rafId = requestAnimationFrame(tick);
+  };
+  const run = () => {
+    if (rafId === null) { last = 0; rafId = requestAnimationFrame(tick); }
+  };
+
+  const setSound = (on) => {
+    video.muted = !on;
+    player.classList.toggle('is-sound', on);
+    if (on) player.classList.add('was-sound');
+    volBtn.setAttribute('aria-pressed', String(on));
+    volBtn.setAttribute('aria-label', on ? 'Disattiva l’audio' : 'Attiva l’audio');
+    volIcon.className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+  };
+
+  const sync = () => {
+    if (isPhoto()) {
+      video.pause();
+      if (playing()) run();
+      return;
+    }
+    if (!playing()) { video.pause(); return; }
+    video.play().catch((err) => {
+      // Audio non ancora permesso dal browser: riparte muto
+      if (err.name === 'NotAllowedError' && !video.muted) {
+        setSound(false);
+        video.play().catch(() => {});
+      }
+    });
+  };
+
+  // Colore, luogo e titolo della story in corso
+  const mark = (i) => {
+    index = (i + stories.length) % stories.length;
+    const t = stories[index];
+    player.style.setProperty('--now', t.style.getPropertyValue('--c'));
+    place.textContent = t.dataset.place || '';
+    video.setAttribute('aria-label', 'Story di Vito: ' + t.dataset.label);
+    render();
+  };
+
+  const show = (i) => {
+    mark(i);
+    const t = stories[index];
+    if (isPhoto()) {
+      // La foto entra sopra il video, che resta fermo sotto
+      photoProgress = 0;
+      photo.classList.remove('is-on');
+      photo.src = t.dataset.photo;
+      photo.alt = t.dataset.alt || '';
+      photo.offsetWidth;
+      photo.classList.add('is-on');
+      cover.classList.add('is-hidden');
+    } else {
+      photo.classList.remove('is-on');
+      photo.alt = '';
+      // Il poster della story nuova entra come le stories di K-Way e copre il
+      // cambio di video; sfuma quando il video parte
+      cover.classList.add('is-entering');
+      cover.classList.remove('is-hidden');
+      cover.src = t.dataset.poster;
+      cover.offsetWidth;
+      cover.classList.remove('is-entering');
+      video.poster = t.dataset.poster;
+      // Stesso file della story di prima: si riparte da capo senza ricaricarlo
+      if (video.getAttribute('src') !== t.dataset.src) video.src = t.dataset.src;
+      else video.currentTime = 0;
+    }
+    render();
+    sync();
+  };
+
+  video.addEventListener('playing', () => {
+    cover.classList.add('is-hidden');
+    run();
+  });
+  video.addEventListener('seeked', () => { if (!video.paused) cover.classList.add('is-hidden'); });
+  video.addEventListener('ended', () => { if (!isPhoto()) show(index + 1); });
+  video.addEventListener('loadedmetadata', render);
+
+  const go = (i) => { started = true; show(i); };
+  player.querySelector('.ab-tap--prev').addEventListener('click', () => {
+    if (!suppressClick) go(index - 1);
+  });
+  player.querySelector('.ab-tap--next').addEventListener('click', () => {
+    if (!suppressClick) go(index + 1);
+  });
+
+  volBtn.addEventListener('click', () => {
+    started = true;
+    setSound(video.muted);
+    sync();
+  });
+  // Il tasto dell'audio sta sopra lo schermo: premerlo non è "tieni premuto"
+  volBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+
+  // Tieni premuto = pausa (come su Instagram). Un tap breve resta navigazione.
+  let holdTimer = null;
+  screen.addEventListener('pointerdown', () => {
+    suppressClick = false;
+    holdTimer = setTimeout(() => {
+      held = true;
+      suppressClick = true;
+      player.classList.add('is-paused');
+      sync();
+    }, 220);
+  });
+  const release = () => {
+    clearTimeout(holdTimer);
+    if (!held) return;
+    held = false;
+    player.classList.remove('is-paused');
+    sync();
+  };
+  screen.addEventListener('pointerup', release);
+  screen.addEventListener('pointerleave', release);
+  screen.addEventListener('pointercancel', release);
+
+  player.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') go(index + 1);
+    if (e.key === 'ArrowLeft') go(index - 1);
+    if (e.key === 'm' || e.key === 'M') volBtn.click();
+  });
+
+  // Gira solo con metà telefono a schermo e la scheda in primo piano
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      sync();
+    }, { threshold: 0.5 }).observe(screen);
+  } else {
+    inView = true;
+  }
+  document.addEventListener('visibilitychange', sync);
+
+  // Precarica le foto dopo il caricamento della pagina: il passaggio dal
+  // video alla foto è istantaneo
+  window.addEventListener('load', () => {
+    stories.forEach((t) => { if ('photo' in t.dataset) new Image().src = t.dataset.photo; });
+  });
+
+  mark(0);
+  sync();
+})();

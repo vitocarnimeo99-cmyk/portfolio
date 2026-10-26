@@ -100,7 +100,10 @@
   }
   @media (max-width:560px){
     .iterum-hero-art{ flex:0 0 auto; width:100%; max-width:380px; }
-    .iterum-badge{ right:-8px; top:-18px; width:108px; height:108px; font-size:0.7rem; } /* testo ≥ 11px: leggibile su telefono */
+    /* testo ≥ 11px: leggibile su telefono. right:-4px e non di più: ruotato
+       di 18° il riquadro del bollino sporge 14px oltre il cerchio, e con
+       l'immagine a tutta larghezza farebbe scorrere la pagina di lato */
+    .iterum-badge{ right:-4px; top:-18px; width:108px; height:108px; font-size:0.7rem; }
   }
 
   /* -------- Tre scene dal festival (galleria su sfondo nero, immagini intere) -------- */

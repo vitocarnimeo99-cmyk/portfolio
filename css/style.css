@@ -110,17 +110,24 @@ nav.wrap{
   list-style:none;
   margin:0; padding:0;
 }
+/* Come .brand: area cliccabile di 44px con padding compensato dal margine
+   negativo. La sottolineatura è uno sfondo, alla stessa distanza dal testo
+   del vecchio bordo: un bordo finirebbe in fondo al padding. */
 .navlinks a{
   text-decoration:none;
   font-size: 0.95rem;
   color: var(--ink-soft);
-  border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
-  transition: color .2s ease, border-color .2s ease;
+  display: inline-block;
+  padding: 12px 0;
+  margin: -12px 0;
+  transition: color .2s ease;
 }
 /* Al passaggio del mouse il link prende un colore a caso tra quelli del
    titolo (--hover-color, da main.js) e si sottolinea dello stesso colore */
-.navlinks a:hover{ color: var(--hover-color, var(--ink)); border-color: currentColor; }
+.navlinks a:hover{
+  color: var(--hover-color, var(--ink));
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 12px) / 100% 1px no-repeat;
+}
 
 /* Pulsante hamburger: visibile solo sotto gli 860px, dove brand + 4 link
    non stanno più su una riga. Le due linee diventano una X quando è aperto. */
@@ -177,10 +184,11 @@ nav.wrap{
   .navlinks a{
     display:block;
     padding: 14px 0;
+    margin: 0;
     font-size: 1.15rem;
     color: var(--ink);
-    border-bottom: 0;
   }
+  .navlinks a:hover{ background: none; }
 }
 @media (prefers-reduced-motion: reduce){
   header, .nav-toggle span, .navlinks{ transition: none !important; }
@@ -335,6 +343,34 @@ body.home header::before{
   height: calc(100% + 60px) !important;
 }
 
+/* Aereo di carta che ogni tanto attraversa l'hero in diagonale (main.js lo
+   muove). Sta sopra il testo ma sotto il cartellino, che lo copre quando ci
+   passa dietro; nascosto finché non vola. Il cielo lo ritaglia con overflow:
+   il clip-path dell'hero lo nasconde ma non toglie lo scorrimento, e
+   fuori schermo a destra la pagina si poteva scorrere di lato. */
+.hero-sky{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-plane{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(64px, 8vw, 120px);
+  height: auto;
+  pointer-events: none;
+  visibility: hidden;
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,.35));
+  will-change: transform;
+}
+.hero-plane.is-flying{ visibility: visible; }
+@media (prefers-reduced-motion: reduce){
+  .hero-plane{ display: none; }
+}
+
 .hero h1{
   font-weight: 700;
   font-size: clamp(3rem, 8vw, 6.4rem);
@@ -403,9 +439,11 @@ body.home header::before{
   margin-top: 4px;
 }
 
-/* Su telefono i dati diventano una sola riga piccola, "7 anni · Bari, IT":
-   restano solo i valori (le etichette spariscono con font-size 0) e Ambiti
-   si toglie, perché lo dice già il sottotitolo. */
+/* Su telefono i dati diventano una sola riga piccola,
+   "7 anni di esperienza · Bari, IT": restano solo i valori (le etichette
+   spariscono con font-size 0), agli anni si aggiunge "di esperienza" perché
+   da soli sembravano l'età, e Ambiti si toglie, perché lo dice già il
+   sottotitolo. */
 @media (max-width: 640px){
   .hero p{ text-wrap: pretty; }
   .hero .meta{
@@ -421,6 +459,7 @@ body.home header::before{
     color: var(--ink-soft);
   }
   .hero .meta div + div span::before{ content: "·"; margin: 0 0.5em; }
+  .hero .meta div:first-child span::after{ content: "\a0 di\a0 esperienza"; }
 }
 
 @media (max-width: 980px){
@@ -607,8 +646,10 @@ h2.section-title{
   margin-right:9px;
   opacity:1;
 }
-/* Su touch non c'è hover: la scritta resta sempre aperta */
-@media (hover: none){
+/* Su touch non c'è hover: la scritta resta sempre aperta. Anche sotto gli
+   820px, perché alcuni telefoni Android dichiarano (hover: hover) e lì la
+   scritta compariva solo dopo il tocco */
+@media (hover: none), (max-width: 820px){
   .tile-open,
   .tile:hover .tile-open{ height:34px; background: rgba(23,20,15,.26); }
   .tile-open i{ transform: rotate(-135deg); }
@@ -629,7 +670,8 @@ h2.section-title{
 /* Immagine solo per il telefono (vedi sotto, max-width 820px): da desktop
    nascosta, e con loading="lazy" non viene nemmeno scaricata */
 .tile .art-mobile{ display: none; }
-.tile:nth-child(9) .tile-frame{ aspect-ratio: 9/16; }
+/* Raf 40 in 4:5 come Iterum: alta quanto la card di HIV che le sta accanto */
+.tile:nth-child(9) .tile-frame{ aspect-ratio: 4/5; }
 /* Sfalsamento come i due scatti di K-Way: la card centrale della riga di
    quadrati scende un po', la griglia sembra impaginata a mano */
 .tile:nth-child(4){ margin-top: 56px; }
@@ -704,9 +746,6 @@ h2.section-title{
   /* Tutte le card a tutta larghezza, ognuna con le proprie proporzioni */
   .grid{ grid-template-columns: 1fr; gap: 36px; }
   .grid .tile{ grid-column: auto; margin-top: 0; }
-  /* Raf 40: in 9:16 a tutta larghezza era alta quasi due schermate */
-  .tile:nth-child(2) .tile-frame,
-  .tile:nth-child(9) .tile-frame{ aspect-ratio: 4/5; }
   .tile-frame{ border-width: 5px; border-radius: 14px; }
   .tile .cap{ margin-top: 14px; padding-top: 12px; }
   .cap .name{ font-size: 1rem; }
@@ -727,25 +766,266 @@ h2.section-title{
 }
 
 /* -------- About -------- */
-.about-grid{
-  display:grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 80px;
-  align-items: start;
-}
-.about-grid p{
-  font-size: 1.15rem;
-  color: var(--ink-soft);
-  max-width: 52ch;
-  margin: 0 0 20px;
-}
-.about-grid p strong{ color: var(--ink); font-weight: 700; }
-
+/* In alto testo e formazione accanto alle stories (lo story player di K-Way
+   con i video e l'audio), sotto le competenze a tutta larghezza */
 .cv-cta{ margin-top:32px; }
 
-/* Il titolo di "Chi sono" è corto: meno spazio sotto per far posto alla formazione */
+/* Il titolo di "Chi sono" è corto: meno spazio sotto per far posto al testo */
 #about h2.section-title{ margin-bottom: 28px; }
-#about .about-grid p{ font-size: 1.08rem; margin-bottom: 14px; }
+
+/* Con il mouse la freccia diventa un disegno grande quanto l'aereo e il
+   palloncino: una matita in "Chi sono", una moka in "Lavori". Non è un
+   cursore CSS (massimo 128px e sfocato su retina) ma un'immagine che segue
+   il mouse (main.js, che mette .has-pencil e .has-moka): il clic resta
+   sulla punta, che main.js porta sotto il puntatore. Il contenitore si
+   sposta, l'immagine dentro fa un piccolo gesto quando si preme, facendo
+   perno sulla punta: la matita si piega, la moka si inclina a sinistra
+   come per versare il caffè. */
+html.has-pencil #about,
+html.has-pencil #about *,
+html.has-moka #lavori,
+html.has-moka #lavori *{ cursor: none; }
+.img-cursor{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  pointer-events: none;
+  visibility: hidden;
+}
+.img-cursor img{
+  display: block;
+  width: auto;
+  height: 130px;
+  transition: transform .12s ease-out;
+  filter: drop-shadow(4px 6px 6px rgba(0,0,0,.18));
+}
+.img-cursor.is-on{ visibility: visible; }
+.pencil-cursor img{ transform-origin: 2.16% 99.35%; }
+.pencil-cursor.is-pressed img{ transform: rotate(-8deg) scale(.96); }
+.moka-cursor img{ transform-origin: 0.64% 32.86%; transition-duration: .2s; }
+.moka-cursor.is-pressed img{ transform: rotate(-14deg); }
+
+/* -------- Chi sono: stories --------
+   Come lo story player di K-Way: avanza da solo quando è a schermo, tocco
+   ai lati per andare avanti e indietro, tieni premuto per la pausa. Qui le
+   stories sono video: la barra segue il video e il tasto in alto a destra
+   accende l'audio (main.js) */
+.ab-player{
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 40px 96px;
+  align-items:center;
+}
+.ab-side p{
+  font-size: 1.08rem;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin: 0 0 14px;
+}
+.ab-side p strong{ color: var(--ink); font-weight: 700; }
+
+/* Competenze: a tutta larghezza sotto le stories, su due colonne che si
+   leggono dall'alto in basso (01–04 a sinistra, 05–08 a destra). Colonne
+   e non griglia: una voce su due righe non allunga quella accanto */
+.about-skills{
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.about-skills .edu-title{ margin-top: 0; }
+@media (min-width: 821px){
+  .about-skills .skills-list{ columns: 2; column-gap: 80px; }
+  .about-skills .skills-list li{ break-inside: avoid; }
+  .about-skills .skills-list .l{ white-space: nowrap; } /* sui tablet le colonne sono strette */
+}
+
+/* Il telefono: cornice scura sul fondo chiaro della sezione, inclinato
+   come quello di K-Way. Dietro, un disco nel colore della story */
+.ab-device{ position:relative; isolation:isolate; }
+.ab-device::before{
+  content:"";
+  position:absolute;
+  left:50%; top:52%;
+  width:130%; aspect-ratio:1;
+  border-radius:50%;
+  background: radial-gradient(closest-side, var(--now, var(--accent)), transparent);
+  opacity:.2;
+  transform: translate(-50%, -50%);
+  pointer-events:none;
+  z-index:-1;
+}
+.ab-bars{
+  display:flex;
+  gap:4px;
+  margin-bottom:12px;
+}
+.ab-bar{
+  position:relative;
+  flex:1;
+  height:3px;
+  border-radius:3px;
+  background: rgba(23,20,15,.16);
+  overflow:hidden;
+}
+.ab-bar span{
+  position:absolute; inset:0;
+  background: var(--ink);
+  transform-origin:left center;
+  transform: scaleX(var(--p,0));
+}
+.ab-screen{
+  position:relative;
+  border-radius:28px;
+  overflow:hidden;
+  aspect-ratio:9/16;
+  background:#000;
+  border:6px solid var(--ink);
+  box-shadow: 0 34px 70px -18px rgba(23,20,15,.45);
+  transform: rotate(1.5deg);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  user-select:none;
+  -webkit-user-select:none;
+}
+.ab-device:hover .ab-screen{ transform: rotate(0deg) scale(1.015); }
+/* Sfumatura in alto per leggere nome e tasto dell'audio su ogni video */
+.ab-screen::after{
+  content:"";
+  position:absolute; inset:0 0 auto;
+  height:110px;
+  background: linear-gradient(rgba(0,0,0,.45), transparent);
+  pointer-events:none;
+  z-index:1;
+}
+.ab-video,
+.ab-photo,
+.ab-cover{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+/* Story con la foto: entra sopra il video come le slide di K-Way */
+.ab-photo{
+  opacity:0;
+  transform: scale(1.04);
+  transition: opacity .45s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+  pointer-events:none;
+}
+.ab-photo.is-on{ opacity:1; transform: scale(1); }
+/* Il poster della story nuova copre il video finché questo non parte, poi
+   sfuma: lo stesso ingresso delle stories di K-Way */
+.ab-cover{
+  transition: opacity .45s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+  pointer-events:none;
+}
+.ab-cover.is-hidden{ opacity:0; }
+.ab-cover.is-entering{ transition:none; opacity:0; transform: scale(1.04); }
+.ab-user{
+  position:absolute;
+  left:14px; top:16px;
+  display:flex; align-items:center; gap:8px;
+  font-size:0.78rem;
+  font-weight:700;
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.45);
+  z-index:2;
+  pointer-events:none;
+}
+.ab-avatar{
+  width:26px; height:26px;
+  border-radius:50%;
+  border:2px solid #fff;
+  /* lo stesso ritratto tondo dell'icona del sito */
+  background: #fff url("../assets/icons/favicon-192.png") center / cover no-repeat;
+}
+.ab-when{ font-weight:500; opacity:.75; }
+.ab-tap{
+  position:absolute; top:0; bottom:0;
+  width:50%;
+  border:none;
+  background:transparent;
+  padding:0;
+  z-index:2;
+}
+.ab-tap--prev{ left:0; cursor: w-resize; }
+.ab-tap--next{ right:0; cursor: e-resize; }
+.ab-tap:focus-visible{ outline:2px solid var(--pop); outline-offset:-4px; }
+/* Audio: tondo in vetro scuro come il bollino delle card; finché non si è
+   mai acceso porta l'etichetta "Attiva l'audio", che poi si ritira */
+.ab-vol{
+  position:absolute;
+  right:12px; top:10px;
+  z-index:3;
+  display:flex; align-items:center; gap:8px;
+  height:38px;
+  min-width:38px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background: rgba(23,20,15,.45);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  color:#fff;
+  font:inherit;
+  font-size:.74rem;
+  font-weight:700;
+  cursor:pointer;
+  transition: background .25s ease, padding .35s ease;
+}
+.ab-vol i{ width:16px; text-align:center; font-size:.95rem; }
+.ab-vol:hover{ background: rgba(23,20,15,.7); }
+.ab-vol:focus-visible{ outline:2px solid var(--pop); outline-offset:2px; }
+.ab-vol-label{ white-space:nowrap; }
+.ab-player:not(.was-sound) .ab-vol{ animation: ab-vol-pulse 2.4s ease-in-out infinite; }
+.ab-player.was-sound .ab-vol{ padding:0 10px; }
+.ab-player.was-sound .ab-vol-label{ display:none; }
+.ab-player.is-sound .ab-vol{ background: var(--pop); border-color: var(--pop); color: var(--ink); }
+@keyframes ab-vol-pulse{
+  0%, 60%, 100%{ box-shadow: 0 0 0 0 rgba(242,193,78,.55); }
+  30%{ box-shadow: 0 0 0 8px rgba(242,193,78,0); }
+}
+.ab-paused{
+  position:absolute;
+  left:50%; top:50%;
+  width:64px; height:64px;
+  margin:-32px 0 0 -32px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.45);
+  color:#fff;
+  font-size:1.2rem;
+  opacity:0;
+  transform: scale(.8);
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events:none;
+  z-index:3;
+}
+.ab-player.is-paused .ab-paused{ opacity:1; transform: scale(1); }
+.ab-hint{
+  display:block;
+  margin-top:16px;
+  text-align:center;
+  font-size:0.8rem;
+  color: var(--ink-soft);
+  text-wrap:balance;
+}
+
+/* Su una colonna: prima titolo e testo, poi il telefono, sotto la
+   formazione. .ab-side si "scioglie" (display:contents) così il telefono
+   può stare in mezzo ai suoi figli */
+@media (max-width: 980px){
+  .ab-player{ display:flex; flex-direction:column; align-items:stretch; gap:0; }
+  .ab-side{ display:contents; }
+  .ab-device{ order:1; width:min(100%, 320px); margin:28px auto 8px; }
+  .ab-device::before{ width:100%; } /* più largo sborderebbe dallo schermo */
+  .ab-edu{ order:2; }
+  .ab-screen{ transform:none; }
+  .ab-device:hover .ab-screen{ transform:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .ab-cover, .ab-photo, .ab-screen{ transition:none; }
+  .ab-player:not(.was-sound) .ab-vol{ animation:none; }
+}
 
 /* Formazione: logo della scuola in una tessera bianca + titolo e dettagli */
 .edu-title{
@@ -769,6 +1049,8 @@ h2.section-title{
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
 }
+/* L'ultima scuola senza filetto: sotto c'è già quello delle competenze */
+.edu-list li:last-child{ border-bottom: 0; }
 .edu-logo{
   flex: 0 0 auto;
   display: flex;
@@ -843,19 +1125,14 @@ h2.section-title{
 }
 .software-icons img{ width: 36px; height: 36px; display:block; }
 @media (max-width: 520px){
-  .skills-list li{ flex-direction: column; align-items: flex-start; gap: 2px; }
+  /* anche la riga Software, che sopra è centrata con :has(), va a sinistra
+     come le altre: titolo sopra e icone sotto */
+  .skills-list li,
+  .skills-list li:has(.software-icons){ flex-direction: column; align-items: flex-start; gap: 2px; }
   .skills-list li span:last-child{ text-align: left; }
   .software-icons{ margin: 6px 0 0; }
 }
 
-/* Il titolo "Competenze" serve solo quando le colonne vanno una sotto
-   l'altra: su desktop l'elenco sta accanto al testo e si spiega da sé */
-.skills-title{ display:none; }
-
-@media (max-width: 820px){
-  .about-grid{ grid-template-columns: 1fr; gap: 40px; }
-  .skills-title{ display:block; margin-top:0; }
-}
 
 /* -------- Contact -------- */
 .contact h2.section-title{ max-width: 20ch; margin-bottom: 22px; }
@@ -1558,6 +1835,44 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   background: radial-gradient(60% 80% at 15% 30%, rgba(2,121,160,.35), transparent 70%);
   pointer-events:none;
 }
+/* Palloncino a forma di cagnolino che ogni tanto sale dal basso, come
+   sfuggito di mano a un bambino, con il filo che penzola (main.js muove
+   tutti e due). Sopra i contenuti, nascosto finché non vola. */
+.featured-sky{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.balloon-string{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.balloon-string path{
+  fill: none;
+  stroke: rgba(247,245,240,.85);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.featured-balloon{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(80px, 10vw, 150px);
+  height: auto;
+  filter: drop-shadow(0 14px 16px rgba(0,0,0,.35));
+  will-change: transform;
+}
+.featured-balloon, .balloon-string{ visibility: hidden; }
+.featured-sky.is-flying .featured-balloon,
+.featured-sky.is-flying .balloon-string{ visibility: visible; }
+@media (prefers-reduced-motion: reduce){
+  .featured-sky{ display: none; }
+}
 .featured-grid{
   position:relative;
   display:grid;
@@ -2095,8 +2410,8 @@ section.contact::before{
   content:"";
   position:absolute; inset:0;
   background: radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.35) 0%, rgba(255,255,255,0) 45%);
-  -webkit-mask: url("../assets/images/VITQ_STICKER.png") center / 100% 100% no-repeat;
-          mask: url("../assets/images/VITQ_STICKER.png") center / 100% 100% no-repeat;
+  -webkit-mask: url("../assets/images/VITQ_STICKER-720.webp") center / 100% 100% no-repeat;
+          mask: url("../assets/images/VITQ_STICKER-720.webp") center / 100% 100% no-repeat;
   opacity:0;
   transition: opacity .35s ease;
   pointer-events:none;
