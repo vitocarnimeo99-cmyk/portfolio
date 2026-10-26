@@ -343,6 +343,34 @@ body.home header::before{
   height: calc(100% + 60px) !important;
 }
 
+/* Aereo di carta che ogni tanto attraversa l'hero in diagonale (main.js lo
+   muove). Sta sopra il testo ma sotto il cartellino, che lo copre quando ci
+   passa dietro; nascosto finché non vola. Il cielo lo ritaglia con overflow:
+   il clip-path dell'hero lo nasconde ma non toglie lo scorrimento, e
+   fuori schermo a destra la pagina si poteva scorrere di lato. */
+.hero-sky{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-plane{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(64px, 8vw, 120px);
+  height: auto;
+  pointer-events: none;
+  visibility: hidden;
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,.35));
+  will-change: transform;
+}
+.hero-plane.is-flying{ visibility: visible; }
+@media (prefers-reduced-motion: reduce){
+  .hero-plane{ display: none; }
+}
+
 .hero h1{
   font-weight: 700;
   font-size: clamp(3rem, 8vw, 6.4rem);
@@ -744,6 +772,39 @@ h2.section-title{
 
 /* Il titolo di "Chi sono" è corto: meno spazio sotto per far posto al testo */
 #about h2.section-title{ margin-bottom: 28px; }
+
+/* Con il mouse la freccia diventa un disegno grande quanto l'aereo e il
+   palloncino: una matita in "Chi sono", una moka in "Lavori". Non è un
+   cursore CSS (massimo 128px e sfocato su retina) ma un'immagine che segue
+   il mouse (main.js, che mette .has-pencil e .has-moka): il clic resta
+   sulla punta, che main.js porta sotto il puntatore. Il contenitore si
+   sposta, l'immagine dentro fa un piccolo gesto quando si preme, facendo
+   perno sulla punta: la matita si piega, la moka si inclina a sinistra
+   come per versare il caffè. */
+html.has-pencil #about,
+html.has-pencil #about *,
+html.has-moka #lavori,
+html.has-moka #lavori *{ cursor: none; }
+.img-cursor{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  pointer-events: none;
+  visibility: hidden;
+}
+.img-cursor img{
+  display: block;
+  width: auto;
+  height: 130px;
+  transition: transform .12s ease-out;
+  filter: drop-shadow(4px 6px 6px rgba(0,0,0,.18));
+}
+.img-cursor.is-on{ visibility: visible; }
+.pencil-cursor img{ transform-origin: 2.16% 99.35%; }
+.pencil-cursor.is-pressed img{ transform: rotate(-8deg) scale(.96); }
+.moka-cursor img{ transform-origin: 0.64% 32.86%; transition-duration: .2s; }
+.moka-cursor.is-pressed img{ transform: rotate(-14deg); }
 
 /* -------- Chi sono: stories --------
    Come lo story player di K-Way: avanza da solo quando è a schermo, tocco
@@ -1773,6 +1834,44 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   position:absolute; inset:0;
   background: radial-gradient(60% 80% at 15% 30%, rgba(2,121,160,.35), transparent 70%);
   pointer-events:none;
+}
+/* Palloncino a forma di cagnolino che ogni tanto sale dal basso, come
+   sfuggito di mano a un bambino, con il filo che penzola (main.js muove
+   tutti e due). Sopra i contenuti, nascosto finché non vola. */
+.featured-sky{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.balloon-string{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.balloon-string path{
+  fill: none;
+  stroke: rgba(247,245,240,.85);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.featured-balloon{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(80px, 10vw, 150px);
+  height: auto;
+  filter: drop-shadow(0 14px 16px rgba(0,0,0,.35));
+  will-change: transform;
+}
+.featured-balloon, .balloon-string{ visibility: hidden; }
+.featured-sky.is-flying .featured-balloon,
+.featured-sky.is-flying .balloon-string{ visibility: visible; }
+@media (prefers-reduced-motion: reduce){
+  .featured-sky{ display: none; }
 }
 .featured-grid{
   position:relative;

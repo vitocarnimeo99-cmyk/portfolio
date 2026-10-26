@@ -514,6 +514,237 @@ if (canHover) window.addEventListener('load', () => {
   loadScene('wkz-pack', 'js/pillowpack3d.js');
 })();
 
+// Aereo di carta nella hero: ogni tanto entra da sotto a sinistra ed esce in
+// alto a destra, ondeggiando, con il muso che segue la traiettoria. Ogni volo
+// è un po' diverso (altezza, onde) e vola solo con l'hero a schermo e la
+// scheda in primo piano; con "riduci movimento" non c'è (style.css).
+(function () {
+  const plane = document.querySelector('.hero-plane');
+  if (!plane || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hero = plane.closest('.hero');
+  // Dove punta il muso nell'immagine, in gradi (0 = verso destra)
+  const HEADING = -50;
+  let inView = true;
+  let flying = false;
+  let timer = null;
+
+  function schedule(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(fly, ms);
+  }
+
+  function fly() {
+    timer = null;
+    if (!inView || document.hidden) return;
+    flying = true;
+    const W = hero.clientWidth;
+    const H = hero.clientHeight;
+    const w = plane.offsetWidth;
+    const h = plane.offsetHeight;
+    const x0 = -w * 1.5;
+    const x1 = W + w * 0.5;
+    const y0 = H * (0.65 + Math.random() * 0.25);
+    const y1 = H * (0.05 + Math.random() * 0.2) - h;
+    const amp = Math.min(H * 0.06, 40) * (0.6 + Math.random() * 0.8);
+    const waves = 1 + Math.random();
+    const dur = Math.min(Math.max((x1 - x0) / 0.25, 4000), 8000);
+    const point = (t) => [
+      x0 + (x1 - x0) * t,
+      y0 + (y1 - y0) * t + Math.sin(t * waves * 2 * Math.PI) * amp
+    ];
+    const start = performance.now();
+    plane.classList.add('is-flying');
+
+    function frame(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const [x, y] = point(t);
+      const [xa, ya] = point(t + 0.005);
+      const angle = Math.atan2(ya - y, xa - x) * 180 / Math.PI;
+      // Un piccolo dondolio, come una papera che si gira a guardare
+      const rock = Math.sin(t * Math.PI * 6) * 4;
+      plane.style.transform = `translate(${x}px, ${y}px) rotate(${angle - HEADING + rock}deg)`;
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        flying = false;
+        plane.classList.remove('is-flying');
+        schedule(9000 + Math.random() * 8000);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Tornando sull'hero (o sulla scheda) riparte presto se era in attesa
+  function resume() {
+    if (inView && !document.hidden && !flying && !timer) schedule(1500);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      resume();
+    }, { threshold: 0.3 }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', resume);
+
+  // Il primo volo dopo l'entrata del testo
+  schedule(2500);
+})();
+
+// Cursori disegnati, solo con il mouse (style.css, .img-cursor): la matita in
+// "Chi sono" e la moka in "Lavori", per prendersi il tempo di un caffè
+// mentre si guardano i progetti. Il contenitore segue il mouse con la punta
+// (la mina, il beccuccio) sotto il puntatore, dove resta il clic; il gesto
+// al clic è sull'immagine dentro e fa perno lì. Scorrendo la pagina senza
+// muovere il mouse la sezione passa sotto il puntatore: lì si ricontrolla
+// cosa c'è sotto.
+(function () {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  // tipX e tipY: la punta nell'immagine, in frazioni di larghezza e altezza
+  function imgCursor({ section, name, src, width, height, tipX, tipY }) {
+    if (!document.querySelector(section)) return;
+    const cursor = document.createElement('span');
+    cursor.className = `img-cursor ${name}-cursor`;
+    cursor.setAttribute('aria-hidden', 'true');
+    const img = new Image(width, height);
+    img.src = src;
+    img.alt = '';
+    img.decoding = 'async';
+    cursor.appendChild(img);
+    document.body.appendChild(cursor);
+    document.documentElement.classList.add(`has-${name}`);
+
+    let x = -1;
+    let y = -1;
+    let on = false;
+    let w = 0;
+    let h = 0;
+    const measure = () => { w = img.offsetWidth; h = img.offsetHeight; };
+    measure();
+    window.addEventListener('resize', measure);
+
+    function toggle(target) {
+      const inside = !!(target && target.closest && target.closest(section));
+      if (inside === on) return;
+      on = inside;
+      cursor.classList.toggle('is-on', on);
+      if (!on) cursor.classList.remove('is-pressed');
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      cursor.style.transform = `translate(${x - tipX * w}px, ${y - tipY * h}px)`;
+      toggle(e.target);
+    }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (x >= 0) toggle(document.elementFromPoint(x, y));
+    }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => toggle(null));
+    document.addEventListener('mousedown', () => { if (on) cursor.classList.add('is-pressed'); });
+    document.addEventListener('mouseup', () => cursor.classList.remove('is-pressed'));
+  }
+
+  imgCursor({ section: '#about', name: 'pencil', src: 'assets/images/MATITA-260.webp',
+    width: 214, height: 260, tipX: 0.0216, tipY: 0.9935 });
+  imgCursor({ section: '#lavori', name: 'moka', src: 'assets/images/MOKA-260.webp',
+    width: 202, height: 260, tipX: 0.0064, tipY: 0.3286 });
+})();
+
+// Palloncino di "In evidenza": sale dal basso fino a uscire in alto, come
+// sfuggito di mano a un bambino. Prende velocità piano piano, dondola a
+// destra e sinistra, il vento lo sposta un po' di lato e rimpicciolisce
+// allontanandosi; il filo, legato al nodo del muso, penzola e resta indietro
+// a ogni dondolio. Parte quando la sezione arriva a schermo, poi ripassa ogni
+// tanto finché ci resta.
+(function () {
+  const sky = document.querySelector('.featured-sky');
+  if (!sky || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const balloon = sky.querySelector('.featured-balloon');
+  const string = sky.querySelector('.balloon-string path');
+  // Il nodo nell'immagine, in frazioni di larghezza e altezza
+  const KNOT_X = 0.914;
+  const KNOT_Y = 0.27;
+  let inView = false;
+  let flying = false;
+  let timer = null;
+
+  function schedule(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(fly, ms);
+  }
+
+  function fly() {
+    timer = null;
+    if (!inView || document.hidden) return;
+    flying = true;
+    const W = sky.clientWidth;
+    const H = sky.clientHeight;
+    const bw = balloon.offsetWidth;
+    const bh = balloon.offsetHeight;
+    const len = bh * 1.3;
+    const x0 = W * (0.1 + Math.random() * 0.7);
+    const drift = W * (Math.random() - 0.5) * 0.3;
+    const y0 = H + 20;
+    const y1 = -bh - len - 20;
+    const sway = 16 + Math.random() * 14;
+    const period = 2400 + Math.random() * 800;
+    const dur = Math.min(Math.max((y0 - y1) / 0.13, 6000), 11000);
+    const start = performance.now();
+    sky.classList.add('is-flying');
+
+    function frame(now) {
+      const ms = now - start;
+      const t = Math.min(ms / dur, 1);
+      const p = 0.6 * t + 0.4 * t * t;
+      const phase = ms / period * 2 * Math.PI;
+      const x = x0 + drift * p + Math.sin(phase) * sway;
+      const y = y0 + (y1 - y0) * p;
+      const angle = Math.sin(phase - 0.6) * 6;
+      const s = 1 - 0.2 * p;
+      balloon.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg) scale(${s})`;
+
+      // Il nodo dopo rotazione e scala intorno al centro dell'immagine
+      const a = angle * Math.PI / 180;
+      const kx = (KNOT_X - 0.5) * bw * s;
+      const ky = (KNOT_Y - 0.5) * bh * s;
+      const ax = x + bw / 2 + kx * Math.cos(a) - ky * Math.sin(a);
+      const ay = y + bh / 2 + kx * Math.sin(a) + ky * Math.cos(a);
+      // Il filo resta indietro rispetto al dondolio e serpeggia un po'
+      const l = len * s;
+      const lag = -Math.cos(phase) * sway * 0.9;
+      const w1 = Math.sin(phase * 1.7) * 7;
+      const w2 = Math.sin(phase * 1.7 + 2) * 9;
+      string.setAttribute('d',
+        `M${ax},${ay} C${ax + w1},${ay + l * 0.35} ${ax + lag * 0.6 + w2},${ay + l * 0.7} ${ax + lag},${ay + l}`);
+
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        flying = false;
+        sky.classList.remove('is-flying');
+        schedule(12000 + Math.random() * 8000);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function resume() {
+    if (inView && !document.hidden && !flying && !timer) schedule(1200);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      resume();
+    // Con un margine e non una soglia: su telefono la sezione è più alta
+    // dello schermo e una percentuale potrebbe non arrivare mai
+    }, { rootMargin: '-20% 0px' }).observe(sky);
+  } else {
+    inView = true;
+    resume();
+  }
+  document.addEventListener('visibilitychange', resume);
+})();
 
 // Titolo della home: ogni lettera in uno span, così al passaggio del mouse
 // solo quella lettera diventa corsivo rosso (vedi .hero h1 .ch in style.css).
