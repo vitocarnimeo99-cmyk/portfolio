@@ -1500,6 +1500,14 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--ink);
 }
 .btn-ghost:hover{ border-color: var(--ink); transform: translateY(-2px); }
+/* Icone SVG di Font Awesome (_partials/icone.svg, una copia in ogni pagina):
+   alte quanto il testo e del suo colore, come il font di icone di prima.
+   La larghezza viene dal viewBox; con una larghezza fissa sull'<i> restano
+   centrate. L'altezza la dà l'SVG: nei contenitori flex l'<i> si allunga
+   con la riga e l'icona resta in alto, come faceva il carattere del font */
+.ico{ display:inline-block; vertical-align:-.125em; }
+.ico svg{ display:block; height:1em; width:auto; margin-inline:auto; fill:currentColor; overflow:visible; }
+.ico-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
 /* Frecce: la stessa icona del bollino delle card al posto dei caratteri
    ← → ↓ ↗. La diagonale è la freccia a destra ruotata, come nel bollino */
 .arrow-ico{ font-size:0.85em; }

@@ -2,6 +2,7 @@
   "name": "vitq-portfolio",
   "private": true,
   "scripts": {
-    "componi": "node tools/componi.mjs"
+    "componi": "node tools/componi.mjs",
+    "icona": "node tools/icona.mjs"
   }
 }

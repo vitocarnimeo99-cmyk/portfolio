@@ -1041,7 +1041,7 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
   const stories = Array.from(player.querySelectorAll('.ab-bar'));
   const bars = stories.map(s => s.firstElementChild);
   const volBtn = player.querySelector('.ab-vol');
-  const volIcon = volBtn.querySelector('i');
+  const volIcon = volBtn.querySelector('use');
   const place = player.querySelector('.ab-when');
   const PHOTO_DURATION = 5000;
 
@@ -1094,7 +1094,7 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
     if (on) player.classList.add('was-sound');
     volBtn.setAttribute('aria-pressed', String(on));
     volBtn.setAttribute('aria-label', on ? 'Disattiva l’audio' : 'Attiva l’audio');
-    volIcon.className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+    volIcon.setAttribute('href', on ? '#ico-volume-high' : '#ico-volume-xmark');
   };
 
   const sync = () => {

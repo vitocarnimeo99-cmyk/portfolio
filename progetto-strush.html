@@ -24,7 +24,6 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 <!-- /comune:head -->
 <style>
@@ -925,6 +924,27 @@
 </style>
 </head>
 <body>
+<!-- comune:icone · non modificare qui: _partials/icone.svg (npm run icona) -->
+<svg class="ico-sprite" aria-hidden="true">
+<symbol id="ico-apple" viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></symbol>
+<symbol id="ico-arrow-left" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></symbol>
+<symbol id="ico-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="ico-arrow-trend-up" viewBox="0 0 576 512"><path d="M384 160c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32V288c0 17.7-14.3 32-32 32s-32-14.3-32-32V205.3L342.6 374.6c-12.5 12.5-32.8 12.5-45.3 0L192 269.3 54.6 406.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0L320 306.7 466.7 160H384z"/></symbol>
+<symbol id="ico-chevron-down" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></symbol>
+<symbol id="ico-comment-dots-regular" viewBox="0 0 512 512"><path d="M168.2 384.9c-15-5.4-31.7-3.1-44.6 6.4c-8.2 6-22.3 14.8-39.4 22.7c5.6-14.7 9.9-31.3 11.3-49.4c1-12.9-3.3-25.7-11.8-35.5C60.4 302.8 48 272 48 240c0-79.5 83.3-160 208-160s208 80.5 208 160s-83.3 160-208 160c-31.6 0-61.3-5.5-87.8-15.1zM26.3 423.8c-1.6 2.7-3.3 5.4-5.1 8.1l-.3 .5c-1.6 2.3-3.2 4.6-4.8 6.9c-3.5 4.7-7.3 9.3-11.3 13.5c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c5.1 0 10.2-.3 15.3-.8l.7-.1c4.4-.5 8.8-1.1 13.2-1.9c.8-.1 1.6-.3 2.4-.5c17.8-3.5 34.9-9.5 50.1-16.1c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9zM144 272a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm144-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm80 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></symbol>
+<symbol id="ico-globe" viewBox="0 0 512 512"><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></symbol>
+<symbol id="ico-google-play" viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></symbol>
+<symbol id="ico-instagram" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></symbol>
+<symbol id="ico-linkedin" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></symbol>
+<symbol id="ico-mobile-screen-button" viewBox="0 0 384 512"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z"/></symbol>
+<symbol id="ico-share-nodes" viewBox="0 0 448 512"><path d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></symbol>
+<symbol id="ico-shuffle" viewBox="0 0 512 512"><path d="M403.8 34.4c12-5 25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V160H352c-10.1 0-19.6 4.7-25.6 12.8L284 229.3 244 176l31.2-41.6C293.3 110.2 321.8 96 352 96h32V64c0-12.9 7.8-24.6 19.8-29.6zM164 282.7L204 336l-31.2 41.6C154.7 401.8 126.2 416 96 416H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c10.1 0 19.6-4.7 25.6-12.8L164 282.7zm274.6 188c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V416H352c-30.2 0-58.7-14.2-76.8-38.4L121.6 172.8c-6-8.1-15.5-12.8-25.6-12.8H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c30.2 0 58.7 14.2 76.8 38.4L326.4 339.2c6 8.1 15.5 12.8 25.6 12.8h32V320c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64z"/></symbol>
+<symbol id="ico-table-cells-large" viewBox="0 0 512 512"><path d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></symbol>
+<symbol id="ico-tiktok" viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></symbol>
+<symbol id="ico-volume-high" viewBox="0 0 640 512"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></symbol>
+<symbol id="ico-volume-xmark" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></symbol>
+</svg>
+<!-- /comune:icone -->
 
 <!-- comune:header · non modificare qui: _partials/header.html -->
 <header>
@@ -945,20 +965,20 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna ai&nbsp;lavori</a>
+      <a class="back-link" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Brand identity & App - Strush S.R.L.s</span>
       <h1>Strush <em>Fintech Startup</em></h1>
       <p class="more" id="intro-more"><strong>Strush</strong> è&nbsp;l'app di&nbsp;finanza personale che&nbsp;rende l'educazione finanziaria <strong>a&nbsp;misura di&nbsp;Gen Z</strong>: tieni traccia delle&nbsp;spese, imposti un&nbsp;budget, dividi i&nbsp;conti con&nbsp;gli&nbsp;amici e&nbsp;ti fai consigliare da&nbsp;<strong>Bernardino</strong>, il&nbsp;coach personale che&nbsp;ti dice le&nbsp;cose come&nbsp;stanno.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
       Del&nbsp;progetto sono <strong>Co-founder &amp; Art&nbsp;Director</strong>.<br class="br-desk"><br class="br-mob"> Ho costruito l'identità del&nbsp;brand da&nbsp;zero: il&nbsp;logo e&nbsp;la&nbsp;sua costruzione geometrica, la&nbsp;mascotte, la&nbsp;palette e&nbsp;il&nbsp;brand manual, fino alle&nbsp;illustrazioni, agli&nbsp;sticker e&nbsp;alle&nbsp;schermate con&nbsp;cui l'app si&nbsp;presenta sugli&nbsp;store.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
       <div class="project-meta">
         <div>Anno<span>2025 — oggi</span></div>
         <div class="meta-wide">Ruolo<span>Co-founder &amp; Art Director</span></div>
         <div>Output<span>App</span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary btn-site" href="#scarica"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Scarica l'app</a>
-        <a class="btn-ghost" href="https://www.strush.it/" target="_blank" rel="noopener">Visita strush.it<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
+        <a class="btn-primary btn-site" href="#scarica"><i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-mobile-screen-button"/></svg></i>Scarica l'app</a>
+        <a class="btn-ghost" href="https://www.strush.it/" target="_blank" rel="noopener">Visita strush.it<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
       </div>
     </div>
     <div class="st-hero-art" id="st-hero">
@@ -1016,20 +1036,20 @@
         <div class="peek" id="st-values-more" style="--peek:14rem">
         <ul class="st-values">
           <li class="st-value">
-            <span class="st-value-icon"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i></span>
+            <span class="st-value-icon"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-comment-dots-regular"/></svg></i></span>
             <div><strong>Chiarezza</strong><p>Un'esperienza d'uso semplice e&nbsp;piacevole, che&nbsp;parli come un&nbsp;amico e&nbsp;agisca come un&nbsp;alleato.</p></div>
           </li>
           <li class="st-value">
-            <span class="st-value-icon"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></span>
+            <span class="st-value-icon"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-share-nodes"/></svg></i></span>
             <div><strong>Connessione</strong><p>Connessioni reali e&nbsp;digitali, in&nbsp;un&nbsp;ecosistema dove l'empatia guida ogni scelta&nbsp;condivisa.</p></div>
           </li>
           <li class="st-value">
-            <span class="st-value-icon"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></span>
+            <span class="st-value-icon"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-arrow-trend-up"/></svg></i></span>
             <div><strong>Progressione</strong><p>Aiutare le&nbsp;persone a&nbsp;migliorarsi e&nbsp;a&nbsp;prendersi cura delle&nbsp;proprie spese, con&nbsp;strumenti semplici e&nbsp;motivanti.</p></div>
           </li>
         </ul>
         </div>
-        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="st-values-more" data-less="Mostra meno">Vedi tutti i&nbsp;valori <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="st-values-more" data-less="Mostra meno">Vedi tutti i&nbsp;valori <span class="peek-count">3</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
         <span class="st-traits-label">Brand personality</span>
         <ul class="st-traits">
           <li>Amichevole</li>
@@ -1053,13 +1073,13 @@
           <p>Perché un&nbsp;T-rex?<br class="br-desk"><br class="br-mob"> Ha il&nbsp;braccino&nbsp;corto.<br class="br-desk"><br class="br-mob"> Anche volendo, al&nbsp;portafoglio non&nbsp;ci&nbsp;arriva&nbsp;💸</p>
         </div>
         </div>
-        <button type="button" class="more-btn" aria-expanded="false" aria-controls="geo-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="more-btn" aria-expanded="false" aria-controls="geo-more"><span class="more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
         <div class="geo-follow">
           <span class="st-traits-label">Segui Strush sui&nbsp;social</span>
           <ul class="social">
-            <li><a href="https://www.instagram.com/strush.it/" target="_blank" rel="noopener" aria-label="Strush su Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.tiktok.com/@strush.it" target="_blank" rel="noopener" aria-label="Strush su TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.linkedin.com/company/strush/" target="_blank" rel="noopener" aria-label="Strush su LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.instagram.com/strush.it/" target="_blank" rel="noopener" aria-label="Strush su Instagram"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-instagram"/></svg></i></a></li>
+            <li><a href="https://www.tiktok.com/@strush.it" target="_blank" rel="noopener" aria-label="Strush su TikTok"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-tiktok"/></svg></i></a></li>
+            <li><a href="https://www.linkedin.com/company/strush/" target="_blank" rel="noopener" aria-label="Strush su LinkedIn"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-linkedin"/></svg></i></a></li>
           </ul>
         </div>
       </div>
@@ -1067,7 +1087,7 @@
         <video width="1080" height="1244" aria-label="Dinuccio, il pittogramma di Strush, costruito sulla sua griglia geometrica" poster="assets/video/posters/strush_costruzione.jpg" muted loop playsinline preload="metadata">
           <source src="assets/video/strush_costruzione.mp4" type="video/mp4">
         </video>
-        <button class="geo-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
+        <button class="geo-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="ico" aria-hidden="true"><svg viewBox="0 0 640 512"><use href="#ico-volume-xmark"/></svg></i></button>
       </div>
     </div>
   </section>
@@ -1089,9 +1109,9 @@
         </div>
         <div class="fb-bar">
           <div class="fb-nav">
-            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
             <span class="fb-count" aria-live="polite">01 / 32</span>
-            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
           </div>
           <div class="fb-progress" aria-hidden="true"><span></span></div>
         </div>
@@ -1149,8 +1169,8 @@
       <div class="board-bar">
         <p>Trascina gli&nbsp;sticker · un&nbsp;tocco per&nbsp;farli&nbsp;saltare</p>
         <div class="board-actions">
-          <button class="board-btn" type="button" data-board="shuffle"><i class="fa-solid fa-shuffle" aria-hidden="true"></i>Rimescola</button>
-          <button class="board-btn" type="button" data-board="grid"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>Riordina</button>
+          <button class="board-btn" type="button" data-board="shuffle"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-shuffle"/></svg></i>Rimescola</button>
+          <button class="board-btn" type="button" data-board="grid"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-table-cells-large"/></svg></i>Riordina</button>
         </div>
       </div>
     </div>
@@ -1194,14 +1214,14 @@
         <div class="stores">
           <div class="store">
             <a class="store-badge" href="https://apps.apple.com/it/app/strush/id6766820241" target="_blank" rel="noopener">
-              <i class="fa-brands fa-apple" aria-hidden="true"></i>
+              <i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-apple"/></svg></i>
               <span><small>Scarica su</small><b>App Store</b></span>
             </a>
             <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://apps.apple.com/it/app/strush/id6766820241"></div>Inquadra con&nbsp;l'iPhone</div>
           </div>
           <div class="store">
             <a class="store-badge" href="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med" target="_blank" rel="noopener">
-              <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+              <i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-google-play"/></svg></i>
               <span><small>Disponibile su</small><b>Google Play</b></span>
             </a>
             <div class="store-qr" aria-hidden="true"><div class="store-qr-code" data-qr="https://play.google.com/store/apps/details?id=it.strush.app&amp;utm_source=emea_Med"></div>Inquadra con&nbsp;Android</div>
@@ -1226,9 +1246,9 @@
         <h2 class="section-title">I&nbsp;soldi non&nbsp;crescono<br><em>sugli&nbsp;alberi ;)</em></h2>
         <p>Ma&nbsp;con&nbsp;le&nbsp;app giuste si&nbsp;gestiscono&nbsp;meglio.<br class="br-desk"><br class="br-mob"> Strush è&nbsp;una&nbsp;startup nata per&nbsp;rendere l'educazione finanziaria semplice, ironica e&nbsp;alla&nbsp;portata di&nbsp;tutti.</p>
         <div class="project-links">
-          <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="fa-solid fa-globe" aria-hidden="true"></i>Visita strush.it<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-          <a class="btn-ghost" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna al&nbsp;portfolio</a>
+          <a class="btn-primary btn-site" href="https://www.strush.it/" target="_blank" rel="noopener"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-globe"/></svg></i>Visita strush.it<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+          <a class="btn-ghost" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+          <a class="btn-ghost" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna al&nbsp;portfolio</a>
         </div>
       </div>
       <a class="team-card" href="https://www.strush.it/" target="_blank" rel="noopener" aria-label="Vai al sito di Strush">
@@ -1243,7 +1263,7 @@
           <li><b>Silvano Sorino</b><span>Co-founder &amp; Game Designer</span></li>
           <li><b>Giuseppe Santoro</b><span>UI/UX Designer</span></li>
         </ul>
-        <span class="team-read">Vai su&nbsp;strush.it<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></span>
+        <span class="team-read">Vai su&nbsp;strush.it<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
       </a>
     </div>
   </section>
@@ -1323,7 +1343,7 @@
       const on = !video.muted;
       soundBtn.setAttribute('aria-pressed', String(on));
       soundBtn.setAttribute('aria-label', on ? "Disattiva l'audio" : "Attiva l'audio");
-      soundBtn.querySelector('i').className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+      soundBtn.querySelector('use').setAttribute('href', on ? '#ico-volume-high' : '#ico-volume-xmark');
       if (on && video.paused) video.play().catch(() => {});
     });
     if (reduceMotion) return;

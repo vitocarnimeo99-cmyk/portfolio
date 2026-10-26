@@ -24,7 +24,6 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 <!-- /comune:head -->
 <!-- Lavoro fatto in BriefMe: la pagina resta raggiungibile dal sito ma non
@@ -1412,6 +1411,24 @@
 </style>
 </head>
 <body>
+<!-- comune:icone · non modificare qui: _partials/icone.svg (npm run icona) -->
+<svg class="ico-sprite" aria-hidden="true">
+<symbol id="ico-arrow-left" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></symbol>
+<symbol id="ico-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="ico-behance" viewBox="0 0 576 512"><path d="M232 237.2c31.8-15.2 48.4-38.2 48.4-74 0-70.6-52.6-87.8-113.3-87.8H0v354.4h171.8c64.4 0 124.9-30.9 124.9-102.9 0-44.5-21.1-77.4-64.7-89.7zM77.9 135.9H151c28.1 0 53.4 7.9 53.4 40.5 0 30.1-19.7 42.2-47.5 42.2h-79v-82.7zm83.3 233.7H77.9V272h84.9c34.3 0 56 14.3 56 50.6 0 35.8-25.9 47-57.6 47zm358.5-240.7H376V94h143.7v34.9zM576 305.2c0-75.9-44.4-139.2-124.9-139.2-78.2 0-131.3 58.8-131.3 135.8 0 79.9 50.3 134.7 131.3 134.7 61.3 0 101-27.6 120.1-86.3H509c-6.7 21.9-34.3 33.5-55.7 33.5-41.3 0-63-24.2-63-65.3h185.1c.3-4.2.6-8.7.6-13.2zM390.4 274c2.3-33.7 24.7-54.8 58.5-54.8 35.4 0 53.2 20.8 56.2 54.8H390.4z"/></symbol>
+<symbol id="ico-check" viewBox="0 0 448 512"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></symbol>
+<symbol id="ico-chevron-down" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></symbol>
+<symbol id="ico-chevron-left" viewBox="0 0 320 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></symbol>
+<symbol id="ico-chevron-right" viewBox="0 0 320 512"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></symbol>
+<symbol id="ico-clock" viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></symbol>
+<symbol id="ico-clone-regular" viewBox="0 0 512 512"><path d="M64 464H288c8.8 0 16-7.2 16-16V384h48v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h64v48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16zM224 304H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H224c-8.8 0-16 7.2-16 16V288c0 8.8 7.2 16 16 16zm-64-16V64c0-35.3 28.7-64 64-64H448c35.3 0 64 28.7 64 64V288c0 35.3-28.7 64-64 64H224c-35.3 0-64-28.7-64-64z"/></symbol>
+<symbol id="ico-pause" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></symbol>
+<symbol id="ico-seedling" viewBox="0 0 512 512"><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0h32c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64H64c123.7 0 224 100.3 224 224v32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320C100.3 320 0 219.7 0 96z"/></symbol>
+<symbol id="ico-volume-high" viewBox="0 0 640 512"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></symbol>
+<symbol id="ico-volume-xmark" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></symbol>
+<symbol id="ico-xmark" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></symbol>
+</svg>
+<!-- /comune:icone -->
 
 <!-- comune:header · non modificare qui: _partials/header.html -->
 <header>
@@ -1432,7 +1449,7 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna ai&nbsp;lavori</a>
+      <a class="back-link" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna ai&nbsp;lavori</a>
       <span class="eyebrow">ADS, PED, VIDEO EDITING E&nbsp;BRANDING — BriefMe by Comverta</span>
       <h1>iContadini <em>Ugento</em></h1>
       <p><strong>iContadini</strong> è&nbsp;un'azienda agricola di&nbsp;<strong>Ugento</strong>, nel&nbsp;cuore del&nbsp;Salento.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
@@ -1443,8 +1460,8 @@
         <div class="meta-wide">Output<span>ADS · PED · VIDEO EDITING · BRANDING · CATALOGUES · 6×3 · PACKAGING · ILLUSTRATIONS</span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary btn-site" href="https://icontadini.it/it/home/" target="_blank" rel="noopener"><i class="fa-solid fa-seedling" aria-hidden="true"></i>Visita icontadini.it<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-        <a class="btn-icon" href="https://www.behance.net/gallery/249631589/iContadini-Ugento-BriefMe" target="_blank" rel="noopener" aria-label="Vedi il progetto su Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+        <a class="btn-primary btn-site" href="https://icontadini.it/it/home/" target="_blank" rel="noopener"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i>Visita icontadini.it<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/249631589/iContadini-Ugento-BriefMe" target="_blank" rel="noopener" aria-label="Vedi il progetto su Behance"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-behance"/></svg></i></a>
       </div>
     </div>
     <div class="ct-hero-art" id="ct-hero">
@@ -1493,7 +1510,7 @@
           <p class="more" id="ads-more" style="--more-h:7.9rem">Per&nbsp;iContadini ho seguito molte più campagne di&nbsp;quelle qui presenti: lanci di&nbsp;prodotto, promo stagionali, box regalo, regalistica aziendale e&nbsp;molto&nbsp;altro.<br class="br-desk"><br class="br-mob"> Questa è&nbsp;solo una&nbsp;piccola selezione.
 
           Ogni campagna viene adattata ai&nbsp;diversi formati e&nbsp;canali, dal&nbsp;feed alle&nbsp;stories, dai&nbsp;reel ai&nbsp;banner, e&nbsp;anche a&nbsp;diverse lingue quando&nbsp;necessario.</p>
-          <button type="button" class="more-btn" aria-expanded="false" aria-controls="ads-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+          <button type="button" class="more-btn" aria-expanded="false" aria-controls="ads-more"><span class="more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
         </div>
       </div>
 
@@ -1524,8 +1541,8 @@
           </div>
           <div class="ads-box">
             <div class="ads-frame is-loading"><span class="ads-spin" aria-hidden="true"></span></div>
-            <button class="ads-arrow ads-arrow--prev" type="button" aria-label="Campagna precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-            <button class="ads-arrow ads-arrow--next" type="button" aria-label="Campagna successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button class="ads-arrow ads-arrow--prev" type="button" aria-label="Campagna precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
+            <button class="ads-arrow ads-arrow--next" type="button" aria-label="Campagna successiva"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
           </div>
           <div class="ads-caption" aria-live="polite"><span></span><span></span></div>
         </div>
@@ -1541,12 +1558,12 @@
           <h2 class="section-title">Stories <em>dal&nbsp;campo</em></h2>
           <p>Le&nbsp;ADS si&nbsp;muovono anche in&nbsp;verticale: video brevi per&nbsp;stories e&nbsp;reel, tra&nbsp;lanci di&nbsp;prodotto, offerte del&nbsp;mese, rubriche e&nbsp;la&nbsp;newsletter.<br class="br-desk"><br class="br-mob"> Scegli un&nbsp;video o&nbsp;lasciali scorrere uno&nbsp;dopo&nbsp;l'altro.</p>
           <ol class="sp-list">
-            <li><button class="sp-track is-active" type="button" data-src="assets/video/IContadini_PRIMO LAVORO SULLA DESTRA.mp4" data-poster="assets/video/posters/IContadini_PRIMO LAVORO SULLA DESTRA.jpg"><span class="sp-num">01</span><span class="sp-title">Che&nbsp;ortaggio sei?<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Rubrica</span></button></li>
-            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_01.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_01.jpg"><span class="sp-num">02</span><span class="sp-title">Linea Grano<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Foglie d'ulivo</span></button></li>
-            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_03.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_03.jpg"><span class="sp-num">03</span><span class="sp-title">Offerte del&nbsp;mese<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Promo</span></button></li>
-            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_05.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_05.jpg"><span class="sp-num">04</span><span class="sp-title">Dalla&nbsp;terra<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Brand</span></button></li>
-            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_06.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_06.jpg"><span class="sp-num">05</span><span class="sp-title">Storia &amp; curiosità<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Rubrica</span></button></li>
-            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_02.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_02.jpg"><span class="sp-num">06</span><span class="sp-title">Newsletter<i class="fa-solid fa-seedling sp-sprout" aria-hidden="true"></i></span><span class="sp-tag">Sconto 10%</span></button></li>
+            <li><button class="sp-track is-active" type="button" data-src="assets/video/IContadini_PRIMO LAVORO SULLA DESTRA.mp4" data-poster="assets/video/posters/IContadini_PRIMO LAVORO SULLA DESTRA.jpg"><span class="sp-num">01</span><span class="sp-title">Che&nbsp;ortaggio sei?<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Rubrica</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_01.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_01.jpg"><span class="sp-num">02</span><span class="sp-title">Linea Grano<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Foglie d'ulivo</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_03.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_03.jpg"><span class="sp-num">03</span><span class="sp-title">Offerte del&nbsp;mese<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Promo</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_05.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_05.jpg"><span class="sp-num">04</span><span class="sp-title">Dalla&nbsp;terra<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Brand</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_06.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_06.jpg"><span class="sp-num">05</span><span class="sp-title">Storia &amp; curiosità<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Rubrica</span></button></li>
+            <li><button class="sp-track" type="button" data-src="assets/video/VIDEO ADS SOCIAL/IContadini_ADS_SOCIAL_02.mp4" data-poster="assets/video/posters/IContadini_ADS_SOCIAL_02.jpg"><span class="sp-num">06</span><span class="sp-title">Newsletter<i class="ico sp-sprout" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i></span><span class="sp-tag">Sconto 10%</span></button></li>
           </ol>
         </div>
         <div class="sp-device">
@@ -1557,8 +1574,8 @@
             </video>
             <button class="sp-tap sp-tap--prev" type="button" aria-label="Video precedente"></button>
             <button class="sp-tap sp-tap--next" type="button" aria-label="Video successivo"></button>
-            <button class="sp-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
-            <span class="sp-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
+            <button class="sp-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="ico" aria-hidden="true"><svg viewBox="0 0 640 512"><use href="#ico-volume-xmark"/></svg></i></button>
+            <span class="sp-paused" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 320 512"><use href="#ico-pause"/></svg></i></span>
           </div>
           <span class="sp-hint"><span class="hint-mouse">Clicca</span><span class="hint-touch">Tocca</span> a&nbsp;destra o&nbsp;a&nbsp;sinistra,<br> tieni premuto per&nbsp;mettere in&nbsp;pausa</span>
         </div>
@@ -1590,7 +1607,7 @@
             <button type="button" data-filter="rubriche" aria-pressed="false">Rubriche</button>
             <button type="button" data-filter="prodotti" aria-pressed="false">Prodotti</button>
             <button type="button" data-filter="promo" aria-pressed="false">Promo &amp; ricorrenze</button>
-            <button type="button" data-filter="carousel" aria-pressed="false"><i class="fa-regular fa-clone" aria-hidden="true"></i>Caroselli</button>
+            <button type="button" data-filter="carousel" aria-pressed="false"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-clone-regular"/></svg></i>Caroselli</button>
           </div>
         </div>
         <!-- I post sono generati dallo script PED, dai dati in fondo alla pagina -->
@@ -1598,8 +1615,8 @@
         <div class="ped-foot">
           <div class="ped-progress" aria-hidden="true"><span></span></div>
           <span class="ped-count" aria-live="polite">15&nbsp;post</span>
-          <button class="ped-arrow" type="button" data-step="-1" aria-label="Post precedenti"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-          <button class="ped-arrow" type="button" data-step="1" aria-label="Post successivi"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <button class="ped-arrow" type="button" data-step="-1" aria-label="Post precedenti"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
+          <button class="ped-arrow" type="button" data-step="1" aria-label="Post successivi"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
         </div>
       </div>
     </div>
@@ -1609,15 +1626,15 @@
     <figure>
       <div class="lb-media">
         <img src="" alt="">
-        <button class="lb-slide lb-slide--prev" type="button" aria-label="Slide precedente" hidden><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-        <button class="lb-slide lb-slide--next" type="button" aria-label="Slide successiva" hidden><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+        <button class="lb-slide lb-slide--prev" type="button" aria-label="Slide precedente" hidden><i class="ico" aria-hidden="true"><svg viewBox="0 0 320 512"><use href="#ico-chevron-left"/></svg></i></button>
+        <button class="lb-slide lb-slide--next" type="button" aria-label="Slide successiva" hidden><i class="ico" aria-hidden="true"><svg viewBox="0 0 320 512"><use href="#ico-chevron-right"/></svg></i></button>
       </div>
       <div class="lb-dots" role="group" aria-label="Slide del carosello"></div>
       <figcaption><span></span><span></span></figcaption>
     </figure>
-    <button class="lb-btn lb-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-    <button class="lb-btn lb-prev" type="button" aria-label="Post precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-    <button class="lb-btn lb-next" type="button" aria-label="Post successivo"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+    <button class="lb-btn lb-close" type="button" aria-label="Chiudi"><i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-xmark"/></svg></i></button>
+    <button class="lb-btn lb-prev" type="button" aria-label="Post precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
+    <button class="lb-btn lb-next" type="button" aria-label="Post successivo"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
   </dialog>
 
   <section class="ct-section ct-zuppe" id="ct-zuppe">
@@ -1635,9 +1652,9 @@
           <span class="soup-info-num">01 / 05</span>
           <h3 class="soup-info-name"><span class="is-in">Zuppa di&nbsp;<em>ceci</em></span></h3>
           <ul class="soup-facts">
-            <li><i class="fa-solid fa-check" aria-hidden="true"></i>100% italiani</li>
-            <li><i class="fa-solid fa-check" aria-hidden="true"></i>Senza conservanti</li>
-            <li><i class="fa-solid fa-clock" aria-hidden="true"></i>Pronta in&nbsp;2'</li>
+            <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-check"/></svg></i>100% italiani</li>
+            <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-check"/></svg></i>Senza conservanti</li>
+            <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-clock"/></svg></i>Pronta in&nbsp;2'</li>
           </ul>
         </div>
         <figure class="soup-fig soup-fig--studio">
@@ -1668,9 +1685,9 @@
         </div>
         <div class="soup-nav">
           <span class="soup-hint">Scorri gli&nbsp;scatti per&nbsp;cambiare zuppa</span>
-          <button class="soup-arrow" type="button" data-step="-1" aria-label="Zuppa precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          <button class="soup-arrow" type="button" data-step="-1" aria-label="Zuppa precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
           <span class="soup-count" aria-live="polite">01 / 05</span>
-          <button class="soup-arrow" type="button" data-step="1" aria-label="Zuppa successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <button class="soup-arrow" type="button" data-step="1" aria-label="Zuppa successiva"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
         </div>
       </div>
     </div>
@@ -1690,8 +1707,8 @@
           <img class="is-active" src="assets/images/icontadini_6x3_01.jpg" width="6000" height="4500" alt="Cartellone 6x3 sotto il cielo: Vivi l'esperienza agricola del Salento, con un contadino che regge un grappolo di pomodorini" loading="lazy" decoding="async">
           <img src="assets/images/icontadini_6x3_02.jpg" width="1920" height="876" alt="Affissione tra gli alberi: Il Salento autentico è servito, con una frisella condita" loading="lazy" decoding="async">
           <img src="assets/images/icontadini_6x3_03.jpg" width="5500" height="3452" alt="Affissione su una recinzione di cantiere in città: Frisella mia, degustazione gratuita" loading="lazy" decoding="async">
-          <button class="bb-arrow bb-arrow--prev" type="button" aria-label="Affissione precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-          <button class="bb-arrow bb-arrow--next" type="button" aria-label="Affissione successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <button class="bb-arrow bb-arrow--prev" type="button" aria-label="Affissione precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
+          <button class="bb-arrow bb-arrow--next" type="button" aria-label="Affissione successiva"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
           <span class="bb-count" aria-live="polite">01 / 03</span>
         </div>
         <div class="bb-thumbs">
@@ -1720,9 +1737,9 @@
         </div>
         <div class="fb-bar">
           <div class="fb-nav">
-            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="fb-arrow" type="button" data-step="-1" aria-label="Pagina precedente"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i></button>
             <span class="fb-count" aria-live="polite">01 / 38</span>
-            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button class="fb-arrow" type="button" data-step="1" aria-label="Pagina successiva"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
           </div>
           <div class="fb-progress" aria-hidden="true"><span></span></div>
         </div>
@@ -1736,8 +1753,8 @@
         <h2 class="section-title">Assaggiali <em>subito ;)</em></h2>
         <p>Conserve, sughi, legumi e&nbsp;box regalo coltivati e&nbsp;lavorati a&nbsp;mano a&nbsp;Ugento.</p>
         <div class="project-links">
-          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-          <a class="btn-ghost" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna al&nbsp;portfolio</a>
+          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+          <a class="btn-ghost" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna al&nbsp;portfolio</a>
         </div>
       </div>
       <a class="client-card" href="https://icontadini.it/it/home/" target="_blank" rel="noopener" aria-label="Vai al sito di iContadini">
@@ -1751,7 +1768,7 @@
           <li>Prodotti tipici pugliesi</li>
           <li>Box regalo</li>
         </ul>
-        <span class="client-read">Vai su&nbsp;icontadini.it<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></span>
+        <span class="client-read">Vai su&nbsp;icontadini.it<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
       </a>
     </div>
   </section>
@@ -2100,7 +2117,7 @@
       const on = !video.muted;
       soundBtn.setAttribute('aria-pressed', String(on));
       soundBtn.setAttribute('aria-label', on ? "Disattiva l'audio" : "Attiva l'audio");
-      soundBtn.querySelector('i').className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+      soundBtn.querySelector('use').setAttribute('href', on ? '#ico-volume-high' : '#ico-volume-xmark');
       userStarted = true;
       sync();
     });
@@ -2272,7 +2289,7 @@
         const badge = document.createElement('span');
         badge.className = 'ped-multi';
         badge.setAttribute('aria-hidden', 'true');
-        badge.innerHTML = '<i class="fa-regular fa-clone"></i>';
+        badge.innerHTML = '<i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-clone-regular"/></svg></i>';
         btn.appendChild(badge);
       }
       if (copy !== MID) { li.setAttribute('aria-hidden', 'true'); btn.tabIndex = -1; }

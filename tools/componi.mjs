@@ -15,6 +15,11 @@
      {{url}}   indirizzo completo della pagina
      {{home}}  "" nella home, "index.html" nelle altre pagine
 
+   Il blocco <!-- comune:icone --> riceve invece da _partials/icone.svg solo
+   le icone che la pagina usa: ogni "#ico-nome" scritto nella pagina (anche
+   negli script) o in js/main.js. Le icone nuove si aggiungono con
+   "npm run icona" (vedi tools/icona.mjs).
+
    Uso:
      npm run componi              aggiorna le pagine
      node tools/componi.mjs --controlla
@@ -38,6 +43,9 @@ const escape = (s) => String(s)
 
 const pagine = JSON.parse(readFileSync(percorso('_partials', 'pagine.json'), 'utf8'));
 const modelli = Object.fromEntries(PARTI.map((p) => [p, readFileSync(percorso('_partials', `${p}.html`), 'utf8')]));
+const icone = new Map([...readFileSync(percorso('_partials', 'icone.svg'), 'utf8')
+  .matchAll(/<symbol id="([^"]+)"[\s\S]*?<\/symbol>/g)].map((m) => [m[1], m[0]]));
+const mainJs = readFileSync(percorso('js', 'main.js'), 'utf8');
 
 const errori = [];
 const daAggiornare = [];
@@ -77,6 +85,20 @@ for (const [file, dati] of Object.entries(pagine)) {
       continue;
     }
     nuovo = nuovo.replace(blocco, (_, inizio, fine) => inizio + riempi(modelli[parte]) + fine);
+  }
+
+  const bloccoIcone = /(<!-- comune:icone\b[^>]*-->\n)[\s\S]*?(<!-- \/comune:icone -->)/;
+  if (!bloccoIcone.test(nuovo)) {
+    errori.push(`${file}: mancano i commenti <!-- comune:icone --> ... <!-- /comune:icone -->`);
+  } else {
+    const usate = new Set([...(nuovo.replace(bloccoIcone, '') + mainJs).matchAll(/#(ico-[a-z0-9-]+)/g)].map((m) => m[1]));
+    const simboli = [...usate].sort().filter((id) => {
+      if (icone.has(id)) return true;
+      errori.push(`${file}: l'icona "${id}" non è in _partials/icone.svg (aggiungila con npm run icona)`);
+      return false;
+    }).map((id) => icone.get(id));
+    const sprite = simboli.length ? `<svg class="ico-sprite" aria-hidden="true">\n${simboli.join('\n')}\n</svg>\n` : '';
+    nuovo = nuovo.replace(bloccoIcone, (_, inizio, fine) => inizio + sprite + fine);
   }
 
   if (nuovo !== html) {
