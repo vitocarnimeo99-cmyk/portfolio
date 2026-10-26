@@ -887,7 +887,7 @@
     strapMaterial.needsUpdate = true;
   });
 
-  Promise.all([loadImage('assets/images/VITO.JPG'), fontsReady]).then(([photo]) => {
+  Promise.all([loadImage('assets/images/VITO-1080.webp'), fontsReady]).then(([photo]) => {
     if (!photo) return;
     const [front, fctx] = newCanvas();
     drawFront(fctx, photo);

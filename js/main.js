@@ -187,31 +187,6 @@
 // i video della griglia partirebbero insieme al caricamento della pagina
 // anche se fuori schermo, sprecando banda e CPU. In pausa quando escono.
 const lazyVideos = document.querySelectorAll('video.art');
-
-// Video con una versione dedicata al mobile (es. Raf 40): sotto gli 820px
-// video e poster vengono scambiati con quelli della versione mobile, con lo
-// stesso taglio della card. Lo scambio è esplicito perché l'attributo media
-// del <source> viene letto una volta sola e alcuni browser lo ignorano.
-const mobileVideoQuery = window.matchMedia('(max-width: 820px)');
-const mobileVideos = document.querySelectorAll('video[data-src-mobile]');
-mobileVideos.forEach(video => {
-  video.dataset.srcDesktop = video.querySelector('source:not([media])').getAttribute('src');
-  video.dataset.posterDesktop = video.getAttribute('poster');
-});
-const applyMobileVideos = () => {
-  const isMobile = mobileVideoQuery.matches;
-  mobileVideos.forEach(video => {
-    const src = isMobile ? video.dataset.srcMobile : video.dataset.srcDesktop;
-    if (video.getAttribute('src') === src) return;
-    const wasPlaying = !video.paused;
-    video.poster = isMobile ? video.dataset.posterMobile : video.dataset.posterDesktop;
-    video.src = src;
-    video.load();
-    if (wasPlaying) video.play().catch(() => {});
-  });
-};
-applyMobileVideos();
-mobileVideoQuery.addEventListener('change', applyMobileVideos);
 if ('IntersectionObserver' in window) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -336,10 +311,21 @@ if (canHover) document.querySelectorAll('video[data-src-hover]').forEach(video =
   layer.preload = 'none';
   layer.setAttribute('aria-hidden', 'true');
   video.after(layer);
-  // scaricata dopo il caricamento della pagina, per non rubare banda all'avvio
+  // scaricata dopo il caricamento della pagina, per non rubare banda all'avvio,
+  // e solo quando la card si avvicina allo schermo
   window.addEventListener('load', () => {
-    layer.preload = 'auto';
-    layer.src = video.dataset.srcHover;
+    const fetchLayer = () => {
+      if (layer.src) return;
+      layer.preload = 'auto';
+      layer.src = video.dataset.srcHover;
+    };
+    if (!('IntersectionObserver' in window)) { fetchLayer(); return; }
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      fetchLayer();
+    }, { rootMargin: '400px 0px' });
+    io.observe(tile);
   });
 
   tile.addEventListener('mouseenter', () => {
@@ -438,13 +424,16 @@ document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
   }, { threshold: 0.5 }).observe(img);
 });
 
-// Precarica e decodifica le varianti hover dei tile a ciclo immagini dopo il
-// load della pagina, cosi' il primo mouseover non ha né attesa di rete né
-// blocco per la decodifica. Le immagini restano in preloadedFrames perché il
-// browser non butti via la versione già decodificata.
+// Precarica e decodifica le varianti hover dei tile a ciclo immagini, cosi'
+// il primo mouseover non ha né attesa di rete né blocco per la decodifica.
+// Solo con il mouse (su touch le varianti scorrono una alla volta e si
+// caricano mentre girano) e solo per i tile vicini allo schermo: tutte
+// insieme al load erano diversi MB scaricati anche per card mai viste.
+// Le immagini restano in preloadedFrames perché il browser non butti via la
+// versione già decodificata.
 const preloadedFrames = [];
-window.addEventListener('load', () => {
-  document.querySelectorAll('img[data-cycle-prefix]').forEach(img => {
+if (canHover) window.addEventListener('load', () => {
+  const preload = (img) => {
     const prefix = img.dataset.cyclePrefix;
     const ext = img.dataset.cycleExt;
     const frames = parseInt(img.dataset.cycleFrames, 10);
@@ -454,7 +443,17 @@ window.addEventListener('load', () => {
       frame.decode().catch(() => {});
       preloadedFrames.push(frame);
     }
-  });
+  };
+  const imgs = document.querySelectorAll('img[data-cycle-prefix]');
+  if (!('IntersectionObserver' in window)) { imgs.forEach(preload); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      io.unobserve(entry.target);
+      preload(entry.target);
+    });
+  }, { rootMargin: '400px 0px' });
+  imgs.forEach(img => io.observe(img));
 });
 
 // Le scene 3D (cartellino in home, pillow pack nelle pagine progetto) richiedono

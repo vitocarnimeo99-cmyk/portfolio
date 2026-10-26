@@ -475,6 +475,9 @@
   /* La lente funziona solo col mouse: su touch l'etichetta diventa un
      pulsante che apre la tavola a tutto schermo */
   .wkz-tavola-tag.hint-touch{ display:none; border:0; font-family:inherit; cursor:pointer; pointer-events:auto; }
+  /* L'etichetta è alta 30px: un livello invisibile porta l'area di tocco
+     a 44px senza ingrandirla sulla tavola */
+  .wkz-tavola-tag.hint-touch::before{ content:""; position:absolute; inset:-7px -4px; }
   @media (hover:none){
     .wkz-tavola-tag.hint-mouse{ display:none; }
     .wkz-tavola-tag.hint-touch{ display:inline-flex; }
@@ -769,11 +772,12 @@
   .wkz-title-row:hover .wkz-title-sticker{ transform: rotate(-4deg) translateY(-6px) scale(1.06); }
   /* Su telefono lo sticker è grande e storto in alto a destra, tagliato dal
      bordo dello schermo come attaccato all'angolo; l'occhiello si stringe
-     per lasciargli posto */
+     per lasciargli posto. Classe sulla sezione e non :has(): dove :has()
+     manca lo sticker usciva dallo schermo e la pagina scorreva di lato */
   @media (max-width:560px){
-    section:has(.wkz-title-sticker){ overflow-x:clip; }
-    .wkz-head:has(.wkz-title-sticker) > div{ position:relative; width:100%; }
-    .wkz-head:has(.wkz-title-sticker) .eyebrow{ max-width:62%; }
+    .wkz-sticker-section{ overflow-x:hidden; overflow-x:clip; }
+    .wkz-sticker-section .wkz-head > div{ position:relative; width:100%; }
+    .wkz-sticker-section .wkz-head .eyebrow{ max-width:62%; }
     .wkz-title-sticker{ position:absolute; right:-40px; top:-34px; width:148px; transform:rotate(16deg); }
   }
 
@@ -1008,7 +1012,7 @@
     </div>
     <div class="wrap wkz-board">
     <figure class="fullshot fullshot-contain loupe-zoom wkz-tavola">
-      <img class="art" id="wkz-tesi-art" src="assets/images/VITO_CARNIMEO_TESI.JPG" width="7087" height="3898" alt="Tavola di tesi Where’s Kud Zamb?: il lungomare di Bari affollato di personaggi illustrati, tra cui si nascondono Nicola e la sua famiglia" loading="lazy" decoding="async">
+      <img class="art" id="wkz-tesi-art" src="assets/images/VITO_CARNIMEO_TESI_5MB.jpg" width="7087" height="3898" alt="Tavola di tesi Where’s Kud Zamb?: il lungomare di Bari affollato di personaggi illustrati, tra cui si nascondono Nicola e la sua famiglia" loading="lazy" decoding="async">
       <img class="wkz-tesi-overlay" id="wkz-tesi-soluzioni" src="assets/images/wkz-web/WKZ_SOLUZIONI.jpg" width="7087" height="3898" alt="Tavola di tesi con le soluzioni: in evidenza Nicola e i membri della sua famiglia nascosti tra la folla" loading="lazy" decoding="async">
       <div class="loupe-handle" aria-hidden="true"></div>
       <div class="loupe-lens" aria-hidden="true"></div>
@@ -1138,7 +1142,7 @@
     </div>
   </section>
 
-  <section class="carousel-section wkz-section">
+  <section class="carousel-section wkz-section wkz-sticker-section">
     <div class="wrap wkz-head">
       <div>
         <span class="eyebrow">Guerrilla · Per&nbsp;le&nbsp;strade di&nbsp;Bari</span>
