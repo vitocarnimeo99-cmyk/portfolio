@@ -1391,6 +1391,39 @@
     stepBar();
   }
 
+  /* Su telefono il cartellino sta dietro al testo e l'aereo di carta
+     (main.js) davanti: perché passi dietro al cartellino come su desktop,
+     mentre vola si ritaglia dove ci sono la tessera (su .hero-sky) e il
+     nastro (su .hero-sky-in, dentro: con un solo ritaglio i due buchi, dove
+     si sovrappongono, si annullerebbero). Stesse misure di style.css. */
+  const sky = container.parentElement.querySelector('.hero-sky');
+  const skyIn = sky && sky.querySelector('.hero-sky-in');
+  const plane = sky && sky.querySelector('.hero-plane');
+  const phoneMq = window.matchMedia('(max-width: 640px)');
+  const strapV = new THREE.Vector3();
+  const strapOutline = [];
+  // Tutto l'hero meno il poligono
+  const hole = (poly) => `path(evenodd, "M-1 -1H${width + 1}V${height + 1}H-1Z M` +
+    poly.map((p) => p.x.toFixed(1) + ' ' + p.y.toFixed(1)).join('L') + 'Z")';
+
+  function clipSky() {
+    if (!skyIn) return;
+    if (!phoneMq.matches || !plane.classList.contains('is-flying')) {
+      if (sky.style.clipPath) sky.style.clipPath = skyIn.style.clipPath = '';
+      return;
+    }
+    // Il contorno del nastro: giù lungo un bordo, su lungo l'altro
+    strapOutline.length = 0;
+    for (let side = 0; side < 2; side++) {
+      for (let k = 0; k < STRAP_SAMPLES; k++) {
+        const v = (side ? STRAP_SAMPLES - 1 - k : k) * 2 + side;
+        strapOutline.push(toHero(strapV.fromArray(strapPos, v * 3).project(camera)));
+      }
+    }
+    sky.style.clipPath = hole(projectCard());
+    skyIn.style.clipPath = hole(strapOutline);
+  }
+
   function animate(now) {
     requestAnimationFrame(animate);
     if (!visible) {
@@ -1432,6 +1465,7 @@
     drawBar();
 
     renderer.render(scene, camera);
+    clipSky();
     if (pointerInside) updateHover();
   }
 
