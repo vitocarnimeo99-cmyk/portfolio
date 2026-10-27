@@ -24,11 +24,25 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 <!-- /comune:head -->
 </head>
 <body class="home">
+<!-- comune:icone · non modificare qui: _partials/icone.svg (npm run icona) -->
+<svg class="ico-sprite" aria-hidden="true">
+<symbol id="ico-arrow-down" viewBox="0 0 384 512"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></symbol>
+<symbol id="ico-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="ico-chevron-down" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></symbol>
+<symbol id="ico-envelope" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></symbol>
+<symbol id="ico-instagram" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></symbol>
+<symbol id="ico-linkedin" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></symbol>
+<symbol id="ico-pause" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></symbol>
+<symbol id="ico-square-behance" viewBox="0 0 448 512"><path d="M155.3 318.4c17.2 0 31.2-6.1 31.2-25.4c0-19.7-11.7-27.4-30.3-27.5h-46v52.9h45.1zm-5.4-129.6H110.3v44.8H153c15.1 0 25.8-6.6 25.8-22.9c0-17.7-13.7-21.9-28.9-21.9zm129.5 74.8h62.2c-1.7-18.5-11.3-29.7-30.5-29.7c-18.3 0-30.5 11.4-31.7 29.7zM384 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zM349.5 185H271.7V166.1h77.8V185zM193.7 243.7c23.6 6.7 35 27.5 35 51.6c0 39-32.7 55.7-67.6 55.9H68v-192h90.5c32.9 0 61.4 9.3 61.4 47.5c0 19.3-9 28.8-26.2 37zm118.7-38.6c43.5 0 67.6 34.3 67.6 75.4c0 1.6-.1 3.3-.2 5c0 .8-.1 1.5-.1 2.2H279.5c0 22.2 11.7 35.3 34.1 35.3c11.6 0 26.5-6.2 30.2-18.1h33.7c-10.4 31.9-31.9 46.8-65.1 46.8c-43.8 0-71.1-29.7-71.1-73c0-41.8 28.7-73.6 71.1-73.6z"/></symbol>
+<symbol id="ico-trophy" viewBox="0 0 576 512"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></symbol>
+<symbol id="ico-volume-high" viewBox="0 0 640 512"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></symbol>
+<symbol id="ico-volume-xmark" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></symbol>
+</svg>
+<!-- /comune:icone -->
 
 <!-- comune:header · non modificare qui: _partials/header.html -->
 <header>
@@ -64,17 +78,17 @@
           <div>Base<span>Bari, IT</span></div>
         </div>
         <div class="project-links hero-links">
-          <a class="btn-primary" href="#lavori">Guarda i&nbsp;lavori<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
+          <a class="btn-primary" href="#lavori">Guarda i&nbsp;lavori<i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-arrow-down"/></svg></i></a>
           <ul class="social hero-social">
-            <li><a href="https://www.instagram.com/vitq1999/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.behance.net/vitocarnimeo_VITQ" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-square-behance" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.linkedin.com/in/vito-mariano-carnimeo-297a33326/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.instagram.com/vitq1999/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-instagram"/></svg></i></a></li>
+            <li><a href="https://www.behance.net/vitocarnimeo_VITQ" target="_blank" rel="noopener" aria-label="Behance"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-square-behance"/></svg></i></a></li>
+            <li><a href="https://www.linkedin.com/in/vito-mariano-carnimeo-297a33326/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-linkedin"/></svg></i></a></li>
           </ul>
-          <a class="btn-icon" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+          <a class="btn-icon" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-envelope"/></svg></i></a>
         </div>
       </div>
     </div>
-    <div class="hero-sky" aria-hidden="true"><img class="hero-plane" src="assets/images/AEREO_DI_CARTA-360.webp" width="360" height="331" alt="" decoding="async" fetchpriority="low"></div>
+    <div class="hero-sky" aria-hidden="true"><div class="hero-sky-in"><img class="hero-plane" src="assets/images/AEREO_DI_CARTA-360.webp" width="360" height="331" alt="" decoding="async" fetchpriority="low"></div></div>
   </div>
 
 <div class="ticker-wrap home-ticker">
@@ -111,7 +125,7 @@
               <source src="assets/video/strush_logo.mp4" type="video/mp4">
             </video>
             <span class="tile-year">2025-2026</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num">01</span><span class="name">Strush</span><span class="type">Personal finance app</span></div>
         </a>
@@ -126,7 +140,7 @@
                data-cycle-ext="-1080.webp"
                data-cycle-frames="4">
             <span class="tile-year">2025</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="04">02</span><span class="name">Iterum</span><span class="type">Poster · Event</span></div>
         </a>
@@ -141,7 +155,7 @@
                data-cycle-ext="-1080.webp"
                data-cycle-frames="3">
             <span class="tile-year">2023</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="05">03</span><span class="name">InYourShoes</span><span class="type">Karaoke Dinner</span></div>
         </a>
@@ -156,7 +170,7 @@
                data-cycle-ext="-1080.webp"
                data-cycle-frames="5">
             <span class="tile-year">2024</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="02">04</span><span class="name">K-Way</span><span class="type">Porta Borsari · Verona</span></div>
         </a>
@@ -171,7 +185,7 @@
                data-cycle-ext="-1080.webp"
                data-cycle-frames="6">
             <span class="tile-year">2022</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="06">05</span><span class="name">Shallo</span><span class="type">Beer shop · Event</span></div>
         </a>
@@ -188,7 +202,7 @@
                alt="Affissione 6x3 «Vivi l’esperienza agricola del Salento» con un contadino che porge un grappolo di pomodori, contro il cielo azzurro"
                loading="lazy" decoding="async">
             <span class="tile-year">2025-2026</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="07">06</span><span class="name">iContadini</span><span class="type">ADV · PED · Video editing · Branding</span></div>
         </a>
@@ -203,7 +217,7 @@
                data-cycle-ext="-1080.webp"
                data-cycle-frames="5">
             <span class="tile-year">2023</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="08">07</span><span class="name">Paninopoli</span><span class="type">Festival communication</span></div>
         </a>
@@ -218,7 +232,7 @@
                data-cycle-ext="-1440.webp"
                data-cycle-frames="2">
             <span class="tile-year">2020</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="09">08</span><span class="name">CAN’T GIVE YOU HIV</span><span class="type">ASA Milano · Milano Check Point</span></div>
         </a>
@@ -229,12 +243,12 @@
               <source src="assets/video/RAF_40_Versione_Mobile.mp4" type="video/mp4">
             </video>
             <span class="tile-year" style="background:#E32227">2024</span>
-            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="tile-open" aria-hidden="true"><span class="tile-open-label">Apri progetto</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
           </div>
           <div class="cap"><span class="num" data-mobile="03">09</span><span class="name">Raf 40</span><span class="type">Sugar Music</span></div>
         </a>
       </div>
-      <button type="button" class="peek-toggle works-toggle" aria-expanded="false" aria-controls="lavori-more" data-less="Mostra meno">Vedi tutti i&nbsp;lavori <span class="peek-count">9</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="peek-toggle works-toggle" aria-expanded="false" aria-controls="lavori-more" data-less="Mostra meno">Vedi tutti i&nbsp;lavori <span class="peek-count">9</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
     </div>
   </section>
 
@@ -254,13 +268,13 @@
               sizes="(max-width: 900px) calc(100vw - 80px), 1200px">
             <img class="art" src="assets/images/VITO_CARNIMEO_TESI_HOME.jpg" width="2400" height="1320" alt="Where’s Kud Zamb? – tavola illustrata del lungomare di Bari affollato di personaggi, tra cui cercare Nicola e la sua famiglia" loading="lazy" decoding="async"></picture><span class="featured-stamp" aria-hidden="true">Premiato</span></span>
         </a>
-        <a class="featured-cta" href="progetto-wkz.html">Scopri il&nbsp;progetto <span aria-hidden="true"><i class="fa-solid fa-arrow-right arrow-ico" aria-hidden="true"></i></span></a>
+        <a class="featured-cta" href="progetto-wkz.html">Scopri il&nbsp;progetto <span aria-hidden="true"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span></a>
         <!-- Loghi dei partner che scorrono. data-partner collega ogni card alle
              voci di "Premi & Pubblicazioni" con lo stesso nome (main.js) -->
         <div class="partners">
           <p class="partners-head">
             <span class="partners-tag">Partner</span>
-            <span class="partners-hint">Le realtà dietro i premi <span class="partners-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right arrow-ico" aria-hidden="true"></i></span></span>
+            <span class="partners-hint">Le realtà dietro i premi <span class="partners-arrow" aria-hidden="true"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span></span>
           </p>
           <div class="partners-marquee">
             <ul class="partners-track">
@@ -278,7 +292,7 @@
       </div>
       <div class="featured-body">
         <div class="awards">
-          <h3 class="awards-title"><i class="fa-solid fa-trophy" aria-hidden="true"></i>Premi &amp; Pubblicazioni</h3>
+          <h3 class="awards-title"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-trophy"/></svg></i>Premi &amp; Pubblicazioni</h3>
           <div class="peek" id="awards-more" style="--peek:13rem">
           <ul class="awards-list">
             <li data-partner="neologia print-club graphic-days"><span class="award-year">2026</span><span class="award-name">Vincitore — Special Award, Premio Neologia</span><span class="award-org">Produzione in&nbsp;collaborazione con&nbsp;Print Club Torino e&nbsp;Graphic Days®, in&nbsp;mostra al&nbsp;festival 2027</span></li>
@@ -292,7 +306,7 @@
             <li data-partner="naba"><span class="award-year">2024</span><span class="award-name">Riconoscimento — Biblioteca NABA</span><span class="award-org">Tesi selezionata per&nbsp;Catalogo Library NABA</span></li>
           </ul>
           </div>
-          <button type="button" class="peek-toggle awards-toggle" aria-expanded="false" aria-controls="awards-more" data-less="Mostra meno">Vedi tutti i&nbsp;premi <span class="peek-count">9</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+          <button type="button" class="peek-toggle awards-toggle" aria-expanded="false" aria-controls="awards-more" data-less="Mostra meno">Vedi tutti i&nbsp;premi <span class="peek-count">9</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
         </div>
       </div>
     </div>
@@ -343,27 +357,31 @@
               </li>
             </ul>
             </div>
-            <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la&nbsp;formazione <span class="peek-count">3</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+            <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="edu-more" data-less="Mostra meno">Vedi tutta la&nbsp;formazione <span class="peek-count">3</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
           </div>
         </div>
         <div class="ab-device">
           <div class="ab-bars" aria-hidden="true">
-            <span class="ab-bar" style="--c:#E8B400" data-src="assets/video/Chi_Sono_01.MOV" data-poster="assets/video/posters/Chi_Sono_01.jpg" data-place="Islanda" data-label="Musica"><span></span></span>
+            <span class="ab-bar" style="--c:#E8B400" data-src="assets/video/Chi_Sono_01.mp4" data-poster="assets/video/posters/Chi_Sono_01.jpg" data-place="Islanda" data-label="Musica"><span></span></span>
             <span class="ab-bar" style="--c:#D8322A" data-photo="assets/images/Chi_Sono_02-720.jpg" data-place="Bari" data-label="Pane e Pomodoro" data-alt="Vito con il sindaco di Bari Vito Leccese davanti alla tavola di Where’s Kud Zamb? esposta alla spiaggia di Pane e Pomodoro"><span></span></span>
             <span class="ab-bar" style="--c:#658964" data-photo="assets/images/Chi_Sono_03-720.jpg" data-place="Bari" data-label="Premio del Comune di Bari" data-alt="Vito riceve dal sindaco Vito Leccese la borsa di studio del Comune di Bari per Where’s Kud Zamb? e mostra il telo illustrato del progetto"><span></span></span>
             <span class="ab-bar" style="--c:#3B4B99" data-photo="assets/images/Chi_Sono_04-720.jpg" data-place="Torino" data-label="Premio Neologia" data-alt="Vito sul palco della premiazione Neologia 2026 con l’attestato di Where’s Kud Zamb?, tra i due presentatori"><span></span></span>
           </div>
           <div class="ab-screen">
-            <video class="ab-video" width="1080" height="1920" poster="assets/video/posters/Chi_Sono_01.jpg" src="assets/video/Chi_Sono_01.MOV" muted playsinline preload="metadata" aria-label="Story di Vito: Musica"></video>
+            <video class="ab-video" width="720" height="1280" poster="assets/video/posters/Chi_Sono_01.jpg" src="assets/video/Chi_Sono_01.mp4" muted playsinline preload="metadata" aria-label="Story di Vito: Musica"></video>
             <img class="ab-photo" width="720" height="1243" alt="" decoding="async">
             <img class="ab-cover" src="assets/video/posters/Chi_Sono_01.jpg" width="720" height="1280" alt="" decoding="async">
             <span class="ab-user" aria-hidden="true"><span class="ab-avatar"></span>vitq1999<span class="ab-when">Islanda</span></span>
             <button class="ab-tap ab-tap--prev" type="button" aria-label="Story precedente"></button>
             <button class="ab-tap ab-tap--next" type="button" aria-label="Story successiva"></button>
-            <button class="ab-vol" type="button" aria-pressed="false" aria-label="Attiva l’audio"><span class="ab-vol-label">Attiva l’audio</span><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
-            <span class="ab-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
+            <button class="ab-vol" type="button" aria-pressed="false" aria-label="Attiva l’audio"><span class="ab-vol-label">Attiva l’audio</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 640 512"><use href="#ico-volume-xmark"/></svg></i></button>
+            <span class="ab-paused" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 320 512"><use href="#ico-pause"/></svg></i></span>
           </div>
           <span class="ab-hint">Tocca ai&nbsp;lati · tieni premuto per&nbsp;la&nbsp;pausa</span>
+        </div>
+        <div class="project-links cv-cta cv-cta--mob">
+          <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il&nbsp;CV<i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-arrow-down"/></svg></i></a>
+          <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il&nbsp;portfolio<i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-arrow-down"/></svg></i></a>
         </div>
       </div>
 
@@ -386,10 +404,10 @@
           </span></li>
         </ul>
         </div>
-        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="skills-more" data-less="Mostra meno">Vedi tutte le&nbsp;competenze <span class="peek-count">8</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" class="peek-toggle" aria-expanded="false" aria-controls="skills-more" data-less="Mostra meno">Vedi tutte le&nbsp;competenze <span class="peek-count">8</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
         <div class="project-links cv-cta">
-          <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il&nbsp;CV<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
-          <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il&nbsp;portfolio<i class="fa-solid fa-arrow-down arrow-ico" aria-hidden="true"></i></a>
+          <a class="btn-primary" href="assets/images/CV_VITO_CARNIMEO.pdf" download>Scarica il&nbsp;CV<i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-arrow-down"/></svg></i></a>
+          <a class="btn-ghost" href="assets/images/CARNIMEO_PORTFOLIO_.pdf" download>Scarica il&nbsp;portfolio<i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-arrow-down"/></svg></i></a>
         </div>
       </div>
     </div>
@@ -401,7 +419,7 @@
         <span class="contact-status"><i class="dot"></i>Disponibile per&nbsp;nuovi progetti</span>
         <h2 class="section-title">Hai un&nbsp;progetto<br class="br-desk"> in&nbsp;mente? <em>Parliamone.</em></h2>
         <div class="contact-row">
-          <a class="big" href="mailto:vitocarnimeo99@gmail.com">vitocarnimeo99@gmail.com<span class="arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></span></a>
+          <a class="big" href="mailto:vitocarnimeo99@gmail.com">vitocarnimeo99@gmail.com<span class="arrow" aria-hidden="true"><i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span></a>
         </div>
       </div>
       <div class="contact-aside">
@@ -413,9 +431,9 @@
         <div class="contact-social">
           <span class="contact-social-label">Cercami sui&nbsp;social</span>
           <ul class="social">
-            <li><a href="https://www.instagram.com/vitq1999/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.behance.net/vitocarnimeo_VITQ" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-square-behance" aria-hidden="true"></i></a></li>
-            <li><a href="https://www.linkedin.com/in/vito-mariano-carnimeo-297a33326/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.instagram.com/vitq1999/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-instagram"/></svg></i></a></li>
+            <li><a href="https://www.behance.net/vitocarnimeo_VITQ" target="_blank" rel="noopener" aria-label="Behance"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-square-behance"/></svg></i></a></li>
+            <li><a href="https://www.linkedin.com/in/vito-mariano-carnimeo-297a33326/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-linkedin"/></svg></i></a></li>
           </ul>
         </div>
       </div>

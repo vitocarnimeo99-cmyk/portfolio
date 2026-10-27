@@ -355,6 +355,7 @@ body.home header::before{
   overflow: hidden;
   pointer-events: none;
 }
+.hero-sky-in{ position: absolute; inset: 0; } /* il secondo ritaglio, per il nastro */
 .hero-plane{
   position: absolute;
   left: 0;
@@ -479,7 +480,9 @@ body.home header::before{
 /* Su telefono invece niente fascia: il titolo parte in alto e il cartellino
    pende a destra delle pillole dei ruoli, sotto il titolo. A riposo sta
    dietro al testo (il cordino passa dietro alle lettere), mentre lo si
-   trascina torna davanti. */
+   trascina torna davanti. L'aereo invece resta davanti al testo:
+   cartellino3d.js lo ritaglia dove ci sono la tessera e il nastro, così ci
+   passa dietro come su desktop (vedi .hero-sky-in). */
 @media (max-width: 640px){
   .hero{ padding-top: 32px; }
   .hero-lanyard{ z-index: 0; }
@@ -773,18 +776,14 @@ h2.section-title{
 /* Il titolo di "Chi sono" è corto: meno spazio sotto per far posto al testo */
 #about h2.section-title{ margin-bottom: 28px; }
 
-/* Con il mouse la freccia diventa un disegno grande quanto l'aereo e il
-   palloncino: una matita in "Chi sono", una moka in "Lavori". Non è un
-   cursore CSS (massimo 128px e sfocato su retina) ma un'immagine che segue
-   il mouse (main.js, che mette .has-pencil e .has-moka): il clic resta
-   sulla punta, che main.js porta sotto il puntatore. Il contenitore si
-   sposta, l'immagine dentro fa un piccolo gesto quando si preme, facendo
-   perno sulla punta: la matita si piega, la moka si inclina a sinistra
-   come per versare il caffè. */
+/* Con il mouse, in "Chi sono", la freccia diventa una matita grande quanto
+   l'aereo e il palloncino. Non è un cursore CSS (massimo 128px e sfocato su
+   retina) ma un'immagine che segue il mouse (main.js, che mette
+   .has-pencil): il clic resta sulla punta, che main.js porta sotto il
+   puntatore. Il contenitore si sposta, l'immagine dentro fa un piccolo
+   gesto quando si preme, facendo perno sulla punta: la matita si piega. */
 html.has-pencil #about,
-html.has-pencil #about *,
-html.has-moka #lavori,
-html.has-moka #lavori *{ cursor: none; }
+html.has-pencil #about *{ cursor: none; }
 .img-cursor{
   position: fixed;
   left: 0;
@@ -803,8 +802,6 @@ html.has-moka #lavori *{ cursor: none; }
 .img-cursor.is-on{ visibility: visible; }
 .pencil-cursor img{ transform-origin: 2.16% 99.35%; }
 .pencil-cursor.is-pressed img{ transform: rotate(-8deg) scale(.96); }
-.moka-cursor img{ transform-origin: 0.64% 32.86%; transition-duration: .2s; }
-.moka-cursor.is-pressed img{ transform: rotate(-14deg); }
 
 /* -------- Chi sono: stories --------
    Come lo story player di K-Way: avanza da solo quando è a schermo, tocco
@@ -1021,6 +1018,14 @@ html.has-moka #lavori *{ cursor: none; }
   .ab-edu{ order:2; }
   .ab-screen{ transform:none; }
   .ab-device:hover .ab-screen{ transform:none; }
+}
+/* Sul telefono niente competenze: CV e portfolio salgono subito sotto le
+   stories, prima della formazione (sono una copia, .cv-cta--mob, perché
+   quelli di sempre stanno nel blocco delle competenze) */
+.project-links.cv-cta--mob{ display:none; }
+@media (max-width: 640px){
+  .about-skills{ display:none; }
+  .project-links.cv-cta--mob{ display:flex; order:1; }
 }
 @media (prefers-reduced-motion: reduce){
   .ab-cover, .ab-photo, .ab-screen{ transition:none; }
@@ -1500,6 +1505,14 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   color: var(--ink);
 }
 .btn-ghost:hover{ border-color: var(--ink); transform: translateY(-2px); }
+/* Icone SVG di Font Awesome (_partials/icone.svg, una copia in ogni pagina):
+   alte quanto il testo e del suo colore, come il font di icone di prima.
+   La larghezza viene dal viewBox; con una larghezza fissa sull'<i> restano
+   centrate. L'altezza la dà l'SVG: nei contenitori flex l'<i> si allunga
+   con la riga e l'icona resta in alto, come faceva il carattere del font */
+.ico{ display:inline-block; vertical-align:-.125em; }
+.ico svg{ display:block; height:1em; width:auto; margin-inline:auto; fill:currentColor; overflow:visible; }
+.ico-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
 /* Frecce: la stessa icona del bollino delle card al posto dei caratteri
    ← → ↓ ↗. La diagonale è la freccia a destra ruotata, come nel bollino */
 .arrow-ico{ font-size:0.85em; }

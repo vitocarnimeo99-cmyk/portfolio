@@ -24,7 +24,6 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 <!-- /comune:head -->
 <style>
@@ -681,6 +680,18 @@
 </style>
 </head>
 <body>
+<!-- comune:icone · non modificare qui: _partials/icone.svg (npm run icona) -->
+<svg class="ico-sprite" aria-hidden="true">
+<symbol id="ico-arrow-left" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></symbol>
+<symbol id="ico-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="ico-behance" viewBox="0 0 576 512"><path d="M232 237.2c31.8-15.2 48.4-38.2 48.4-74 0-70.6-52.6-87.8-113.3-87.8H0v354.4h171.8c64.4 0 124.9-30.9 124.9-102.9 0-44.5-21.1-77.4-64.7-89.7zM77.9 135.9H151c28.1 0 53.4 7.9 53.4 40.5 0 30.1-19.7 42.2-47.5 42.2h-79v-82.7zm83.3 233.7H77.9V272h84.9c34.3 0 56 14.3 56 50.6 0 35.8-25.9 47-57.6 47zm358.5-240.7H376V94h143.7v34.9zM576 305.2c0-75.9-44.4-139.2-124.9-139.2-78.2 0-131.3 58.8-131.3 135.8 0 79.9 50.3 134.7 131.3 134.7 61.3 0 101-27.6 120.1-86.3H509c-6.7 21.9-34.3 33.5-55.7 33.5-41.3 0-63-24.2-63-65.3h185.1c.3-4.2.6-8.7.6-13.2zM390.4 274c2.3-33.7 24.7-54.8 58.5-54.8 35.4 0 53.2 20.8 56.2 54.8H390.4z"/></symbol>
+<symbol id="ico-chevron-down" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></symbol>
+<symbol id="ico-hand-pointer" viewBox="0 0 448 512"><path d="M128 40c0-22.1 17.9-40 40-40s40 17.9 40 40V188.2c8.5-7.6 19.7-12.2 32-12.2c20.6 0 38.2 13 45 31.2c8.8-9.3 21.2-15.2 35-15.2c25.3 0 46 19.5 47.9 44.3c8.5-7.7 19.8-12.3 32.1-12.3c26.5 0 48 21.5 48 48v48 16 48c0 70.7-57.3 128-128 128l-16 0H240l-.1 0h-5.2c-5 0-9.9-.3-14.7-1c-55.3-5.6-106.2-34-140-79L8 336c-13.3-17.7-9.7-42.7 8-56s42.7-9.7 56 8l56 74.7V40zM240 304c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304zm48-16c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304c0-8.8-7.2-16-16-16zm80 16c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304z"/></symbol>
+<symbol id="ico-pause" viewBox="0 0 320 512"><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></symbol>
+<symbol id="ico-volume-high" viewBox="0 0 640 512"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></symbol>
+<symbol id="ico-volume-xmark" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></symbol>
+</svg>
+<!-- /comune:icone -->
 
 <!-- comune:header · non modificare qui: _partials/header.html -->
 <header>
@@ -701,25 +712,25 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna ai&nbsp;lavori</a>
+      <a class="back-link" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Campagna store opening — Burro Studio</span>
       <h1>K-Way 25 <em>Porta Borsari, Verona</em></h1>
       <p class="more" id="intro-more">Campagna ideata per&nbsp;celebrare l'inaugurazione del&nbsp;<strong>primo store K-Way</strong> in&nbsp;<strong>Corso Porta Borsari</strong> a&nbsp;Verona.<br class="br-desk"><br class="br-mob"><br class="br-desk"><br class="br-mob">
       Per&nbsp;l'occasione ho sviluppato un'<strong>illustrazione esclusiva della&nbsp;storica Porta Borsari</strong>, l'antica porta romana che&nbsp;dà il&nbsp;nome alla&nbsp;via, e&nbsp;un&nbsp;lettering K-Way gonfio e&nbsp;"bagnato" di&nbsp;pioggia.<br class="br-desk"><br class="br-mob"> Il&nbsp;disegno è&nbsp;diventato il&nbsp;volto di&nbsp;poster, sticker e&nbsp;di&nbsp;un&nbsp;<strong>K-Way in&nbsp;edizione limitata</strong>, oltre che&nbsp;del&nbsp;flyer per&nbsp;l'after party di&nbsp;inaugurazione.</p>
-      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="more-btn" aria-expanded="false" aria-controls="intro-more"><span class="more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
       <div class="project-meta">
         <div>Anno<span>2024</span></div>
         <div>Ruolo<span>Illustration · Graphic</span></div>
         <div class="meta-wide">Output<span>Poster · Sticker · K-Way limited</span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener">Vedi il&nbsp;progetto su&nbsp;Behance<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-        <a class="btn-icon" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+        <a class="btn-primary" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener">Vedi il&nbsp;progetto su&nbsp;Behance<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209154263/K-Way-25-Verona-Burro-Studio" target="_blank" rel="noopener" aria-label="Behance"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-behance"/></svg></i></a>
       </div>
     </div>
     <div class="kway-hero-art" id="kway-hero">
       <div class="kway-card">
-        <img src="assets/images/KWAY02.jpg" width="1149" height="1149" alt="K-Way blu in edizione limitata con l'illustrazione di Porta Borsari stampata sul retro" loading="eager" decoding="async">
+        <img src="assets/images/KWAY02-jpg-1149.webp" srcset="assets/images/KWAY02-jpg-480.webp 480w, assets/images/KWAY02-jpg-800.webp 800w, assets/images/KWAY02-jpg-1149.webp 1149w" sizes="(max-width: 480px) 88vw, (max-width: 560px) 67vw, (max-width: 640px) 59vw, (max-width: 720px) 52vw, (max-width: 820px) 46vw, (max-width: 900px) 42vw, (max-width: 980px) 39vw, (max-width: 1280px) 34vw, (max-width: 1440px) 31vw, 426px" width="1149" height="1149" alt="K-Way blu in edizione limitata con l'illustrazione di Porta Borsari stampata sul retro" loading="eager" decoding="async">
         <span class="kway-coords" aria-hidden="true">18W67N – 29E29N · VERONA</span>
       </div>
       <span class="kway-badge" aria-hidden="true">Limited<br>edition</span>
@@ -760,13 +771,13 @@
       <div class="kway-street-grid">
         <figure class="kway-shot">
           <div class="kway-shot-frame zoom-soft">
-            <img class="art" src="assets/images/KWAY01.jpg" width="1146" height="1146" alt="Flyer giallo K-Way per l'after party privato, appoggiato sul parabrezza di un'auto blu" loading="lazy" decoding="async">
+            <img class="art" src="assets/images/KWAY01-jpg-1146.webp" srcset="assets/images/KWAY01-jpg-480.webp 480w, assets/images/KWAY01-jpg-800.webp 800w, assets/images/KWAY01-jpg-1146.webp 1146w" sizes="(max-width: 480px) 94vw, (max-width: 560px) 95vw, (max-width: 640px) 96vw, (max-width: 720px) 91vw, (max-width: 820px) 93vw, (max-width: 980px) 53vw, (max-width: 1280px) 50vw, (max-width: 1440px) 45vw, 625px" width="1146" height="1146" alt="Flyer giallo K-Way per l'after party privato, appoggiato sul parabrezza di un'auto blu" loading="lazy" decoding="async">
           </div>
           <figcaption><span class="ks-num">01</span><span class="ks-label">Flyer after party</span><span class="ks-meta">Gio 30.03 · 10PM–End</span></figcaption>
         </figure>
         <figure class="kway-shot">
           <div class="kway-shot-frame zoom-tile">
-            <img class="art" src="assets/images/KWAY04.jpg" width="1082" height="1082" alt="Poster blu con l'illustrazione gialla di Porta Borsari affisso su un pilastro in pietra a Verona" loading="lazy" decoding="async">
+            <img class="art" src="assets/images/KWAY04-jpg-1082.webp" srcset="assets/images/KWAY04-jpg-480.webp 480w, assets/images/KWAY04-jpg-800.webp 800w, assets/images/KWAY04-jpg-1082.webp 1082w" sizes="(max-width: 480px) 94vw, (max-width: 560px) 95vw, (max-width: 640px) 96vw, (max-width: 720px) 91vw, (max-width: 820px) 93vw, (max-width: 980px) 38vw, (max-width: 1280px) 72vw, (max-width: 1440px) 64vw, 894px" width="1082" height="1082" alt="Poster blu con l'illustrazione gialla di Porta Borsari affisso su un pilastro in pietra a Verona" loading="lazy" decoding="async">
             <span class="kway-shot-tag hint-mouse">Passa sopra per&nbsp;lo&nbsp;zoom</span>
           </div>
           <figcaption><span class="ks-num">02</span><span class="ks-label">Poster Porta Borsari</span><span class="ks-meta">Corso Porta Borsari</span></figcaption>
@@ -789,7 +800,7 @@
           <div class="triss-phone">
             <span class="triss-bar" aria-hidden="true"></span>
             <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
-            <img src="assets/images/K-way_TRISS_01.jpg" width="750" height="1334" alt="Story K-Way: flyer giallo dell'after party privato, giovedì 30.03 dalle 10PM, Sciò Rum e Mattias Clay vinyl DJ set" loading="lazy" decoding="async">
+            <img src="assets/images/K-way_TRISS_01-jpg-750.webp" srcset="assets/images/K-way_TRISS_01-jpg-480.webp 480w, assets/images/K-way_TRISS_01-jpg-750.webp 750w" sizes="(max-width: 480px) 71vw, (max-width: 560px) 53vw, (max-width: 640px) 46vw, (max-width: 720px) 41vw, (max-width: 820px) 36vw, (max-width: 980px) 28vw, (max-width: 1280px) 23vw, (max-width: 1440px) 21vw, 288px" width="750" height="1334" alt="Story K-Way: flyer giallo dell'after party privato, giovedì 30.03 dalle 10PM, Sciò Rum e Mattias Clay vinyl DJ set" loading="lazy" decoding="async">
           </div>
           <figcaption><span class="tr-num">01</span><span class="tr-label">After party</span><span class="tr-meta">Gio 30.03 · 10PM–End</span></figcaption>
         </figure>
@@ -797,7 +808,7 @@
           <div class="triss-phone">
             <span class="triss-bar" aria-hidden="true"></span>
             <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
-            <img src="assets/images/K-way_TRISS_02.jpg" width="750" height="1334" alt="Story K-Way: il K-Way blu in edizione limitata con Porta Borsari sul retro, esposto su un manichino nello store" loading="lazy" decoding="async">
+            <img src="assets/images/K-way_TRISS_02-jpg-750.webp" srcset="assets/images/K-way_TRISS_02-jpg-480.webp 480w, assets/images/K-way_TRISS_02-jpg-750.webp 750w" sizes="(max-width: 480px) 71vw, (max-width: 560px) 53vw, (max-width: 640px) 46vw, (max-width: 720px) 41vw, (max-width: 820px) 36vw, (max-width: 980px) 28vw, (max-width: 1280px) 23vw, (max-width: 1440px) 21vw, 288px" width="750" height="1334" alt="Story K-Way: il K-Way blu in edizione limitata con Porta Borsari sul retro, esposto su un manichino nello store" loading="lazy" decoding="async">
           </div>
           <figcaption><span class="tr-num">02</span><span class="tr-label">In&nbsp;vetrina</span><span class="tr-meta">Limited edition</span></figcaption>
         </figure>
@@ -805,7 +816,7 @@
           <div class="triss-phone">
             <span class="triss-bar" aria-hidden="true"></span>
             <span class="triss-user" aria-hidden="true">kway_official<svg class="triss-verified" viewBox="0 0 40 40"><path fill="#0095F6" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/><path fill="#fff" d="M17.21 27.282 10.29 20.36l2.42-2.42 4.5 4.5 9.08-9.08 2.42 2.42z"/></svg></span>
-            <img src="assets/images/K-way_TRISS_03.jpg" width="750" height="1334" alt="Story K-Way: flyer blu dell'opening con Porta Borsari in giallo, giovedì 30.03 dalle 6 alle 9PM, Corso Porta Borsari 57/D" loading="lazy" decoding="async">
+            <img src="assets/images/K-way_TRISS_03-jpg-750.webp" srcset="assets/images/K-way_TRISS_03-jpg-480.webp 480w, assets/images/K-way_TRISS_03-jpg-750.webp 750w" sizes="(max-width: 480px) 71vw, (max-width: 560px) 53vw, (max-width: 640px) 46vw, (max-width: 720px) 41vw, (max-width: 820px) 36vw, (max-width: 980px) 28vw, (max-width: 1280px) 23vw, (max-width: 1440px) 21vw, 288px" width="750" height="1334" alt="Story K-Way: flyer blu dell'opening con Porta Borsari in giallo, giovedì 30.03 dalle 6 alle 9PM, Corso Porta Borsari 57/D" loading="lazy" decoding="async">
           </div>
           <figcaption><span class="tr-num">03</span><span class="tr-label">Opening</span><span class="tr-meta">6–9PM · Porta Borsari 57/D</span></figcaption>
         </figure>
@@ -816,33 +827,33 @@
           <span class="eyebrow">Live dall'opening</span>
           <h3>La&nbsp;serata, <em>story dopo story</em></h3>
           <p class="more" id="opening-more" style="--more-h:7.75rem">L’artwork non&nbsp;si&nbsp;è&nbsp;fermato alla&nbsp;vetrina, ma&nbsp;ha accompagnato l’intera serata, diventando parte&nbsp;dell’esperienza.<br class="br-desk"><br class="br-mob">Tra&nbsp;musica, momenti da&nbsp;condividere nelle&nbsp;stories, sticker da&nbsp;prendere e&nbsp;gadget da&nbsp;portare a&nbsp;casa, il&nbsp;progetto ha continuato a&nbsp;vivere anche fuori dallo&nbsp;spazio dell’evento, attraverso gli&nbsp;occhi e&nbsp;i&nbsp;contenuti di&nbsp;chi&nbsp;lo&nbsp;ha&nbsp;vissuto.</p>
-          <button type="button" class="more-btn" aria-expanded="false" aria-controls="opening-more"><span class="more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+          <button type="button" class="more-btn" aria-expanded="false" aria-controls="opening-more"><span class="more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
           <div class="sp-now" aria-live="polite"><span class="sp-now-num">04</span><span class="sp-now-label">Il&nbsp;K-Way in&nbsp;vetrina</span></div>
           <ul class="sp-thumbs">
-          <li><button class="sp-thumb is-active" type="button" aria-label="Story 04: Il K-Way in vetrina"><img src="assets/images/K-way_TRISS_04.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 05: DJ set al banco"><img src="assets/images/K-way_TRISS_05.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 06: Veronesità ai massimi"><img src="assets/images/K-way_TRISS_06.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 07: Setting up, si parte alle 6PM"><img src="assets/images/K-way_TRISS_07.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 08: Repost del flyer opening"><img src="assets/images/K-way_TRISS_08.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 09: Repost del flyer after party"><img src="assets/images/K-way_TRISS_09.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 10: Dietro la camera"><img src="assets/images/K-way_TRISS_10.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
-          <li><button class="sp-thumb" type="button" aria-label="Story 11: Il giorno dopo"><img src="assets/images/K-way_TRISS_11.jpg" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb is-active" type="button" aria-label="Story 04: Il K-Way in vetrina"><img src="assets/images/K-way_TRISS_04-jpg-750.webp" srcset="assets/images/K-way_TRISS_04-jpg-480.webp 480w, assets/images/K-way_TRISS_04-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 05: DJ set al banco"><img src="assets/images/K-way_TRISS_05-jpg-750.webp" srcset="assets/images/K-way_TRISS_05-jpg-480.webp 480w, assets/images/K-way_TRISS_05-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 06: Veronesità ai massimi"><img src="assets/images/K-way_TRISS_06-jpg-750.webp" srcset="assets/images/K-way_TRISS_06-jpg-480.webp 480w, assets/images/K-way_TRISS_06-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 07: Setting up, si parte alle 6PM"><img src="assets/images/K-way_TRISS_07-jpg-750.webp" srcset="assets/images/K-way_TRISS_07-jpg-480.webp 480w, assets/images/K-way_TRISS_07-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 08: Repost del flyer opening"><img src="assets/images/K-way_TRISS_08-jpg-750.webp" srcset="assets/images/K-way_TRISS_08-jpg-480.webp 480w, assets/images/K-way_TRISS_08-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 09: Repost del flyer after party"><img src="assets/images/K-way_TRISS_09-jpg-750.webp" srcset="assets/images/K-way_TRISS_09-jpg-480.webp 480w, assets/images/K-way_TRISS_09-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 10: Dietro la camera"><img src="assets/images/K-way_TRISS_10-jpg-750.webp" srcset="assets/images/K-way_TRISS_10-jpg-480.webp 480w, assets/images/K-way_TRISS_10-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
+          <li><button class="sp-thumb" type="button" aria-label="Story 11: Il giorno dopo"><img src="assets/images/K-way_TRISS_11-jpg-750.webp" srcset="assets/images/K-way_TRISS_11-jpg-480.webp 480w, assets/images/K-way_TRISS_11-jpg-750.webp 750w" sizes="(max-width: 480px) 16vw, (max-width: 560px) 11vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 6vw, 72px" width="750" height="1334" alt="" loading="lazy" decoding="async"></button></li>
           </ul>
         </div>
         <div class="sp-device">
           <div class="sp-bars" aria-hidden="true"><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span><span class="sp-bar"><span></span></span></div>
           <div class="sp-screen">
-          <img class="sp-slide is-active" src="assets/images/K-way_TRISS_04.jpg" width="750" height="1334" alt="Story di @kway_official: il K-Way blu con Porta Borsari esposto su un manichino nello store" loading="lazy" decoding="async" data-label="Il K-Way in vetrina">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_05.jpg" width="750" height="1334" alt="Story: Alberto Morelato e Tiscrivodopo al DJ set, con gli sticker K-Way sparsi sul banco" loading="lazy" decoding="async" data-label="DJ set al banco">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_06.jpg" width="750" height="1334" alt="Story con la scritta “Veronesità ai massimi”: i DJ alla console nello store K-Way" loading="lazy" decoding="async" data-label="Veronesità ai massimi">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_07.jpg" width="750" height="1334" alt="Story “Setting upppp, starting at 6PM”: il K-Way in vetrina visto da fuori, Porta Borsari" loading="lazy" decoding="async" data-label="Setting up, si parte alle 6PM">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_08.jpg" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer blu dell'opening pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer opening">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_09.jpg" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer giallo dell'after party pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer after party">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_10.jpg" width="750" height="1334" alt="Story: il display di una Canon inquadra l'illustrazione sul K-Way, con le info del DJ set 6–9PM" loading="lazy" decoding="async" data-label="Dietro la camera">
-          <img class="sp-slide" src="assets/images/K-way_TRISS_11.jpg" width="750" height="1334" alt="Story: il K-Way limited edition appoggiato su una sedia, “opening hometown store”" loading="lazy" decoding="async" data-label="Il giorno dopo">
+          <img class="sp-slide is-active" src="assets/images/K-way_TRISS_04-jpg-750.webp" srcset="assets/images/K-way_TRISS_04-jpg-480.webp 480w, assets/images/K-way_TRISS_04-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story di @kway_official: il K-Way blu con Porta Borsari esposto su un manichino nello store" loading="lazy" decoding="async" data-label="Il K-Way in vetrina">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_05-jpg-750.webp" srcset="assets/images/K-way_TRISS_05-jpg-480.webp 480w, assets/images/K-way_TRISS_05-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story: Alberto Morelato e Tiscrivodopo al DJ set, con gli sticker K-Way sparsi sul banco" loading="lazy" decoding="async" data-label="DJ set al banco">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_06-jpg-750.webp" srcset="assets/images/K-way_TRISS_06-jpg-480.webp 480w, assets/images/K-way_TRISS_06-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story con la scritta “Veronesità ai massimi”: i DJ alla console nello store K-Way" loading="lazy" decoding="async" data-label="Veronesità ai massimi">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_07-jpg-750.webp" srcset="assets/images/K-way_TRISS_07-jpg-480.webp 480w, assets/images/K-way_TRISS_07-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story “Setting upppp, starting at 6PM”: il K-Way in vetrina visto da fuori, Porta Borsari" loading="lazy" decoding="async" data-label="Setting up, si parte alle 6PM">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_08-jpg-750.webp" srcset="assets/images/K-way_TRISS_08-jpg-480.webp 480w, assets/images/K-way_TRISS_08-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer blu dell'opening pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer opening">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_09-jpg-750.webp" srcset="assets/images/K-way_TRISS_09-jpg-480.webp 480w, assets/images/K-way_TRISS_09-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story di @kway_official che ricondivide il flyer giallo dell'after party pubblicato da Burro Studio" loading="lazy" decoding="async" data-label="Repost del flyer after party">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_10-jpg-750.webp" srcset="assets/images/K-way_TRISS_10-jpg-480.webp 480w, assets/images/K-way_TRISS_10-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story: il display di una Canon inquadra l'illustrazione sul K-Way, con le info del DJ set 6–9PM" loading="lazy" decoding="async" data-label="Dietro la camera">
+          <img class="sp-slide" src="assets/images/K-way_TRISS_11-jpg-750.webp" srcset="assets/images/K-way_TRISS_11-jpg-480.webp 480w, assets/images/K-way_TRISS_11-jpg-750.webp 750w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 60vw, (max-width: 640px) 53vw, (max-width: 720px) 47vw, (max-width: 820px) 41vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 28vw, (max-width: 1440px) 25vw, 348px" width="750" height="1334" alt="Story: il K-Way limited edition appoggiato su una sedia, “opening hometown store”" loading="lazy" decoding="async" data-label="Il giorno dopo">
             <button class="sp-tap sp-tap--prev" type="button" aria-label="Story precedente"></button>
             <button class="sp-tap sp-tap--next" type="button" aria-label="Story successiva"></button>
-            <span class="sp-paused" aria-hidden="true"><i class="fa-solid fa-pause"></i></span>
+            <span class="sp-paused" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 320 512"><use href="#ico-pause"/></svg></i></span>
           </div>
           <span class="sp-hint">Tocca ai&nbsp;lati · tieni premuto per&nbsp;la&nbsp;pausa</span>
         </div>
@@ -861,14 +872,14 @@
       </div>
       <div class="sticker-board" id="sticker-board">
         <figure class="sticker sticker--logo" data-x="0.08" data-y="0.12" data-r="-8">
-          <img src="assets/images/KWAY03_sticker.png" width="928" height="766" alt="Due sticker K-Way, uno giallo e uno blu, con il lettering e le coordinate di Verona" decoding="async" draggable="false">
+          <img src="assets/images/KWAY03_sticker-png-928.webp" srcset="assets/images/KWAY03_sticker-png-480.webp 480w, assets/images/KWAY03_sticker-png-800.webp 800w, assets/images/KWAY03_sticker-png-928.webp 928w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 66vw, (max-width: 640px) 58vw, (max-width: 720px) 51vw, (max-width: 820px) 45vw, (max-width: 900px) 46vw, (max-width: 980px) 42vw, (max-width: 1280px) 32vw, (max-width: 1440px) 29vw, 400px" width="928" height="766" alt="Due sticker K-Way, uno giallo e uno blu, con il lettering e le coordinate di Verona" decoding="async" draggable="false">
           <figcaption>Lettering · giallo &amp; blu</figcaption>
         </figure>
         <figure class="sticker sticker--porta" data-x="0.58" data-y="0.06" data-r="6">
-          <img src="assets/images/KWAY05_sticker.png" width="712" height="791" alt="Sticker sagomato con l'illustrazione gialla di Porta Borsari e il lettering K-Way su fondo blu" decoding="async" draggable="false">
+          <img src="assets/images/KWAY05_sticker-png-712.webp" srcset="assets/images/KWAY05_sticker-png-480.webp 480w, assets/images/KWAY05_sticker-png-712.webp 712w" sizes="(max-width: 480px) 86vw, (max-width: 560px) 66vw, (max-width: 640px) 58vw, (max-width: 720px) 51vw, (max-width: 820px) 45vw, (max-width: 900px) 38vw, (max-width: 980px) 35vw, (max-width: 1280px) 27vw, (max-width: 1440px) 24vw, 330px" width="712" height="791" alt="Sticker sagomato con l'illustrazione gialla di Porta Borsari e il lettering K-Way su fondo blu" decoding="async" draggable="false">
           <figcaption>Porta Borsari · die-cut</figcaption>
         </figure>
-        <span class="sticker-hint"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>Trascina gli&nbsp;sticker</span>
+        <span class="sticker-hint"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-hand-pointer"/></svg></i>Trascina gli&nbsp;sticker</span>
         <button class="sticker-reset" type="button">Rimetti a&nbsp;posto</button>
       </div>
     </div>
@@ -879,8 +890,8 @@
       <h2 class="section-title">Progetti per&nbsp;il&nbsp;tuo opening?</h2>
       <p>Lettering, illustrazione e&nbsp;materiali per&nbsp;lanci, store e&nbsp;edizioni&nbsp;limitate.<br class="br-desk"><br class="br-mob"> Scrivimi e&nbsp;disegniamo insieme il&nbsp;prossimo&nbsp;drop.</p>
       <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-        <a class="btn-ghost" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna al&nbsp;portfolio</a>
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Scrivimi per&nbsp;un&nbsp;progetto<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+        <a class="btn-ghost" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna al&nbsp;portfolio</a>
       </div>
     </div>
   </section>

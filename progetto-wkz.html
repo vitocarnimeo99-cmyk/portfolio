@@ -24,7 +24,6 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/main.js" defer></script>
 <!-- /comune:head -->
 <script src="js/carousel.js" defer></script>
@@ -591,12 +590,20 @@
     color:#fff;
   }
   .wkz-toggle.btn-primary:hover{ background: var(--ink); color: var(--paper); }
+  /* Lente e "ricomincia" (Font Awesome magnifying-glass e rotate-left)
+     disegnate con una maschera: il testo del pulsante lo riscrive lo script */
   .wkz-toggle::before{
-    font-family:"Font Awesome 6 Free";
-    font-weight:900;
-    content:"\f002";
+    content:"";
+    flex:none;
+    width:1em; height:1em;
+    background:currentColor;
+    -webkit-mask: var(--wkz-ico) center / contain no-repeat;
+    mask: var(--wkz-ico) center / contain no-repeat;
+    --wkz-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'/%3E%3C/svg%3E");
   }
-  .wkz-toggle[aria-pressed="true"]::before{ content:"\f2f9"; }
+  .wkz-toggle[aria-pressed="true"]::before{
+    --wkz-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z'/%3E%3C/svg%3E");
+  }
   .wkz-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
   @media (max-width:820px){
     /* Su schermi stretti i personaggi non si rimpiccioliscono: la card
@@ -877,6 +884,29 @@
 </style>
 </head>
 <body>
+<!-- comune:icone · non modificare qui: _partials/icone.svg (npm run icona) -->
+<svg class="ico-sprite" aria-hidden="true">
+<symbol id="ico-arrow-left" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></symbol>
+<symbol id="ico-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="ico-arrows-left-right" viewBox="0 0 512 512"><path d="M406.6 374.6l96-96c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224l-293.5 0 41.4-41.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288l293.5 0-41.4 41.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/></symbol>
+<symbol id="ico-behance" viewBox="0 0 576 512"><path d="M232 237.2c31.8-15.2 48.4-38.2 48.4-74 0-70.6-52.6-87.8-113.3-87.8H0v354.4h171.8c64.4 0 124.9-30.9 124.9-102.9 0-44.5-21.1-77.4-64.7-89.7zM77.9 135.9H151c28.1 0 53.4 7.9 53.4 40.5 0 30.1-19.7 42.2-47.5 42.2h-79v-82.7zm83.3 233.7H77.9V272h84.9c34.3 0 56 14.3 56 50.6 0 35.8-25.9 47-57.6 47zm358.5-240.7H376V94h143.7v34.9zM576 305.2c0-75.9-44.4-139.2-124.9-139.2-78.2 0-131.3 58.8-131.3 135.8 0 79.9 50.3 134.7 131.3 134.7 61.3 0 101-27.6 120.1-86.3H509c-6.7 21.9-34.3 33.5-55.7 33.5-41.3 0-63-24.2-63-65.3h185.1c.3-4.2.6-8.7.6-13.2zM390.4 274c2.3-33.7 24.7-54.8 58.5-54.8 35.4 0 53.2 20.8 56.2 54.8H390.4z"/></symbol>
+<symbol id="ico-calendar-regular" viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"/></symbol>
+<symbol id="ico-chevron-down" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></symbol>
+<symbol id="ico-expand" viewBox="0 0 448 512"><path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"/></symbol>
+<symbol id="ico-feather" viewBox="0 0 512 512"><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l57-57h68c49.7 0 97.9-14.4 139-41c11.1-7.2 5.5-23-7.8-23c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l81-24.3c2.5-.8 4.8-2.1 6.7-4l22.4-22.4c10.1-10.1 2.9-27.3-11.3-27.3l-32.2 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l112-33.6c4-1.2 7.4-3.9 9.3-7.7C506.4 207.6 512 184.1 512 160c0-41-16.3-80.3-45.3-109.3l-5.5-5.5C432.3 16.3 393 0 352 0s-80.3 16.3-109.3 45.3L139 149C91 197 64 262.1 64 330v55.3L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"/></symbol>
+<symbol id="ico-hand" viewBox="0 0 512 512"><path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-17.7-14.3-32-32-32s-32 14.3-32 32V336c0 1.5 0 3.1 .1 4.6L67.6 283c-16-15.2-41.3-14.6-56.6 1.4s-14.6 41.3 1.4 56.6L124.8 448c43.1 41.1 100.4 64 160 64H304c97.2 0 176-78.8 176-176V128c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V64c0-17.7-14.3-32-32-32s-32 14.3-32 32V240c0 8.8-7.2 16-16 16s-16-7.2-16-16V32z"/></symbol>
+<symbol id="ico-hand-pointer" viewBox="0 0 448 512"><path d="M128 40c0-22.1 17.9-40 40-40s40 17.9 40 40V188.2c8.5-7.6 19.7-12.2 32-12.2c20.6 0 38.2 13 45 31.2c8.8-9.3 21.2-15.2 35-15.2c25.3 0 46 19.5 47.9 44.3c8.5-7.7 19.8-12.3 32.1-12.3c26.5 0 48 21.5 48 48v48 16 48c0 70.7-57.3 128-128 128l-16 0H240l-.1 0h-5.2c-5 0-9.9-.3-14.7-1c-55.3-5.6-106.2-34-140-79L8 336c-13.3-17.7-9.7-42.7 8-56s42.7-9.7 56 8l56 74.7V40zM240 304c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304zm48-16c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304c0-8.8-7.2-16-16-16zm80 16c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304z"/></symbol>
+<symbol id="ico-leaf" viewBox="0 0 512 512"><path d="M272 96c-78.6 0-145.1 51.5-167.7 122.5c33.6-17 71.5-26.5 111.7-26.5h88c8.8 0 16 7.2 16 16s-7.2 16-16 16H288 216s0 0 0 0c-16.6 0-32.7 1.9-48.3 5.4c-25.9 5.9-49.9 16.4-71.4 30.7c0 0 0 0 0 0C38.3 298.8 0 364.9 0 440v16c0 13.3 10.7 24 24 24s24-10.7 24-24V440c0-48.7 20.7-92.5 53.8-123.2C121.6 392.3 190.3 448 272 448l1 0c132.1-.7 239-130.9 239-291.4c0-42.6-7.5-83.1-21.1-119.6c-2.6-6.9-12.7-6.6-16.2-.1C455.9 72.1 418.7 96 376 96L272 96z"/></symbol>
+<symbol id="ico-location-dot" viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></symbol>
+<symbol id="ico-magnifying-glass" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></symbol>
+<symbol id="ico-seedling" viewBox="0 0 512 512"><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0h32c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64H64c123.7 0 224 100.3 224 224v32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320C100.3 320 0 219.7 0 96z"/></symbol>
+<symbol id="ico-stopwatch" viewBox="0 0 448 512"><path d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h16V98.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6V64h16c17.7 0 32-14.3 32-32s-14.3-32-32-32H224 176zm72 192V320c0 13.3-10.7 24-24 24s-24-10.7-24-24V192c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></symbol>
+<symbol id="ico-trophy" viewBox="0 0 576 512"><path d="M400 0H176c-26.5 0-48.1 21.8-47.1 48.2c.2 5.3 .4 10.6 .7 15.8H24C10.7 64 0 74.7 0 88c0 92.6 33.5 157 78.5 200.7c44.3 43.1 98.3 64.8 138.1 75.8c23.4 6.5 39.4 26 39.4 45.6c0 20.9-17 37.9-37.9 37.9H192c-17.7 0-32 14.3-32 32s14.3 32 32 32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H357.9C337 448 320 431 320 410.1c0-19.6 15.9-39.2 39.4-45.6c39.9-11 93.9-32.7 138.2-75.8C542.5 245 576 180.6 576 88c0-13.3-10.7-24-24-24H446.4c.3-5.2 .5-10.4 .7-15.8C448.1 21.8 426.5 0 400 0zM48.9 112h84.4c9.1 90.1 29.2 150.3 51.9 190.6c-24.9-11-50.8-26.5-73.2-48.3c-32-31.1-58-76-63-142.3zM464.1 254.3c-22.4 21.8-48.3 37.3-73.2 48.3c22.7-40.3 42.8-100.5 51.9-190.6h84.4c-5.1 66.3-31.1 111.2-63 142.3z"/></symbol>
+<symbol id="ico-volume-high" viewBox="0 0 640 512"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></symbol>
+<symbol id="ico-volume-xmark" viewBox="0 0 576 512"><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></symbol>
+<symbol id="ico-xmark" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></symbol>
+</svg>
+<!-- /comune:icone -->
 
 <!-- comune:header · non modificare qui: _partials/header.html -->
 <header>
@@ -897,7 +927,7 @@
 
   <div class="project-hero wrap">
     <div class="project-hero-text">
-      <a class="back-link" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna ai&nbsp;lavori</a>
+      <a class="back-link" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna ai&nbsp;lavori</a>
       <span class="eyebrow">Progetto di&nbsp;tesi — NABA, Milano</span>
       <h1>Where's<br class="br-desk"><br class="br-mob"> Kud&nbsp;Zamb? <em>Find Nicola in&nbsp;Bari</em></h1>
       <div class="wkz-intro">
@@ -911,15 +941,15 @@
       <br class="br-mob">Il&nbsp;progetto prende la&nbsp;forma di&nbsp;un&nbsp;<strong>gioco di&nbsp;ricerca</strong>, in&nbsp;cui bisogna trovare Nicola e&nbsp;la&nbsp;sua famiglia all’interno di&nbsp;un’illustrazione ricca di&nbsp;dettagli e&nbsp;di&nbsp;personaggi, ambientata nella&nbsp;città di&nbsp;Bari.</p>
         </div>
       </div>
-      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
       </div>
           <div class="project-meta">
         <div>Anno<span>2024</span></div>
         <div>Output<span>Telo mare · Sticker · Poster · Shopper </span></div>
       </div>
       <div class="project-links">
-        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni per&nbsp;l'acquisto<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-        <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="fa-brands fa-behance" aria-hidden="true"></i></a>
+        <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni per&nbsp;l'acquisto<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+        <a class="btn-icon" href="https://www.behance.net/gallery/209160819/Wheres-Kud-Zamb-Find-Nicola-in-Bari-NABA" target="_blank" rel="noopener" aria-label="Behance"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-behance"/></svg></i></a>
       </div>
     </div>
     <!-- Colonna destra: busta 3D e sotto i partner. Su telefono si "scioglie"
@@ -932,9 +962,9 @@
             <defs><path id="wkz-ring-path" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
             <text><textPath href="#wkz-ring-path" textLength="268" lengthAdjust="spacing">Premi &amp; Pubblicazioni <tspan class="star">✦</tspan></textPath></text>
           </svg>
-          <span class="wkz-badge-core" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
+          <span class="wkz-badge-core" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-trophy"/></svg></i></span>
         </button>
-        <span class="wkz-pack-hint" aria-hidden="true"><i class="fa-solid fa-hand-pointer"></i>Trascina la&nbsp;busta per&nbsp;girarla</span>
+        <span class="wkz-pack-hint" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-hand-pointer"/></svg></i>Trascina la&nbsp;busta per&nbsp;girarla</span>
       </div>
       <!-- Stessi partner della home (index.html #in-evidenza): qui un clic su
            un logo apre la finestra dei premi con le voci collegate accese -->
@@ -945,14 +975,14 @@
         </p>
         <div class="partners-marquee">
           <ul class="partners-track">
-            <li class="partner-card" data-partner="neologia" style="--c:#CDF936"><img src="assets/images/partner/neologia.png" width="320" height="52" alt="Neologia" loading="lazy"></li>
-            <li class="partner-card" data-partner="print-club" style="--c:#fff"><img src="assets/images/partner/print-club-torino.png" width="91" height="128" alt="Print Club Torino" loading="lazy"></li>
-            <li class="partner-card" data-partner="graphic-days" style="--c:#fff"><img src="assets/images/partner/graphic-days.png" width="320" height="105" alt="Graphic Days" loading="lazy"></li>
-            <li class="partner-card" data-partner="farm" style="--c:#AB1C38"><img src="assets/images/partner/farm-cultural-park.png" width="129" height="128" alt="Farm Cultural Park" loading="lazy"></li>
-            <li class="partner-card" data-partner="bari" style="--c:#fff"><img src="assets/images/partner/comune-di-bari.png" width="109" height="128" alt="Comune di Bari" loading="lazy"></li>
-            <li class="partner-card" data-partner="grafica" style="--c:#FFEE00"><img src="assets/images/partner/grafica-magazine.png" width="320" height="79" alt="Grafica Magazine" loading="lazy"></li>
-            <li class="partner-card" data-partner="telebari" style="--c:#fff"><img src="assets/images/partner/telebari.png" width="320" height="70" alt="Telebari" loading="lazy"></li>
-            <li class="partner-card" data-partner="naba" style="--c:#fff"><img src="assets/images/partner/naba.png" width="304" height="128" alt="NABA – Nuova Accademia di Belle Arti" loading="lazy"></li>
+            <li class="partner-card" data-partner="neologia" style="--c:#CDF936"><img src="assets/images/partner/neologia-png-320.webp" srcset="assets/images/partner/neologia-png-320.webp 320w" sizes="(max-width: 480px) 25vw, (max-width: 560px) 17vw, (max-width: 640px) 18vw, (max-width: 720px) 16vw, (max-width: 820px) 14vw, (max-width: 900px) 13vw, (max-width: 980px) 12vw, (max-width: 1280px) 9vw, (max-width: 1440px) 8vw, 108px" width="320" height="52" alt="Neologia" loading="lazy"></li>
+            <li class="partner-card" data-partner="print-club" style="--c:#fff"><img src="assets/images/partner/print-club-torino-png-91.webp" srcset="assets/images/partner/print-club-torino-png-91.webp 91w" sizes="(max-width: 480px) 9vw, (max-width: 640px) 7vw, (max-width: 820px) 6vw, (max-width: 980px) 5vw, (max-width: 1280px) 4vw, (max-width: 1440px) 3vw, 42px" width="91" height="128" alt="Print Club Torino" loading="lazy"></li>
+            <li class="partner-card" data-partner="graphic-days" style="--c:#fff"><img src="assets/images/partner/graphic-days-png-320.webp" srcset="assets/images/partner/graphic-days-png-320.webp 320w" sizes="(max-width: 480px) 25vw, (max-width: 560px) 17vw, (max-width: 640px) 18vw, (max-width: 720px) 16vw, (max-width: 820px) 14vw, (max-width: 900px) 13vw, (max-width: 980px) 12vw, (max-width: 1280px) 9vw, (max-width: 1440px) 8vw, 108px" width="320" height="105" alt="Graphic Days" loading="lazy"></li>
+            <li class="partner-card" data-partner="farm" style="--c:#AB1C38"><img src="assets/images/partner/farm-cultural-park-png-129.webp" srcset="assets/images/partner/farm-cultural-park-png-129.webp 129w" sizes="(max-width: 480px) 13vw, (max-width: 560px) 9vw, (max-width: 640px) 10vw, (max-width: 720px) 9vw, (max-width: 820px) 8vw, (max-width: 980px) 7vw, (max-width: 1440px) 5vw, 60px" width="129" height="128" alt="Farm Cultural Park" loading="lazy"></li>
+            <li class="partner-card" data-partner="bari" style="--c:#fff"><img src="assets/images/partner/comune-di-bari-png-109.webp" srcset="assets/images/partner/comune-di-bari-png-109.webp 109w" sizes="(max-width: 480px) 11vw, (max-width: 560px) 8vw, (max-width: 640px) 9vw, (max-width: 720px) 8vw, (max-width: 820px) 7vw, (max-width: 980px) 6vw, (max-width: 1280px) 5vw, (max-width: 1440px) 4vw, 52px" width="109" height="128" alt="Comune di Bari" loading="lazy"></li>
+            <li class="partner-card" data-partner="grafica" style="--c:#FFEE00"><img src="assets/images/partner/grafica-magazine-png-320.webp" srcset="assets/images/partner/grafica-magazine-png-320.webp 320w" sizes="(max-width: 480px) 25vw, (max-width: 560px) 17vw, (max-width: 640px) 18vw, (max-width: 720px) 16vw, (max-width: 820px) 14vw, (max-width: 900px) 13vw, (max-width: 980px) 12vw, (max-width: 1280px) 9vw, (max-width: 1440px) 8vw, 108px" width="320" height="79" alt="Grafica Magazine" loading="lazy"></li>
+            <li class="partner-card" data-partner="telebari" style="--c:#fff"><img src="assets/images/partner/telebari-png-320.webp" srcset="assets/images/partner/telebari-png-320.webp 320w" sizes="(max-width: 480px) 25vw, (max-width: 560px) 17vw, (max-width: 640px) 18vw, (max-width: 720px) 16vw, (max-width: 820px) 14vw, (max-width: 900px) 13vw, (max-width: 980px) 12vw, (max-width: 1280px) 9vw, (max-width: 1440px) 8vw, 108px" width="320" height="70" alt="Telebari" loading="lazy"></li>
+            <li class="partner-card" data-partner="naba" style="--c:#fff"><img src="assets/images/partner/naba-png-304.webp" srcset="assets/images/partner/naba-png-304.webp 304w" sizes="(max-width: 480px) 25vw, (max-width: 560px) 17vw, (max-width: 640px) 18vw, (max-width: 720px) 16vw, (max-width: 820px) 14vw, (max-width: 900px) 13vw, (max-width: 980px) 12vw, (max-width: 1280px) 9vw, (max-width: 1440px) 8vw, 108px" width="304" height="128" alt="NABA – Nuova Accademia di Belle Arti" loading="lazy"></li>
           </ul>
         </div>
       </div>
@@ -997,9 +1027,9 @@
     </div>
     <div class="wrap wkz-board">
       <figure class="wkz-cast" tabindex="0" aria-label="Nicola e la sua famiglia, scorri in orizzontale per vederli tutti">
-        <img src="assets/images/WKZ/CARACTER.jpg" width="2400" height="745" alt="Character design di Where’s Kud Zamb?: Nicola e i personaggi della sua famiglia in fila, a figura intera" loading="lazy" decoding="async">
+        <img src="assets/images/WKZ/CARACTER-jpg-1200.webp" srcset="assets/images/WKZ/CARACTER-jpg-480.webp 480w, assets/images/WKZ/CARACTER-jpg-800.webp 800w, assets/images/WKZ/CARACTER-jpg-1200.webp 1200w, assets/images/WKZ/CARACTER-jpg-1600.webp 1600w, assets/images/WKZ/CARACTER-jpg-2000.webp 2000w, assets/images/WKZ/CARACTER-jpg-2400.webp 2400w" sizes="(max-width: 480px) 231vw, (max-width: 560px) 161vw, (max-width: 640px) 141vw, (max-width: 720px) 125vw, (max-width: 820px) 110vw, (max-width: 900px) 88vw, (max-width: 980px) 89vw, (max-width: 1280px) 92vw, (max-width: 1440px) 93vw, 73vw" width="2400" height="745" alt="Character design di Where’s Kud Zamb?: Nicola e i personaggi della sua famiglia in fila, a figura intera" loading="lazy" decoding="async">
       </figure>
-      <p class="wkz-cast-hint"><i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i>Scorri per&nbsp;vederli&nbsp;tutti</p>
+      <p class="wkz-cast-hint"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-arrows-left-right"/></svg></i>Scorri per&nbsp;vederli&nbsp;tutti</p>
     </div>
     <div class="wrap">
       <div class="wkz-head">
@@ -1016,8 +1046,8 @@
       <img class="wkz-tesi-overlay" id="wkz-tesi-soluzioni" src="assets/images/wkz-web/WKZ_SOLUZIONI.jpg" width="7087" height="3898" alt="Tavola di tesi con le soluzioni: in evidenza Nicola e i membri della sua famiglia nascosti tra la folla" loading="lazy" decoding="async">
       <div class="loupe-handle" aria-hidden="true"></div>
       <div class="loupe-lens" aria-hidden="true"></div>
-      <span class="wkz-tavola-tag hint-mouse" aria-hidden="true"><i class="fa-solid fa-magnifying-glass"></i>Passa sopra con&nbsp;la&nbsp;lente</span>
-      <button type="button" class="wkz-tavola-tag hint-touch" id="wkz-viewer-open" aria-haspopup="dialog" aria-controls="wkz-viewer"><i class="fa-solid fa-expand" aria-hidden="true"></i>Gioca a&nbsp;tutto schermo</button>
+      <span class="wkz-tavola-tag hint-mouse" aria-hidden="true"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-magnifying-glass"/></svg></i>Passa sopra con&nbsp;la&nbsp;lente</span>
+      <button type="button" class="wkz-tavola-tag hint-touch" id="wkz-viewer-open" aria-haspopup="dialog" aria-controls="wkz-viewer"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-expand"/></svg></i>Gioca a&nbsp;tutto schermo</button>
     </figure>
     <div class="wkz-board-bar">
       <div class="fullshot-note-wrap">
@@ -1027,7 +1057,7 @@
           <span class="fullshot-note-item"><strong>N.B.</strong> L'illustrazione presenta: 430&nbsp;persone (alieni, pokemon, sirenetti); 21&nbsp;cani; 10&nbsp;gatti; 23&nbsp;palloni; 3&nbsp;papere; 8&nbsp;piccioni; 1&nbsp;polpo; 1&nbsp;pellicano; 6&nbsp;topolini; 1&nbsp;unicorno; 1&nbsp;foca; 1&nbsp;granchio; 1&nbsp;sfera del&nbsp;drago; 2&nbsp;galli, 1&nbsp;gabibbo; 4&nbsp;pesci; 4&nbsp;tartarughe</span>
         </div>
       </div>
-      <button type="button" class="btn-primary wkz-toggle" id="wkz-tesi-toggle" aria-pressed="false">Basta mi&nbsp;arrendo<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></button>
+      <button type="button" class="btn-primary wkz-toggle" id="wkz-tesi-toggle" aria-pressed="false">Basta mi&nbsp;arrendo<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
     </div>
     </div>
   </section>
@@ -1037,7 +1067,7 @@
       <div>
         <span class="eyebrow">Test con&nbsp;il&nbsp;pubblico</span>
         <h2 class="section-title">Prova <em>sul&nbsp;campo</em></h2>
-        <span class="wkz-stopwatch"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i>Sotto i&nbsp;2&nbsp;minuti = sticker in&nbsp;regalo</span>
+        <span class="wkz-stopwatch"><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-stopwatch"/></svg></i>Sotto i&nbsp;2&nbsp;minuti = sticker in&nbsp;regalo</span>
       </div>
       <div class="wkz-head-text">
       <p>Ho portato il&nbsp;telo con&nbsp;il&nbsp;poster interattivo tra&nbsp;i&nbsp;<strong>passanti</strong>, invitandoli a&nbsp;partecipare al&nbsp;gioco di&nbsp;individuazione dei&nbsp;personaggi.<br class="br-desk"><br class="br-mob"> Ho cronometrato i&nbsp;tempi di&nbsp;ciascun partecipante per&nbsp;<strong>analizzare l'efficacia del&nbsp;gioco</strong>, premiando con&nbsp;uno&nbsp;sticker chi&nbsp;riusciva a&nbsp;trovare Nicola in&nbsp;meno di&nbsp;due&nbsp;minuti.</p>
@@ -1046,20 +1076,20 @@
     <div class="pano pano--campo">
       <div class="pano-scroller" tabindex="0" aria-label="Foto della prova sul campo, scorri in orizzontale">
         <div class="pano-track">
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-01.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-02.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-03.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-04.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-05.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-06.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-07.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-08.jpg" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-09.jpg" width="6000" height="4000" alt="Trova Nicola per Bari — scatto 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-10.jpg" width="5941" height="3961" alt="Trova Nicola per Bari — scatto 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-11.jpg" width="2653" height="3979" alt="Trova Nicola per Bari — scatto 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-12.jpg" width="3931" height="4914" alt="Trova Nicola per Bari — scatto 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-13.jpg" width="3750" height="4687" alt="Trova Nicola per Bari — scatto 13" loading="lazy" decoding="async" draggable="false"><figcaption>13 / 14</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-14.jpg" width="3521" height="5282" alt="Trova Nicola per Bari — scatto 14" loading="lazy" decoding="async" draggable="false"><figcaption>14 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-01-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-01-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-01-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-01-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-02-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-02-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-02-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-02-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-03-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-03-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-03-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-03-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-04-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-04-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-04-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-04-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-05-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-05-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-05-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-05-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-06-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-06-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-06-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-06-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-07-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-07-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-07-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-07-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-08-jpg-1120.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-08-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-08-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-08-jpg-1120.webp 1120w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="1120" height="1400" alt="Trova Nicola per Bari — scatto 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-1200.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-1200.webp 1200w, assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-1600.webp 1600w, assets/images/wkz-web/foto-carosello/wkz-carosello-09-jpg-2000.webp 2000w" sizes="(max-width: 480px) 126vw, (max-width: 560px) 88vw, (max-width: 640px) 77vw, (max-width: 720px) 119vw, (max-width: 820px) 105vw, (max-width: 900px) 96vw, (max-width: 980px) 88vw, (max-width: 1280px) 67vw, (max-width: 1440px) 60vw, 840px" width="6000" height="4000" alt="Trova Nicola per Bari — scatto 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-1200.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-1200.webp 1200w, assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-1600.webp 1600w, assets/images/wkz-web/foto-carosello/wkz-carosello-10-jpg-2000.webp 2000w" sizes="(max-width: 480px) 126vw, (max-width: 560px) 88vw, (max-width: 640px) 77vw, (max-width: 720px) 119vw, (max-width: 820px) 105vw, (max-width: 900px) 96vw, (max-width: 980px) 88vw, (max-width: 1280px) 67vw, (max-width: 1440px) 60vw, 840px" width="5941" height="3961" alt="Trova Nicola per Bari — scatto 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-11-jpg-800.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-11-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-11-jpg-800.webp 800w" sizes="(max-width: 480px) 56vw, (max-width: 560px) 39vw, (max-width: 640px) 34vw, (max-width: 720px) 53vw, (max-width: 820px) 47vw, (max-width: 900px) 43vw, (max-width: 980px) 39vw, (max-width: 1280px) 30vw, (max-width: 1440px) 27vw, 373px" width="2653" height="3979" alt="Trova Nicola per Bari — scatto 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-12-jpg-1200.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-12-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-12-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-12-jpg-1200.webp 1200w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="3931" height="4914" alt="Trova Nicola per Bari — scatto 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-13-jpg-1200.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-13-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-13-jpg-800.webp 800w, assets/images/wkz-web/foto-carosello/wkz-carosello-13-jpg-1200.webp 1200w" sizes="(max-width: 480px) 67vw, (max-width: 560px) 47vw, (max-width: 640px) 41vw, (max-width: 720px) 64vw, (max-width: 820px) 56vw, (max-width: 900px) 51vw, (max-width: 980px) 47vw, (max-width: 1280px) 36vw, (max-width: 1440px) 32vw, 448px" width="3750" height="4687" alt="Trova Nicola per Bari — scatto 13" loading="lazy" decoding="async" draggable="false"><figcaption>13 / 14</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/foto-carosello/wkz-carosello-14-jpg-800.webp" srcset="assets/images/wkz-web/foto-carosello/wkz-carosello-14-jpg-480.webp 480w, assets/images/wkz-web/foto-carosello/wkz-carosello-14-jpg-800.webp 800w" sizes="(max-width: 480px) 56vw, (max-width: 560px) 39vw, (max-width: 640px) 34vw, (max-width: 720px) 53vw, (max-width: 820px) 47vw, (max-width: 900px) 43vw, (max-width: 980px) 39vw, (max-width: 1280px) 30vw, (max-width: 1440px) 27vw, 373px" width="3521" height="5282" alt="Trova Nicola per Bari — scatto 14" loading="lazy" decoding="async" draggable="false"><figcaption>14 / 14</figcaption></figure>
         </div>
       </div>
       <div class="wrap pano-bar">
@@ -1081,18 +1111,18 @@
     <div class="pano pano--sketch">
       <div class="pano-scroller" tabindex="0" aria-label="Sketch di studio del personaggio, scorri in orizzontale">
         <div class="pano-track">
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-01.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-02.jpg" width="1145" height="1300" alt="Sketch di studio del personaggio — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-03.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-04.jpg" width="1300" height="908" alt="Sketch di studio del personaggio — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-05.jpg" width="1146" height="1146" alt="Sketch di studio del personaggio — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-06.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-07.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-08.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-09.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-10.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-11.JPG" width="2048" height="2048" alt="Sketch di studio del personaggio — 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 12</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-12.jpg" width="1154" height="1154" alt="Sketch di studio del personaggio — 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-01-jpg-1145.webp" srcset="assets/images/wkz-web/sketch/sketch-01-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-01-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-01-jpg-1145.webp 1145w" sizes="(max-width: 480px) 74vw, (max-width: 560px) 52vw, (max-width: 640px) 45vw, (max-width: 720px) 70vw, (max-width: 820px) 62vw, (max-width: 900px) 56vw, (max-width: 980px) 52vw, (max-width: 1280px) 40vw, (max-width: 1440px) 35vw, 493px" width="1145" height="1300" alt="Sketch di studio del personaggio — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-02-jpg-1145.webp" srcset="assets/images/wkz-web/sketch/sketch-02-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-02-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-02-jpg-1145.webp 1145w" sizes="(max-width: 480px) 74vw, (max-width: 560px) 52vw, (max-width: 640px) 45vw, (max-width: 720px) 70vw, (max-width: 820px) 62vw, (max-width: 900px) 56vw, (max-width: 980px) 52vw, (max-width: 1280px) 40vw, (max-width: 1440px) 35vw, 493px" width="1145" height="1300" alt="Sketch di studio del personaggio — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-03-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-03-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-03-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-03-jpg-1200.webp 1200w, assets/images/wkz-web/sketch/sketch-03-jpg-1300.webp 1300w" sizes="(max-width: 480px) 120vw, (max-width: 560px) 84vw, (max-width: 640px) 73vw, (max-width: 720px) 114vw, (max-width: 820px) 100vw, (max-width: 900px) 91vw, (max-width: 980px) 84vw, (max-width: 1280px) 64vw, (max-width: 1440px) 57vw, 802px" width="1300" height="908" alt="Sketch di studio del personaggio — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-04-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-04-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-04-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-04-jpg-1200.webp 1200w, assets/images/wkz-web/sketch/sketch-04-jpg-1300.webp 1300w" sizes="(max-width: 480px) 120vw, (max-width: 560px) 84vw, (max-width: 640px) 73vw, (max-width: 720px) 114vw, (max-width: 820px) 100vw, (max-width: 900px) 91vw, (max-width: 980px) 84vw, (max-width: 1280px) 64vw, (max-width: 1440px) 57vw, 802px" width="1300" height="908" alt="Sketch di studio del personaggio — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-05-jpg-1146.webp" srcset="assets/images/wkz-web/sketch/sketch-05-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-05-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-05-jpg-1146.webp 1146w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="1146" height="1146" alt="Sketch di studio del personaggio — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-06-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-06-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-06-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-06-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-07-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-07-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-07-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-07-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 07" loading="lazy" decoding="async" draggable="false"><figcaption>07 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-08-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-08-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-08-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-08-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 08" loading="lazy" decoding="async" draggable="false"><figcaption>08 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-09-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-09-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-09-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-09-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 09" loading="lazy" decoding="async" draggable="false"><figcaption>09 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-10-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-10-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-10-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-10-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 10" loading="lazy" decoding="async" draggable="false"><figcaption>10 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-11-jpg-1200.webp" srcset="assets/images/wkz-web/sketch/sketch-11-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-11-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-11-jpg-1200.webp 1200w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="2048" height="2048" alt="Sketch di studio del personaggio — 11" loading="lazy" decoding="async" draggable="false"><figcaption>11 / 12</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/sketch/sketch-12-jpg-1146.webp" srcset="assets/images/wkz-web/sketch/sketch-12-jpg-480.webp 480w, assets/images/wkz-web/sketch/sketch-12-jpg-800.webp 800w, assets/images/wkz-web/sketch/sketch-12-jpg-1146.webp 1146w" sizes="(max-width: 480px) 84vw, (max-width: 560px) 59vw, (max-width: 640px) 51vw, (max-width: 720px) 80vw, (max-width: 820px) 70vw, (max-width: 900px) 64vw, (max-width: 980px) 59vw, (max-width: 1280px) 45vw, (max-width: 1440px) 40vw, 560px" width="1154" height="1154" alt="Sketch di studio del personaggio — 12" loading="lazy" decoding="async" draggable="false"><figcaption>12 / 12</figcaption></figure>
         </div>
       </div>
       <div class="wrap pano-bar">
@@ -1148,25 +1178,25 @@
         <span class="eyebrow">Guerrilla · Per&nbsp;le&nbsp;strade di&nbsp;Bari</span>
         <div class="wkz-title-row">
           <h2 class="section-title">Lo&nbsp;<em>sticker</em></h2>
-          <img class="wkz-title-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker.png" width="640" height="599" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          <img class="wkz-title-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker-png-480.webp" srcset="assets/images/wkz-web/STICKER/wkz-sticker-png-480.webp 480w" sizes="(max-width: 480px) 39vw, (max-width: 560px) 27vw, (max-width: 640px) 22vw, (max-width: 720px) 19vw, (max-width: 820px) 17vw, (max-width: 900px) 15vw, (max-width: 980px) 14vw, (max-width: 1280px) 11vw, (max-width: 1440px) 10vw, 132px" width="640" height="599" alt="" aria-hidden="true" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="wkz-head-text">
       <div class="wkz-more wkz-more--mobile" id="wkz-more-sticker">
       <p>Per&nbsp;suscitare curiosità, sullo&nbsp;sticker ho messo direttamente la&nbsp;domanda del&nbsp;progetto: <strong>“Where’s Kud&nbsp;Zamb?”</strong>, con&nbsp;un&nbsp;lettering rosso e&nbsp;bianco come i&nbsp;colori di&nbsp;Bari.<br class="br-desk"><br class="br-mob"> Il&nbsp;volto di&nbsp;Nicola e&nbsp;il&nbsp;colore della&nbsp;sua maglietta aiutano a&nbsp;riconoscerlo&nbsp;nell’illustrazione.<br class="br-desk"><br class="br-mob"> Il&nbsp;<strong>QR&nbsp;code</strong> rimandava alla&nbsp;pagina Instagram del&nbsp;progetto, con&nbsp;la&nbsp;tavola&nbsp;completa.</p>
       </div>
-      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more-sticker"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more-sticker"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
       </div>
     </div>
     <div class="pano pano--sticker">
       <div class="pano-scroller" tabindex="0" aria-label="Foto dello sticker per le strade, scorri in orizzontale">
         <div class="pano-track">
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_01.jpg" width="5118" height="3412" alt="Sticker guerrilla Where's Kud Zamb — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 06</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_02.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 06</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_03.jpg" width="5943" height="3962" alt="Sticker guerrilla Where's Kud Zamb — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 06</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_04.jpg" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 06</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_05.jpg" width="5713" height="3809" alt="Sticker guerrilla Where's Kud Zamb — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 06</figcaption></figure>
-          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_06.jpg" width="5692" height="3795" alt="Sticker guerrilla Where's Kud Zamb — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_01-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_01-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_01-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_01-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_01-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="5118" height="3412" alt="Sticker guerrilla Where's Kud Zamb — 01" loading="lazy" decoding="async" draggable="false"><figcaption>01 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_02-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_02-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_02-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_02-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_02-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 02" loading="lazy" decoding="async" draggable="false"><figcaption>02 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_03-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_03-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_03-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_03-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_03-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="5943" height="3962" alt="Sticker guerrilla Where's Kud Zamb — 03" loading="lazy" decoding="async" draggable="false"><figcaption>03 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_04-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_04-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_04-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_04-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_04-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="6000" height="4000" alt="Sticker guerrilla Where's Kud Zamb — 04" loading="lazy" decoding="async" draggable="false"><figcaption>04 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_05-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_05-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_05-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_05-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_05-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="5713" height="3809" alt="Sticker guerrilla Where's Kud Zamb — 05" loading="lazy" decoding="async" draggable="false"><figcaption>05 / 06</figcaption></figure>
+          <figure class="pano-frame"><img src="assets/images/wkz-web/STICKER/STICKER_06-jpg-1200.webp" srcset="assets/images/wkz-web/STICKER/STICKER_06-jpg-480.webp 480w, assets/images/wkz-web/STICKER/STICKER_06-jpg-800.webp 800w, assets/images/wkz-web/STICKER/STICKER_06-jpg-1200.webp 1200w, assets/images/wkz-web/STICKER/STICKER_06-jpg-1600.webp 1600w" sizes="(max-width: 480px) 79vw, (max-width: 560px) 55vw, (max-width: 640px) 48vw, (max-width: 720px) 102vw, (max-width: 820px) 90vw, (max-width: 900px) 82vw, (max-width: 980px) 75vw, (max-width: 1280px) 58vw, (max-width: 1440px) 51vw, 720px" width="5692" height="3795" alt="Sticker guerrilla Where's Kud Zamb — 06" loading="lazy" decoding="async" draggable="false"><figcaption>06 / 06</figcaption></figure>
         </div>
       </div>
       <div class="wrap pano-bar">
@@ -1192,18 +1222,18 @@
         </div>
       </div>
       </div>
-      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more-pack"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+      <button type="button" class="wkz-more-btn" aria-expanded="false" aria-controls="wkz-more-pack"><span class="wkz-more-label">Leggi di&nbsp;più</span><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-chevron-down"/></svg></i></button>
       <ul class="wkz-specs">
-        <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Made in&nbsp;Italy</li>
-        <li><i class="fa-solid fa-feather" aria-hidden="true"></i>Pile 100%</li>
-        <li><i class="fa-solid fa-leaf" aria-hidden="true"></i>OEKO-TEX</li>
-        <li><i class="fa-solid fa-seedling" aria-hidden="true"></i>Global Organic Textile</li>
-        <li><i class="fa-regular fa-calendar" aria-hidden="true"></i>Da&nbsp;dicembre 2024</li>
+        <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-location-dot"/></svg></i>Made in&nbsp;Italy</li>
+        <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-feather"/></svg></i>Pile 100%</li>
+        <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-leaf"/></svg></i>OEKO-TEX</li>
+        <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-seedling"/></svg></i>Global Organic Textile</li>
+        <li><i class="ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-calendar-regular"/></svg></i>Da&nbsp;dicembre 2024</li>
       </ul>
     </div>
     <div class="photo-duo-grid">
-      <figure class="is-portrait"><img src="assets/images/wkz-web/foto-finali/foto-fine-01.JPG" width="3835" height="5752" alt="Telo pile Where's Kud Zamb — scatto 01" loading="lazy" decoding="async"></figure>
-      <figure class="is-landscape"><img src="assets/images/wkz-web/foto-finali/foto-fine-02.jpg" width="4740" height="4000" alt="Telo pile Where's Kud Zamb — scatto 02" loading="lazy" decoding="async"></figure>
+      <figure class="is-portrait"><img src="assets/images/wkz-web/foto-finali/foto-fine-01-jpg-1200.webp" srcset="assets/images/wkz-web/foto-finali/foto-fine-01-jpg-480.webp 480w, assets/images/wkz-web/foto-finali/foto-fine-01-jpg-800.webp 800w, assets/images/wkz-web/foto-finali/foto-fine-01-jpg-1200.webp 1200w, assets/images/wkz-web/foto-finali/foto-fine-01-jpg-1600.webp 1600w" sizes="(max-width: 820px) 102vw, 37vw" width="3835" height="5752" alt="Telo pile Where's Kud Zamb — scatto 01" loading="lazy" decoding="async"></figure>
+      <figure class="is-landscape"><img src="assets/images/wkz-web/foto-finali/foto-fine-02-jpg-1200.webp" srcset="assets/images/wkz-web/foto-finali/foto-fine-02-jpg-480.webp 480w, assets/images/wkz-web/foto-finali/foto-fine-02-jpg-800.webp 800w, assets/images/wkz-web/foto-finali/foto-fine-02-jpg-1200.webp 1200w, assets/images/wkz-web/foto-finali/foto-fine-02-jpg-1600.webp 1600w, assets/images/wkz-web/foto-finali/foto-fine-02-jpg-2000.webp 2000w, assets/images/wkz-web/foto-finali/foto-fine-02-jpg-2400.webp 2400w" sizes="(max-width: 820px) 102vw, 66vw" width="4740" height="4000" alt="Telo pile Where's Kud Zamb — scatto 02" loading="lazy" decoding="async"></figure>
     </div>
   </section>
 
@@ -1213,12 +1243,12 @@
         <h2 class="section-title">Sei interessato <em>all'acquisto?</em></h2>
         <p>Teli mare, pile, poster, sticker e&nbsp;altri prodotti sono&nbsp;disponibili.<br class="br-desk"><br class="br-mob"> Per&nbsp;scoprire quelli disponibili e&nbsp;ricevere maggiori informazioni,&nbsp;contattami.</p>
         <div class="project-links">
-          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></a>
-          <a class="btn-ghost" href="index.html#lavori"><i class="fa-solid fa-arrow-left arrow-ico" aria-hidden="true"></i>Torna al&nbsp;portfolio</a>
+          <a class="btn-primary" href="mailto:vitocarnimeo99@gmail.com">Chiedimi informazioni<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></a>
+          <a class="btn-ghost" href="index.html#lavori"><i class="ico arrow-ico" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-left"/></svg></i>Torna al&nbsp;portfolio</a>
         </div>
       </div>
       <a class="wkz-shop" href="mailto:vitocarnimeo99@gmail.com" aria-label="Scrivimi per acquistare i prodotti di Where's Kud Zamb?">
-        <img class="wkz-shop-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker.png" width="640" height="599" alt="" loading="lazy" decoding="async">
+        <img class="wkz-shop-sticker" src="assets/images/wkz-web/STICKER/wkz-sticker-png-480.webp" srcset="assets/images/wkz-web/STICKER/wkz-sticker-png-480.webp 480w" sizes="(max-width: 480px) 29vw, (max-width: 560px) 21vw, (max-width: 640px) 24vw, (max-width: 720px) 22vw, (max-width: 820px) 19vw, (max-width: 900px) 17vw, (max-width: 980px) 16vw, (max-width: 1280px) 12vw, (max-width: 1440px) 11vw, 150px" width="640" height="599" alt="" loading="lazy" decoding="async">
         <span class="wkz-shop-label">Merch ufficiale</span>
         <strong>Porta Nicola a&nbsp;casa</strong>
         <ul>
@@ -1227,7 +1257,7 @@
           <li>Poster<span>Formato a&nbsp;scelta</span></li>
           <li>Sticker &amp; shopper<span>Anche in&nbsp;set</span></li>
         </ul>
-        <span class="wkz-shop-cta">Scrivimi per&nbsp;ordinare&nbsp;<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></span>
+        <span class="wkz-shop-cta">Scrivimi per&nbsp;ordinare&nbsp;<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></span>
       </a>
     </div>
   </section>
@@ -1243,11 +1273,11 @@
     </div>
   </div>
   <div class="wkz-viewer-top">
-    <span class="wkz-viewer-hint"><i class="fa-solid fa-hand" aria-hidden="true"></i>Due dita per ingrandire</span>
-    <button class="wkz-viewer-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    <span class="wkz-viewer-hint"><i class="ico" aria-hidden="true"><svg viewBox="0 0 512 512"><use href="#ico-hand"/></svg></i>Due dita per ingrandire</span>
+    <button class="wkz-viewer-close" type="button" aria-label="Chiudi"><i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-xmark"/></svg></i></button>
   </div>
   <div class="wkz-viewer-bottom">
-    <button type="button" class="btn-primary wkz-toggle" aria-pressed="false">Basta mi arrendo<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i></button>
+    <button type="button" class="btn-primary wkz-toggle" aria-pressed="false">Basta mi arrendo<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i></button>
   </div>
 </dialog>
 
@@ -1256,8 +1286,8 @@
 <dialog class="wkz-awards" id="wkz-awards" aria-labelledby="wkz-awards-title">
   <div class="wkz-awards-head">
     <span class="eyebrow">Where's Kud Zamb? · Riconoscimenti</span>
-    <h2 id="wkz-awards-title"><i class="fa-solid fa-trophy" aria-hidden="true"></i>Premi &amp; Pubblicazioni</h2>
-    <button class="wkz-awards-close" type="button" aria-label="Chiudi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    <h2 id="wkz-awards-title"><i class="ico" aria-hidden="true"><svg viewBox="0 0 576 512"><use href="#ico-trophy"/></svg></i>Premi &amp; Pubblicazioni</h2>
+    <button class="wkz-awards-close" type="button" aria-label="Chiudi"><i class="ico" aria-hidden="true"><svg viewBox="0 0 384 512"><use href="#ico-xmark"/></svg></i></button>
   </div>
   <div class="wkz-awards-body">
     <div class="awards">
@@ -1648,7 +1678,7 @@
         if (viewer) viewer.classList.toggle('is-solved', solved);
         toggles.forEach(function (b) {
           b.setAttribute('aria-pressed', solved);
-          b.innerHTML = (solved ? 'Ricomincio a cercare' : 'Basta mi arrendo') + '<i class="fa-solid fa-arrow-right arrow-ico arrow-ne" aria-hidden="true"></i>';
+          b.innerHTML = (solved ? 'Ricomincio a cercare' : 'Basta mi arrendo') + '<i class="ico arrow-ico arrow-ne" aria-hidden="true"><svg viewBox="0 0 448 512"><use href="#ico-arrow-right"/></svg></i>';
         });
         // la lente ingrandisce l'immagine attualmente visibile
         lens.style.backgroundImage = 'url("' + (solved ? overlay.currentSrc || overlay.src : img.currentSrc) + '")';

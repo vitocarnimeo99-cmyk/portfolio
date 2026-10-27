@@ -590,13 +590,11 @@ if (canHover) window.addEventListener('load', () => {
   schedule(2500);
 })();
 
-// Cursori disegnati, solo con il mouse (style.css, .img-cursor): la matita in
-// "Chi sono" e la moka in "Lavori", per prendersi il tempo di un caffè
-// mentre si guardano i progetti. Il contenitore segue il mouse con la punta
-// (la mina, il beccuccio) sotto il puntatore, dove resta il clic; il gesto
-// al clic è sull'immagine dentro e fa perno lì. Scorrendo la pagina senza
-// muovere il mouse la sezione passa sotto il puntatore: lì si ricontrolla
-// cosa c'è sotto.
+// Cursore disegnato, solo con il mouse (style.css, .img-cursor): la matita in
+// "Chi sono". Il contenitore segue il mouse con la punta (la mina) sotto il
+// puntatore, dove resta il clic; il gesto al clic è sull'immagine dentro e
+// fa perno lì. Scorrendo la pagina senza muovere il mouse la sezione passa
+// sotto il puntatore: lì si ricontrolla cosa c'è sotto.
 (function () {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
@@ -647,8 +645,6 @@ if (canHover) window.addEventListener('load', () => {
 
   imgCursor({ section: '#about', name: 'pencil', src: 'assets/images/MATITA-260.webp',
     width: 214, height: 260, tipX: 0.0216, tipY: 0.9935 });
-  imgCursor({ section: '#lavori', name: 'moka', src: 'assets/images/MOKA-260.webp',
-    width: 202, height: 260, tipX: 0.0064, tipY: 0.3286 });
 })();
 
 // Palloncino di "In evidenza": sale dal basso fino a uscire in alto, come
@@ -1041,7 +1037,7 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
   const stories = Array.from(player.querySelectorAll('.ab-bar'));
   const bars = stories.map(s => s.firstElementChild);
   const volBtn = player.querySelector('.ab-vol');
-  const volIcon = volBtn.querySelector('i');
+  const volIcon = volBtn.querySelector('use');
   const place = player.querySelector('.ab-when');
   const PHOTO_DURATION = 5000;
 
@@ -1094,7 +1090,7 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
     if (on) player.classList.add('was-sound');
     volBtn.setAttribute('aria-pressed', String(on));
     volBtn.setAttribute('aria-label', on ? 'Disattiva l’audio' : 'Attiva l’audio');
-    volIcon.className = 'fa-solid ' + (on ? 'fa-volume-high' : 'fa-volume-xmark');
+    volIcon.setAttribute('href', on ? '#ico-volume-high' : '#ico-volume-xmark');
   };
 
   const sync = () => {
