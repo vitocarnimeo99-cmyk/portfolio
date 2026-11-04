@@ -759,7 +759,7 @@
   /* Il QR serve solo da desktop: dal telefono si tocca il bottone */
   @media (hover:none), (max-width:700px){ .store-qr{ display:none; } }
 
-  /* Due telefoni con le schermate degli store che scorrono */
+  /* Due telefoni, ognuno con il suo video a loop */
   .phones{
     position:relative;
     height:670px;
@@ -784,19 +784,15 @@
     aspect-ratio:1242/2688;
     border-radius:34px;
     overflow:hidden;
-    background:#fff;
+    background:#121212;
   }
-  /* Le schermate scorrono di lato come un carosello di Instagram */
-  .phone-track{
-    display:flex;
-    height:100%;
-    transition: transform .6s cubic-bezier(.25,.8,.25,1);
-  }
-  .phone-track img{
-    flex:0 0 100%;
+  .phone-screen video{
+    display:block;
     width:100%; height:100%;
     object-fit:cover;
   }
+  /* Lo stesso tasto del video della costruzione, in alto a destra */
+  .phone-sound{ top:12px; right:12px; bottom:auto; z-index:3; box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); }
   .phone-island{
     position:absolute;
     top:10px; left:50%;
@@ -806,16 +802,6 @@
     background:#000;
     z-index:2;
   }
-  .phone-dots{
-    position:absolute;
-    left:50%; bottom:-34px;
-    transition: opacity .3s ease;
-    transform: translateX(-50%);
-    display:flex; gap:6px;
-  }
-  .phone-dots span{ width:6px; height:6px; border-radius:3px; background: rgba(255,255,255,.25); transition: width .4s ease, background-color .4s ease; }
-  .phone-dots span.is-active{ width:18px; background: var(--st-lilac); }
-  .phone--back .phone-dots{ opacity:0; }
   @media (max-width:980px){
     .st-get-grid{ grid-template-columns:minmax(0, 1fr); gap:40px; }
     .phones{ height:670px; width:100%; max-width:440px; margin:0 auto; }
@@ -830,6 +816,9 @@
     .phones{ height:460px; }
     .phone{ width:190px; border-radius:32px; padding:8px; }
     .phone-screen{ border-radius:25px; }
+    /* Tasto più piccolo per non toccare l'isola, ma l'area da toccare resta 44px */
+    .phone-sound{ top:8px; right:8px; width:34px; height:34px; font-size:0.8rem; }
+    .phone-sound::after{ content:""; position:absolute; inset:-5px; border-radius:50%; }
     .phone--front{ left:calc(100% - 200px); top:24px; }
     .phone--back{ left:10px; }
     .stores{ gap:12px; }
@@ -903,7 +892,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .st-card, .st-peek, .st-value, .st-traits li, .geo-sound, .pano-frame,
-    .sticker, .st-get-sticker, .store-badge, .phone-track, .phone, .team-card{ transition:none; }
+    .sticker, .st-get-sticker, .store-badge, .phone, .team-card{ transition:none; }
     .sticker.is-pop, .st-get-head:hover .st-get-sticker{ animation:none; }
     .st-ticker .ticker{ animation:none; }
   }
@@ -1206,7 +1195,7 @@
             <ul class="app-tags">
               <li>Gratis</li>
               <li>Finanza</li>
-              <li>iPhone · iPad · Mac</li>
+              <li>iPhone</li>
               <li>Android</li>
             </ul>
           </div>
@@ -1228,13 +1217,23 @@
           </div>
         </div>
       </div>
-      <div class="phones" id="phones" aria-label="Anteprima delle schermate di Strush" role="img">
+      <div class="phones" id="phones">
         <div class="phone phone--back">
-          <div class="phone-screen"><span class="phone-island"></span></div>
+          <div class="phone-screen">
+            <span class="phone-island"></span>
+            <video width="540" height="960" aria-label="Video di Strush: Vuoi iniziare questo viaggio con noi? Scarica l'app e parti per questa nuova avventura" poster="assets/video/posters/Strush_Video_02-540.jpg" muted loop playsinline preload="metadata">
+              <source src="assets/video/Strush_Video_02-540.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
         <div class="phone phone--front">
-          <div class="phone-screen"><span class="phone-island"></span></div>
-          <div class="phone-dots"></div>
+          <div class="phone-screen">
+            <span class="phone-island"></span>
+            <video width="540" height="960" aria-label="Video di Strush: dalle icone delle app si aprono le schermate di Strush e gli sticker di Bernardino" poster="assets/video/posters/Strush_Video_01-540.jpg" muted loop playsinline preload="metadata">
+              <source src="assets/video/Strush_Video_01-540.mp4" type="video/mp4">
+            </video>
+            <button class="geo-sound phone-sound" type="button" aria-label="Attiva l'audio" aria-pressed="false"><i class="ico" aria-hidden="true"><svg viewBox="0 0 640 512"><use href="#ico-volume-xmark"/></svg></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -2042,67 +2041,44 @@
     stickers.forEach((s) => s.el.querySelector('img').addEventListener('load', () => place(s)));
   })();
 
-  // Scarica l'app: i due telefoni mostrano le schermate del carosello in
-  // dissolvenza (quello dietro è sfasato di tre), e i QR per gli store.
-  // Passando sopra il telefono davanti (o toccandolo) i due si scambiano.
+  // Scarica l'app: ogni telefono ha il suo video a loop, muto, che gira solo
+  // mentre la sezione è a schermo. L'audio è sempre del telefono davanti e il
+  // tasto lo segue. Passando sopra il telefono davanti (o toccandolo) i due si
+  // scambiano; con l'audio acceso il mouse non li scambia più, così il video
+  // non cambia mentre lo si ascolta e il tasto resta lì per spegnerlo.
   (function () {
     const phones = document.getElementById('phones');
     if (!phones) return;
-    const frames = Array.from({ length: 6 }, (_, i) => 'assets/images/STRUSH/CAROSELLO 02/' + (i + 1) + ' C-800.webp');
-    // In coda c'è una copia della prima schermata: dall'ultima si scorre su
-    // quella e poi si torna all'inizio senza animazione, così il giro è continuo.
-    const fill = (screen) => {
-      const track = document.createElement('div');
-      track.className = 'phone-track';
-      frames.concat(frames[0]).forEach((src) => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = '';
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        track.appendChild(img);
-      });
-      screen.appendChild(track);
-      return track;
-    };
-    const slide = (track, k) => {
-      const prev = track.dataset.k;
-      track.dataset.k = k;
-      if (prev == frames.length - 1 && k === 0 && !reduceMotion) {
-        track.style.transform = 'translateX(-' + frames.length * 100 + '%)';
-        setTimeout(() => {
-          track.style.transition = 'none';
-          track.style.transform = 'translateX(0)';
-          track.offsetWidth;
-          track.style.transition = '';
-        }, 650);
-      } else {
-        track.style.transform = 'translateX(-' + k * 100 + '%)';
-      }
-    };
     const phoneEls = Array.from(phones.querySelectorAll('.phone'));
-    const front = fill(phones.querySelector('.phone--front .phone-screen'));
-    const back = fill(phones.querySelector('.phone--back .phone-screen'));
-    const dotsWrap = phones.querySelector('.phone-dots');
-    const dots = frames.map(() => dotsWrap.appendChild(document.createElement('span')));
-    // I due telefoni partono da schermate diverse (1 e 4) e scorrono allo
-    // stesso ritmo ma sfasati di mezzo giro: non cambiano mai insieme e non
-    // mostrano mai la stessa schermata.
-    const EVERY = 3000;
-    const decks = [
-      { track: front, k: 0, delay: 0 },
-      { track: back, k: 3, delay: EVERY / 2 },
-    ];
-    const show = () => {
-      decks.forEach((d) => slide(d.track, d.k));
-      const shown = decks.find((d) => d.track.closest('.phone--front')).k;
-      dots.forEach((d, k) => d.classList.toggle('is-active', k === shown));
+    const videos = Array.from(phones.querySelectorAll('video'));
+    const soundBtn = phones.querySelector('.phone-sound');
+    let sound = false;
+    const setSound = (on) => {
+      sound = on;
+      const frontVideo = phones.querySelector('.phone--front video');
+      videos.forEach((v) => { v.muted = !on || v !== frontVideo; });
+      soundBtn.setAttribute('aria-pressed', String(on));
+      soundBtn.setAttribute('aria-label', on ? "Disattiva l'audio" : "Attiva l'audio");
+      soundBtn.querySelector('use').setAttribute('href', on ? '#ico-volume-high' : '#ico-volume-xmark');
+      if (on && frontVideo.paused) frontVideo.play().catch(() => {});
     };
-    show();
-    if (!reduceMotion) decks.forEach((d) => {
-      const step = () => { d.k = (d.k + 1) % frames.length; show(); };
-      setTimeout(() => { step(); setInterval(step, EVERY); }, EVERY + d.delay);
+    // Il tasto sta sopra il telefono: premerlo non deve scambiarli
+    soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setSound(!sound);
     });
+    if (!reduceMotion) {
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          videos.forEach((v) => {
+            if (entries[0].isIntersecting) v.play().catch(() => {});
+            else v.pause();
+          });
+        }, { threshold: 0.3 }).observe(phones);
+      } else {
+        videos.forEach((v) => v.play().catch(() => {}));
+      }
+    }
 
     // Dopo uno scambio il telefono nuovo davanti può finire sotto il cursore:
     // si riarma solo quando il mouse ne esce, così non rimbalzano all'infinito.
@@ -2125,8 +2101,8 @@
         el.classList.toggle('phone--back');
       });
       const out1 = pose(out), inc1 = pose(inc);
-      inc.appendChild(dotsWrap);
-      show();
+      inc.querySelector('.phone-screen').appendChild(soundBtn);
+      setSound(sound);
 
       if (!reduceMotion) {
         const w = out.offsetWidth;
@@ -2151,7 +2127,7 @@
     };
     phoneEls.forEach((el) => {
       el.addEventListener('pointerenter', (e) => {
-        if (e.pointerType === 'mouse' && !locked && el.classList.contains('phone--front')) swap();
+        if (e.pointerType === 'mouse' && !locked && !sound && el.classList.contains('phone--front')) swap();
       });
       el.addEventListener('pointerleave', () => {
         if (!moving && el.classList.contains('phone--front')) locked = false;
