@@ -1213,10 +1213,10 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
   }
   document.addEventListener('visibilitychange', sync);
 
-  // Precarica le foto dopo il caricamento della pagina: il passaggio dal
-  // video alla foto è istantaneo
+  // Precarica foto e poster dopo il caricamento della pagina: il passaggio
+  // alla story dopo è istantaneo
   window.addEventListener('load', () => {
-    stories.forEach((t) => { if ('photo' in t.dataset) new Image().src = t.dataset.photo; });
+    stories.forEach((t) => { new Image().src = t.dataset.photo || t.dataset.poster; });
   });
 
   mark(0);

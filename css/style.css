@@ -2164,7 +2164,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 
 /* -------- Hero -------- */
 /* "Guarda i lavori" seguito dalla barra social (Instagram, Behance,
-   LinkedIn) e dal tondo della mail, tutti tondi della stessa misura e alti
+   LinkedIn, TikTok) e dal tondo della mail, tutti tondi della stessa misura e alti
    quanto il pulsante. */
 .hero-links{ margin-top:44px; align-items:center; gap:12px; }
 .hero .meta{ margin-top:40px; }
@@ -2272,7 +2272,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .partners-track{
   display:flex; width:max-content;
   list-style:none; margin:0; padding:0;
-  animation: scroll-left 34s linear infinite;
+  animation: scroll-left 38s linear infinite;
 }
 /* Si ferma solo con il mouse sopra una card, non sul resto della fila.
    Su touch l'hover resta appiccicato anche solo scorrendo col dito: lì la
@@ -2294,9 +2294,9 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   transition: transform .3s ease, opacity .3s ease, filter .3s ease, box-shadow .3s ease;
   cursor:default;
 }
-.partner-card:nth-child(even){ --r: 1.6deg; }
-/* Periodi che dividono 8 (i loghi): la copia ha gli stessi tilt, il loop non scatta */
-.partner-card:nth-child(4n+3){ --r: -.8deg; }
+/* Periodo che divide 9 (i loghi): la copia ha gli stessi tilt, il loop non scatta */
+.partner-card:nth-child(3n+2){ --r: 1.6deg; }
+.partner-card:nth-child(3n){ --r: -.8deg; }
 .partner-card img{
   display:block;
   width:auto; height:auto;
@@ -2448,13 +2448,21 @@ section.contact::before{
 .contact-row .big{ color: var(--paper); border-color: rgba(247,245,240,.5); }
 .contact-row .big .arrow{ color: var(--pop); }
 .contact-row .big:hover{ color: var(--pop); border-color: var(--pop); }
-.contact .social a{ width:56px; height:56px; font-size:1.6rem; color: var(--paper); border-color: rgba(247,245,240,.25); }
+/* I tondi riempiono la colonna dello sticker: si stringono con lei senza uscirne */
+.contact .social{
+  --tondo: min(56px, calc((var(--sticker-w) - 24px) / 4));
+  width: var(--sticker-w);
+  justify-content: space-between;
+  gap: 8px;
+}
+.contact .social a{ width:var(--tondo); height:var(--tondo); font-size:1.6rem; color: var(--paper); border-color: rgba(247,245,240,.25); }
 .contact-social{ display:flex; flex-direction:column; align-items:center; gap:12px; }
 .contact-social-label{ font-size:0.85rem; color: rgba(247,245,240,.7); letter-spacing:0.01em; }
 .contact .social a:hover{ color: var(--ink); background-color: var(--pop); border-color: var(--pop); }
 @media (max-width: 860px){
   .contact-inner{ grid-template-columns: minmax(0, 1fr); }
   .contact-aside{ margin-top:48px; }
+  .contact .social{ --tondo:56px; width:auto; gap:20px; }
   .sticker-card{ width: min(180px, 50vw); }
 }
 @media (max-width: 640px){
