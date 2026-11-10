@@ -2272,7 +2272,7 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
 .partners-track{
   display:flex; width:max-content;
   list-style:none; margin:0; padding:0;
-  animation: scroll-left 38s linear infinite;
+  animation: scroll-left 42s linear infinite;
 }
 /* Si ferma solo con il mouse sopra una card, non sul resto della fila.
    Su touch l'hover resta appiccicato anche solo scorrendo col dito: lì la
@@ -2294,9 +2294,9 @@ a.tile{ display:block; text-decoration:none; color:inherit; }
   transition: transform .3s ease, opacity .3s ease, filter .3s ease, box-shadow .3s ease;
   cursor:default;
 }
-/* Periodo che divide 9 (i loghi): la copia ha gli stessi tilt, il loop non scatta */
-.partner-card:nth-child(3n+2){ --r: 1.6deg; }
-.partner-card:nth-child(3n){ --r: -.8deg; }
+/* Periodo che divide 10 (i loghi): la copia ha gli stessi tilt, il loop non scatta */
+.partner-card:nth-child(5n+2), .partner-card:nth-child(5n+4){ --r: 1.6deg; }
+.partner-card:nth-child(5n+3), .partner-card:nth-child(5n){ --r: -.8deg; }
 .partner-card img{
   display:block;
   width:auto; height:auto;
